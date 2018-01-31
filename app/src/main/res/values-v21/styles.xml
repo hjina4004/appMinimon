@@ -1,0 +1,14 @@
+<resources>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="ExoMediaButton.pause">
+        <item name="android:src">@drawable/exo_controls_rewind</item>
+        <item name="android:contentDescription">@string/exo_controls_pause_description</item>
+    </style>
+</resources>
