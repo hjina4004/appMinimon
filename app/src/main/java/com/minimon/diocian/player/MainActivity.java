@@ -1,4 +1,4 @@
-package com.example.jina.exandroid;
+package com.minimon.diocian.player;
 
 import android.annotation.SuppressLint;
 import android.net.Uri;

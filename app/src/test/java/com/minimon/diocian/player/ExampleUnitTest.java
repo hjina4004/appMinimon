@@ -1,4 +1,4 @@
-package com.example.jina.exandroid;
+package com.minimon.diocian.player;
 
 import org.junit.Test;
 

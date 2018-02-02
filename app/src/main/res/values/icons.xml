@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="icon_logo">&#xe901;</string>
+    <string name="icon_searchs">&#xe900;</string>
+    <string name="icon_search">&#xe986;</string>
+    <string name="icon_logobg">&#xe902;</string>
+    <string name="icon_logo_bg1">&#xe902;</string>
+    <string name="icon_logo_bg2">&#xe903;</string>
+    <string name="icon_close_pop">&#xe904;</string>
+    <string name="icon_facebook">&#xe905;</string>
+    <string name="icon_google">&#xe906;</string>
+    <string name="icon_kakao">&#xe907;</string>
+    <string name="icon_naver">&#xe908;</string>
+    <string name="icon_coin_dollar">&#xe93b;</string>
+    <string name="icon_credit_card">&#xe93f;</string>
+    <string name="icon_spinner9">&#xe982;</string>
+    <string name="icon_user">&#xe971;</string>
+    <string name="icon_enter">&#xea13;</string>
+    <string name="icon_lastfm">&#xeacb;</string>
+    <string name="icon_down">&#xe909;</string>
+    <string name="icon_up">&#xe90a;</string>
+    <string name="icon_youtube">&#xea9d;</string>
+    <string name="icon_instagram">&#xea92;</string>
+    <string name="icon_emblem">&#xe90b;</string>
+    <string name="icon_emblembg">&#xe90c;</string>
+    <string name="icon_star_full">&#xe9d9;</string>
+    <string name="icon_share">&#xe90d;</string>
+    <string name="icon_myplay">&#xe90e;</string>
+    <string name="icon_heart">&#xe9da;</string>
+    <string name="icon_play3">&#xea1c;</string>
+    <string name="icon_bubble">&#xe96b;</string>
+    <string name="icon_myqna">&#xe910;</string>
+    <string name="icon_myfaq">&#xe90f;</string>
+    <string name="icon_check">&#xe911;</string>
+    <string name="icon_prev">&#xe913;</string>
+    <string name="icon_next">&#xe912;</string>
+</resources>
