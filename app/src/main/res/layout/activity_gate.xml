@@ -14,7 +14,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="120dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/ico_intro_logo" />
         </LinearLayout>
@@ -28,7 +28,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="35dp"
                     android:scaleType="centerInside"
                     android:src="@drawable/ico_intro_minimon" />
         </LinearLayout>
@@ -39,11 +39,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn_signup"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:textColor="#fffafafa"
         android:background="@drawable/rounded_corner"
-        android:text="로그인"
+        android:text="@string/btn_login"
         android:textSize="20sp"/>
 
     <Button
@@ -51,11 +51,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="#fffb450d"
         android:background="@drawable/rounded_corner_outline"
-        android:text="간편 회원가입"
+        android:text="@string/btn_signup"
         android:textSize="20sp"/>
 </RelativeLayout>

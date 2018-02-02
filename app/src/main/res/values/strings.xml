@@ -6,4 +6,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="media_url_hls">http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8</string>
+
+    <string name="title_login">미니몬 서비스 로그인</string>
+
+    <string name="btn_login">로그인</string>
+    <string name="btn_signup">간편 회원가입</string>
 </resources>

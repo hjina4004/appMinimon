@@ -10,14 +10,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.minimon.diocian.MainActivity"
+    tools:context="com.minimon.diocian.player.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <FrameLayout
         android:id="@+id/main_media_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent" >
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/player_view"
