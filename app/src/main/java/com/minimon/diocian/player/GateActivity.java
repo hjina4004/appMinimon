@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 
@@ -13,13 +15,29 @@ public class GateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gate);
 
-        Button button = findViewById(R.id.btn_login);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button btnLogin = findViewById(R.id.btn_login);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GateActivity.this, LoginActivity.class);
-                startActivity(intent);
+                gotoLogin();
             }
         });
+
+        Button btnSignup = findViewById(R.id.btn_signup);
+        btnSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gotoSignup();
+            }
+        });
+    }
+
+    public void gotoLogin() {
+        Intent intent = new Intent(GateActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    public void gotoSignup() {
+
     }
 }
