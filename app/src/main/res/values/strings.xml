@@ -1,9 +1,25 @@
 <resources>
-    <string name="app_name">exAndroid</string>
+    <string name="app_name">Minimon</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
     <string name="media_url_hls">http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8</string>
+
+    <string name="title_login">미니몬 서비스 로그인</string>
+    <string name="title_sns">소셜 로그인</string>
+
+    <string name="btn_login">로그인</string>
+    <string name="btn_signup">간편 회원가입</string>
+    <string name="btn_autologin">자동 로그인</string>
+
+    <string name="usr_id">아이디</string>
+    <string name="usr_pw">비밀번호</string>
+    <string name="find_usr_id">아이디/비밀번호 찾기</string>
+    <string name="new_usr">신규 회원 가입</string>
+    <string name="login_naver">NAVER 로그인</string>
+    <string name="login_kakao">KAKAO 로그인</string>
+    <string name="login_facebook">FACEBOOK 로그인</string>
+    <string name="login_google">GOOGLE 로그인</string>
 </resources>

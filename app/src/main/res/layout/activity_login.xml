@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/inUserID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/usr_id"
+            android:background="@drawable/bg_edittext"
+            android:paddingTop="14.33dp"
+            android:paddingLeft="17.67dp"
+            android:paddingRight="17.67dp"
+            android:paddingBottom="14.33dp"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/inUserPW"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/usr_pw"
+            android:inputType="textPassword" />
+
+        <CheckBox
+            android:id="@+id/cbAutoLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_autologin" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_background"
+            android:stateListAnimator="@null"
+            android:text="@string/btn_login"
+            android:textColor="#fffafafa"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textViewError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnFindUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/find_usr_id" />
+
+            <Button
+                android:id="@+id/btnNewUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/new_usr" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <com.minimon.diocian.player.TextAwesome
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fa_check" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_sns" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnNaver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_naver" />
+
+        <Button
+            android:id="@+id/btnKakao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_kakao" />
+
+        <Button
+            android:id="@+id/btnFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_facebook" />
+
+        <Button
+            android:id="@+id/btnGoogle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_google" />
+
+    </LinearLayout>
+</ScrollView>
