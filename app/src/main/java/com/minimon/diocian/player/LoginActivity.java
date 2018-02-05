@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -17,11 +18,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
 
-        setImageInButton(R.mipmap.a001_social_naver, R.id.btnNaver, 40);
-        setImageInButton(R.mipmap.a001_social_kakao, R.id.btnKakao, 40);
-        setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook, 40);
-        setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle, 40);
+        setImageInButton(R.mipmap.a001_social_naver, R.id.btnNaver);
+        setImageInButton(R.mipmap.a001_social_kakao, R.id.btnKakao);
+        setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook);
+        setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle);
     }
 
     @Override
@@ -33,10 +35,9 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void setImageInButton(int drawableID, int btnID, int height) {
+    public void setImageInButton(int drawableID, int btnID) {
         Drawable drawable = ContextCompat.getDrawable(LoginActivity.this, drawableID);
-        int right = (int) (drawable.getIntrinsicWidth() * ((float)height / drawable.getIntrinsicHeight()));
-        drawable.setBounds(0, 0, right, height);
+        drawable.setBounds(0, 0, (int) drawable.getIntrinsicWidth(), (int) drawable.getIntrinsicHeight());
 
         Button btn = findViewById(btnID);
         btn.setCompoundDrawables(drawable, null, null, null);

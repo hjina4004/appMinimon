@@ -38,7 +38,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:textColor="#fffb450d"
+        android:textColor="@color/MainColor"
         android:background="@drawable/ripple_background_outline"
         android:stateListAnimator="@null"
         android:text="@string/btn_signup"

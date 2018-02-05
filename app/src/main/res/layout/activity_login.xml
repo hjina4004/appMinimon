@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:textColor="@color/colorBaseText"
+            android:buttonTint="@color/colorBaseText"
             android:text="@string/btn_autologin" />
 
         <Button
@@ -55,7 +56,11 @@
         <TextView
             android:id="@+id/textViewError"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:textColor="@color/colorError"
+            android:textSize="15.50sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,7 +74,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:textColor="@color/colorBaseText"
-                android:background="@drawable/rounded_corner_outline_flat"
+                android:background="@drawable/ripple_background_outline_flat"
                 android:text="@string/find_usr_id"
                 android:textSize="15.50sp" />
 
@@ -79,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/colorBaseText"
-                android:background="@drawable/rounded_corner_outline_flat"
+                android:background="@drawable/ripple_background_outline_flat"
                 android:text="@string/new_usr"
                 android:textSize="15.50sp" />
         </LinearLayout>
@@ -87,8 +92,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="10dp"
+            android:paddingTop="50dp"
+            android:paddingBottom="10dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -101,47 +106,58 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBaseText"
-                android:text="@string/title_sns" />
+                android:text="@string/title_sns"
+                android:textSize="15.50sp" />
+
         </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorBaseBoarder"
+            android:layout_marginBottom="20dp" />
 
         <Button
             android:id="@+id/btnNaver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:minHeight="38.67dp"
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_naver"
             android:text="@string/login_naver"
-            android:textSize="10.50sp" />
+            android:textSize="15.50sp" />
 
         <Button
             android:id="@+id/btnKakao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:textColor="@color/colorBaseText"
+            android:minHeight="38.67dp"
+            android:textColor="@color/colorKakao"
             android:background="@drawable/btn_login_kakao"
             android:text="@string/login_kakao"
-            android:textSize="10.50sp" />
+            android:textSize="15.50sp" />
 
         <Button
             android:id="@+id/btnFacebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:minHeight="38.67dp"
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_facebook"
             android:text="@string/login_facebook"
-            android:textSize="10.50sp" />
+            android:textSize="15.50sp" />
 
         <Button
             android:id="@+id/btnGoogle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="38.67dp"
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_google"
             android:text="@string/login_google"
-            android:textSize="10.50sp" />
+            android:textSize="15.50sp" />
 
     </LinearLayout>
 </ScrollView>
