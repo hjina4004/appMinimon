@@ -1,41 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBaseBG"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:padding="20dp"
         android:orientation="vertical" >
 
         <EditText
             android:id="@+id/inUserID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:ems="10"
             android:hint="@string/usr_id"
+            android:textColorHint="#F6F6F6"
+            android:textColor="@color/colorBaseText"
             android:background="@drawable/bg_edittext"
-            android:paddingTop="14.33dp"
-            android:paddingLeft="17.67dp"
-            android:paddingRight="17.67dp"
-            android:paddingBottom="14.33dp"
             android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/inUserPW"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:ems="10"
             android:hint="@string/usr_pw"
+            android:textColorHint="#F6F6F6"
+            android:textColor="@color/colorBaseText"
+            android:background="@drawable/bg_edittext"
             android:inputType="textPassword" />
 
         <CheckBox
             android:id="@+id/cbAutoLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorBaseText"
             android:text="@string/btn_autologin" />
 
         <Button
@@ -45,7 +49,7 @@
             android:background="@drawable/ripple_background"
             android:stateListAnimator="@null"
             android:text="@string/btn_login"
-            android:textColor="#fffafafa"
+            android:textColor="@color/colorBaseText"
             android:textSize="20sp" />
 
         <TextView
@@ -62,31 +66,41 @@
                 android:id="@+id/btnFindUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="@string/find_usr_id" />
+                android:textColor="@color/colorBaseText"
+                android:background="@drawable/rounded_corner_outline_flat"
+                android:text="@string/find_usr_id"
+                android:textSize="15.50sp" />
 
             <Button
                 android:id="@+id/btnNewUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/new_usr" />
+                android:textColor="@color/colorBaseText"
+                android:background="@drawable/rounded_corner_outline_flat"
+                android:text="@string/new_usr"
+                android:textSize="15.50sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
-            <com.minimon.diocian.player.TextAwesome
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fa_check" />
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/a001_intro_tl" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorBaseText"
                 android:text="@string/title_sns" />
         </LinearLayout>
 
@@ -94,25 +108,40 @@
             android:id="@+id/btnNaver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_naver" />
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorBaseText"
+            android:background="@drawable/btn_login_naver"
+            android:text="@string/login_naver"
+            android:textSize="10.50sp" />
 
         <Button
             android:id="@+id/btnKakao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_kakao" />
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorBaseText"
+            android:background="@drawable/btn_login_kakao"
+            android:text="@string/login_kakao"
+            android:textSize="10.50sp" />
 
         <Button
             android:id="@+id/btnFacebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_facebook" />
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorBaseText"
+            android:background="@drawable/btn_login_facebook"
+            android:text="@string/login_facebook"
+            android:textSize="10.50sp" />
 
         <Button
             android:id="@+id/btnGoogle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_google" />
+            android:textColor="@color/colorBaseText"
+            android:background="@drawable/btn_login_google"
+            android:text="@string/login_google"
+            android:textSize="10.50sp" />
 
     </LinearLayout>
 </ScrollView>

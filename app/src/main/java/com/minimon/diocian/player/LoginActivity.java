@@ -18,7 +18,10 @@ public class LoginActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setImageInButton(R.drawable.ico_intro_minimon, R.id.btnNaver, 40);
+        setImageInButton(R.mipmap.a001_social_naver, R.id.btnNaver, 40);
+        setImageInButton(R.mipmap.a001_social_kakao, R.id.btnKakao, 40);
+        setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook, 40);
+        setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle, 40);
     }
 
     @Override

@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="colorBaseBG">#1e2328</color>
+    <color name="colorBaseEditText">#2b3135</color>
+    <color name="colorBaseText">#FFFFFF</color>
+    <color name="colorBGNaver">#099a49</color>
+    <color name="colorBGKakao">#f9e000</color>
+    <color name="colorBGFacebook">#3a589b</color>
+    <color name="colorBGGoogle">#d6492f</color>
 </resources>
