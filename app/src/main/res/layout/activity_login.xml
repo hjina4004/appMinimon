@@ -16,8 +16,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="9.33dp"
             android:hint="@string/usr_id"
-            android:textColorHint="#F6F6F6"
+            android:textColorHint="@color/colorHint"
             android:textColor="@color/colorBaseText"
+            android:textCursorDrawable="@null"
             android:background="@drawable/bg_edittext"
             android:inputType="textPersonName"
             android:textSize="@dimen/btn_md_font_size" />
@@ -29,8 +30,9 @@
             android:layout_marginBottom="10dp"
             android:ems="10"
             android:hint="@string/usr_pw"
-            android:textColorHint="#F6F6F6"
+            android:textColorHint="@color/colorHint"
             android:textColor="@color/colorBaseText"
+            android:textCursorDrawable="@null"
             android:background="@drawable/bg_edittext"
             android:inputType="textPassword"
             android:textSize="@dimen/btn_md_font_size" />
@@ -50,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple_background"
+            android:onClick="onClickLogin"
             android:stateListAnimator="@null"
             android:text="@string/btn_login"
             android:textColor="@color/colorBaseText"
@@ -75,9 +78,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:textColor="@color/colorBaseText"
                 android:background="@drawable/ripple_background_outline_flat"
-                android:text="@string/find_usr_id"
+                android:onClick="onClickFindMember"
+                android:text="@string/find_usr"
+                android:textColor="@color/colorBaseText"
                 android:textSize="@dimen/btn_md_font_size" />
 
             <Button
@@ -96,17 +100,19 @@
             android:layout_height="match_parent"
             android:paddingTop="50dp"
             android:paddingBottom="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal" >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/base_padding_right"
                 android:src="@mipmap/a001_intro_tl" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:textColor="@color/colorBaseText"
                 android:text="@string/title_sns"
                 android:textSize="@dimen/btn_md_font_size" />

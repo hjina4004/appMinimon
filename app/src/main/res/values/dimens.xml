@@ -10,6 +10,7 @@
     <!-- the Minimon Design guidelines. -->
     <dimen name="base_padding">17.67dp</dimen>
     <dimen name="base_padding_top">14.33dp</dimen>
+    <dimen name="base_padding_right">9dp</dimen>
     <dimen name="base_radius">5dp</dimen>
 
     <dimen name="btn_lg_font_size">20.75dp</dimen>

@@ -9,8 +9,12 @@
     <color name="colorBaseBG">#1e2328</color>
     <color name="colorBaseEditText">#2b3135</color>
     <color name="colorBaseText">#FFFFFF</color>
+    <color name="colorSubText">#777c80</color>
     <color name="colorBaseBoarder">#333333</color>
     <color name="colorError">#ff0000</color>
+    <color name="colorHint">#F6F6F6</color>
+    <color name="colorEditTextAddoneBG">#363b3f</color>
+    <color name="colorEditTextAddone">#777c80</color>
 
     <color name="colorBGNaver">#099a49</color>
     <color name="colorKakao">#3a211d</color>

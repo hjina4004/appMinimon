@@ -31,7 +31,7 @@ public class GateActivity extends AppCompatActivity {
     }
 
     public void gotoLogin() {
-        Intent intent = new Intent(GateActivity.this, LoginActivity.class);
+        Intent intent = new Intent(GateActivity.this.getApplicationContext(), LoginActivity.class);
         startActivity(intent);
     }
 

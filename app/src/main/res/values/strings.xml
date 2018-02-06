@@ -16,8 +16,16 @@
 
     <string name="usr_id">아이디</string>
     <string name="usr_pw">비밀번호</string>
-    <string name="find_usr_id">아이디/비밀번호 찾기</string>
+    <string name="usr_email">이메일</string>
+    <string name="find_usr">아이디/비밀번호 찾기</string>
+    <string name="find_usr_id">아이디 찾기</string>
+    <string name="find_usr_id_description">회원가입 시 사용한 e-mail 정보를 입력하시기 바랍니다.</string>
+    <string name="find_usr_pw">비밀번호 찾기</string>
+    <string name="find_usr_pw_description">회원의 아이디와 e-mail 정보를 입력하시기 바랍니다.</string>
+    <string name="hint_input_id">영문/숫자 4~12자</string>
+    <string name="hint_input_email">이메일을 입력하세요</string>
     <string name="new_usr">신규 회원 가입</string>
+    <string name="reset_password">신규 비밀번호 발급</string>
     <string name="login_naver">NAVER 로그인</string>
     <string name="login_kakao">KAKAO 로그인</string>
     <string name="login_facebook">FACEBOOK 로그인</string>
