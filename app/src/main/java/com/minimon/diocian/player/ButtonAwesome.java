@@ -4,12 +4,11 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.util.LruCache;
 import android.util.AttributeSet;
-import android.widget.Button;
 
 
 public class ButtonAwesome extends android.support.v7.widget.AppCompatButton{
 	private final static String NAME = "FONTAWESOME";
-	private static LruCache<String, Typeface> sTypefaceCache = new LruCache<String, Typeface>(12);
+	private static LruCache<String, Typeface> sTypefaceCache = new LruCache<>(12);
 
 	public ButtonAwesome(Context context) {
 		super(context);

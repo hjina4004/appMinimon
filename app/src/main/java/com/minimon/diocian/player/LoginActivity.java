@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -37,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void setImageInButton(int drawableID, int btnID) {
         Drawable drawable = ContextCompat.getDrawable(LoginActivity.this, drawableID);
-        drawable.setBounds(0, 0, (int) drawable.getIntrinsicWidth(), (int) drawable.getIntrinsicHeight());
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
         Button btn = findViewById(btnID);
         btn.setCompoundDrawables(drawable, null, null, null);

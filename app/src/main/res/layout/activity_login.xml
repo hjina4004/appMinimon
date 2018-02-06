@@ -7,20 +7,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:padding="@dimen/base_padding"
         android:orientation="vertical" >
 
         <EditText
             android:id="@+id/inUserID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:ems="10"
+            android:layout_marginBottom="9.33dp"
             android:hint="@string/usr_id"
             android:textColorHint="#F6F6F6"
             android:textColor="@color/colorBaseText"
             android:background="@drawable/bg_edittext"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:textSize="@dimen/btn_md_font_size" />
 
         <EditText
             android:id="@+id/inUserPW"
@@ -32,7 +32,8 @@
             android:textColorHint="#F6F6F6"
             android:textColor="@color/colorBaseText"
             android:background="@drawable/bg_edittext"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textSize="@dimen/btn_md_font_size" />
 
         <CheckBox
             android:id="@+id/cbAutoLogin"
@@ -41,7 +42,8 @@
             android:layout_marginBottom="10dp"
             android:textColor="@color/colorBaseText"
             android:buttonTint="@color/colorBaseText"
-            android:text="@string/btn_autologin" />
+            android:text="@string/btn_autologin"
+            android:textSize="@dimen/btn_md_font_size" />
 
         <Button
             android:id="@+id/btnLogin"
@@ -51,7 +53,7 @@
             android:stateListAnimator="@null"
             android:text="@string/btn_login"
             android:textColor="@color/colorBaseText"
-            android:textSize="20sp" />
+            android:textSize="@dimen/btn_lg_font_size" />
 
         <TextView
             android:id="@+id/textViewError"
@@ -60,7 +62,7 @@
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
             android:textColor="@color/colorError"
-            android:textSize="15.50sp" />
+            android:textSize="@dimen/btn_md_font_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -76,7 +78,7 @@
                 android:textColor="@color/colorBaseText"
                 android:background="@drawable/ripple_background_outline_flat"
                 android:text="@string/find_usr_id"
-                android:textSize="15.50sp" />
+                android:textSize="@dimen/btn_md_font_size" />
 
             <Button
                 android:id="@+id/btnNewUser"
@@ -86,7 +88,7 @@
                 android:textColor="@color/colorBaseText"
                 android:background="@drawable/ripple_background_outline_flat"
                 android:text="@string/new_usr"
-                android:textSize="15.50sp" />
+                android:textSize="@dimen/btn_md_font_size" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorBaseText"
                 android:text="@string/title_sns"
-                android:textSize="15.50sp" />
+                android:textSize="@dimen/btn_md_font_size" />
 
         </LinearLayout>
         <TextView
@@ -125,7 +127,7 @@
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_naver"
             android:text="@string/login_naver"
-            android:textSize="15.50sp" />
+            android:textSize="@dimen/btn_md_font_size" />
 
         <Button
             android:id="@+id/btnKakao"
@@ -136,7 +138,7 @@
             android:textColor="@color/colorKakao"
             android:background="@drawable/btn_login_kakao"
             android:text="@string/login_kakao"
-            android:textSize="15.50sp" />
+            android:textSize="@dimen/btn_md_font_size" />
 
         <Button
             android:id="@+id/btnFacebook"
@@ -147,7 +149,7 @@
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_facebook"
             android:text="@string/login_facebook"
-            android:textSize="15.50sp" />
+            android:textSize="@dimen/btn_md_font_size" />
 
         <Button
             android:id="@+id/btnGoogle"
@@ -157,7 +159,7 @@
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_google"
             android:text="@string/login_google"
-            android:textSize="15.50sp" />
+            android:textSize="@dimen/btn_md_font_size" />
 
     </LinearLayout>
 </ScrollView>

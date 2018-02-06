@@ -6,4 +6,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- the Minimon Design guidelines. -->
+    <dimen name="base_padding">17.67dp</dimen>
+    <dimen name="base_padding_top">14.33dp</dimen>
+    <dimen name="base_radius">5dp</dimen>
+
+    <dimen name="btn_lg_font_size">20.75dp</dimen>
+    <dimen name="btn_md_font_size">15.50dp</dimen>
+    <dimen name="btn_sm_font_size">13.53dp</dimen>
+    <dimen name="btn_xs_font_size">11.25dp</dimen>
 </resources>
