@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_input_email"
-                android:labelFor="@+id/editText"
+                android:labelFor="@+id/editTextEmail"
                 android:paddingBottom="@dimen/base_padding_top"
                 android:paddingLeft="117.67dp"
                 android:paddingTop="@dimen/base_padding_top"
@@ -56,9 +56,8 @@
                 android:textColor="@color/colorBaseText"
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:textSize="@dimen/btn_md_font_size" >
-                <requestFocus />
             </EditText>
 
             <TextView
@@ -128,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_input_id"
-                android:labelFor="@+id/editText"
+                android:labelFor="@+id/editTextUserID"
                 android:paddingBottom="@dimen/base_padding_top"
                 android:paddingLeft="117.67dp"
                 android:paddingTop="@dimen/base_padding_top"
@@ -138,7 +137,6 @@
                 android:background="@drawable/bg_edittext"
                 android:inputType="textPersonName"
                 android:textSize="@dimen/btn_md_font_size" >
-                <requestFocus />
             </EditText>
 
             <TextView
@@ -161,7 +159,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_input_email"
-                android:labelFor="@+id/editText"
+                android:labelFor="@+id/editTextUserEmail"
                 android:paddingBottom="@dimen/base_padding_top"
                 android:paddingLeft="117.67dp"
                 android:paddingTop="@dimen/base_padding_top"
@@ -171,7 +169,6 @@
                 android:background="@drawable/bg_edittext"
                 android:inputType="textEmailAddress"
                 android:textSize="@dimen/btn_md_font_size" >
-                <requestFocus />
             </EditText>
 
             <TextView

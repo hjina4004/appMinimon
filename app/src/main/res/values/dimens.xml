@@ -13,6 +13,9 @@
     <dimen name="base_padding_right">9dp</dimen>
     <dimen name="base_radius">5dp</dimen>
 
+    <dimen name="btn_sm_width">114dp</dimen>
+    <dimen name="btn_sm_height">35.67dp</dimen>
+
     <dimen name="btn_lg_font_size">20.75dp</dimen>
     <dimen name="btn_md_font_size">15.50dp</dimen>
     <dimen name="btn_sm_font_size">13.53dp</dimen>

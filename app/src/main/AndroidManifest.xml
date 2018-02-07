@@ -35,7 +35,15 @@
             android:label="@string/find_usr">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".GateActivity" />
+                android:value=".LoginActivity" />
+        </activity>
+
+        <activity
+            android:name=".NewMemberActivity"
+            android:label="@string/new_usr">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
         </activity>
 
         <activity

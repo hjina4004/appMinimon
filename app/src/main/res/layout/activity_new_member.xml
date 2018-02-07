@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorBaseBG"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/base_padding"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/base_padding" >
+            <EditText
+                android:id="@+id/editTextID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_input_id"
+                android:labelFor="@+id/editTextID"
+                android:paddingBottom="@dimen/base_padding_top"
+                android:paddingLeft="117.67dp"
+                android:paddingTop="@dimen/base_padding_top"
+                android:textColorHint="@color/colorHint"
+                android:textColor="@color/colorBaseText"
+                android:textCursorDrawable="@null"
+                android:background="@drawable/bg_edittext"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/btn_md_font_size" >
+            </EditText>
+
+            <TextView
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/colorEditTextAddone"
+                android:background="@drawable/bg_edittext_left"
+                android:textSize="@dimen/btn_md_font_size"
+                android:text="@string/usr_id" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/base_padding" >
+            <EditText
+                android:id="@+id/editTextNickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_input_nickname"
+                android:labelFor="@+id/editTextNickname"
+                android:paddingBottom="@dimen/base_padding_top"
+                android:paddingLeft="117.67dp"
+                android:paddingTop="@dimen/base_padding_top"
+                android:textColorHint="@color/colorHint"
+                android:textColor="@color/colorBaseText"
+                android:textCursorDrawable="@null"
+                android:background="@drawable/bg_edittext"
+                android:inputType="textPersonName"
+                android:textSize="@dimen/btn_md_font_size" >
+            </EditText>
+
+            <TextView
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/colorEditTextAddone"
+                android:background="@drawable/bg_edittext_left"
+                android:textSize="@dimen/btn_md_font_size"
+                android:text="@string/usr_nickname" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/base_padding" >
+            <EditText
+                android:id="@+id/editTextPW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_input_pw"
+                android:labelFor="@+id/editTextPW"
+                android:paddingBottom="@dimen/base_padding_top"
+                android:paddingLeft="117.67dp"
+                android:paddingTop="@dimen/base_padding_top"
+                android:textColorHint="@color/colorHint"
+                android:textColor="@color/colorBaseText"
+                android:textCursorDrawable="@null"
+                android:background="@drawable/bg_edittext"
+                android:inputType="textPassword"
+                android:textSize="@dimen/btn_md_font_size" >
+            </EditText>
+
+            <TextView
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/colorEditTextAddone"
+                android:background="@drawable/bg_edittext_left"
+                android:textSize="@dimen/btn_md_font_size"
+                android:text="@string/usr_pw" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/base_padding" >
+            <EditText
+                android:id="@+id/editTextPWC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_input_pw_confirm"
+                android:labelFor="@+id/editTextID"
+                android:paddingBottom="@dimen/base_padding_top"
+                android:paddingLeft="117.67dp"
+                android:paddingTop="@dimen/base_padding_top"
+                android:textColorHint="@color/colorHint"
+                android:textColor="@color/colorBaseText"
+                android:textCursorDrawable="@null"
+                android:background="@drawable/bg_edittext"
+                android:inputType="textPassword"
+                android:textSize="@dimen/btn_md_font_size" >
+            </EditText>
+
+            <TextView
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/colorEditTextAddone"
+                android:background="@drawable/bg_edittext_left"
+                android:textSize="@dimen/btn_md_font_size"
+                android:text="@string/usr_pw_confirm" />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/base_padding" >
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_input_email"
+                android:labelFor="@+id/editTextEmail"
+                android:paddingBottom="@dimen/base_padding_top"
+                android:paddingLeft="117.67dp"
+                android:paddingTop="@dimen/base_padding_top"
+                android:textColorHint="@color/colorHint"
+                android:textColor="@color/colorBaseText"
+                android:textCursorDrawable="@null"
+                android:background="@drawable/bg_edittext"
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/btn_md_font_size" >
+            </EditText>
+
+            <TextView
+                android:layout_width="104dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/colorEditTextAddone"
+                android:background="@drawable/bg_edittext_left"
+                android:textSize="@dimen/btn_md_font_size"
+                android:text="@string/usr_email" />
+        </FrameLayout>
+
+        <CheckBox
+            android:id="@+id/cbAgreeTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBaseText"
+            android:buttonTint="@color/colorBaseText"
+            android:text="@string/agree_total"
+            android:textSize="@dimen/btn_md_font_size" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorBaseBoarder"
+            android:layout_marginBottom="@dimen/base_padding_right" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/base_padding"
+            android:paddingRight="@dimen/base_padding"
+            android:paddingBottom="@dimen/base_padding_right"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cbAgreeTemrsOfUse"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/colorBaseText"
+                android:buttonTint="@color/colorBaseText"
+                android:text="@string/agree_termsofuse"
+                android:textSize="@dimen/btn_md_font_size" />
+
+            <Button
+                android:id="@+id/btnTermOfUse"
+                android:layout_width="@dimen/btn_sm_width"
+                android:layout_height="@dimen/btn_sm_height"
+                android:textColor="@color/colorBaseText"
+                android:background="@drawable/ripple_background_outline_flat"
+                android:text="@string/view_agree"
+                android:textSize="@dimen/btn_sm_font_size" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/base_padding"
+            android:paddingRight="@dimen/base_padding"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cbAgreePrivacyPolicy"
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/colorBaseText"
+                android:buttonTint="@color/colorBaseText"
+                android:text="@string/agree_privacypolicy"
+                android:textSize="@dimen/btn_md_font_size" />
+
+            <Button
+                android:id="@+id/btnPrivacyPolicy"
+                android:layout_width="@dimen/btn_sm_width"
+                android:layout_height="@dimen/btn_sm_height"
+                android:textColor="@color/colorBaseText"
+                android:background="@drawable/ripple_background_outline_flat"
+                android:text="@string/view_agree"
+                android:textSize="@dimen/btn_sm_font_size" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorBaseBoarder"
+            android:layout_marginTop="@dimen/base_padding_right"
+            android:layout_marginBottom="@dimen/base_padding" />
+
+        <Button
+            android:id="@+id/btnFindUserID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple_background"
+            android:stateListAnimator="@null"
+            android:text="@string/btn_signup"
+            android:textColor="@color/colorBaseText"
+            android:textSize="@dimen/btn_lg_font_size" />
+    </LinearLayout>
+</ScrollView>

@@ -41,6 +41,6 @@
         android:textColor="@color/MainColor"
         android:background="@drawable/ripple_background_outline"
         android:stateListAnimator="@null"
-        android:text="@string/btn_signup"
+        android:text="@string/btn_signup_1"
         android:textSize="20sp"/>
 </RelativeLayout>

@@ -91,6 +91,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/colorBaseText"
                 android:background="@drawable/ripple_background_outline_flat"
+                android:onClick="onClickNewMember"
                 android:text="@string/new_usr"
                 android:textSize="@dimen/btn_md_font_size" />
         </LinearLayout>

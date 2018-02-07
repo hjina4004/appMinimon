@@ -15,6 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,21 +55,27 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("LoginActivity:", "onClickLogin start");
         // URL 설정.
         // http://192.168.10.182:8080/lmvas/api/json/login.php?key=gidwls&uname=jina&psw=1234
-        // http://dev.api.minimon.com
-        String url = "http://dev.api.minimon.com/login";
-        ContentValues loingInfo = new ContentValues();
-        loingInfo.put("type", "basic");
-        loingInfo.put("id", "jina");
-        loingInfo.put("value", "1234@");
-        loingInfo.put("dvice_id", "1234-1234");
+        // http://dev.api.minimon.com/User/login?type=basic&id=hjina&value=12345678&device_id=358964070302117
+        // {"resCode":"0900","msg":"\ud504\ub85c\uc138\uc2a4\uc624\ub958","data":{"errCode":"0104","errMsg":"\uc544\uc774\ub514 \ub610\ub294 \ube44\ubc00\ubc88\ud638\ub97c \ud655\uc778\ud558\uc138\uc694."}}
+        String url = "http://dev.api.minimon.com/User/login";
+        ContentValues loginInfo = new ContentValues();
+        loginInfo.put("type", "basic");
+        loginInfo.put("id", "hjina");
+        loginInfo.put("value", "12345678");
+        // loginInfo.put("device_id", "358964070302117");
 
         // AsyncTask를 통해 HttpURLConnection 수행.
-        NetworkTask networkTask = new NetworkTask(url, loingInfo);
+        NetworkTask networkTask = new NetworkTask(url, loginInfo);
         networkTask.execute();
     }
 
     public void responseNetworkTask(String s) {
-        Log.d("LoginActivity:", "responseNetworkTask: " + s);
+        try {
+            JSONObject objJSON = new JSONObject(s);
+            Log.d("LoginActivity:", "responseNetworkTask: " + objJSON);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public class NetworkTask extends AsyncTask<Void, Void, String> {
@@ -97,6 +107,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickFindMember(View view) {
         Intent intent = new Intent(LoginActivity.this.getApplicationContext(), FindMemberActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickNewMember(View view) {
+        Intent intent = new Intent(LoginActivity.this.getApplicationContext(), NewMemberActivity.class);
         startActivity(intent);
     }
 }
