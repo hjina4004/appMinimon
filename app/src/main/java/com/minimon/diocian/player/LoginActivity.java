@@ -112,6 +112,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickNewMember(View view) {
         Intent intent = new Intent(LoginActivity.this.getApplicationContext(), NewMemberActivity.class);
+
+        String strType = getResources().getResourceEntryName(view.getId());
+        if (view.getId() == R.id.btnNewUser)    intent.putExtra("type", "basic");
+        else                                    intent.putExtra("type", strType);
+
         startActivity(intent);
     }
 }

@@ -11,6 +11,7 @@
         android:orientation="vertical" >
 
         <FrameLayout
+            android:id="@+id/layoutUserID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/base_padding" >
@@ -73,6 +74,7 @@
                 android:text="@string/usr_nickname" />
         </FrameLayout>
         <FrameLayout
+            android:id="@+id/layoutUserPW"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/base_padding" >
@@ -104,6 +106,7 @@
                 android:text="@string/usr_pw" />
         </FrameLayout>
         <FrameLayout
+            android:id="@+id/layoutUserPWConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/base_padding" >
@@ -135,6 +138,7 @@
                 android:text="@string/usr_pw_confirm" />
         </FrameLayout>
         <FrameLayout
+            android:id="@+id/layoutUserEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/base_padding" >
