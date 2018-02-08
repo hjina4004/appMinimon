@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 public class NewMemberActivity extends AppCompatActivity {
     String strType = "basic";
@@ -37,6 +38,8 @@ public class NewMemberActivity extends AppCompatActivity {
     }
 
     private void modeSNS() {
+        EditText editText = findViewById(R.id.editTextID);
+        editText.setText(getIntent().getStringExtra("uid"));
         View view = findViewById(R.id.layoutUserID);
         enableViews(view, false);
 
@@ -46,6 +49,8 @@ public class NewMemberActivity extends AppCompatActivity {
         view = findViewById(R.id.layoutUserPWConfirm);
         enableViews(view, false);
 
+        editText = findViewById(R.id.editTextEmail);
+        editText.setText(getIntent().getStringExtra("email"));
         view = findViewById(R.id.layoutUserEmail);
         enableViews(view, false);
     }

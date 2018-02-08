@@ -2,9 +2,10 @@ package com.minimon.diocian.player;
 
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -14,17 +15,29 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
+    private MinimonUser minimonUser;
+    private NaverLogin naverLogin;
+
+    private static Context mContext;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mContext = this;
+
+        init();
+    }
+
+    public void init() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
 
@@ -32,12 +45,60 @@ public class LoginActivity extends AppCompatActivity {
         setImageInButton(R.mipmap.a001_social_kakao, R.id.btnKakao);
         setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook);
         setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle);
+
+        initAutoLogin();
+
+        initMinomon();
+        initNaver();
+    }
+
+    private void initMinomon() {
+        minimonUser = new MinimonUser();
+        minimonUser.setListener(new MinimonUser.MinimonLoginListener() {
+            @Override
+            public void onLogined(JSONObject info) {
+                Log.d("LoginActivity:", "onLogined: " + info);
+            }
+        });
+    }
+
+    private void initNaver() {
+        naverLogin = new NaverLogin(mContext);
+        naverLogin.setListener(new NaverLogin.NaverLoginListener() {
+            @Override
+            public void onLogined(String uid, String email) {
+                newMemberSNS("naver", "naver_" + uid, email);
+            }
+        });
+
+        Button loginButton = findViewById(R.id.btnNaver);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                naverLogin.forceLogin();
+            }
+        });
+    }
+
+    private void initAutoLogin() {
+        CheckBox checkBox = findViewById(R.id.cbAutoLogin);
+        checkBox.setChecked(loadAutoLogin());
+
+        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (buttonView.getId() == R.id.cbAutoLogin) {
+                    saveAutoLogin(isChecked);
+                }
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            //finish();
+            NavUtils.navigateUpFromSameTask(LoginActivity.this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -47,62 +108,20 @@ public class LoginActivity extends AppCompatActivity {
         Drawable drawable = ContextCompat.getDrawable(LoginActivity.this, drawableID);
         drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
-        Button btn = findViewById(btnID);
+        Button btn = (Button) findViewById(btnID);
         btn.setCompoundDrawables(drawable, null, null, null);
     }
 
     public void onClickLogin(View view) {
         Log.d("LoginActivity:", "onClickLogin start");
-        // URL 설정.
-        // http://192.168.10.182:8080/lmvas/api/json/login.php?key=gidwls&uname=jina&psw=1234
-        // http://dev.api.minimon.com/User/login?type=basic&id=hjina&value=12345678&device_id=358964070302117
-        // {"resCode":"0900","msg":"\ud504\ub85c\uc138\uc2a4\uc624\ub958","data":{"errCode":"0104","errMsg":"\uc544\uc774\ub514 \ub610\ub294 \ube44\ubc00\ubc88\ud638\ub97c \ud655\uc778\ud558\uc138\uc694."}}
-        String url = "http://dev.api.minimon.com/User/login";
+
         ContentValues loginInfo = new ContentValues();
         loginInfo.put("type", "basic");
         loginInfo.put("id", "hjina");
         loginInfo.put("value", "12345678");
-        // loginInfo.put("device_id", "358964070302117");
+        loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
 
-        // AsyncTask를 통해 HttpURLConnection 수행.
-        NetworkTask networkTask = new NetworkTask(url, loginInfo);
-        networkTask.execute();
-    }
-
-    public void responseNetworkTask(String s) {
-        try {
-            JSONObject objJSON = new JSONObject(s);
-            Log.d("LoginActivity:", "responseNetworkTask: " + objJSON);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public class NetworkTask extends AsyncTask<Void, Void, String> {
-        private String url;
-        private ContentValues values;
-
-        public NetworkTask(String url, ContentValues values) {
-            this.url = url;
-            this.values = values;
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String result; // 요청 결과를 저장할 변수.
-            RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
-            result = requestHttpURLConnection.request(url, values); // 해당 URL로 부터 결과물을 얻어온다.
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            //doInBackground()로 부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력한다.
-            responseNetworkTask(s);
-        }
+        minimonUser.login(loginInfo);
     }
 
     public void onClickFindMember(View view) {
@@ -112,11 +131,30 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickNewMember(View view) {
         Intent intent = new Intent(LoginActivity.this.getApplicationContext(), NewMemberActivity.class);
-
-        String strType = getResources().getResourceEntryName(view.getId());
-        if (view.getId() == R.id.btnNewUser)    intent.putExtra("type", "basic");
-        else                                    intent.putExtra("type", strType);
-
+        intent.putExtra("type", "basic");
         startActivity(intent);
+    }
+
+    private void newMemberSNS(String nameSNS, String uid, String email) {
+        Intent intent = new Intent(LoginActivity.this.getApplicationContext(), NewMemberActivity.class);
+        intent.putExtra("type", nameSNS);
+        intent.putExtra("uid", uid);
+        intent.putExtra("email", email);
+        startActivity(intent);
+    }
+
+    private void saveAutoLogin(boolean isAuto) {
+        SharedPreferences prefs = getSharedPreferences("minimon_preference", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("AutoLogin", isAuto? "1":"0");
+        editor.commit();
+    }
+
+    public boolean loadAutoLogin() {
+        SharedPreferences prefs = getSharedPreferences("minimon_preference", MODE_PRIVATE);
+        if (prefs.getString("AutoLogin", "0").equals("1"))
+            return true;
+
+        return false;
     }
 }

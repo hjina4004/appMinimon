@@ -8,7 +8,7 @@
     <color name="colorBaseRipple">#80FFFFFF</color>
     <color name="colorBaseBG">#1e2328</color>
     <color name="colorBaseEditText">#2b3135</color>
-    <color name="colorBaseText">#FFFFFF</color>
+    <color name="colorBaseText">#ffffff</color>
     <color name="colorSubText">#777c80</color>
     <color name="colorBaseBoarder">#333333</color>
     <color name="colorError">#ff0000</color>

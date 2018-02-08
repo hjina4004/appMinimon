@@ -13,7 +13,7 @@ public class GateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gate);
 
-        Button btnLogin = findViewById(R.id.btn_login);
+        Button btnLogin = (Button) findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -21,7 +21,7 @@ public class GateActivity extends AppCompatActivity {
             }
         });
 
-        Button btnSignup = findViewById(R.id.btn_signup);
+        Button btnSignup = (Button) findViewById(R.id.btn_signup);
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

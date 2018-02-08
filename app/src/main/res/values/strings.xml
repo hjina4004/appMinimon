@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Minimon</string>
+    <string name="naver_ClientID">pFdVUe7QyF5niz__G19O</string>
+    <string name="naver_ClientSecret">yopsmvueGB</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
