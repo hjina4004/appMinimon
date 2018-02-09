@@ -18,20 +18,28 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
-import com.kakao.auth.AuthType;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.ApiErrorCode;
+import com.kakao.usermgmt.LoginButton;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
-import com.minimon.diocian.player.kakao.WaitingDialog;
 
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
+    private String TAG = "LoginActivity";
+
     private MinimonUser minimonUser;
     private NaverLogin naverLogin;
     private SessionCallback callback;   // for kakao
+    private LoginButton btn_kakao_login;
 
     private static Context mContext;
 
@@ -46,16 +54,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void init() {
-        callback = new SessionCallback();
-        Session.getCurrentSession().addCallback(callback);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
 
-        setImageInButton(R.mipmap.a001_social_naver, R.id.btnNaver);
-        setImageInButton(R.mipmap.a001_social_kakao, R.id.btnKakao);
-        setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook);
-        setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle);
+//        setImageInButton(R.mipmap.a001_social_naver, R.id.btnNaver);
+//        setImageInButton(R.mipmap.a001_social_kakao, R.id.btnKakao);
+//        setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook);
+//        setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle);
 
         initAutoLogin();
 
@@ -93,16 +98,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initKakao() {
+        callback = new SessionCallback();
+        Session.getCurrentSession().addCallback(callback);
+//        Session.getCurrentSession().checkAndImplicitOpen();
+
+        btn_kakao_login = findViewById(R.id.login_button_activity);
         Button loginButton = findViewById(R.id.btnKakao);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Session session = Session.getCurrentSession();
-                session.addCallback(new SessionCallback());
-                session.open(AuthType.KAKAO_LOGIN_ALL, LoginActivity.this);
+                btn_kakao_login.performClick();
             }
         });
-
     }
 
     private void initAutoLogin() {
@@ -128,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
@@ -147,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onSessionOpened() {
-            redirectSignupActivity();
+            requestMe();
         }
 
         @Override
@@ -158,22 +166,52 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    protected void showWaitingDialog() { WaitingDialog.showWaitingDialog(this); }
+    /**
+     * 사용자의 상태를 알아 보기 위해 me API 호출을 한다.
+     */
+    protected void requestMe() {
+        UserManagement.getInstance().requestMe(new MeResponseCallback() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                String message = "failed to get user info. msg=" + errorResult;
+                Log.d(TAG,message);
 
-    protected void cancelWaitingDialog() {
-        WaitingDialog.cancelWaitingDialog();
+                int result = errorResult.getErrorCode();
+                if (result == ApiErrorCode.CLIENT_ERROR_CODE) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_message_for_service_unavailable), Toast.LENGTH_SHORT).show();
+                } else {
+                    redirectLoginActivity();
+                }
+            }
+
+            @Override
+            public void onSessionClosed(ErrorResult errorResult) {
+                redirectLoginActivity();
+            }
+
+            @Override
+            public void onSuccess(UserProfile userProfile) {
+                Log.d(TAG,"UserProfile : " + userProfile);
+                newMemberSNS("kakao", "kakao_" + userProfile.getId(), userProfile.getEmail());
+            }
+
+            @Override
+            public void onNotSignedUp() {
+                showSignup();
+            }
+        });
     }
 
-    protected void redirectLoginActivity() {
-//        final Intent intent = new Intent(this, RootLoginActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
+    private void redirectLoginActivity() {
+        Log.d(TAG,"redirectLoginActivity");
     }
 
-    protected void redirectSignupActivity() {
-//        final Intent intent = new Intent(this, KakaoSignupActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
+    private void redirectMainActivity() {
+        Log.d(TAG,"redirectMainActivity");
+    }
+
+    private void showSignup() {
+        Log.d(TAG,"showSignup");
     }
 
     public void setImageInButton(int drawableID, int btnID) {

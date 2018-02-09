@@ -1,5 +1,6 @@
 package com.minimon.diocian.player;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -14,15 +15,17 @@ import android.widget.Button;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import static com.kakao.util.helper.Utility.getPackageInfo;
+
 
 public class GateActivity extends AppCompatActivity {
-    private final String TAG = "GateActivity";
+    private final static String TAG = "GateActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gate);
 
-        getHashKey();
+        Log.d(TAG, "Hash Key = " + getKeyHash(this.getApplicationContext()));
 
         Button btnLogin = (Button) findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -50,18 +53,20 @@ public class GateActivity extends AppCompatActivity {
 
     }
 
-    private void getHashKey() {
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo("com.minimon.diocian.player", PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
+    public static String getKeyHash(final Context context) {
+        PackageInfo packageInfo = getPackageInfo(context, PackageManager.GET_SIGNATURES);
+        if (packageInfo == null)
+            return null;
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.d(TAG,"key_hash="+ Base64.encodeToString(md.digest(), Base64.DEFAULT));
+                return Base64.encodeToString(md.digest(), Base64.NO_WRAP);
+            } catch (NoSuchAlgorithmException e) {
+                Log.w(TAG, "Unable to get MessageDigest. signature=" + signature, e);
             }
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
         }
+        return null;
     }
 }
