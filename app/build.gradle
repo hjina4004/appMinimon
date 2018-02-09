@@ -38,4 +38,7 @@ dependencies {
 
     // 카카오 로그인 sdk를 사용하기 위해 필요.
     compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+
+    // Facebook 로그인
+    implementation 'com.facebook.android:facebook-login:[4,5)'
 }

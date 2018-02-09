@@ -20,6 +20,14 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -31,15 +39,20 @@ import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
 
 public class LoginActivity extends AppCompatActivity {
     private String TAG = "LoginActivity";
 
     private MinimonUser minimonUser;
     private NaverLogin naverLogin;
-    private SessionCallback callback;   // for kakao
+    private SessionCallback callback;           // for kakao
     private LoginButton btn_kakao_login;
+
+    private CallbackManager callbackManager;    //for acebook
+    com.facebook.login.widget.LoginButton btn_facebook_btn;
 
     private static Context mContext;
 
@@ -67,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         initMinomon();
         initNaver();
         initKakao();
+        initFacebook();
     }
 
     private void initMinomon() {
@@ -100,14 +114,51 @@ public class LoginActivity extends AppCompatActivity {
     private void initKakao() {
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
-//        Session.getCurrentSession().checkAndImplicitOpen();
 
         btn_kakao_login = findViewById(R.id.login_button_activity);
         Button loginButton = findViewById(R.id.btnKakao);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_kakao_login.performClick();
+                if (!Session.getCurrentSession().checkAndImplicitOpen()) {
+                    btn_kakao_login.performClick();
+                } else {}
+            }
+        });
+    }
+
+    private void initFacebook() {
+        callbackManager = CallbackManager.Factory.create();
+
+        btn_facebook_btn = findViewById(R.id.login_button_facebook);
+        btn_facebook_btn.setReadPermissions("public_profile", "email");
+        Button loginButton = findViewById(R.id.btnFacebook);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                if (accessToken == null) {
+                    btn_facebook_btn.performClick();
+                } else {
+                    requestFacebookUser(accessToken);
+                }
+            }
+        });
+
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                requestFacebookUser(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG,"FacebookCallback onCancel");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Log.d(TAG,"FacebookCallback onError");
             }
         });
     }
@@ -142,12 +193,16 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        // for facebook
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         Session.getCurrentSession().removeCallback(callback);
     }
 
@@ -212,6 +267,31 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showSignup() {
         Log.d(TAG,"showSignup");
+    }
+
+    private void requestFacebookUser(AccessToken accessToken) {
+        Log.e("onSuccess", "--------" + accessToken);
+        Log.e("Token", "--------" + accessToken.getToken());
+        Log.e("Permission", "--------" + accessToken.getPermissions());
+
+        GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                Log.v(TAG, "GraphRequest result:" + response.toString());
+                try {
+                    String id = object.getString("id");
+                    String email = object.has("email")? object.getString("email"):"";
+                    newMemberSNS("facebook", "fb_" + id, email);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,email,gender");
+        graphRequest.setParameters(parameters);
+        graphRequest.executeAsync();
     }
 
     public void setImageInButton(int drawableID, int btnID) {

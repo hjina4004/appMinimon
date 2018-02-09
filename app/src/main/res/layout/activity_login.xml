@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBaseBG"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
@@ -37,12 +38,12 @@
             android:inputType="textPassword"
             android:textSize="@dimen/btn_md_font_size" />
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cbAutoLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:buttonTint="@color/colorBaseText"
+            app:buttonTint="@color/checkbox_filter_tint"
             android:text="@string/btn_autologin"
             android:textColor="@color/colorBaseText"
             android:textSize="@dimen/btn_md_font_size" />
@@ -169,7 +170,14 @@
             android:drawableLeft="@mipmap/a001_social_facebook"
             android:text="@string/login_facebook"
             android:textSize="@dimen/btn_md_font_size" />
-
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:visibility="gone"/>
         <Button
             android:id="@+id/btnGoogle"
             android:layout_width="match_parent"
