@@ -19,11 +19,19 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.kakao.auth.AuthType;
+import com.kakao.auth.ISessionCallback;
+import com.kakao.auth.Session;
+import com.kakao.util.exception.KakaoException;
+import com.kakao.util.helper.log.Logger;
+import com.minimon.diocian.player.kakao.WaitingDialog;
+
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
     private MinimonUser minimonUser;
     private NaverLogin naverLogin;
+    private SessionCallback callback;   // for kakao
 
     private static Context mContext;
 
@@ -38,6 +46,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void init() {
+        callback = new SessionCallback();
+        Session.getCurrentSession().addCallback(callback);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
 
@@ -50,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
         initMinomon();
         initNaver();
+        initKakao();
     }
 
     private void initMinomon() {
@@ -80,6 +92,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void initKakao() {
+        Button loginButton = findViewById(R.id.btnKakao);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Session session = Session.getCurrentSession();
+                session.addCallback(new SessionCallback());
+                session.open(AuthType.KAKAO_LOGIN_ALL, LoginActivity.this);
+            }
+        });
+
+    }
+
     private void initAutoLogin() {
         CheckBox checkBox = findViewById(R.id.cbAutoLogin);
         checkBox.setChecked(loadAutoLogin());
@@ -102,6 +127,53 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Session.getCurrentSession().removeCallback(callback);
+    }
+
+    private class SessionCallback implements ISessionCallback {
+
+        @Override
+        public void onSessionOpened() {
+            redirectSignupActivity();
+        }
+
+        @Override
+        public void onSessionOpenFailed(KakaoException exception) {
+            if(exception != null) {
+                Logger.e(exception);
+            }
+        }
+    }
+
+    protected void showWaitingDialog() { WaitingDialog.showWaitingDialog(this); }
+
+    protected void cancelWaitingDialog() {
+        WaitingDialog.cancelWaitingDialog();
+    }
+
+    protected void redirectLoginActivity() {
+//        final Intent intent = new Intent(this, RootLoginActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+    }
+
+    protected void redirectSignupActivity() {
+//        final Intent intent = new Intent(this, KakaoSignupActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
     }
 
     public void setImageInButton(int drawableID, int btnID) {
