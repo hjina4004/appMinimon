@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBaseBG"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
@@ -170,12 +171,12 @@
                 android:text="@string/usr_email" />
         </FrameLayout>
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cbAgreeTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorBaseText"
-            android:buttonTint="@color/colorBaseText"
+            app:buttonTint="@color/checkbox_filter_tint"
             android:text="@string/agree_total"
             android:textSize="@dimen/btn_md_font_size" />
 
@@ -193,16 +194,15 @@
             android:paddingBottom="@dimen/base_padding_right"
             android:orientation="horizontal">
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/cbAgreeTemrsOfUse"
                 android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/colorBaseText"
-                android:buttonTint="@color/colorBaseText"
+                app:buttonTint="@color/checkbox_filter_tint"
                 android:text="@string/agree_termsofuse"
                 android:textSize="@dimen/btn_md_font_size" />
-
             <Button
                 android:id="@+id/btnTermOfUse"
                 android:layout_width="@dimen/btn_sm_width"
@@ -220,16 +220,15 @@
             android:paddingRight="@dimen/base_padding"
             android:orientation="horizontal">
 
-            <CheckBox
+            <android.support.v7.widget.AppCompatCheckBox
                 android:id="@+id/cbAgreePrivacyPolicy"
                 android:layout_width="10dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/colorBaseText"
-                android:buttonTint="@color/colorBaseText"
+                app:buttonTint="@color/checkbox_filter_tint"
                 android:text="@string/agree_privacypolicy"
                 android:textSize="@dimen/btn_md_font_size" />
-
             <Button
                 android:id="@+id/btnPrivacyPolicy"
                 android:layout_width="@dimen/btn_sm_width"

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +29,19 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -38,21 +52,32 @@ import com.kakao.usermgmt.callback.MeResponseCallback;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
+import com.nhn.android.naverlogin.ui.OAuthLoginDialogMng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private String TAG = "LoginActivity";
+
+    private OAuthLoginDialogMng mDialogMng;
 
     private MinimonUser minimonUser;
     private NaverLogin naverLogin;
-    private SessionCallback callback;           // for kakao
+
+    // for kakao
+    private SessionCallback callback;
     private LoginButton btn_kakao_login;
 
-    private CallbackManager callbackManager;    //for acebook
-    com.facebook.login.widget.LoginButton btn_facebook_btn;
+    // for facebook
+    private CallbackManager callbackManager;
+    com.facebook.login.widget.LoginButton btn_facebook_login;
+
+    // for Google
+    private static final int GOOGLE_SIGN_IN = 9001;
+    private GoogleApiClient mGoogleApiClient;
+    private FirebaseAuth mFirebaseAuth;
 
     private static Context mContext;
 
@@ -75,12 +100,15 @@ public class LoginActivity extends AppCompatActivity {
 //        setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook);
 //        setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle);
 
+        mDialogMng = new OAuthLoginDialogMng();
+
         initAutoLogin();
 
         initMinomon();
         initNaver();
         initKakao();
         initFacebook();
+        initGoogle();
     }
 
     private void initMinomon() {
@@ -120,6 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialogMng.showProgressDlg(mContext, "카카오 계정으로 로그인 중입니다.", null);
                 if (!Session.getCurrentSession().checkAndImplicitOpen()) {
                     btn_kakao_login.performClick();
                 } else {}
@@ -130,15 +159,16 @@ public class LoginActivity extends AppCompatActivity {
     private void initFacebook() {
         callbackManager = CallbackManager.Factory.create();
 
-        btn_facebook_btn = findViewById(R.id.login_button_facebook);
-        btn_facebook_btn.setReadPermissions("public_profile", "email");
+        btn_facebook_login = findViewById(R.id.login_button_facebook);
+        btn_facebook_login.setReadPermissions("public_profile", "email");
         Button loginButton = findViewById(R.id.btnFacebook);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialogMng.showProgressDlg(mContext, "페이스북 계정으로 로그인 중입니다.", null);
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
                 if (accessToken == null) {
-                    btn_facebook_btn.performClick();
+                    btn_facebook_login.performClick();
                 } else {
                     requestFacebookUser(accessToken);
                 }
@@ -148,17 +178,44 @@ public class LoginActivity extends AppCompatActivity {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                mDialogMng.hideProgressDlg();
                 requestFacebookUser(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG,"FacebookCallback onCancel");
+                mDialogMng.hideProgressDlg();
             }
 
             @Override
             public void onError(FacebookException exception) {
                 Log.d(TAG,"FacebookCallback onError");
+                mDialogMng.hideProgressDlg();
+            }
+        });
+    }
+
+    private void initGoogle() {
+        mFirebaseAuth = FirebaseAuth.getInstance();
+
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        Button loginButton = findViewById(R.id.btnGoogle);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialogMng.showProgressDlg(mContext, "구글 계정으로 로그인 중입니다.", null);
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, GOOGLE_SIGN_IN);
             }
         });
     }
@@ -197,6 +254,51 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
         super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == GOOGLE_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseAuthWithGoogle(account);
+            } else {
+                // Google Sign In failed, update UI appropriately
+                // ...
+                mDialogMng.hideProgressDlg();
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                mDialogMng.hideProgressDlg();
+
+                if (task.isSuccessful()) {
+                    // Sign in success, update UI with the signed-in user's information
+                    FirebaseUser user = mFirebaseAuth.getCurrentUser();
+
+                    String name = user.getDisplayName();
+                    String email = user.getEmail();
+                    String uid = user.getUid();
+
+                    Log.d(TAG, "Google account --- uid=" + uid);
+                    Log.d(TAG, "Google account --- email=" + email);
+                    Log.d(TAG, "Google account --- name=" + name);
+
+                    newMemberSNS("google", "gg_"+uid, email);
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithCredential:failure", task.getException());
+                    Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -206,15 +308,22 @@ public class LoginActivity extends AppCompatActivity {
         Session.getCurrentSession().removeCallback(callback);
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
     private class SessionCallback implements ISessionCallback {
 
         @Override
         public void onSessionOpened() {
-            requestMe();
+            mDialogMng.hideProgressDlg();
+            requestKakaoUser();
         }
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
+            mDialogMng.hideProgressDlg();
             if(exception != null) {
                 Logger.e(exception);
             }
@@ -224,7 +333,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 사용자의 상태를 알아 보기 위해 me API 호출을 한다.
      */
-    protected void requestMe() {
+    protected void requestKakaoUser() {
         UserManagement.getInstance().requestMe(new MeResponseCallback() {
             @Override
             public void onFailure(ErrorResult errorResult) {
@@ -260,11 +369,6 @@ public class LoginActivity extends AppCompatActivity {
     private void redirectLoginActivity() {
         Log.d(TAG,"redirectLoginActivity");
     }
-
-    private void redirectMainActivity() {
-        Log.d(TAG,"redirectMainActivity");
-    }
-
     private void showSignup() {
         Log.d(TAG,"showSignup");
     }
@@ -326,6 +430,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void newMemberSNS(String nameSNS, String uid, String email) {
+        mDialogMng.hideProgressDlg();
+
         Intent intent = new Intent(LoginActivity.this.getApplicationContext(), NewMemberActivity.class);
         intent.putExtra("type", nameSNS);
         intent.putExtra("uid", uid);

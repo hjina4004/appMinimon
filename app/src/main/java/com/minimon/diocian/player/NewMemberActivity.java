@@ -9,10 +9,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class NewMemberActivity extends AppCompatActivity {
     String strType = "basic";
+
+    private CheckBox cbAgreeTotal;
+    private CheckBox cbAgreeTemrsOfUse;
+    private CheckBox cbAgreePrivacyPolicy;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,6 +30,8 @@ public class NewMemberActivity extends AppCompatActivity {
         strType = getIntent().getStringExtra("type");
         Log.i("strType", strType);
         if (!strType.equals("basic")) modeSNS();
+
+        initAggre();
     }
 
     @Override
@@ -65,5 +72,44 @@ public class NewMemberActivity extends AppCompatActivity {
         v.setEnabled(enabled);
         v.setAlpha(0.5F);
         v.setFocusable(false);
+    }
+
+    private void initAggre() {
+        cbAgreeTotal = findViewById(R.id.cbAgreeTotal);
+        cbAgreeTemrsOfUse = findViewById(R.id.cbAgreeTemrsOfUse) ;
+        cbAgreePrivacyPolicy = findViewById(R.id.cbAgreePrivacyPolicy) ;
+
+        cbAgreeTotal.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isChecked = ((CheckBox)v).isChecked();
+                cbAgreeTemrsOfUse.setChecked(isChecked);
+                cbAgreePrivacyPolicy.setChecked(isChecked);
+            }
+        }) ;
+        cbAgreeTemrsOfUse.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox)v).isChecked()) {
+                    // TODO : CheckBox is checked.
+                    if (cbAgreePrivacyPolicy.isChecked())  cbAgreeTotal.setChecked(true);
+                } else {
+                    // TODO : CheckBox is unchecked.
+                    cbAgreeTotal.setChecked(false);
+                }
+            }
+        }) ;
+        cbAgreePrivacyPolicy.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox)v).isChecked()) {
+                    // TODO : CheckBox is checked.
+                    if (cbAgreeTemrsOfUse.isChecked())  cbAgreeTotal.setChecked(true);
+                } else {
+                    // TODO : CheckBox is unchecked.
+                    cbAgreeTotal.setChecked(false);
+                }
+            }
+        }) ;
     }
 }

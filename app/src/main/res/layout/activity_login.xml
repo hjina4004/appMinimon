@@ -188,6 +188,5 @@
             android:drawableLeft="@mipmap/a001_social_google"
             android:text="@string/login_google"
             android:textSize="@dimen/btn_md_font_size" />
-
     </LinearLayout>
 </ScrollView>
