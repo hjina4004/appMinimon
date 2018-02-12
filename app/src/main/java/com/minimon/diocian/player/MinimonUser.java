@@ -68,7 +68,7 @@ import org.json.JSONObject;
 //        0101				사용중인 아이디
 //        0102				사용중인 닉네임
 //        0103				사용중인 이메일
-//        login	"#공통
+//login	"#공통
 //        IOS / Android / Web"	#2 로그인	"{
 //        ""resCode"": ""0000"",
 //        ""msg"": ""로그인에 성공하였습니다."",
@@ -413,6 +413,7 @@ public class MinimonUser {
     private final String TAG = "MinimonUser";
     private final String API_URL = "http://dev.api.minimon.com/User/";
     private String currentRequest;
+    private String typeSocial;
 
     public interface MinimonUserListener {
         // These methods are the different events and need to pass relevant arguments with the event
@@ -422,6 +423,7 @@ public class MinimonUser {
 
     public MinimonUser() {
         this.listener = null; // set null listener
+        typeSocial = "basic";
 
         init();
     }
@@ -437,6 +439,7 @@ public class MinimonUser {
 
     private void requestFunction(String current, ContentValues info) {
         currentRequest = current;
+        typeSocial = info.getAsString("value");
         NetworkTask networkTask = new NetworkTask(API_URL+current, info);
         networkTask.execute();
     }
@@ -580,6 +583,7 @@ public class MinimonUser {
         try {
             JSONObject objJSON = new JSONObject(s);
             objJSON.put("current_request", currentRequest);
+            objJSON.put("current_social", typeSocial);
             Log.d(TAG, "responseNetworkTask: " + objJSON);
 
             if (listener != null)

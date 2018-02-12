@@ -29,7 +29,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
@@ -38,13 +37,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -82,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
     // private FirebaseAuth mFirebaseAuth;
 
-    private static Context mContext;
+    private Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,14 +113,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onResponse(JSONObject info) {
                 Log.d(TAG, "MinimonUserListener - onResponse: " + info);
                 try {
-                    String resCode = info.getString("resCode");
-                    String currentRequest = info.getString("current_request");
-                    if (resCode.equals("0000") && currentRequest.equals("login")) {
-                        UserInfo.getInstance().setData(info.getJSONObject("data"));
-                        gotoMain();
-                    } else if (currentRequest.equals("login")) {
-                        print_error(R.string.notice_error_login);
-                    }
+                    String resCode = info.has("resCode")? info.getString("resCode"):"";
+                    String currentRequest = info.has("current_request")? info.getString("current_request"):"";
+                    String typeSocial = info.has("current_social")? info.getString("current_social"):"basic";
+                    if (currentRequest.equals("login"))     resultMinimonLogin(info);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -136,12 +124,35 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
+    private void resultMinimonLogin(JSONObject info) {
+        try {
+            UserInfo userInfo = UserInfo.getInstance();
+            String resCode = info.has("resCode") ? info.getString("resCode") : "";
+            String typeSocial = info.has("current_social") ? info.getString("current_social") : "basic";
+
+            if (resCode.equals("0000")) {
+                userInfo.setData(info.getJSONObject("data"));
+                gotoMain();
+            } else if (resCode.equals("0402") && !typeSocial.equals("basic")) {
+                newMemberSNS(typeSocial, userInfo.getUID(), userInfo.getEmail());
+            } else {
+                print_error(R.string.notice_error_login);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initNaver() {
         naverLogin = new NaverLogin(mContext);
         naverLogin.setListener(new NaverLogin.NaverLoginListener() {
             @Override
             public void onLogined(String uid, String email) {
-                newMemberSNS("NV", "NV" + uid, email);
+                UserInfo userInfo = UserInfo.getInstance();
+                userInfo.setUID(uid);
+                userInfo.setEmail(email);
+                loginMinimon(uid, "NV", "social");
+                // newMemberSNS("NV", uid, email);
             }
         });
 
@@ -287,7 +298,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId() + ", " + acct.getEmail());
-        newMemberSNS("GG", "GG"+acct.getId(), acct.getEmail());
+        String uid = acct.getId();
+        String email = acct.getEmail();
+
+        UserInfo userInfo = UserInfo.getInstance();
+        userInfo.setUID(uid);
+        userInfo.setEmail(email);
+        loginMinimon(uid, "GG", "social");
+        // newMemberSNS("GG", acct.getId(), acct.getEmail());
 
 //        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 //        mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -307,7 +325,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //                    Log.d(TAG, "Google account --- email=" + email);
 //                    Log.d(TAG, "Google account --- name=" + name);
 //
-//                    newMemberSNS("GG", "GG"+user.getProviderId(), email);
+//                    newMemberSNS("GG", user.getProviderId(), email);
 //                } else {
 //                    // If sign in fails, display a message to the user.
 //                    Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -372,7 +390,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onSuccess(UserProfile userProfile) {
                 Log.d(TAG,"UserProfile : " + userProfile);
-                newMemberSNS("KK", "KK" + userProfile.getId(), userProfile.getEmail());
+                String uid = String.valueOf(userProfile.getId());
+                String email = userProfile.getEmail();
+
+                UserInfo userInfo = UserInfo.getInstance();
+                userInfo.setUID(uid);
+                userInfo.setEmail(email);
+                loginMinimon(uid, "KK", "social");
+                // newMemberSNS("KK", String.valueOf(userProfile.getId()), userProfile.getEmail());
             }
 
             @Override
@@ -399,9 +424,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onCompleted(JSONObject object, GraphResponse response) {
                 Log.v(TAG, "GraphRequest result:" + response.toString());
                 try {
-                    String id = object.getString("id");
+                    String uid = object.getString("id");
                     String email = object.has("email")? object.getString("email"):"";
-                    newMemberSNS("FB", "FB" + id, email);
+
+                    UserInfo userInfo = UserInfo.getInstance();
+                    userInfo.setUID(uid);
+                    userInfo.setEmail(email);
+                    loginMinimon(uid, "KK", "social");
+                    // newMemberSNS("FB", uid, email);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -424,11 +454,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public void onClickLogin(View view) {
         Log.d("LoginActivity:", "onClickLogin start");
+        loginMinimon(getInputUID(), getInputPassword(), "basic");
+    }
 
+    private void loginMinimon(String uid, String password, String type) {
         ContentValues loginInfo = new ContentValues();
-        loginInfo.put("type", "basic");
-        loginInfo.put("id", getInputUID());
-        loginInfo.put("value", getInputPassword());
+        loginInfo.put("type", type);
+        loginInfo.put("id", uid);
+        loginInfo.put("value", password);
         loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
 
         print_error(R.string.notice_loging);
@@ -461,15 +494,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         SharedPreferences prefs = getSharedPreferences("minimon_preference", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("AutoLogin", isAuto? "1":"0");
-        editor.commit();
+        editor.apply();
     }
 
     public boolean loadAutoLogin() {
         SharedPreferences prefs = getSharedPreferences("minimon_preference", MODE_PRIVATE);
-        if (prefs.getString("AutoLogin", "0").equals("1"))
-            return true;
-
-        return false;
+        return prefs.getString("AutoLogin", "0").equals("1");
     }
 
     private String getInputUID() {

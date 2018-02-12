@@ -50,7 +50,10 @@ public class GateActivity extends AppCompatActivity {
     }
 
     public void gotoSignup() {
-
+        Intent intent = new Intent(GateActivity.this.getApplicationContext(), NewMemberActivity.class);
+        intent.putExtra("type", "basic");
+        intent.putExtra("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
+        startActivity(intent);
     }
 
     public static String getKeyHash(final Context context) {

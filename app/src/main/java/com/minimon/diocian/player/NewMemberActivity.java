@@ -18,6 +18,7 @@ import org.json.JSONObject;
 public class NewMemberActivity extends AppCompatActivity {
     private final String TAG = "NewMemberActivity";
     String strType = "basic";
+    String strDeviceID = "";
 
     private MinimonUser minimonUser;
 
@@ -34,6 +35,7 @@ public class NewMemberActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
 
         strType = getIntent().getStringExtra("type");
+        strDeviceID = getIntent().getStringExtra("device_id");
         Log.i("strType", strType);
         if (!strType.equals("basic")) modeSNS();
 
@@ -143,6 +145,7 @@ public class NewMemberActivity extends AppCompatActivity {
         info.put("value", strPW);
         info.put("email", strEmail);
         info.put("nickname", strNickname);
+        info.put("device_id", strDeviceID);
 
         minimonUser.create(info);
     }
