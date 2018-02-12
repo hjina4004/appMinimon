@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "913852316246",
+    "firebase_url": "https://minimon-for-android.firebaseio.com",
+    "project_id": "minimon-for-android",
+    "storage_bucket": "minimon-for-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913852316246:android:8ded8d686f0e846c",
+        "android_client_info": {
+          "package_name": "com.minimon.diocian.player"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913852316246-c5t3d6atbregmu5gf4om8t1i9c63i2cu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.minimon.diocian.player",
+            "certificate_hash": "80065d175e3ecab2da0329ead12f3f9d9d67d134"
+          }
+        },
+        {
+          "client_id": "913852316246-qe0qf95qc94m6tuiclm4595l7qp4446m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL8McS8OZhGP-yYUZQwcHUZw79nBTRkZQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913852316246-qe0qf95qc94m6tuiclm4595l7qp4446m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

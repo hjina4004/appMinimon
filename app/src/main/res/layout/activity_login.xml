@@ -21,7 +21,7 @@
             android:textColor="@color/colorBaseText"
             android:textCursorDrawable="@null"
             android:background="@drawable/bg_edittext"
-            android:inputType="textPersonName"
+            android:inputType="textEmailAddress"
             android:textSize="@dimen/btn_md_font_size" />
 
         <EditText

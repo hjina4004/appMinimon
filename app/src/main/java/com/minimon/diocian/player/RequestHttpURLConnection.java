@@ -2,6 +2,7 @@ package com.minimon.diocian.player;
 
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +14,9 @@ import java.net.URL;
 import java.util.Map;
 
 public class RequestHttpURLConnection {
-    public String request(String _url, ContentValues _params){
+    static final String TAG = "RequestHttpURLConnection";
+
+    public String request(String _url, ContentValues _params, String token){
         // HttpURLConnection 참조 변수.
         HttpURLConnection urlConn = null;
         // URL 뒤에 붙여서 보낼 파라미터.
@@ -61,6 +64,7 @@ public class RequestHttpURLConnection {
             urlConn.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
             urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
             urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;charset=UTF-8");
+            if (token != null)  urlConn.setRequestProperty("Authorization", token);
 
             // [2-2]. parameter 전달 및 데이터 읽어오기.
             String strParams = sbParams.toString(); //sbParams에 정리한 파라미터들을 스트링으로 저장. 예)id=id1&pw=123;
@@ -71,8 +75,10 @@ public class RequestHttpURLConnection {
 
             // [2-3]. 연결 요청 확인.
             // 실패 시 null을 리턴하고 메서드를 종료.
-            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
+            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                Log.e(TAG, "request error: " + urlConn.getResponseCode());
                 return null;
+            }
 
             // [2-4]. 읽어온 결과물 리턴.
             // 요청한 URL의 출력물을 BufferedReader로 받는다.

@@ -29,7 +29,7 @@
                 android:textColor="@color/colorBaseText"
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:textSize="@dimen/btn_md_font_size" >
             </EditText>
 
@@ -60,7 +60,7 @@
                 android:textColor="@color/colorBaseText"
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
-                android:inputType="textPersonName"
+                android:inputType="textEmailAddress"
                 android:textSize="@dimen/btn_md_font_size" >
             </EditText>
 
@@ -247,10 +247,11 @@
             android:layout_marginBottom="@dimen/base_padding" />
 
         <Button
-            android:id="@+id/btnFindUserID"
+            android:id="@+id/btnSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple_background"
+            android:onClick="onClickSignup"
             android:stateListAnimator="@null"
             android:text="@string/btn_signup"
             android:textColor="@color/colorBaseText"

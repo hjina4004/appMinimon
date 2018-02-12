@@ -11,6 +11,9 @@
 
     <string name="title_login">미니몬 서비스 로그인</string>
     <string name="title_sns">소셜 로그인</string>
+    <string name="notice_exit_app">한번 더 뒤로가기 누르면 종료됩니다.</string>
+    <string name="notice_loging">잠시만 기다리세요. 로그인 중입니다.</string>
+    <string name="notice_error_login">아이디 또는 비밀번호를 확인하세요.</string>
 
     <string name="btn_login">로그인</string>
     <string name="btn_signup_1">간편 회원가입</string>

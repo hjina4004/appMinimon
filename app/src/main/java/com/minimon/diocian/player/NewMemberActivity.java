@@ -1,6 +1,7 @@
 package com.minimon.diocian.player;
 
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -12,8 +13,13 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import org.json.JSONObject;
+
 public class NewMemberActivity extends AppCompatActivity {
+    private final String TAG = "NewMemberActivity";
     String strType = "basic";
+
+    private MinimonUser minimonUser;
 
     private CheckBox cbAgreeTotal;
     private CheckBox cbAgreeTemrsOfUse;
@@ -31,7 +37,8 @@ public class NewMemberActivity extends AppCompatActivity {
         Log.i("strType", strType);
         if (!strType.equals("basic")) modeSNS();
 
-        initAggre();
+        initMinomon();
+        initAgree();
     }
 
     @Override
@@ -74,7 +81,17 @@ public class NewMemberActivity extends AppCompatActivity {
         v.setFocusable(false);
     }
 
-    private void initAggre() {
+    private void initMinomon() {
+        minimonUser = new MinimonUser();
+        minimonUser.setListener(new MinimonUser.MinimonUserListener() {
+            @Override
+            public void onResponse(JSONObject info) {
+                Log.d(TAG, "MinimonUserListener - onResponse: " + info);
+            }
+        });
+    }
+
+    private void initAgree() {
         cbAgreeTotal = findViewById(R.id.cbAgreeTotal);
         cbAgreeTemrsOfUse = findViewById(R.id.cbAgreeTemrsOfUse) ;
         cbAgreePrivacyPolicy = findViewById(R.id.cbAgreePrivacyPolicy) ;
@@ -86,30 +103,78 @@ public class NewMemberActivity extends AppCompatActivity {
                 cbAgreeTemrsOfUse.setChecked(isChecked);
                 cbAgreePrivacyPolicy.setChecked(isChecked);
             }
-        }) ;
+        });
         cbAgreeTemrsOfUse.setOnClickListener(new CheckBox.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (((CheckBox)v).isChecked()) {
-                    // TODO : CheckBox is checked.
                     if (cbAgreePrivacyPolicy.isChecked())  cbAgreeTotal.setChecked(true);
                 } else {
-                    // TODO : CheckBox is unchecked.
                     cbAgreeTotal.setChecked(false);
                 }
             }
-        }) ;
+        });
         cbAgreePrivacyPolicy.setOnClickListener(new CheckBox.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (((CheckBox)v).isChecked()) {
-                    // TODO : CheckBox is checked.
                     if (cbAgreeTemrsOfUse.isChecked())  cbAgreeTotal.setChecked(true);
                 } else {
-                    // TODO : CheckBox is unchecked.
                     cbAgreeTotal.setChecked(false);
                 }
             }
-        }) ;
+        });
+    }
+
+    public void onClickSignup (View view) {
+        ContentValues info = new ContentValues();
+//        type			    String	O	회원타입	basic: 기본회원 , social: 소셜회원
+//        id			    String	O	아이디
+//        value			    String	O	패스워도 혹은 소셜구분값	"type이 basic일때 패스워드 type이 social일때 소셜타입값 FB:facebook, GG:google, NV:naver, KK:kakao"
+//        email			    String	O	이메일
+//        nickname			String	O	닉네임
+        String strUID = getInputUID();
+        String strPW = getInputPassword();
+        String strEmail = getInputEmail();
+        String strNickname = getInputNickname();
+
+        info.put("type", getType());
+        info.put("id", strUID);
+        info.put("value", strPW);
+        info.put("email", strEmail);
+        info.put("nickname", strNickname);
+
+        minimonUser.create(info);
+    }
+
+    private String getType() {
+        if (strType.equals("basic"))
+            return strType;
+
+        return "social";
+    }
+
+    private String getInputUID() {
+        EditText text = findViewById(R.id.editTextID);
+        return text.getText().toString();
+    }
+
+    private String getInputPassword() {
+        EditText text = findViewById(R.id.editTextPW);
+        if (strType.equals("basic")) {
+            return text.getText().toString();
+        }
+
+        return strType;
+    }
+
+    private String getInputEmail() {
+        EditText text = findViewById(R.id.editTextEmail);
+        return text.getText().toString();
+    }
+
+    private String getInputNickname() {
+        EditText text = findViewById(R.id.editTextNickname);
+        return text.getText().toString();
     }
 }
