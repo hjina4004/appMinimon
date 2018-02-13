@@ -55,6 +55,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private String TAG = "LoginActivity";
+    private String strUID = "";
 
     private OAuthLoginDialogMng mDialogMng;
 
@@ -67,7 +68,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     // for facebook
     private CallbackManager callbackManager;
-    com.facebook.login.widget.LoginButton btn_facebook_login;
+    private com.facebook.login.widget.LoginButton btn_facebook_login;
 
     // for Google
     private static final int GOOGLE_SIGN_IN = 9001;
@@ -95,6 +96,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //        setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook);
 //        setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle);
 
+        strUID = getIntent().getStringExtra("uid");
+        if (strUID != null && strUID.length() > 0) {
+            EditText text = findViewById(R.id.inUserID);
+            text.setText(strUID);
+        }
+
         mDialogMng = new OAuthLoginDialogMng();
 
         initAutoLogin();
@@ -113,9 +120,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onResponse(JSONObject info) {
                 Log.d(TAG, "MinimonUserListener - onResponse: " + info);
                 try {
-                    String resCode = info.has("resCode")? info.getString("resCode"):"";
                     String currentRequest = info.has("current_request")? info.getString("current_request"):"";
-                    String typeSocial = info.has("current_social")? info.getString("current_social"):"basic";
                     if (currentRequest.equals("login"))     resultMinimonLogin(info);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -464,7 +469,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginInfo.put("value", password);
         loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
 
-        print_error(R.string.notice_loging);
+        print_error(null);
         minimonUser.login(loginInfo);
     }
 
@@ -520,6 +525,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void print_error(Integer strID) {
         TextView view = findViewById(R.id.textViewError);
-        view.setText(strID);
+        if (strID == null) {
+            view.setText("");
+        } else {
+            view.setText(strID);
+        }
     }
 }

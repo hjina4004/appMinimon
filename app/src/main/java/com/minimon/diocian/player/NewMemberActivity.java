@@ -2,9 +2,12 @@ package com.minimon.diocian.player;
 
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,7 +16,10 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.regex.Pattern;
 
 public class NewMemberActivity extends AppCompatActivity {
     private final String TAG = "NewMemberActivity";
@@ -89,8 +95,29 @@ public class NewMemberActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject info) {
                 Log.d(TAG, "MinimonUserListener - onResponse: " + info);
+                try {
+                    String currentRequest = info.has("current_request")? info.getString("current_request"):"";
+                    if (currentRequest.equals("create"))     resultMinimonSignup(info);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
+    }
+    private void resultMinimonSignup(JSONObject info) {
+        try {
+            String resCode = info.has("resCode") ? info.getString("resCode") : "";
+
+            if (resCode.equals("0000")) {
+                gotoLogin();
+            } else if (resCode.equals("0400")) {
+                alertNotice(info.getString("msg"));
+            } else {
+                alertNotice(info.getJSONObject("data").getString("errMsg"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initAgree() {
@@ -129,17 +156,31 @@ public class NewMemberActivity extends AppCompatActivity {
     }
 
     public void onClickSignup (View view) {
-        ContentValues info = new ContentValues();
 //        type			    String	O	회원타입	basic: 기본회원 , social: 소셜회원
 //        id			    String	O	아이디
 //        value			    String	O	패스워도 혹은 소셜구분값	"type이 basic일때 패스워드 type이 social일때 소셜타입값 FB:facebook, GG:google, NV:naver, KK:kakao"
 //        email			    String	O	이메일
 //        nickname			String	O	닉네임
         String strUID = getInputUID();
-        String strPW = getInputPassword();
-        String strEmail = getInputEmail();
-        String strNickname = getInputNickname();
+        if (strUID.length() == 0) return;
 
+        String strNickname = getInputNickname();
+        if (strNickname.length() == 0) return;
+
+        String strPW = getInputPassword();
+        if (strPW.length() == 0) return;
+
+        String strEmail = getInputEmail();
+        if (strEmail.length() == 0) return;
+
+        if (!cbAgreeTotal.isChecked()) {
+            alertNotice(R.string.notice_error_agree);
+            return;
+        }
+
+        UserInfo.getInstance().setUID(strUID);
+
+        ContentValues info = new ContentValues();
         info.put("type", getType());
         info.put("id", strUID);
         info.put("value", strPW);
@@ -159,13 +200,38 @@ public class NewMemberActivity extends AppCompatActivity {
 
     private String getInputUID() {
         EditText text = findViewById(R.id.editTextID);
-        return text.getText().toString();
+        if (text.getText().length() < 1) {
+            alertNotice(R.string.notice_none_input_id);
+            return "";
+        }
+
+        String strInput = text.getText().toString();
+        boolean flag = Pattern.matches("^[a-zA-Z\\d]{4,12}$", strInput);
+        if (!flag) {
+            alertNotice(R.string.notice_error_input_id);
+            strInput = "";
+        }
+        return strInput;
     }
 
     private String getInputPassword() {
         EditText text = findViewById(R.id.editTextPW);
+        if (text.getText().length() < 1) {
+            alertNotice(R.string.notice_none_input_pw);
+            return "";
+        }
+
         if (strType.equals("basic")) {
-            return text.getText().toString();
+            String strInput = text.getText().toString();
+            boolean flag = Pattern.matches("^[a-zA-Z\\d]{6,12}$", strInput);
+            if (!flag) {
+                alertNotice(R.string.notice_error_input_pw);
+                strInput = "";
+            } else if (!confirmPassword(strInput)) {
+                alertNotice(R.string.notice_error_input_pwc);
+                strInput = "";
+            }
+            return strInput;
         }
 
         return strType;
@@ -173,11 +239,74 @@ public class NewMemberActivity extends AppCompatActivity {
 
     private String getInputEmail() {
         EditText text = findViewById(R.id.editTextEmail);
-        return text.getText().toString();
+        if (text.getText().length() < 1) {
+            alertNotice(R.string.notice_none_input_email);
+            return "";
+        }
+
+        String strInput = text.getText().toString();
+        boolean flag = Pattern.matches("^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$", strInput);
+        if (!flag) {
+            alertNotice(R.string.notice_error_input_email);
+            strInput = "";
+        }
+        return strInput;
+    }
+
+    private boolean confirmPassword(String strPW) {
+        EditText text = findViewById(R.id.editTextPWC);
+        return strPW.equals(text.getText().toString());
     }
 
     private String getInputNickname() {
         EditText text = findViewById(R.id.editTextNickname);
-        return text.getText().toString();
+        if (text.getText().length() < 1) {
+            alertNotice(R.string.notice_none_input_nickname);
+            return "";
+        }
+
+        String strInput = text.getText().toString();
+        boolean flag = Pattern.matches("^[a-zA-Z\\d]{2,12}$", strInput);
+        if (!flag) {
+            alertNotice(R.string.notice_error_input_nickname);
+            strInput = "";
+        }
+        return strInput;
+    }
+
+    private void alertNotice(int strID) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(NewMemberActivity.this);
+        dialog.setMessage(strID);
+        dialog.setPositiveButton(R.string.notice_close, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+
+        final AlertDialog alert = dialog.create();
+        alert.show();
+    }
+
+    private void alertNotice(String str) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(NewMemberActivity.this);
+        dialog.setMessage(str);
+        dialog.setPositiveButton(R.string.notice_close, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                gotoLogin();
+            }
+        });
+
+        final AlertDialog alert = dialog.create();
+        alert.show();
+    }
+
+    private void gotoLogin() {
+        Intent intent = new Intent(NewMemberActivity.this.getApplicationContext(), LoginActivity.class);
+        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("uid", UserInfo.getInstance().getUID());
+        startActivity(intent);
+
+        finish();
     }
 }

@@ -42,8 +42,8 @@ public class NaverLogin {
 
     // API 인스턴스를 초기화
     private void initNaverAuthInstance() {
-        final String OAUTH_CLIENT_ID = "pFdVUe7QyF5niz__G19O";
-        final String OAUTH_CLIENT_SECRET = "yopsmvueGB";
+        final String OAUTH_CLIENT_ID = "pNqb86SdiAtNl8LEF07A";
+        final String OAUTH_CLIENT_SECRET = "vXiEObrjBd";
         final String OAUTH_CLIENT_NAME = "Minimon";
 
         mOAuthLoginInstance = OAuthLogin.getInstance();
