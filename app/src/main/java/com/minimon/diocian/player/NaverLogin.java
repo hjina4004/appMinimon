@@ -25,7 +25,7 @@ public class NaverLogin {
 
     public interface NaverLoginListener {
         // These methods are the different events and need to pass relevant arguments with the event
-        public void onLogined(String uid, String email);
+        void onLogined(String uid, String email);
     }
     private NaverLoginListener listener;
 

@@ -14,6 +14,7 @@
     <string name="notice_exit_app">한번 더 뒤로가기 누르면 종료됩니다.</string>
     <string name="notice_loging">잠시만 기다리세요. 로그인 중입니다.</string>
     <string name="notice_error_login">아이디 또는 비밀번호를 확인하세요.</string>
+    <string name="notice_success_signup">가입을 환영합니다. 즐거운 시간 되십시오.</string>
     <string name="notice_none_input_id">아이디를 입력해 주세요.</string>
     <string name="notice_none_input_nickname">닉네임을 입력해 주세요.</string>
     <string name="notice_none_input_pw">비밀번호를 입력해 주세요.</string>
@@ -27,6 +28,8 @@
     <string name="notice_error_agree">이용약관 및 개인정보 보호정책에 동의가 되어 있지 않습니다. 동의 후 가입하시기 바랍니다.</string>
     <string name="notice_duplicate_id">사용중인 아이디 입니다.</string>
     <string name="notice_duplicate_nickname">사용중인 닉네임 입니다.</string>
+    <string name="notice_find_id">회원님의 아이디는 %1$s입니다.</string>
+    <string name="notice_not_found_id">이메일과 일치하는 아이디가 없습니다.</string>
     <string name="notice_close">[닫기]</string>
 
     <string name="btn_login">로그인</string>

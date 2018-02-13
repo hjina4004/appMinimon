@@ -447,7 +447,6 @@ public class MinimonUser {
     // #1 회원가입
     // 같은 이메일이라도 소셜 / 일반따로 가입할수 있음
     public void create(ContentValues info) {
-        Log.d(TAG, "createInfo: " + info);
 //        type			    String	O	회원타입	basic: 기본회원 , social: 소셜회원
 //        id			    String	O	아이디
 //        value			    String	O	패스워도 혹은 소셜구분값	"type이 basic일때 패스워드 type이 social일때 소셜타입값 FB:facebook, GG:google, NV:naver, KK:kakao"
@@ -455,6 +454,7 @@ public class MinimonUser {
 //        nickname			String	O	닉네임
 //        nickname_social	String		소셜에서 사용중인 닉네임
 //        device_id			String		디바이스 고유값
+        Log.d(TAG, "createInfo: " + info);
         requestFunction("create", info);
     }
 
@@ -465,17 +465,18 @@ public class MinimonUser {
 //        value			String	O	패스워도 혹은 소셜구분값	"type이 basic일때 패스워드 type이 social일때 소셜타입값 FB:facebook, GG:google, NV:naver, KK:kakao"
 //        device_id		String		디바이스 고유값
         Log.d(TAG, "loginInfo: " + info);
-
         requestFunction("login", info);
     }
 
     // #3 아이디 / 비밀번호 찾기
     // 일반회원은 뒤4자리 마스킹처리
     // 소셜회원은 어느 소셜로 가입했는지 까지만 표기
-    public void find() {
+    public void find(ContentValues info) {
 //        email_id		String	O	이메일주소   	ex) minimon@gamil.com 일때 minimon
 //        email_domain	String	O	이메일도메인	ex) minimon@gamil.com 일때 gmail.com
 //        id			String		유저 아이디	값이 있으면 비밀번호찾기 없으면 아이디찾기
+        Log.d(TAG, "findInfo: " + info);
+        requestFunction("find", info);
     }
 
     // #4 회원정보조회

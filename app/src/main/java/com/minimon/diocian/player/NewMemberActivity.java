@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -23,8 +24,8 @@ import java.util.regex.Pattern;
 
 public class NewMemberActivity extends AppCompatActivity {
     private final String TAG = "NewMemberActivity";
-    String strType = "basic";
-    String strDeviceID = "";
+    private String strType = "basic";
+    private String strDeviceID;
 
     private MinimonUser minimonUser;
 
@@ -98,6 +99,7 @@ public class NewMemberActivity extends AppCompatActivity {
                 try {
                     String currentRequest = info.has("current_request")? info.getString("current_request"):"";
                     if (currentRequest.equals("create"))     resultMinimonSignup(info);
+                    else if (currentRequest.equals("login")) resultMinimonLogin(info);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -109,11 +111,24 @@ public class NewMemberActivity extends AppCompatActivity {
             String resCode = info.has("resCode") ? info.getString("resCode") : "";
 
             if (resCode.equals("0000")) {
-                gotoLogin();
+                alertNoticeSignup();
             } else if (resCode.equals("0400")) {
                 alertNotice(info.getString("msg"));
             } else {
                 alertNotice(info.getJSONObject("data").getString("errMsg"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void resultMinimonLogin(JSONObject info) {
+        try {
+            UserInfo userInfo = UserInfo.getInstance();
+            String resCode = info.has("resCode") ? info.getString("resCode") : "";
+            if (resCode.equals("0000")) {
+                userInfo.setData(info.getJSONObject("data"));
+                gotoMain();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -206,6 +221,9 @@ public class NewMemberActivity extends AppCompatActivity {
         }
 
         String strInput = text.getText().toString();
+        if (!strType.equals("basic"))
+            return strInput;
+
         boolean flag = Pattern.matches("^[a-zA-Z\\d]{4,12}$", strInput);
         if (!flag) {
             alertNotice(R.string.notice_error_input_id);
@@ -216,25 +234,24 @@ public class NewMemberActivity extends AppCompatActivity {
 
     private String getInputPassword() {
         EditText text = findViewById(R.id.editTextPW);
-        if (text.getText().length() < 1) {
+        if (!strType.equals("basic"))
+            return strType;
+
+        String strInput = text.getText().toString();
+        if (strInput.length() < 1) {
             alertNotice(R.string.notice_none_input_pw);
             return "";
         }
 
-        if (strType.equals("basic")) {
-            String strInput = text.getText().toString();
-            boolean flag = Pattern.matches("^[a-zA-Z\\d]{6,12}$", strInput);
-            if (!flag) {
-                alertNotice(R.string.notice_error_input_pw);
-                strInput = "";
-            } else if (!confirmPassword(strInput)) {
-                alertNotice(R.string.notice_error_input_pwc);
-                strInput = "";
-            }
-            return strInput;
+        boolean flag = Pattern.matches("^[a-zA-Z\\d]{6,12}$", strInput);
+        if (!flag) {
+            alertNotice(R.string.notice_error_input_pw);
+            strInput = "";
+        } else if (!confirmPassword(strInput)) {
+            alertNotice(R.string.notice_error_input_pwc);
+            strInput = "";
         }
-
-        return strType;
+        return strInput;
     }
 
     private String getInputEmail() {
@@ -275,38 +292,41 @@ public class NewMemberActivity extends AppCompatActivity {
     }
 
     private void alertNotice(int strID) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(NewMemberActivity.this);
-        dialog.setMessage(strID);
-        dialog.setPositiveButton(R.string.notice_close, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        });
-
-        final AlertDialog alert = dialog.create();
-        alert.show();
+        alertNotice(getResources().getString(strID));
     }
 
     private void alertNotice(String str) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(NewMemberActivity.this);
-        dialog.setMessage(str);
-        dialog.setPositiveButton(R.string.notice_close, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                gotoLogin();
-            }
-        });
-
-        final AlertDialog alert = dialog.create();
-        alert.show();
+        JUtil util = new JUtil();
+        util.alertNotice(NewMemberActivity.this, str, null);
     }
 
-    private void gotoLogin() {
-        Intent intent = new Intent(NewMemberActivity.this.getApplicationContext(), LoginActivity.class);
-        intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("uid", UserInfo.getInstance().getUID());
-        startActivity(intent);
+    private void alertNoticeSignup() {
+        JUtil util = new JUtil();
+        util.alertNotice(NewMemberActivity.this, getResources().getString(R.string.notice_success_signup), new JUtil.JUtilListener() {
+            @Override
+            public void callback(int id) {
+                String uid = getInputUID();
+                String password = getInputPassword();
+                String type = getType();
 
-        finish();
+                loginMinimon(uid, password, type);
+            }
+        });
+    }
+
+    private void loginMinimon(String uid, String password, String type) {
+        ContentValues loginInfo = new ContentValues();
+        loginInfo.put("type", type);
+        loginInfo.put("id", uid);
+        loginInfo.put("value", password);
+        loginInfo.put("device_id", strDeviceID);
+
+        minimonUser.login(loginInfo);
+    }
+
+    private void gotoMain() {
+        Intent intent = new Intent(NewMemberActivity.this.getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

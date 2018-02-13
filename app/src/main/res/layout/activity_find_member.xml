@@ -79,6 +79,7 @@
             android:stateListAnimator="@null"
             android:text="@string/find_usr_id"
             android:textColor="@color/colorBaseText"
+            android:onClick="onClickFindMember"
             android:textSize="@dimen/btn_lg_font_size" />
 
         <TextView
@@ -190,6 +191,7 @@
             android:stateListAnimator="@null"
             android:text="@string/reset_password"
             android:textColor="@color/colorBaseText"
+            android:onClick="onClickResetPassword"
             android:textSize="@dimen/btn_lg_font_size" />
     </LinearLayout>
 </ScrollView>
