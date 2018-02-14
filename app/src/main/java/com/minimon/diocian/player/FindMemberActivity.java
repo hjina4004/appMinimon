@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +38,6 @@ public class FindMemberActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            //finish();
             NavUtils.navigateUpFromSameTask(FindMemberActivity.this);
             return true;
         }
@@ -52,7 +52,8 @@ public class FindMemberActivity extends AppCompatActivity {
                 Log.d(TAG, "MinimonUserListener - onResponse: " + info);
                 try {
                     String currentRequest = info.has("current_request")? info.getString("current_request"):"";
-                    if (currentRequest.equals("find"))     resultMinimonFind(info);
+                    if (currentRequest.equals("find"))                  resultMinimonFind(info);
+                    else if (currentRequest.equals("resetPassword"))    resultMinimonResetPassword(info);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -65,11 +66,31 @@ public class FindMemberActivity extends AppCompatActivity {
             String resCode = info.has("resCode") ? info.getString("resCode") : "";
 
             if (resCode.equals("0000")) {
-                String uid = info.getJSONObject("data").getJSONArray("list").getJSONObject(0).getString("id");
-                String text = String.format(getResources().getString(R.string.notice_find_id), uid);
-                alertNotice(text);
+                JSONArray jsonArray = info.getJSONObject("data").getJSONArray("list");
+                String foundUIDs = "";
+                for (int i = 0; i < 1/*jsonArray.length()*/; i ++) {
+                    String uid = jsonArray.getJSONObject(i).getString("id");
+                    String text = "\n" + String.format(getResources().getString(R.string.notice_find_id), uid);
+                    foundUIDs = foundUIDs.concat(text);
+                }
+                foundUIDs = foundUIDs.replaceFirst("\n", "");
+                alertNotice(foundUIDs);
             } else {
                 alertNotice(getResources().getString(R.string.notice_not_found_id));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void resultMinimonResetPassword(JSONObject info) {
+        try {
+            String resCode = info.has("resCode") ? info.getString("resCode") : "";
+
+            if (resCode.equals("0000")) {
+                alertNotice("Success: " + info.getString("msg"));
+            } else {
+                alertNotice("Fail: " + info.getString("msg"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -88,7 +109,16 @@ public class FindMemberActivity extends AppCompatActivity {
     }
 
     public void onClickResetPassword(View view) {
+        EditText textUID = findViewById(R.id.editTextUserID);
+        EditText textEmail = findViewById(R.id.editTextUserEmail);
+        String strEmail[] = textEmail.getText().toString().split("[@]");
 
+        ContentValues info = new ContentValues();
+        info.put("email_id", strEmail[0]);
+        info.put("email_domain", strEmail[1]);
+        info.put("id", textUID.getText().toString());
+
+        minimonUser.find(info);
     }
 
     private void alertNotice(String str) {

@@ -121,7 +121,7 @@ import org.json.JSONObject;
 //        0500					데이터베이스 오류
 //        0900					프로세스 오류
 //        0104				아이디 또는 비밀번호 불일치
-//        find	"#공통
+//find	"#공통
 //        IOS / Android / Web"	"#3 아이디 / 비밀번호 찾기
 //        일반회원은 뒤4자리 마스킹처리
 //        소셜회원은 어느 소셜로 가입했는지 까지만 표기"	"{
@@ -162,7 +162,7 @@ import org.json.JSONObject;
 //        0500					데이터베이스 오류
 //        0900					프로세스 오류
 //        0105				입력정보와 일치하는 회원정보없음
-//        info	"#공통
+//info	"#공통
 //        IOS / Android / Web"	#4 회원정보조회	"{
 //        ""resCode"": ""0000"",
 //        ""msg"": ""회원정보 조회에 성공하였습니다."",
@@ -439,6 +439,9 @@ public class MinimonUser {
 
     private void requestFunction(String current, ContentValues info) {
         currentRequest = current;
+        if (current.equals("find") && info.get("id") != null)
+            currentRequest = "resetPassword";
+
         typeSocial = info.getAsString("value");
         NetworkTask networkTask = new NetworkTask(API_URL+current, info);
         networkTask.execute();
@@ -581,6 +584,9 @@ public class MinimonUser {
     }
 
     public void responseNetworkTask(String s) {
+        if (s == null) {
+            return;
+        }
         try {
             JSONObject objJSON = new JSONObject(s);
             objJSON.put("current_request", currentRequest);

@@ -14,9 +14,11 @@ import java.net.URL;
 import java.util.Map;
 
 public class RequestHttpURLConnection {
-    static final String TAG = "RequestHttpURLConnection";
+    static final String TAG = "RequestHttp";
 
     public String request(String _url, ContentValues _params, String token){
+        Log.e(TAG, "request url: " + _url);
+
         // HttpURLConnection 참조 변수.
         HttpURLConnection urlConn = null;
         // URL 뒤에 붙여서 보낼 파라미터.

@@ -42,7 +42,7 @@ public class NewMemberActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
 
         strType = getIntent().getStringExtra("type");
-        strDeviceID = getIntent().getStringExtra("device_id");
+        strDeviceID = DeviceUuidFactory.getDeviceUuid(this.getApplicationContext());
         Log.i("strType", strType);
         if (!strType.equals("basic")) modeSNS();
 

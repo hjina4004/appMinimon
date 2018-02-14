@@ -5,12 +5,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -73,7 +71,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     // for Google
     private static final int GOOGLE_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
-    // private FirebaseAuth mFirebaseAuth;
 
     private Context mContext;
 
@@ -90,11 +87,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void init() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
-
-//        setImageInButton(R.mipmap.a001_social_naver, R.id.btnNaver);
-//        setImageInButton(R.mipmap.a001_social_kakao, R.id.btnKakao);
-//        setImageInButton(R.mipmap.a001_social_facebook, R.id.btnFacebook);
-//        setImageInButton(R.mipmap.a001_social_google, R.id.btnGoogle);
 
         strUID = getIntent().getStringExtra("uid");
         if (strUID != null && strUID.length() > 0) {
@@ -130,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void resultMinimonLogin(JSONObject info) {
+        mDialogMng.hideProgressDlg();
         try {
             UserInfo userInfo = UserInfo.getInstance();
             String resCode = info.has("resCode") ? info.getString("resCode") : "";
@@ -157,7 +150,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 userInfo.setUID(uid);
                 userInfo.setEmail(email);
                 loginMinimon(uid, "NV", "social");
-                // newMemberSNS("NV", uid, email);
             }
         });
 
@@ -228,8 +220,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void initGoogle() {
-        // mFirebaseAuth = FirebaseAuth.getInstance();
-
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -268,7 +258,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            //finish();
             NavUtils.navigateUpFromSameTask(LoginActivity.this);
             return true;
         }
@@ -310,34 +299,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         userInfo.setUID(uid);
         userInfo.setEmail(email);
         loginMinimon(uid, "GG", "social");
-        // newMemberSNS("GG", acct.getId(), acct.getEmail());
-
-//        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-//        mFirebaseAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//            @Override
-//            public void onComplete(@NonNull Task<AuthResult> task) {
-//                mDialogMng.hideProgressDlg();
-//
-//                if (task.isSuccessful()) {
-//                    // Sign in success, update UI with the signed-in user's information
-//                    FirebaseUser user = mFirebaseAuth.getCurrentUser();
-//
-//                    String name = user.getDisplayName();
-//                    String email = user.getEmail();
-//                    String uid = user.getUid();
-//
-//                    Log.d(TAG, "Google account --- uid=" + uid);
-//                    Log.d(TAG, "Google account --- email=" + email);
-//                    Log.d(TAG, "Google account --- name=" + name);
-//
-//                    newMemberSNS("GG", user.getProviderId(), email);
-//                } else {
-//                    // If sign in fails, display a message to the user.
-//                    Log.w(TAG, "signInWithCredential:failure", task.getException());
-//                    Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
     }
 
     @Override
@@ -402,7 +363,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 userInfo.setUID(uid);
                 userInfo.setEmail(email);
                 loginMinimon(uid, "KK", "social");
-                // newMemberSNS("KK", String.valueOf(userProfile.getId()), userProfile.getEmail());
             }
 
             @Override
@@ -420,10 +380,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void requestFacebookUser(AccessToken accessToken) {
-        Log.e("onSuccess", "--------" + accessToken);
-        Log.e("Token", "--------" + accessToken.getToken());
-        Log.e("Permission", "--------" + accessToken.getPermissions());
-
         GraphRequest graphRequest = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
@@ -436,7 +392,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     userInfo.setUID(uid);
                     userInfo.setEmail(email);
                     loginMinimon(uid, "KK", "social");
-                    // newMemberSNS("FB", uid, email);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -447,14 +402,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         parameters.putString("fields", "id,name,email,gender");
         graphRequest.setParameters(parameters);
         graphRequest.executeAsync();
-    }
-
-    public void setImageInButton(int drawableID, int btnID) {
-        Drawable drawable = ContextCompat.getDrawable(LoginActivity.this, drawableID);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-
-        Button btn = (Button) findViewById(btnID);
-        btn.setCompoundDrawables(drawable, null, null, null);
     }
 
     public void onClickLogin(View view) {
