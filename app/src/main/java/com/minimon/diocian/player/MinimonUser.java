@@ -548,11 +548,12 @@ public class MinimonUser {
     public class NetworkTask extends AsyncTask<Void, Void, String> {
         private String url;
         private ContentValues values;
-        private String token = null;
+        private String token;
 
         public NetworkTask(String url, ContentValues values) {
             this.url = url;
             this.values = values;
+            this.token = null;
         }
 
         public void setToken(String token) {

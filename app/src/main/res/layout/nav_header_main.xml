@@ -1,32 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/side_nav_bar"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBaseBG"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:paddingBottom="0dp"
+    android:paddingEnd="@dimen/base_padding"
+    android:paddingLeft="@dimen/base_padding"
+    android:paddingRight="@dimen/base_padding"
+    android:paddingStart="@dimen/base_padding"
+    android:paddingTop="@dimen/base_padding">
 
-    <com.minimon.diocian.player.TextIconmoon
-        android:id="@+id/logo"
+    <TextView
+        android:id="@+id/home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/base_padding"
+        android:drawableRight="@mipmap/a008_home"
+        android:drawableEnd="@mipmap/a008_home"
+        android:drawablePadding="19dp"
+        android:gravity="center_vertical|end"
+        android:text="@string/btn_home"
+        android:textColor="@color/colorBaseText"
+        android:textSize="@dimen/menu_font_size_home" />
+
+    <TextView
+        android:id="@+id/tv_user_nickname"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="60dp"
-        android:text="@string/icon_emblem"
-        android:textColor="@android:color/holo_orange_dark"
-        android:textSize="60sp" />
+        android:layout_height="match_parent"
+        android:drawableLeft="@drawable/ic_user"
+        android:drawableStart="@drawable/ic_user"
+        android:drawablePadding="17.67dp"
+        android:gravity="center_vertical"
+        android:text="@string/init_nickname"
+        android:textColor="@color/colorBaseText"
+        android:textSize="@dimen/menu_font_size_uid" />
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Minimon" />
+        android:layout_height="0.67dp"
+        android:layout_marginBottom="8.67dp"
+        android:layout_marginTop="8.67dp"
+        android:background="#e63614" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_point"
+            android:drawableStart="@drawable/ic_point"
+            android:drawablePadding="17.67dp"
+            android:gravity="center_vertical"
+            android:text="@string/user_point"
+            android:textColor="@color/colorBaseText"
+            android:textSize="@dimen/menu_font_size_point" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_user_point"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="35dp"
+                android:layout_marginRight="35dp"
+                android:gravity="center_vertical|end"
+                android:text="@string/init_point"
+                android:textColor="@color/colorError"
+                android:textSize="@dimen/menu_font_size_point_value" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|end">
+
+                <TextView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/shape_circle"
+                    android:gravity="center"
+                    android:text="@string/mark_point"
+                    android:textColor="@color/colorBaseText"
+                    android:textSize="@dimen/menu_font_size_link" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.67dp"
+        android:layout_marginBottom="8.67dp"
+        android:layout_marginTop="8.67dp"
+        android:background="#404348" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/ic_fixed"
+            android:drawableStart="@drawable/ic_fixed"
+            android:drawablePadding="17.67dp"
+            android:gravity="center_vertical"
+            android:text="@string/user_fixed"
+            android:textColor="@color/colorBaseText"
+            android:textSize="@dimen/menu_font_size_point" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_user_fixed"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="35dp"
+                android:layout_marginRight="35dp"
+                android:gravity="center_vertical|end"
+                android:text="@string/init_fixed"
+                android:textColor="@color/colorBaseText"
+                android:textSize="@dimen/menu_font_size_fixed_value" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|end">
+
+                <TextView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/shape_circle"
+                    android:gravity="center"
+                    android:text="@string/mark_fixed"
+                    android:textColor="@color/colorBaseText"
+                    android:textSize="@dimen/menu_font_size_link" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.67dp"
+        android:layout_marginTop="8.67dp"
+        android:background="#e63614" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8.67dp"
+        android:drawableLeft="@drawable/ic_charge"
+        android:drawableStart="@drawable/ic_charge"
+        android:drawableRight="@mipmap/a008_gnb_arr"
+        android:drawableEnd="@mipmap/a008_gnb_arr"
+        android:drawablePadding="17.67dp"
+        android:gravity="center_vertical"
+        android:text="@string/menu_charge"
+        android:textColor="@color/colorBaseText"
+        android:textSize="@dimen/menu_font_size_point" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.67dp"
+        android:layout_marginTop="8.67dp"
+        android:background="#404348" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8.67dp"
+        android:drawableLeft="@drawable/ic_watch"
+        android:drawableStart="@drawable/ic_watch"
+        android:drawableRight="@mipmap/a008_gnb_arr"
+        android:drawableEnd="@mipmap/a008_gnb_arr"
+        android:drawablePadding="17.67dp"
+        android:gravity="center_vertical"
+        android:text="@string/menu_watch"
+        android:textColor="@color/colorBaseText"
+        android:textSize="@dimen/menu_font_size_point" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.67dp"
+        android:layout_marginTop="8.67dp"
+        android:background="#404348" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8.67dp"
+        android:drawableLeft="@drawable/ic_mypage"
+        android:drawableStart="@drawable/ic_mypage"
+        android:drawableRight="@mipmap/a008_gnb_arr"
+        android:drawableEnd="@mipmap/a008_gnb_arr"
+        android:drawablePadding="17.67dp"
+        android:gravity="center_vertical"
+        android:text="@string/menu_mypage"
+        android:textColor="@color/colorBaseText"
+        android:textSize="@dimen/menu_font_size_point" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.67dp"
+        android:layout_marginTop="8.67dp"
+        android:background="#404348" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8.67dp"
+        android:drawableLeft="@drawable/ic_customer"
+        android:drawableStart="@drawable/ic_customer"
+        android:drawableRight="@mipmap/a008_gnb_arr"
+        android:drawableEnd="@mipmap/a008_gnb_arr"
+        android:drawablePadding="17.67dp"
+        android:gravity="center_vertical"
+        android:text="@string/menu_customer"
+        android:textColor="@color/colorBaseText"
+        android:textSize="@dimen/menu_font_size_point" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.67dp"
+        android:layout_marginTop="8.67dp"
+        android:background="#404348" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8.67dp"
+        android:drawableRight="@mipmap/a008_logout"
+        android:drawableEnd="@mipmap/a008_logout"
+        android:drawablePadding="17.67dp"
+        android:gravity="center_vertical|end"
+        android:text="@string/menu_logout"
+        android:textColor="@color/colorBaseText"
+        android:textSize="@dimen/menu_font_size_point" />
 </LinearLayout>

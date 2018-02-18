@@ -98,14 +98,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         initAutoLogin();
 
-        initMinomon();
+        initMinimon();
         initNaver();
         initKakao();
         initFacebook();
         initGoogle();
     }
 
-    private void initMinomon() {
+    private void initMinimon() {
         minimonUser = new MinimonUser();
         minimonUser.setListener(new MinimonUser.MinimonUserListener() {
             @Override

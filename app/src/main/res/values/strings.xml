@@ -32,6 +32,7 @@
     <string name="notice_not_found_id">이메일과 일치하는 아이디가 없습니다.</string>
     <string name="notice_close">[닫기]</string>
 
+    <string name="btn_home">홈이동</string>
     <string name="btn_login">로그인</string>
     <string name="btn_signup_1">간편 회원가입</string>
     <string name="btn_signup">회원가입</string>
@@ -62,4 +63,18 @@
     <string name="login_kakao">KAKAO 로그인</string>
     <string name="login_facebook">FACEBOOK 로그인</string>
     <string name="login_google">GOOGLE 로그인</string>
+
+    <string name="user_point">포인트</string>
+    <string name="user_fixed">정액제</string>
+    <string name="mark_point">P</string>
+    <string name="mark_fixed">D</string>
+    <string name="menu_charge">이용권</string>
+    <string name="menu_watch">시청영상</string>
+    <string name="menu_mypage">내 정보</string>
+    <string name="menu_customer">고객센터</string>
+    <string name="menu_logout">로그아웃</string>
+
+    <string name="init_nickname">User nickname</string>
+    <string name="init_point">96,500</string>
+    <string name="init_fixed">2018.12.24</string>
 </resources>

@@ -17,7 +17,9 @@ public class RequestHttpURLConnection {
     static final String TAG = "RequestHttp";
 
     public String request(String _url, ContentValues _params, String token){
-        Log.e(TAG, "request url: " + _url);
+        Log.d(TAG, "request url: " + _url);
+        Log.d(TAG, "request params: " + _params);
+        Log.d(TAG, "request token: " + token);
 
         // HttpURLConnection 참조 변수.
         HttpURLConnection urlConn = null;

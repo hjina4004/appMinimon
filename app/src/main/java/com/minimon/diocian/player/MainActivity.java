@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     private long backPressedTime = 0;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private static final String TAG = "PayerActivity";
+    private static final String TAG = "MainActivity";
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
@@ -89,6 +91,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setBackgroundColor(getResources().getColor(R.color.colorBaseBG));
+
+        Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
+        viewUserInfo();
     }
 
     @Override
@@ -397,5 +403,15 @@ public class MainActivity extends AppCompatActivity
         public void onVideoDisabled(DecoderCounters counters) {
 
         }
+    }
+
+    private void viewUserInfo() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View view  = navigationView.getHeaderView(0);
+
+        TextView tvUserNickname = view.findViewById(R.id.tv_user_nickname);
+
+        UserInfo userInfo = UserInfo.getInstance();
+        tvUserNickname.setText(userInfo.getNickname());
     }
 }

@@ -30,7 +30,7 @@ public class FindMemberActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
 
-        initMinomon();
+        initMinimon();
 
         jUtil = new JUtil();
     }
@@ -44,7 +44,7 @@ public class FindMemberActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initMinomon() {
+    private void initMinimon() {
         minimonUser = new MinimonUser();
         minimonUser.setListener(new MinimonUser.MinimonUserListener() {
             @Override
