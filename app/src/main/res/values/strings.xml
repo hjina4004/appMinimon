@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Minimon</string>
+    <string name="naver_ClientID">pFdVUe7QyF5niz__G19O</string>
+    <string name="naver_ClientSecret">yopsmvueGB</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,17 +11,70 @@
 
     <string name="title_login">미니몬 서비스 로그인</string>
     <string name="title_sns">소셜 로그인</string>
+    <string name="notice_exit_app">한번 더 뒤로가기 누르면 종료됩니다.</string>
+    <string name="notice_loging">잠시만 기다리세요. 로그인 중입니다.</string>
+    <string name="notice_error_login">아이디 또는 비밀번호를 확인하세요.</string>
+    <string name="notice_success_signup">가입을 환영합니다. 즐거운 시간 되십시오.</string>
+    <string name="notice_none_input_id">아이디를 입력해 주세요.</string>
+    <string name="notice_none_input_nickname">닉네임을 입력해 주세요.</string>
+    <string name="notice_none_input_pw">비밀번호를 입력해 주세요.</string>
+    <string name="notice_none_input_pwc">확인 비밀번호를 입력해 주세요.</string>
+    <string name="notice_none_input_email">이메일을 입력해 주세요.</string>
+    <string name="notice_error_input_id">아이디는 4글자에서 12글자까지 영문 또는 숫자를 이용하여 입력하여 주시기 바랍니다.</string>
+    <string name="notice_error_input_nickname">닉네임은 2글자에서 12글자까지 이용하여 입력하여 주시기 바랍니다.</string>
+    <string name="notice_error_input_pw">비밀번호는 6글자에서 12글자까지 이용하여 입력하여 주시기 바랍니다.</string>
+    <string name="notice_error_input_pwc">비밀번호 확인이 잘못되었습니다. 다시 한번 입력하여 주시기 바랍니다.</string>
+    <string name="notice_error_input_email">잘못된 이메일입니다.</string>
+    <string name="notice_error_agree">이용약관 및 개인정보 보호정책에 동의가 되어 있지 않습니다. 동의 후 가입하시기 바랍니다.</string>
+    <string name="notice_duplicate_id">사용중인 아이디 입니다.</string>
+    <string name="notice_duplicate_nickname">사용중인 닉네임 입니다.</string>
+    <string name="notice_find_id">회원님의 아이디는 %1$s입니다.</string>
+    <string name="notice_not_found_id">이메일과 일치하는 아이디가 없습니다.</string>
+    <string name="notice_close">[닫기]</string>
 
+    <string name="btn_home">홈이동</string>
     <string name="btn_login">로그인</string>
-    <string name="btn_signup">간편 회원가입</string>
+    <string name="btn_signup_1">간편 회원가입</string>
+    <string name="btn_signup">회원가입</string>
     <string name="btn_autologin">자동 로그인</string>
+    <string name="agree_total">전체 동의</string>
+    <string name="agree_termsofuse">서비스 이용약관</string>
+    <string name="agree_privacypolicy">개인정보 취급방침</string>
+    <string name="view_agree">전문 보기</string>
 
     <string name="usr_id">아이디</string>
     <string name="usr_pw">비밀번호</string>
-    <string name="find_usr_id">아이디/비밀번호 찾기</string>
+    <string name="usr_email">이메일</string>
+    <string name="usr_nickname">닉네임</string>
+    <string name="usr_pw_confirm">비밀번호 확인</string>
+    <string name="find_usr">아이디/비밀번호 찾기</string>
+    <string name="find_usr_id">아이디 찾기</string>
+    <string name="find_usr_id_description">회원가입 시 사용한 e-mail 정보를 입력하시기 바랍니다.</string>
+    <string name="find_usr_pw">비밀번호 찾기</string>
+    <string name="find_usr_pw_description">회원의 아이디와 e-mail 정보를 입력하시기 바랍니다.</string>
+    <string name="hint_input_id">영문/숫자 4~12자</string>
+    <string name="hint_input_pw">영문/숫자 6~12자</string>
+    <string name="hint_input_pw_confirm">비밀번호를 입력하세요</string>
+    <string name="hint_input_email">이메일을 입력하세요</string>
+    <string name="hint_input_nickname">영문/숫자 2~12자</string>
     <string name="new_usr">신규 회원 가입</string>
+    <string name="reset_password">신규 비밀번호 발급</string>
     <string name="login_naver">NAVER 로그인</string>
     <string name="login_kakao">KAKAO 로그인</string>
     <string name="login_facebook">FACEBOOK 로그인</string>
     <string name="login_google">GOOGLE 로그인</string>
+
+    <string name="user_point">포인트</string>
+    <string name="user_fixed">정액제</string>
+    <string name="mark_point">P</string>
+    <string name="mark_fixed">D</string>
+    <string name="menu_charge">이용권</string>
+    <string name="menu_watch">시청영상</string>
+    <string name="menu_mypage">내 정보</string>
+    <string name="menu_customer">고객센터</string>
+    <string name="menu_logout">로그아웃</string>
+
+    <string name="init_nickname">User nickname</string>
+    <string name="init_point">96,500</string>
+    <string name="init_fixed">2018.12.24</string>
 </resources>

@@ -3,9 +3,7 @@ package com.minimon.diocian.player;
 import android.annotation.SuppressLint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -48,8 +48,11 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final long FINISH_INTERVAL_TIME = 2000;
+    private long backPressedTime = 0;
+
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private static final String TAG = "PayerActivity";
+    private static final String TAG = "MainActivity";
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
@@ -88,6 +91,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setBackgroundColor(getResources().getColor(R.color.colorBaseBG));
+
+        Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
+        viewUserInfo();
     }
 
     @Override
@@ -96,7 +103,15 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            long tempTime = System.currentTimeMillis();
+            long intervalTime = tempTime - backPressedTime;
+
+            if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
+                super.onBackPressed();
+            } else {
+                backPressedTime = tempTime;
+                Toast.makeText(getApplicationContext(), R.string.notice_exit_app, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -388,5 +403,15 @@ public class MainActivity extends AppCompatActivity
         public void onVideoDisabled(DecoderCounters counters) {
 
         }
+    }
+
+    private void viewUserInfo() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View view  = navigationView.getHeaderView(0);
+
+        TextView tvUserNickname = view.findViewById(R.id.tv_user_nickname);
+
+        UserInfo userInfo = UserInfo.getInstance();
+        tvUserNickname.setText(userInfo.getNickname());
     }
 }

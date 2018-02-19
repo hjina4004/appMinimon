@@ -1,57 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorBaseBG"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:padding="@dimen/base_padding"
         android:orientation="vertical" >
 
         <EditText
             android:id="@+id/inUserID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_marginBottom="9.33dp"
             android:hint="@string/usr_id"
+            android:textColorHint="@color/colorHint"
+            android:textColor="@color/colorBaseText"
+            android:textCursorDrawable="@null"
             android:background="@drawable/bg_edittext"
-            android:paddingTop="14.33dp"
-            android:paddingLeft="17.67dp"
-            android:paddingRight="17.67dp"
-            android:paddingBottom="14.33dp"
-            android:inputType="textPersonName" />
+            android:inputType="textEmailAddress"
+            android:textSize="@dimen/btn_md_font_size" />
 
         <EditText
             android:id="@+id/inUserPW"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:ems="10"
             android:hint="@string/usr_pw"
-            android:inputType="textPassword" />
+            android:textColorHint="@color/colorHint"
+            android:textColor="@color/colorBaseText"
+            android:textCursorDrawable="@null"
+            android:background="@drawable/bg_edittext"
+            android:inputType="textPassword"
+            android:textSize="@dimen/btn_md_font_size" />
 
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cbAutoLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_autologin" />
+            android:layout_marginBottom="10dp"
+            app:buttonTint="@color/checkbox_filter_tint"
+            android:text="@string/btn_autologin"
+            android:textColor="@color/colorBaseText"
+            android:textSize="@dimen/btn_md_font_size" />
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ripple_background"
+            android:onClick="onClickLogin"
             android:stateListAnimator="@null"
             android:text="@string/btn_login"
-            android:textColor="#fffafafa"
-            android:textSize="20sp" />
+            android:textColor="@color/colorBaseText"
+            android:textSize="@dimen/btn_lg_font_size" />
 
         <TextView
             android:id="@+id/textViewError"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp"
+            android:textColor="@color/colorError"
+            android:textSize="@dimen/btn_md_font_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -62,57 +77,116 @@
                 android:id="@+id/btnFindUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="@string/find_usr_id" />
+                android:background="@drawable/ripple_background_outline_flat"
+                android:onClick="onClickFindMember"
+                android:text="@string/find_usr"
+                android:textColor="@color/colorBaseText"
+                android:textSize="@dimen/btn_md_font_size" />
 
             <Button
                 android:id="@+id/btnNewUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/new_usr" />
+                android:textColor="@color/colorBaseText"
+                android:background="@drawable/ripple_background_outline_flat"
+                android:onClick="onClickNewMember"
+                android:text="@string/new_usr"
+                android:textSize="@dimen/btn_md_font_size" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:paddingTop="50dp"
+            android:paddingBottom="10dp"
+            android:orientation="horizontal" >
 
-            <com.minimon.diocian.player.TextAwesome
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fa_check" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/base_padding_right"
+                android:src="@mipmap/a001_intro_tl" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/title_sns" />
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/colorBaseText"
+                android:text="@string/title_sns"
+                android:textSize="@dimen/btn_md_font_size" />
+
         </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorBaseBoarder"
+            android:layout_marginBottom="20dp" />
 
         <Button
             android:id="@+id/btnNaver"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_naver" />
+            android:layout_marginBottom="10dp"
+            android:minHeight="38.67dp"
+            android:textColor="@color/colorBaseText"
+            android:background="@drawable/btn_login_naver"
+            android:drawableLeft="@mipmap/a001_social_naver"
+            android:text="@string/login_naver"
+            android:textSize="@dimen/btn_md_font_size" />
 
         <Button
             android:id="@+id/btnKakao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_kakao" />
+            android:layout_marginBottom="10dp"
+            android:minHeight="38.67dp"
+            android:textColor="@color/colorKakao"
+            android:background="@drawable/btn_login_kakao"
+            android:drawableLeft="@mipmap/a001_social_kakao"
+            android:text="@string/login_kakao"
+            android:textSize="@dimen/btn_md_font_size" />
+        <com.kakao.usermgmt.LoginButton
+            android:id="@+id/login_button_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/btnFacebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_facebook" />
-
+            android:layout_marginBottom="10dp"
+            android:minHeight="38.67dp"
+            android:textColor="@color/colorBaseText"
+            android:background="@drawable/btn_login_facebook"
+            android:drawableLeft="@mipmap/a001_social_facebook"
+            android:text="@string/login_facebook"
+            android:textSize="@dimen/btn_md_font_size" />
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:visibility="gone"/>
         <Button
             android:id="@+id/btnGoogle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_google" />
-
+            android:minHeight="38.67dp"
+            android:textColor="@color/colorBaseText"
+            android:background="@drawable/btn_login_google"
+            android:drawableLeft="@mipmap/a001_social_google"
+            android:text="@string/login_google"
+            android:textSize="@dimen/btn_md_font_size" />
     </LinearLayout>
 </ScrollView>

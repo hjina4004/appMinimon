@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
@@ -6,4 +6,30 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- the Minimon Design guidelines. -->
+    <dimen name="base_padding">17.67dp</dimen>
+    <dimen name="base_padding_top">14.33dp</dimen>
+    <dimen name="base_padding_right">9dp</dimen>
+    <dimen name="base_radius">5dp</dimen>
+
+    <dimen name="btn_sm_width">114dp</dimen>
+    <dimen name="btn_sm_height">35.67dp</dimen>
+
+    <dimen name="btn_lg_font_size">20.75dp</dimen>
+    <dimen name="btn_md_font_size">15.50dp</dimen>
+    <dimen name="btn_sm_font_size">13.53dp</dimen>
+    <dimen name="btn_xs_font_size">11.25dp</dimen>
+
+    <dimen name="menu_font_size_home">15.66sp</dimen>
+    <dimen name="menu_font_size_uid">20.87sp</dimen>
+    <dimen name="menu_font_size_point">16.53sp</dimen>
+    <dimen name="menu_font_size_point_value">19.13sp</dimen>
+    <dimen name="menu_font_size_fixed">16.53sp</dimen>
+    <dimen name="menu_font_size_fixed_value">19.13sp</dimen>
+    <dimen name="menu_font_size_link">15.66sp</dimen>
+
+    <dimen name="design_navigation_padding_top_default" tools:override="true">0dp</dimen>
+    <dimen name="design_navigation_separator_vertical_padding" tools:override="true">0dp</dimen>
+    <dimen name="design_navigation_padding_bottom" tools:override="true">0dp</dimen>
 </resources>

@@ -3,4 +3,32 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- NEW DISIGN -->
+    <color name="color1">#404040</color>
+    <color name="color2">#B2B2B2</color>
+    <color name="color3">#2A2A2A</color>
+    <color name="color4">#E5E5E5</color>
+    <color name="color5">#F6F6F6</color>
+    <color name="color6">#FFFFFF</color>
+    <color name="color7">#000000</color>
+    <color name="color8">#4A4A4C</color>
+
+    <color name="MainColor">#fb450d</color>
+    <color name="colorBaseRipple">#80FFFFFF</color>
+    <color name="colorBaseBG">#1e2328</color>
+    <color name="colorBaseEditText">#2b3135</color>
+    <color name="colorBaseText">#ffffff</color>
+    <color name="colorSubText">#777c80</color>
+    <color name="colorBaseBoarder">#333333</color>
+    <color name="colorError">#ff0000</color>
+    <color name="colorHint">#F6F6F6</color>
+    <color name="colorEditTextAddoneBG">#363b3f</color>
+    <color name="colorEditTextAddone">#777c80</color>
+
+    <color name="colorBGNaver">#099a49</color>
+    <color name="colorKakao">#3a211d</color>
+    <color name="colorBGKakao">#f9e000</color>
+    <color name="colorBGFacebook">#3a589b</color>
+    <color name="colorBGGoogle">#d6492f</color>
 </resources>

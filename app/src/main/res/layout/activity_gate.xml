@@ -3,36 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/layout_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="120dp"
         android:layout_centerInParent="true">
-        <LinearLayout
-            android:id="@+id/layout_logo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/ico_intro_logo" />
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout_logo_title"
-            android:layout_below="@+id/layout_logo"
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="100dp">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/ico_intro_minimon" />
-        </LinearLayout>
-    </RelativeLayout>
+            android:src="@mipmap/a001_logo" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_login"
@@ -56,9 +38,9 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
-        android:textColor="#fffb450d"
+        android:textColor="@color/MainColor"
         android:background="@drawable/ripple_background_outline"
         android:stateListAnimator="@null"
-        android:text="@string/btn_signup"
+        android:text="@string/btn_signup_1"
         android:textSize="20sp"/>
 </RelativeLayout>
