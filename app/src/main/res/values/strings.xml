@@ -31,6 +31,7 @@
     <string name="notice_find_id">회원님의 아이디는 %1$s입니다.</string>
     <string name="notice_not_found_id">이메일과 일치하는 아이디가 없습니다.</string>
     <string name="notice_close">[닫기]</string>
+    <string name="notice_logout">정상적으로 로그아웃 되었습니다</string>
 
     <string name="btn_home">홈이동</string>
     <string name="btn_login">로그인</string>

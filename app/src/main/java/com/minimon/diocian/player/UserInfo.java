@@ -54,6 +54,21 @@ public class UserInfo {
         Log.w(TAG, "setData: "+data);
         this.data = data;
         try {
+            if(data == null){
+                this.setToken("");
+
+                this.setUID("");
+                this.setNickname("");
+                this.setEmail("");
+                this.setState("");
+                this.setAdult("");
+                this.setCertificate("");
+                this.setSocial("");
+                this.setLoc("");
+                this.setPoint("");
+                this.setFixed("");
+                return;
+            }
             this.setToken(data.getString("apiToken"));
 
             JSONObject userInfo = data.getJSONObject("userInfo");

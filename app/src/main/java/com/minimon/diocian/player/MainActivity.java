@@ -1,6 +1,9 @@
 package com.minimon.diocian.player;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -17,6 +20,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -44,6 +49,9 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,22 +62,22 @@ public class MainActivity extends AppCompatActivity
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static final String TAG = "MainActivity";
 
-    private SimpleExoPlayer player;
-    private SimpleExoPlayerView playerView;
-    private ComponentListener componentListener;
-
-    private long playBackPosition;
-    private int currentWindow;
-    private boolean playWhenReady = true;
-    private boolean inErrorState;
+//    private SimpleExoPlayer player;
+//    private SimpleExoPlayerView playerView;
+//    private ComponentListener componentListener;
+//
+//    private long playBackPosition;
+//    private int currentWindow;
+//    private boolean playWhenReady = true;
+//    private boolean inErrorState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        componentListener = new ComponentListener();
-        playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
+//        componentListener = new ComponentListener();
+//        playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -92,6 +100,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setBackgroundColor(getResources().getColor(R.color.colorBaseBG));
+
+
 
         Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
         viewUserInfo();
@@ -162,74 +172,74 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23) {
-            initializePlayer();
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (Util.SDK_INT > 23) {
+//            initializePlayer();
+//        }
+//    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        hideSytemUi();
-        if (Util.SDK_INT <= 23 || player == null) {
-            initializePlayer();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        hideSytemUi();
+//        if (Util.SDK_INT <= 23 || player == null) {
+//            initializePlayer();
+//        }
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (Util.SDK_INT <= 23) {
+//            releasePlayer();
+//        }
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        if (Util.SDK_INT > 23) {
+//            releasePlayer();
+//        }
+//    }
 
     // Internal methods
 
-    private void initializePlayer() {
-        if (player == null) {
-            TrackSelection.Factory adaptiveTrackSelectionFactory =
-                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
-            player = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(this),
-                    new DefaultTrackSelector(adaptiveTrackSelectionFactory), new DefaultLoadControl());
-
-            player.addListener(componentListener);
-            player.setAudioDebugListener(componentListener);
-            player.setVideoDebugListener(componentListener);
-            PlaybackControlView simpleExoplayerView;
-            playerView.setPlayer(player);
-
-            player.setPlayWhenReady(playWhenReady);
-        }
-
-        MediaSource mediaSources = buildMediaSource(Uri.parse(getString(R.string.media_url_hls)));
-        player.seekTo(currentWindow, playBackPosition);
-        player.prepare(mediaSources, true, false);
-        inErrorState = false;
-    }
-
-    private void releasePlayer() {
-        if (player != null) {
-            currentWindow = player.getCurrentWindowIndex();
-            playWhenReady = player.getPlayWhenReady();
-            player.removeListener(componentListener);
-            player.setAudioDebugListener(null);
-            player.setVideoDebugListener(null);
-            player.release();
-            player = null;
-        }
-    }
+//    private void initializePlayer() {
+//        if (player == null) {
+//            TrackSelection.Factory adaptiveTrackSelectionFactory =
+//                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+//            player = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(this),
+//                    new DefaultTrackSelector(adaptiveTrackSelectionFactory), new DefaultLoadControl());
+//
+//            player.addListener(componentListener);
+//            player.setAudioDebugListener(componentListener);
+//            player.setVideoDebugListener(componentListener);
+//            PlaybackControlView simpleExoplayerView;
+//            playerView.setPlayer(player);
+//
+//            player.setPlayWhenReady(playWhenReady);
+//        }
+//
+//        MediaSource mediaSources = buildMediaSource(Uri.parse(getString(R.string.media_url_hls)));
+//        player.seekTo(currentWindow, playBackPosition);
+//        player.prepare(mediaSources, true, false);
+//        inErrorState = false;
+//    }
+//
+//    private void releasePlayer() {
+//        if (player != null) {
+//            currentWindow = player.getCurrentWindowIndex();
+//            playWhenReady = player.getPlayWhenReady();
+//            player.removeListener(componentListener);
+//            player.setAudioDebugListener(null);
+//            player.setVideoDebugListener(null);
+//            player.release();
+//            player = null;
+//        }
+//    }
 
     private MediaSource buildMediaSource(Uri uri) {
         DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
@@ -258,160 +268,242 @@ public class MainActivity extends AppCompatActivity
 //            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
-    private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {
-        @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest) {
-
-        }
-
-        @Override
-        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-        }
-
-        @Override
-        public void onLoadingChanged(boolean isLoading) {
-
-        }
-
-        @Override
-        public void onPlayerStateChanged(boolean playWhenReady, int state) {
-            String stateString;
-            switch (state) {
-                case ExoPlayer.STATE_IDLE:
-                    stateString = "STATE_IDLE";
-                    break;
-                case ExoPlayer.STATE_BUFFERING:
-                    stateString = "STATE_BUFFERING";
-                    break;
-                case ExoPlayer.STATE_READY:
-                    stateString = "STATE_READY";
-                    break;
-                case ExoPlayer.STATE_ENDED:
-                    stateString = "STATE_ENDED";
-                    break;
-                default:
-                    stateString = "UNKNOWN STATE";
-                    break;
-            }
-            Log.d(TAG, "state [" + playWhenReady + ", " + stateString + "]");
-        }
-
-        @Override
-        public void onRepeatModeChanged(int repeatMode) {
-
-        }
-
-        @Override
-        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-        }
-
-        @Override
-        public void onPlayerError(ExoPlaybackException error) {
-            inErrorState = true;
-        }
-
-        @Override
-        public void onPositionDiscontinuity(int reason) {
-            if (inErrorState) {
-                // This will only occur if the user has performed a seek whilst in the error state. Update
-                // the resume position so that if the user then retries, playback will resume from the
-                // position to which they seeked.
-                updateResumePosition();
-            }
-        }
-
-        private void updateResumePosition() {
-            currentWindow = player.getCurrentWindowIndex();
-            playBackPosition = Math.max(0, player.getContentPosition());
-        }
-
-
-        @Override
-        public void onSeekProcessed() {
-            Log.d(TAG, "seekProcessed");
-        }
-
-        @Override
-        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-            Log.d(TAG, "playbackParameters " + String.format(
-                    "[speed=%.2f, pitch=%.2f]", playbackParameters.speed, playbackParameters.pitch));
-        }
-
-        @Override
-        public void onAudioEnabled(DecoderCounters counters) {
-
-        }
-
-        @Override
-        public void onAudioSessionId(int audioSessionId) {
-
-        }
-
-        @Override
-        public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
-
-        }
-
-        @Override
-        public void onAudioInputFormatChanged(Format format) {
-
-        }
-
-        @Override
-        public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-
-        }
-
-        @Override
-        public void onAudioDisabled(DecoderCounters counters) {
-
-        }
-
-        @Override
-        public void onVideoEnabled(DecoderCounters counters) {
-
-        }
-
-        @Override
-        public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
-
-        }
-
-        @Override
-        public void onVideoInputFormatChanged(Format format) {
-
-        }
-
-        @Override
-        public void onDroppedFrames(int count, long elapsedMs) {
-
-        }
-
-        @Override
-        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-
-        }
-
-        @Override
-        public void onRenderedFirstFrame(Surface surface) {
-
-        }
-
-        @Override
-        public void onVideoDisabled(DecoderCounters counters) {
-
-        }
-    }
+//    private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {
+//        @Override
+//        public void onTimelineChanged(Timeline timeline, Object manifest) {
+//
+//        }
+//
+//        @Override
+//        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+//
+//        }
+//
+//        @Override
+//        public void onLoadingChanged(boolean isLoading) {
+//
+//        }
+//
+//        @Override
+//        public void onPlayerStateChanged(boolean playWhenReady, int state) {
+//            String stateString;
+//            switch (state) {
+//                case ExoPlayer.STATE_IDLE:
+//                    stateString = "STATE_IDLE";
+//                    break;
+//                case ExoPlayer.STATE_BUFFERING:
+//                    stateString = "STATE_BUFFERING";
+//                    break;
+//                case ExoPlayer.STATE_READY:
+//                    stateString = "STATE_READY";
+//                    break;
+//                case ExoPlayer.STATE_ENDED:
+//                    stateString = "STATE_ENDED";
+//                    break;
+//                default:
+//                    stateString = "UNKNOWN STATE";
+//                    break;
+//            }
+//            Log.d(TAG, "state [" + playWhenReady + ", " + stateString + "]");
+//        }
+//
+//        @Override
+//        public void onRepeatModeChanged(int repeatMode) {
+//
+//        }
+//
+//        @Override
+//        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+//
+//        }
+//
+//        @Override
+//        public void onPlayerError(ExoPlaybackException error) {
+//            inErrorState = true;
+//        }
+//
+//        @Override
+//        public void onPositionDiscontinuity(int reason) {
+//            if (inErrorState) {
+//                // This will only occur if the user has performed a seek whilst in the error state. Update
+//                // the resume position so that if the user then retries, playback will resume from the
+//                // position to which they seeked.
+//                updateResumePosition();
+//            }
+//        }
+//
+//        private void updateResumePosition() {
+//            currentWindow = player.getCurrentWindowIndex();
+//            playBackPosition = Math.max(0, player.getContentPosition());
+//        }
+//
+//
+//        @Override
+//        public void onSeekProcessed() {
+//            Log.d(TAG, "seekProcessed");
+//        }
+//
+//        @Override
+//        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+//            Log.d(TAG, "playbackParameters " + String.format(
+//                    "[speed=%.2f, pitch=%.2f]", playbackParameters.speed, playbackParameters.pitch));
+//        }
+//
+//        @Override
+//        public void onAudioEnabled(DecoderCounters counters) {
+//
+//        }
+//
+//        @Override
+//        public void onAudioSessionId(int audioSessionId) {
+//
+//        }
+//
+//        @Override
+//        public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+//
+//        }
+//
+//        @Override
+//        public void onAudioInputFormatChanged(Format format) {
+//
+//        }
+//
+//        @Override
+//        public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
+//
+//        }
+//
+//        @Override
+//        public void onAudioDisabled(DecoderCounters counters) {
+//
+//        }
+//
+//        @Override
+//        public void onVideoEnabled(DecoderCounters counters) {
+//
+//        }
+//
+//        @Override
+//        public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+//
+//        }
+//
+//        @Override
+//        public void onVideoInputFormatChanged(Format format) {
+//
+//        }
+//
+//        @Override
+//        public void onDroppedFrames(int count, long elapsedMs) {
+//
+//        }
+//
+//        @Override
+//        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+//
+//        }
+//
+//        @Override
+//        public void onRenderedFirstFrame(Surface surface) {
+//
+//        }
+//
+//        @Override
+//        public void onVideoDisabled(DecoderCounters counters) {
+//
+//        }
+//    }
 
     private void viewUserInfo() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         View view  = navigationView.getHeaderView(0);
 
         TextView tvUserNickname = view.findViewById(R.id.tv_user_nickname);
+        TextView tvUserPoint = view.findViewById(R.id.tv_user_point);
+        TextView tvUserFixed = view.findViewById(R.id.tv_user_fixed);
 
         UserInfo userInfo = UserInfo.getInstance();
         tvUserNickname.setText(userInfo.getNickname());
+        tvUserPoint.setText(userInfo.getPoint());
+        tvUserFixed.setText(checkFixed(userInfo.getFixed()));
+
+        TextView tv_serviceCenter = view.findViewById(R.id.tv_serviceCenter);
+        TextView tv_userInfo = view.findViewById(R.id.tv_userInfo);
+        TextView tv_logout = view.findViewById(R.id.tv_logout);
+        tv_serviceCenter.setOnClickListener(drawerClickListenr);
+        tv_userInfo.setOnClickListener(drawerClickListenr);
+        tv_logout.setOnClickListener(drawerClickListenr);
+    }
+
+    private String checkFixed(String fixed){
+        if(fixed.equals("0")){
+            return "-";
+        }else{
+            return fixed;
+        }
+    }
+
+    private View.OnClickListener drawerClickListenr = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Fragment fragment = null;
+
+            switch (v.getId()){
+                case R.id.tv_playlist:
+                    break;
+                case R.id.tv_serviceCenter:
+                    fragment = new VideoPlayerFragment();
+                    break;
+                case R.id.tv_userInfo:
+                    fragment = new UserInfoFragment();
+                    break;
+                case R.id.tv_logout:
+                    tryLogout();
+                    break;
+            }
+
+            if(fragment != null){
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.main_media_frame, fragment);
+                ft.commit();
+            }
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    };
+
+    private void tryLogout(){
+        if("KK".equals(UserInfo.getInstance().getSocial())){
+            UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+                @Override
+                public void onCompleteLogout() {
+
+                }
+            });
+        }else if("NV".equals(UserInfo.getInstance().getSocial())){
+            new NaverLogin(getApplicationContext()).forceLogout();
+        }else if("FB".equals(UserInfo.getInstance().getSocial())){
+            if(AccessToken.getCurrentAccessToken() != null) {
+                LoginManager.getInstance().logOut();
+            }
+        }else if("GG".equals(UserInfo.getInstance().getSocial())){
+            FirebaseAuth.getInstance().signOut();
+        }
+        new MinimonUser().logout();
+
+
+        new JUtil().alertNotice(this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {
+            @Override
+            public void callback(int id) {
+                gotoGate();
+            }
+        });
+    }
+    private void gotoGate(){
+        Intent intent = new Intent(MainActivity.this, GateActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

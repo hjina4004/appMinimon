@@ -74,12 +74,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private Context mContext;
 
+    Preferences pref;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         mContext = this;
+
+        pref = Preferences.getInstance(Preferences.LOGIN);
 
         init();
     }
@@ -130,6 +134,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             if (resCode.equals("0000")) {
                 userInfo.setData(info.getJSONObject("data"));
+                pref.setPreferences();
                 gotoMain();
             } else if (resCode.equals("0402") && !typeSocial.equals("basic")) {
                 newMemberSNS(typeSocial, userInfo.getUID(), userInfo.getEmail());

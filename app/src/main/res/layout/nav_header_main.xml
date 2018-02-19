@@ -154,6 +154,7 @@
         android:background="#e63614" />
 
     <TextView
+        android:id="@+id/tv_tickets"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8.67dp"
@@ -173,6 +174,7 @@
         android:background="#404348" />
 
     <TextView
+        android:id="@+id/tv_playlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8.67dp"
@@ -192,6 +194,7 @@
         android:background="#404348" />
 
     <TextView
+        android:id="@+id/tv_userInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8.67dp"
@@ -211,6 +214,7 @@
         android:background="#404348" />
 
     <TextView
+        android:id="@+id/tv_serviceCenter"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8.67dp"
@@ -230,6 +234,7 @@
         android:background="#404348" />
 
     <TextView
+        android:id="@+id/tv_logout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="8.67dp"

@@ -543,6 +543,7 @@ public class MinimonUser {
 
     // 로그아웃 처리(토큰도 함께 삭제)
     public void logout() {
+        UserInfo.getInstance().setData(null);
     }
 
     public class NetworkTask extends AsyncTask<Void, Void, String> {
