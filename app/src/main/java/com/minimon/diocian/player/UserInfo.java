@@ -50,6 +50,9 @@ public class UserInfo {
     public void setData(JSONObject data) {
         // {"apiToken":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJ3d3cubWluaW1vbi5jb20iLCJpYXQiOjE1MTg0MTYwNzgsImV4cCI6MjM4MjQxNjA3OCwiZGF0YSI6eyJpZCI6ImhqaW5hIiwia2V5IjozNjE3NDk4NzQwNjYzNDU1MDY0fX0.cMknL1dCx1NADoQN-l9zhulyw0QbE0ptLjQRdbEJTWwvL5t_-TtOdV4YG0-XlrO6FmRFSm6Dl-BkC5vtCku9ng",
         // "userInfo":{"idx":"3974","id":"hjina","name":null,"nickname":"hjina","email":"jina@lmfriends.com","state":"0","is_adult":"0","is_certificate":"0","is_social":"0","loc":null,"point":"0","fixed":"0"}}
+        // {"apiToken":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJ3d3cubWluaW1vbi5jb20iLCJpYXQiOjE1MTkwNTM0MDksImV4cCI6MjM4MzA1MzQwOSwiZGF0YSI6eyJpZCI6IkdHMTAxMTIyNzk3OTM2NjEwMTI0MDc5Iiwia2V5IjozNjE5OTg1MzM0ODk0MDY0NDY3fX0.1xoucRKRGtIXvg88b91JmXUZc_klq0YUidlPnnChS9zx9anq6DG9MRcXO2A_tcRyufoAMjYx7ICTkQGc-vCT5w",
+        // "userInfo":{"idx":"1934","id":"GG101122797936610124079","name":null,"nickname":"lmfds","email":"lmfdsse@gmail.com","state":"0","is_adult":"0","is_certificate":"0","is_social":"1","loc":"GG","point":"0","fixed":"0"}}
+
 
         Log.w(TAG, "setData: "+data);
         this.data = data;
@@ -78,7 +81,10 @@ public class UserInfo {
             this.setState(userInfo.getString("state"));
             this.setAdult(userInfo.getString("is_adult"));
             this.setCertificate(userInfo.getString("is_certificate"));
-            this.setSocial(userInfo.getString("is_social"));
+            if (userInfo.getString("is_social").equals("1"))
+                this.setSocial(userInfo.getString("id").substring(0, 2));
+            else
+                this.setSocial(userInfo.getString("is_social"));
             this.setLoc(userInfo.getString("loc"));
             this.setPoint(userInfo.getString("point"));
             this.setFixed(userInfo.getString("fixed"));

@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,18 +51,28 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener{
 
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static final String TAG = "MainActivity";
+
+    // for Google
+    private static final int GOOGLE_SIGN_IN = 9001;
+    private GoogleApiClient mGoogleApiClient;
 
 //    private SimpleExoPlayer player;
 //    private SimpleExoPlayerView playerView;
@@ -101,10 +113,16 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setBackgroundColor(getResources().getColor(R.color.colorBaseBG));
 
-
+        initGoogle();
 
         Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
         viewUserInfo();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -474,33 +492,67 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    private void initGoogle() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        Toast.makeText(MainActivity.this, "" + connectionResult, Toast.LENGTH_SHORT).show();
+    }
+
     private void tryLogout(){
+        Log.d(TAG, "tryLogout:" + UserInfo.getInstance().getSocial());
         if("KK".equals(UserInfo.getInstance().getSocial())){
             UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
                 @Override
                 public void onCompleteLogout() {
-
+                    procLogout();
                 }
             });
         }else if("NV".equals(UserInfo.getInstance().getSocial())){
-            new NaverLogin(getApplicationContext()).forceLogout();
+            NaverLogin naverLogin = new NaverLogin(getApplicationContext());
+            naverLogin.setListener(new NaverLogin.NaverLoginListener() {
+                @Override
+                public void onLogined(String uid, String email) {
+
+                }
+
+                @Override
+                public void onLogout() {
+                    procLogout();
+                }
+            });
+            naverLogin.forceLogout();
         }else if("FB".equals(UserInfo.getInstance().getSocial())){
             if(AccessToken.getCurrentAccessToken() != null) {
                 LoginManager.getInstance().logOut();
+                procLogout();
             }
         }else if("GG".equals(UserInfo.getInstance().getSocial())){
-            FirebaseAuth.getInstance().signOut();
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(@NonNull Status status) {
+                    procLogout();
+                }
+            });
         }
+    }
+
+    private void procLogout() {
         new MinimonUser().logout();
-
-
-        new JUtil().alertNotice(this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {
+        new JUtil().alertNotice(MainActivity.this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {
             @Override
             public void callback(int id) {
                 gotoGate();
             }
         });
     }
+
     private void gotoGate(){
         Intent intent = new Intent(MainActivity.this, GateActivity.class);
         startActivity(intent);

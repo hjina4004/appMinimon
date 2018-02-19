@@ -156,6 +156,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 userInfo.setEmail(email);
                 loginMinimon(uid, "NV", "social");
             }
+
+            @Override
+            public void onLogout() {
+            }
         });
 
         Button loginButton = findViewById(R.id.btnNaver);

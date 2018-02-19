@@ -40,12 +40,12 @@ public class Preferences extends Activity{
 
     public void setPreferences(){
         if(mode == LOGIN){
-            SharedPreferences pref = getSharedPreferences("login",MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString("token",UserInfo.getInstance().getToken());
-            editor.putString("uid",UserInfo.getInstance().getUID());
-            editor.putString("social",UserInfo.getInstance().getSocial());
-            editor.commit();
+//            SharedPreferences pref = getSharedPreferences("login",MODE_PRIVATE);
+//            SharedPreferences.Editor editor = pref.edit();
+//            editor.putString("token",UserInfo.getInstance().getToken());
+//            editor.putString("uid",UserInfo.getInstance().getUID());
+//            editor.putString("social",UserInfo.getInstance().getSocial());
+//            editor.commit();
 //            editor.putString("nickname",UserInfo.getInstance().getNickname());
 //            editor.putString("email",UserInfo.getInstance().getEmail());
 //            editor.putString("state",UserInfo.getInstance().getState());

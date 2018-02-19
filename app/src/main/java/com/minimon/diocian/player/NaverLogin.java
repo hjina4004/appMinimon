@@ -26,6 +26,7 @@ public class NaverLogin {
     public interface NaverLoginListener {
         // These methods are the different events and need to pass relevant arguments with the event
         void onLogined(String uid, String email);
+        void onLogout();
     }
     private NaverLoginListener listener;
 
@@ -58,12 +59,15 @@ public class NaverLogin {
     // 로그아웃 처리(토큰도 함께 삭제)
     public void forceLogout() {
         // 스레드로 돌려야 한다. 안 그러면 로그아웃 처리가 안되고 false를 반환한다.
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                mOAuthLoginInstance.logoutAndDeleteToken(mContext);
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mOAuthLoginInstance.logoutAndDeleteToken(mContext);
+//                if (listener != null)
+//                    listener.onLogout();
+//            }
+//        }).start();
+        new LogoutTask().execute();
     }
 
     // 로그인을 처리할 핸들러
@@ -85,6 +89,21 @@ public class NaverLogin {
             }
         }
     };
+
+    public class LogoutTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (listener != null)
+                listener.onLogout();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mOAuthLoginInstance.logoutAndDeleteToken(mContext);
+            return null;
+        }
+    }
 
     public class RequestApiTask extends AsyncTask<Void, Void, StringBuffer> {
         private String token;
