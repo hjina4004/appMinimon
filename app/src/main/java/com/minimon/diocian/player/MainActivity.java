@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -449,13 +450,15 @@ public class MainActivity extends AppCompatActivity
         TextView tv_serviceCenter = view.findViewById(R.id.tv_serviceCenter);
         TextView tv_userInfo = view.findViewById(R.id.tv_userInfo);
         TextView tv_logout = view.findViewById(R.id.tv_logout);
+        TextView tv_playlist = view.findViewById(R.id.tv_playlist);
         tv_serviceCenter.setOnClickListener(drawerClickListenr);
         tv_userInfo.setOnClickListener(drawerClickListenr);
         tv_logout.setOnClickListener(drawerClickListenr);
+        tv_playlist.setOnClickListener(drawerClickListenr);
     }
 
     private String checkFixed(String fixed){
-        if(fixed.equals("0")){
+        if("0".equals(fixed)){
             return "-";
         }else{
             return fixed;
@@ -469,6 +472,8 @@ public class MainActivity extends AppCompatActivity
 
             switch (v.getId()){
                 case R.id.tv_playlist:
+                    Intent intent = new Intent(getApplicationContext(), ChannelMainActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.tv_serviceCenter:
                     fragment = new VideoPlayerFragment();
@@ -544,6 +549,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void procLogout() {
+        SharedPreferences prefs = getSharedPreferences("minimon-preference", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove("AutoLogin");
+        editor.remove("social");
+        editor.remove("token");
+        editor.remove("userUID");
+        editor.remove("userPWD");
+        editor.apply();
         new MinimonUser().logout();
         new JUtil().alertNotice(MainActivity.this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {
             @Override

@@ -444,6 +444,7 @@ public class MinimonUser {
 
         typeSocial = info.getAsString("value");
         NetworkTask networkTask = new NetworkTask(API_URL+current, info);
+//        networkTask.setToken(UserInfo.getInstance().getToken());
         networkTask.execute();
     }
 

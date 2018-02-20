@@ -2,6 +2,7 @@ package com.minimon.diocian.player;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -25,12 +26,19 @@ public class GateActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
 
+    String autoLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gate);
 
         Log.d(TAG, "Hash Key = " + getKeyHash(this.getApplicationContext()));
+
+        SharedPreferences pref = getSharedPreferences("minimon_preference", MODE_PRIVATE);
+        autoLogin = pref.getString("AutoLogin","0");
+        if("1".equals(autoLogin))
+            gotoLogin();
 
         Button btnLogin = (Button) findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {

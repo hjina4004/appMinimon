@@ -42,6 +42,7 @@ import com.kakao.usermgmt.ApiErrorCode;
 import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.User;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
@@ -74,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private Context mContext;
 
-    Preferences pref;
+    String token, social;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +84,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         mContext = this;
 
-        pref = Preferences.getInstance(Preferences.LOGIN);
+        SharedPreferences pref = getSharedPreferences("minimon-preference", MODE_PRIVATE);
+        pref.getString("token","");
 
         init();
     }
@@ -107,6 +109,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         initKakao();
         initFacebook();
         initGoogle();
+        tryAutoLogin();
     }
 
     private void initMinimon() {
@@ -134,7 +137,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             if (resCode.equals("0000")) {
                 userInfo.setData(info.getJSONObject("data"));
-                pref.setPreferences();
+                SharedPreferences pref = getSharedPreferences("minimon_preference", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("token",userInfo.getToken());
+                editor.putString("social", userInfo.getSocial());
+                editor.apply();
+//                pref.setPreferences();
                 gotoMain();
             } else if (resCode.equals("0402") && !typeSocial.equals("basic")) {
                 newMemberSNS(typeSocial, userInfo.getUID(), userInfo.getEmail());
@@ -461,6 +469,52 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public boolean loadAutoLogin() {
         SharedPreferences prefs = getSharedPreferences("minimon_preference", MODE_PRIVATE);
         return prefs.getString("AutoLogin", "0").equals("1");
+    }
+
+    public void tryAutoLogin(){
+        if(loadAutoLogin()){
+            SharedPreferences prefs = getSharedPreferences("minimon-preference",MODE_PRIVATE);
+            String token = prefs.getString("token","");
+            String social = prefs.getString("social","");
+            String userUID = prefs.getString("userUID","");
+            String userPWD = prefs.getString("userPWD","");
+            if("".equals(token) || token == null || token.isEmpty()){ // 아이디가 이미 저장되어 있으면 토큰을 저장하도록 하므로 토근이 없으면 로그인시도
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("token", UserInfo.getInstance().getToken());
+                editor.putString("social", UserInfo.getInstance().getSocial());
+                if("".equals(UserInfo.getInstance().getSocial())){
+                    editor.putString("userUID", getInputUID());
+                    editor.putString("userPWD", getInputPassword());
+                }
+                editor.apply();
+            }else{ // 토큰이 있는경우 자동로그인 처리
+                if("KK".equals(social)){
+                    callback = new SessionCallback();
+                    Session.getCurrentSession().addCallback(callback);
+                    btn_kakao_login = findViewById(R.id.login_button_activity);
+                    if (!Session.getCurrentSession().checkAndImplicitOpen()) {
+                        btn_kakao_login.performClick();
+                    }
+                }else if("FB".equals(social)){
+                    callbackManager = CallbackManager.Factory.create();
+
+                    btn_facebook_login = findViewById(R.id.login_button_facebook);
+                    btn_facebook_login.setReadPermissions("public_profile", "email");
+                    AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                    if (accessToken == null) {
+                        btn_facebook_login.performClick();
+                    }
+                }else if("NV".equals(social)){
+                    naverLogin = new NaverLogin(mContext);
+                    naverLogin.forceLogin();
+                }else if("GG".equals(social)){
+                    Button loginButton = findViewById(R.id.btnGoogle);
+                    loginButton.performClick();
+                }else{
+                    loginMinimon(userUID,userPWD,"basic");
+                }
+            }
+        }
     }
 
     private String getInputUID() {

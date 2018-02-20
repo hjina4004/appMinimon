@@ -76,6 +76,9 @@ public class UserInfo {
 
             JSONObject userInfo = data.getJSONObject("userInfo");
             this.setUID(userInfo.getString("id"));
+//            if (userInfo.getString("is_social").equals("1")){
+//                this.setUID(userInfo.getString("id").substring(2));
+//            }
             this.setNickname(userInfo.getString("nickname"));
             this.setEmail(userInfo.getString("email"));
             this.setState(userInfo.getString("state"));

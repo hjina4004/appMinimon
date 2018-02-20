@@ -4,6 +4,7 @@ package com.minimon.diocian.player;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
@@ -32,6 +33,7 @@ public class NewMemberActivity extends AppCompatActivity {
     private CheckBox cbAgreeTotal;
     private CheckBox cbAgreeTemrsOfUse;
     private CheckBox cbAgreePrivacyPolicy;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
