@@ -4,6 +4,130 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBaseBG"
     tools:context="com.minimon.diocian.player.ChannelMainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="17.33dp">
+            <FrameLayout
+                android:id="@+id/fragment_video"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#ffffff"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="17.33dp"
+                android:paddingLeft="17.67dp"
+                android:paddingRight="17.67dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_drama_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15.65dp"
+                    android:textColor="#ffffff"
+                    android:text="DramaName"
+                    android:paddingBottom="17.33dp"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/img_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentLeft="true"
+                        android:src="@mipmap/a021_detail_point"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_drama_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8.67dp"
+                        android:layout_toRightOf="@+id/img_point"
+                        android:layout_centerInParent="true"
+                        android:text="point"
+                        android:textColor="#fb450b"
+                        android:textSize="15.65dp" />
+
+                    <ImageButton
+                        android:id="@+id/img_btn_heart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@color/colorBaseBG"
+                        android:src="@mipmap/a021_heart_on" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.67dp"
+                    android:layout_marginTop="19dp"
+                    android:background="#333"/>
+                <TextView
+                    android:id="@+id/tv_drama_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14.33dp"
+                    android:textSize="13.91dp"
+                    android:textColor="#ffffff"
+                    android:text="Drama Description"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.67dp"
+                    android:layout_marginTop="19dp"
+                    android:background="#333"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="14.33dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingLeft="113dp"
+                        android:text="스토리 더보기"
+                        android:textSize="13.91dp"
+                        android:textColor="#ffffff"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/a017_txt_open_down"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.67dp"
+                    android:layout_marginTop="14.33dp"
+                    android:background="#333"/>
+                <TextView
+                    android:id="@+id/tv_drama_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="17.67dp"
+                    android:textSize="13.91dp"
+                    android:textColor="#777c80"
+                    android:text="TAG"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

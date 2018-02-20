@@ -22,6 +22,9 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -52,6 +55,7 @@ public class VideoPlayerFragment extends Fragment {
     private boolean inErrorState;
     private long playBackPosition;
     private int currentWindow;
+    private String videoUrl = "";
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
@@ -131,7 +135,8 @@ public class VideoPlayerFragment extends Fragment {
             player.setPlayWhenReady(playWhenReady);
         }
 
-        MediaSource mediaSources = buildMediaSource(Uri.parse(getString(R.string.media_url_hls)));
+//        videoUrl.replace("&","&26");
+        MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl));
         player.seekTo(currentWindow, playBackPosition);
         player.prepare(mediaSources, true, false);
         inErrorState = false;
@@ -297,8 +302,15 @@ public class VideoPlayerFragment extends Fragment {
     }
 
     private MediaSource buildMediaSource(Uri uri) {
+//        Uri mp4VideoUri = uri;
+//        DefaultBandwidthMeter bandwidthMeter1 = new DefaultBandwidthMeter();
+//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,Util.getUserAgent(getActivity(), "yourApplicationName"),
+//                bandwidthMeter1); ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+//        MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri,dataSourceFactory, extractorsFactory, null, null);
+//        player.prepare(videoSource); player_view.setUseController(false);
+
         DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
-        return new HlsMediaSource.Factory(mediaDataSourceFactory).createMediaSource(uri, null, null);
+        return new ExtractorMediaSource.Factory(mediaDataSourceFactory).createMediaSource(uri, null, null);
     }
 
 
@@ -310,5 +322,9 @@ public class VideoPlayerFragment extends Fragment {
     public HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
         return new DefaultHttpDataSourceFactory(Util.getUserAgent(getActivity(), "exAndroid"), bandwidthMeter);
+    }
+
+    public void setVideoUrl(String url){
+        this.videoUrl = url;
     }
 }
