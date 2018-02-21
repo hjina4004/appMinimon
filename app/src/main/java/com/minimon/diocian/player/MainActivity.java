@@ -17,48 +17,25 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Surface;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.audio.AudioRendererEventListener;
-import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.PlaybackControlView;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
-import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.firebase.auth.FirebaseAuth;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
@@ -472,11 +449,8 @@ public class MainActivity extends AppCompatActivity
 
             switch (v.getId()){
                 case R.id.tv_playlist:
-                    Intent intent = new Intent(getApplicationContext(), ChannelMainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), DramaPlayActivity.class);
                     startActivity(intent);
-                    break;
-                case R.id.tv_serviceCenter:
-                    fragment = new VideoPlayerFragment();
                     break;
                 case R.id.tv_userInfo:
                     fragment = new UserInfoFragment();

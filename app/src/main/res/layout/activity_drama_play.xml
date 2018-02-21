@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBaseBG"
-    tools:context="com.minimon.diocian.player.ChannelMainActivity">
+    tools:context="com.minimon.diocian.player.DramaPlayActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,6 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBaseBG"
             android:orientation="vertical"
             android:paddingTop="17.33dp">
             <FrameLayout
@@ -22,7 +23,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="#ffffff"
-                />
+                >
+                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                    android:id="@+id/player_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,10 +126,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="17.67dp"
+                    android:paddingBottom="17.67dp"
                     android:textSize="13.91dp"
                     android:textColor="#777c80"
                     android:text="TAG"/>
 
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="17.67dp"
+                android:paddingLeft="17.67dp"
+                android:paddingRight="17.67dp"
+                android:background="@color/colorEditTextAddoneBG">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="31.67dp"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

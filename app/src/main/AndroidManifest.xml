@@ -86,7 +86,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".ChannelMainActivity"></activity>
+        <activity android:name=".DramaPlayActivity"></activity>
     </application>
 
 </manifest>
