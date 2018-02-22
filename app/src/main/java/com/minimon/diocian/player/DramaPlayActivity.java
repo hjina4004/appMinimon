@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,12 +62,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DramaPlayActivity extends AppCompatActivity {
+public class DramaPlayActivity extends AppCompatActivity implements  PlayListItemClickLsitener{
 
     private final String TAG = "DramaPlayActivity";
     private final String STATE_RESUME_WINDOW = "resumeWindow";
     private final String STATE_RESUME_POSITION = "resumePosition";
     private final String STATE_PLAYER_FULLSCREEN = "playerFullscreen";
+
+    private NestedScrollView dramaPlayMainScrollView;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private boolean playWhenReady = true;
@@ -116,6 +120,7 @@ public class DramaPlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
 
+        dramaPlayMainScrollView = findViewById(R.id.drama_play_main_scrollview);
         if(savedInstanceState != null){
             mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
             mResumePosition = savedInstanceState.getLong(STATE_RESUME_POSITION);
@@ -134,15 +139,16 @@ public class DramaPlayActivity extends AppCompatActivity {
 
         epiAdapter = new PlaylistDramaAdapter(this, arrEpisode);
         rc_playlist.setAdapter(epiAdapter);
+        epiAdapter.setClickListener(this);
 
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rc_playlist.setLayoutManager(layoutManager);
     }
 
-    private void sendData(){
+    private void sendData(String idx){
         ContentValues values = new ContentValues();
-        values.put("ep_idx","645");
+        values.put("ep_idx",idx);
         values.put("quality","his");
         values.put("id",UserInfo.getInstance().getUID());
 
@@ -160,10 +166,16 @@ public class DramaPlayActivity extends AppCompatActivity {
                 }
             }
         });
-        sendData();
+
     }
 
-   private void setData(JSONObject info){
+    @Override
+    public void onClick(View v, String idx) {
+        sendData(idx);
+        dramaPlayMainScrollView.scrollTo(0,0);
+    }
+
+    private void setData(JSONObject info){
        try{
            JSONArray videoArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
            JSONObject videoObj = (JSONObject) videoArr.get(0);
@@ -181,6 +193,7 @@ public class DramaPlayActivity extends AppCompatActivity {
 
    private void setPlaylistData(JSONArray jarr){
        try {
+           arrEpisode.clear();
            for (int i = 0; i < jarr.length(); i++) {
                JSONObject objEpisode = (JSONObject) jarr.get(i);
                Drama episode = new Drama();
@@ -271,7 +284,7 @@ public class DramaPlayActivity extends AppCompatActivity {
             initFullscreenDialog();
 
             initData();
-
+            sendData("645");
             if(mExoPlayerFullscreen){
                 ((ViewGroup) playerView.getParent()).removeView(playerView);
                 mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -304,7 +317,7 @@ public class DramaPlayActivity extends AppCompatActivity {
             initFullscreenDialog();
 
             initData();
-
+            sendData("645");
             if(mExoPlayerFullscreen){
                 ((ViewGroup) playerView.getParent()).removeView(playerView);
                 mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

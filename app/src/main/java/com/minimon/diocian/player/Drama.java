@@ -8,9 +8,11 @@ import android.graphics.Bitmap;
 
 public class Drama {
     private String idx;
+    private String c_idx;
     private String ep;
     private String thumbnailUrl;
     private String contentTitle;
+    private String c_title;
     private String channelName;
     private String playCount;
     private String heartCount;
@@ -88,5 +90,21 @@ public class Drama {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getC_idx() {
+        return c_idx;
+    }
+
+    public void setC_idx(String c_idx) {
+        this.c_idx = c_idx;
+    }
+
+    public String getC_title() {
+        return c_title;
+    }
+
+    public void setC_title(String c_title) {
+        this.c_title = c_title;
     }
 }

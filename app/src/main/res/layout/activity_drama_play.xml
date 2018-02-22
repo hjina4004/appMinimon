@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBaseBG"
-    tools:context="com.minimon.diocian.player.DramaPlayActivity">
+    android:background="@color/colorBaseBG">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/drama_play_main_scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -181,7 +181,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_marginBottom="94.67dp"
-        app:layout_anchor="@id/fb_sort_lastest"
+        app:layout_anchor="@+id/fb_sort_lastest"
         app:layout_anchorGravity="top"/>
     <TextView
         android:layout_width="wrap_content"
@@ -189,7 +189,7 @@
         android:text="회차"
         android:elevation="6dp"
         android:textSize="13.75dp"
-        app:layout_anchor="@id/fb_sort_episode"
+        app:layout_anchor="@+id/fb_sort_episode"
         app:layout_anchorGravity="center"/>
 
     <android.support.design.widget.FloatingActionButton
@@ -206,19 +206,16 @@
         android:textSize="13.75dp"
         android:text="최신"
         android:elevation="6dp"
-        app:layout_anchor="@id/fb_sort_lastest"
+        app:layout_anchor="@+id/fb_sort_lastest"
         app:layout_anchorGravity="center"/>
-
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fb_scroll_to_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:paddingTop="8.67dp"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
         android:src="@mipmap/a009_quick_top"
-        android:backgroundTint="#fb450b"/>
+        app:backgroundTint="#fb450b"/>
 </android.support.design.widget.CoordinatorLayout>

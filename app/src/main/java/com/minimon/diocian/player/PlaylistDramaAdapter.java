@@ -21,6 +21,7 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
 
     private List<Drama> items;
     private Context mContext;
+    private PlayListItemClickLsitener listener;
 
     public PlaylistDramaAdapter(Context context, List<Drama> modelData){
         this.items = modelData;
@@ -58,14 +59,17 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
-
-    public class ListItemViewHolder extends RecyclerView.ViewHolder{
+    public void setClickListener(PlayListItemClickLsitener itemClickLsitener){
+        this.listener = itemClickLsitener;
+    }
+    public class ListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView thumbnail;
         TextView contentTitle;
         TextView channelName;
         TextView playCount;
         TextView heartCount;
         TextView point;
+
         public ListItemViewHolder(View itemView, int viewType) {
             super(itemView);
             thumbnail = (ImageView) itemView.findViewById(R.id.img_drama_thumbnail);
@@ -74,6 +78,12 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
             playCount = (TextView) itemView.findViewById(R.id.tv_drama_playlist_play);
             heartCount = (TextView) itemView.findViewById(R.id.tv_drama_playlist_heart);
             point = (TextView) itemView.findViewById(R.id.tv_drama_playlist_point);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(listener != null) listener.onClick(v, items.get(getAdapterPosition()).getIdx().toString());
         }
     }
 }
