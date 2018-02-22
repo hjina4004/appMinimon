@@ -9,11 +9,10 @@ import android.graphics.Bitmap;
 public class Drama {
     private String idx;
     private String c_idx;
-    private String ep;
+    private int ep;
     private String thumbnailUrl;
     private String contentTitle;
     private String c_title;
-    private String channelName;
     private String playCount;
     private String heartCount;
     private String point;
@@ -26,14 +25,6 @@ public class Drama {
 
     public void setContentTitle(String contentTitle) {
         this.contentTitle = contentTitle;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
     }
 
     public String getPlayCount() {
@@ -60,11 +51,11 @@ public class Drama {
         this.point = point;
     }
 
-    public String getEp() {
+    public int getEp() {
         return ep;
     }
 
-    public void setEp(String ep) {
+    public void setEp(int ep) {
         this.ep = ep;
     }
 

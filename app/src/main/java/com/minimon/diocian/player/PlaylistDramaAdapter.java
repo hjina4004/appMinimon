@@ -44,7 +44,7 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
         if(!TextUtils.isEmpty(item.getThumbnailUrl()))
             Picasso.with(mContext).load(item.getThumbnailUrl()).into(itemHolder.thumbnail);
         itemHolder.contentTitle.setText(item.getContentTitle());
-        itemHolder.channelName.setText(item.getChannelName());
+        itemHolder.channelName.setText(item.getC_title());
         itemHolder.playCount.setText(item.getPlayCount());
         itemHolder.heartCount.setText(item.getHeartCount());
         itemHolder.point.setText(item.getPoint());

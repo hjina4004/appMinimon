@@ -14,15 +14,15 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp">
         <TextView
             android:id="@+id/tv_drama_playlist_contentTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Minimon Content Title"
             android:textColor="#fff"
-            android:textSize="20dp"
-            android:textStyle="bold"
+            android:textSize="14.2dp"
             />
         <TextView
             android:id="@+id/tv_drama_playlist_channelName"
@@ -40,7 +40,8 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_drama_playlist_channelName">
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center">
                 <ImageView
                     android:src="@mipmap/a009_thum_s_play"
                     android:layout_width="wrap_content"
@@ -48,11 +49,16 @@
                 <TextView
                     android:id="@+id/tv_drama_playlist_play"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textColor="#ffffff"
+                    android:paddingLeft="2dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:gravity="center">
                 <ImageView
                     android:src="@mipmap/a009_thum_s_heart"
                     android:layout_width="wrap_content"
@@ -60,11 +66,16 @@
                 <TextView
                     android:id="@+id/tv_drama_playlist_heart"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#ffffff"
+                    android:paddingLeft="2dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:gravity="center">
                 <ImageView
                     android:src="@mipmap/a009_thum_s_point"
                     android:layout_width="wrap_content"
@@ -72,7 +83,10 @@
                 <TextView
                     android:id="@+id/tv_drama_playlist_point"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#ffffff"
+                    android:paddingLeft="2dp"/>
             </LinearLayout>
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>

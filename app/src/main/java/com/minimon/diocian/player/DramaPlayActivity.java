@@ -1,9 +1,11 @@
 package com.minimon.diocian.player;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -60,6 +62,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DramaPlayActivity extends AppCompatActivity implements  PlayListItemClickLsitener{
@@ -103,9 +108,11 @@ public class DramaPlayActivity extends AppCompatActivity implements  PlayListIte
     RecyclerView rc_playlist;
     List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
     PlaylistDramaAdapter epiAdapter;
+    private String c_title;
 
     FloatingActionButton fbScrollToTop;
-
+    FloatingActionButton fbSortLastest;
+    FloatingActionButton fbSortEp;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -144,6 +151,13 @@ public class DramaPlayActivity extends AppCompatActivity implements  PlayListIte
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rc_playlist.setLayoutManager(layoutManager);
+
+        fbScrollToTop = findViewById(R.id.fb_scroll_to_top);
+        fbSortLastest = findViewById(R.id.fb_sort_lastest);
+        fbSortEp = findViewById(R.id.fb_sort_episode);
+        fbScrollToTop.setOnClickListener(mClickListener);
+        fbSortLastest.setOnClickListener(mClickListener);
+        fbSortEp.setOnClickListener(mClickListener);
     }
 
     private void sendData(String idx){
@@ -154,13 +168,16 @@ public class DramaPlayActivity extends AppCompatActivity implements  PlayListIte
 
         minimonEpisode.info(values);
     }
+
+
     private void initData(){
         minimonEpisode = new MinimonEpisode();
         minimonEpisode.setListener(new MinimonEpisode.MinimonEpisodeListener() {
             @Override
-            public void onResponse(JSONObject info) {
+            public void onResponse(JSONObject info , String responseType) {
                 try{
-                    setData(info);
+                    if("info".equals(responseType))
+                        setData(info);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -170,10 +187,44 @@ public class DramaPlayActivity extends AppCompatActivity implements  PlayListIte
     }
 
     @Override
-    public void onClick(View v, String idx) {
-        sendData(idx);
-        dramaPlayMainScrollView.scrollTo(0,0);
+    public void onClick(View v, final String idx) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("결제 진행");
+        builder.setMessage(" 결제를 진행하시겠습니까?");
+        builder.setPositiveButton("예",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendData(idx);
+                        dramaPlayMainScrollView.scrollTo(0,0);
+                    }
+                });
+        builder.setNegativeButton("아니오",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+        builder.show();
     }
+
+    private View.OnClickListener mClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.fb_scroll_to_top:
+                    dramaPlayMainScrollView.scrollTo(0,0);
+                    break;
+                case R.id.fb_sort_episode:
+                    sortEpiArr("asc");
+                    break;
+                case R.id.fb_sort_lastest:
+                    sortEpiArr("desc");
+                    break;
+            }
+        }
+    };
 
     private void setData(JSONObject info){
        try{
@@ -191,6 +242,39 @@ public class DramaPlayActivity extends AppCompatActivity implements  PlayListIte
        }
    }
 
+   private void refreshPlaylistData(JSONObject info){
+        try{
+            JSONArray playlistArr = (JSONArray) info.getJSONObject("data").get("list");
+        }catch (JSONException e){
+
+        }
+   }
+
+   public static class Descending implements Comparator<Drama>{
+
+       @Override
+       public int compare(Drama o1, Drama o2) {
+           return o2.getEp() - o1.getEp();
+       }
+   }
+    public static class Asc implements Comparator<Drama>{
+
+        @Override
+        public int compare(Drama o1, Drama o2) {
+            return o1.getEp() - o2.getEp();
+        }
+    }
+   private void sortEpiArr(String type){
+       if("asc".equals(type)){
+           Asc asc = new Asc();
+           Collections.sort(arrEpisode,asc);
+       }else{
+           Descending desc = new Descending();
+           Collections.sort(arrEpisode, desc);
+       }
+       epiAdapter.notifyDataSetChanged();
+   }
+
    private void setPlaylistData(JSONArray jarr){
        try {
            arrEpisode.clear();
@@ -200,11 +284,12 @@ public class DramaPlayActivity extends AppCompatActivity implements  PlayListIte
                episode.setIdx(objEpisode.get("idx").toString());
                episode.setContentTitle(objEpisode.getString("title"));
                episode.setPoint(objEpisode.getString("point"));
-               episode.setEp(objEpisode.getString("ep"));
+               episode.setEp(objEpisode.getInt("ep"));
                episode.setPlayTime(objEpisode.getString("play_time"));
                episode.setHeartCount(objEpisode.getString("like_cnt"));
                episode.setPlayCount(objEpisode.getString("play_cnt"));
                episode.setThumbnailUrl(objEpisode.getString("image_url"));
+               episode.setC_title(c_title);
                arrEpisode.add(episode);
            }
            epiAdapter.notifyDataSetChanged();
@@ -217,6 +302,7 @@ public class DramaPlayActivity extends AppCompatActivity implements  PlayListIte
        try {
            tv_content_title.setText(obj.getString("title"));
            tv_content_point.setText(obj.getString("point"));
+           c_title = obj.getString("c_title");
            tv_episode_description.setText(obj.getString("summary"));
            JSONArray jarr = obj.getJSONArray("list_tag");
            String tags = "";

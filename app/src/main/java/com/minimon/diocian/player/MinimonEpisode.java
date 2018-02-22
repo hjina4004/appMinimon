@@ -22,10 +22,11 @@ public class MinimonEpisode {
     private final String TAG = "MinimonEpisode";
     private final String API_URL = "http://dev.api.minimon.com/Episode/";
     private String currentRequest;
+    String responseType = "";
 
     public interface MinimonEpisodeListener {
         // These methods are the different events and need to pass relevant arguments with the event
-        public void onResponse(JSONObject info);
+        public void onResponse(JSONObject info, String type);
     }
 
     private MinimonEpisodeListener listener;
@@ -85,13 +86,15 @@ public class MinimonEpisode {
             Log.d(TAG, "responseNetworkTask: " + objJSON);
 
             if (listener != null)
-                listener.onResponse(objJSON);
+                listener.onResponse(objJSON, responseType);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     public void info(ContentValues value){
+        responseType = "info";
         requestFunction("info", value);
     }
+
 }

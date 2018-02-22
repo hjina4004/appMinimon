@@ -22,7 +22,8 @@
                 android:id="@+id/fragment_video"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="#ffffff"
+                android:background="#000000
+"
                 >
                 <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                     android:id="@+id/player_view"
@@ -168,6 +169,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical"
+                    android:paddingTop="17.67dp"
                     />
 
             </LinearLayout>
@@ -180,7 +182,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_marginBottom="94.67dp"
+        android:layout_marginBottom="100dp"
         app:layout_anchor="@+id/fb_sort_lastest"
         app:layout_anchorGravity="top"/>
     <TextView
@@ -197,7 +199,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:layout_marginBottom="46.67dp"
+        android:layout_marginBottom="50dp"
         app:layout_anchor="@+id/fb_scroll_to_top"
         app:layout_anchorGravity="top"/>
     <TextView
