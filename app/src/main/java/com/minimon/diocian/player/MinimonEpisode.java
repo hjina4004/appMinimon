@@ -1,11 +1,18 @@
 package com.minimon.diocian.player;
 
 import android.content.ContentValues;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Created by GOOD on 2018-02-20.
@@ -35,7 +42,6 @@ public class MinimonEpisode {
         networkTask.setToken(UserInfo.getInstance().getToken());
         networkTask.execute();
     }
-
     public class NetworkTask extends AsyncTask<Void,Void,String>{
         private String url;
         private ContentValues values;
