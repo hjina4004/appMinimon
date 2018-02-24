@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private static final String TAG = "MainActivity";
+    private final String PREF_NAME = "minimon-preference";
 
     // for Google
     private static final int GOOGLE_SIGN_IN = 9001;
@@ -485,15 +486,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void tryLogout(){
-        Log.d(TAG, "tryLogout:" + UserInfo.getInstance().getSocial());
-        if("KK".equals(UserInfo.getInstance().getSocial())){
+        String typeSocial = UserInfo.getInstance().getSocial();
+        Log.d(TAG, "tryLogout:" + typeSocial);
+        if("KK".equals(typeSocial)){
             UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
                 @Override
                 public void onCompleteLogout() {
                     procLogout();
                 }
             });
-        }else if("NV".equals(UserInfo.getInstance().getSocial())){
+        }else if("NV".equals(typeSocial)){
             NaverLogin naverLogin = new NaverLogin(getApplicationContext());
             naverLogin.setListener(new NaverLogin.NaverLoginListener() {
                 @Override
@@ -507,30 +509,27 @@ public class MainActivity extends AppCompatActivity
                 }
             });
             naverLogin.forceLogout();
-        }else if("FB".equals(UserInfo.getInstance().getSocial())){
+        }else if("FB".equals(typeSocial)){
             if(AccessToken.getCurrentAccessToken() != null) {
                 LoginManager.getInstance().logOut();
                 procLogout();
             }
-        }else if("GG".equals(UserInfo.getInstance().getSocial())){
+        }else if("GG".equals(typeSocial)){
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
                 @Override
                 public void onResult(@NonNull Status status) {
                     procLogout();
                 }
             });
+        }else{
+            procLogout();
         }
     }
 
     private void procLogout() {
-        SharedPreferences prefs = getSharedPreferences("minimon-preference", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("AutoLogin");
-        editor.remove("social");
-        editor.remove("token");
-        editor.remove("userUID");
-        editor.remove("userPWD");
-        editor.apply();
+        editor.clear().commit();
         new MinimonUser().logout();
         new JUtil().alertNotice(MainActivity.this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {
             @Override

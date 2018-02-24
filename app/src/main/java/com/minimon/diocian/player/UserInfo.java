@@ -22,6 +22,7 @@ public class UserInfo {
     private String mLoc;
     private String mPoint;
     private String mFixed;
+    private String mPWD;
 
     //private constructor.
     private UserInfo(){
@@ -70,15 +71,16 @@ public class UserInfo {
                 this.setLoc("");
                 this.setPoint("");
                 this.setFixed("");
+                this.setPWD("");
                 return;
             }
             this.setToken(data.getString("apiToken"));
 
             JSONObject userInfo = data.getJSONObject("userInfo");
             this.setUID(userInfo.getString("id"));
-//            if (userInfo.getString("is_social").equals("1")){
-//                this.setUID(userInfo.getString("id").substring(2));
-//            }
+            if (userInfo.getString("is_social").equals("1")){
+                this.setUID(userInfo.getString("id").substring(2));
+            }
             this.setNickname(userInfo.getString("nickname"));
             this.setEmail(userInfo.getString("email"));
             this.setState(userInfo.getString("state"));
@@ -171,5 +173,12 @@ public class UserInfo {
     }
     public void setFixed(String value) {
         this.mFixed = value;
+    }
+
+    public String getPWD() {
+        return mPWD;
+    }
+    public void setPWD(String value) {
+        this.mPWD = value;
     }
 }
