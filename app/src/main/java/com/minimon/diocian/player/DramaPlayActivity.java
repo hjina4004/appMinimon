@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private NestedScrollView dramaPlayMainScrollView;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private boolean playWhenReady = true;
+    private boolean playWhenReady = false;
     private boolean inErrorState;
 //    private long playBackPosition;
 //    private int currentWindow;
@@ -170,6 +171,9 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 try{
                     if("info".equals(responseType))
                         setData(info);
+                    else{
+
+                    }
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -233,6 +237,12 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            return;
        }
    }
+
+//   private void setPlayingPlaylistData(JSONObject list){
+//        try{
+//            JSONArray playlistArray = (JSONArray) list.
+//        }
+//   }
 
    private void refreshPlaylistData(JSONObject info){
         try{
@@ -648,5 +658,10 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         public void onVideoDisabled(DecoderCounters counters) {
 
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
     }
 }

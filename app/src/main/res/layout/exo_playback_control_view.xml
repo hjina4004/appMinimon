@@ -103,4 +103,28 @@
 
    </LinearLayout>
 
+   <RelativeLayout
+       android:id="@+id/view_play_info"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:gravity="center_vertical">
+      <TextView
+          android:id="@+id/tv_bandwidth"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="bandWidth"
+          android:layout_centerVertical="true"
+          android:textColor="#ffffff"
+          />
+      <TextView
+          android:id="@+id/tv_playing_playlist"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="재생목록"
+          android:layout_centerVertical="true"
+          android:layout_centerHorizontal="true"
+          android:textColor="#ffffff"
+          />
+   </RelativeLayout>
+
 </LinearLayout>

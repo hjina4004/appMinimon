@@ -97,4 +97,9 @@ public class MinimonEpisode {
         requestFunction("info", value);
     }
 
+    public void list_(ContentValues value){
+        responseType = "list_";
+        requestFunction("list_",value);
+    }
+
 }
