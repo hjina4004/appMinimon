@@ -137,18 +137,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             if (resCode.equals("0000")) {
                 userInfo.setData(info.getJSONObject("data"));
-<<<<<<< HEAD
-//                SharedPreferences pref = getSharedPreferences("minimon_preference", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = pref.edit();
-//                editor.putString("token",userInfo.getToken());
-//                editor.putString("social", userInfo.getSocial());
-//                editor.apply();
-//                pref.setPreferences();
-                saveLoginData();
-=======
                 userInfo.setPWD(getInputPassword());
                 saveLoginInfo();
->>>>>>> fc2dafbea09fe64dfd4f928b1ccfe8e4a32a7f2b
                 gotoMain();
             } else if (resCode.equals("0402") && !typeSocial.equals("basic")) {
                 newMemberSNS(typeSocial, userInfo.getUID(), userInfo.getEmail());
@@ -500,14 +490,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
             String token = prefs.getString("token","");
             String social = prefs.getString("social","");
-<<<<<<< HEAD
-            String userUID = prefs.getString("userUID","");
-            String userPWD = prefs.getString("userPWD","");
-            if("".equals(token) || token == null || token.isEmpty()){ // 아이디가 이미 저장되어 있으면 토큰을 저장하도록 하므로 토근이 있으면 로그인시도
-
-=======
             if("".equals(token) || token == null || token.isEmpty()){ // 아이디가 이미 저장되어 있으면 토큰을 저장하도록 하므로 토근이 없으면 로그인시도
->>>>>>> fc2dafbea09fe64dfd4f928b1ccfe8e4a32a7f2b
             }else{ // 토큰이 있는경우 자동로그인 처리
                 if("KK".equals(social)){
                     Button loginButton = findViewById(R.id.btnKakao);

@@ -529,13 +529,7 @@ public class MainActivity extends AppCompatActivity
     private void procLogout() {
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-<<<<<<< HEAD
-        Log.d("Logout",prefs.getString("AutoLogin",""));
         editor.clear().commit();
-//        editor.commit();
-=======
-        editor.clear().commit();
->>>>>>> fc2dafbea09fe64dfd4f928b1ccfe8e4a32a7f2b
         new MinimonUser().logout();
         new JUtil().alertNotice(MainActivity.this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {
             @Override
