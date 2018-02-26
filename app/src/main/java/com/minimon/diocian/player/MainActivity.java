@@ -519,18 +519,17 @@ public class MainActivity extends AppCompatActivity
                     procLogout();
                 }
             });
+        }else{
+            procLogout();
         }
     }
 
     private void procLogout() {
         SharedPreferences prefs = getSharedPreferences("minimon-preference", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("AutoLogin");
-        editor.remove("social");
-        editor.remove("token");
-        editor.remove("userUID");
-        editor.remove("userPWD");
-        editor.apply();
+        Log.d("Logout",prefs.getString("AutoLogin",""));
+        editor.clear().commit();
+//        editor.commit();
         new MinimonUser().logout();
         new JUtil().alertNotice(MainActivity.this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {
             @Override

@@ -6,6 +6,6 @@ import android.view.View;
  * Created by GOOD on 2018-02-22.
  */
 
-public interface PlayListItemClickLsitener {
+public interface PlayListItemClickListener {
     void onClick(View v, String idx);
 }

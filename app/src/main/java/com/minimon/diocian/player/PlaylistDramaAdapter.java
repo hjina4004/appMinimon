@@ -21,7 +21,7 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
 
     private List<Drama> items;
     private Context mContext;
-    private PlayListItemClickLsitener listener;
+    private PlayListItemClickListener listener;
 
     public PlaylistDramaAdapter(Context context, List<Drama> modelData){
         this.items = modelData;
@@ -59,7 +59,7 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
-    public void setClickListener(PlayListItemClickLsitener itemClickLsitener){
+    public void setClickListener(PlayListItemClickListener itemClickLsitener){
         this.listener = itemClickLsitener;
     }
     public class ListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

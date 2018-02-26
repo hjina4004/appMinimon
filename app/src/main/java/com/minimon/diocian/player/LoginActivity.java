@@ -137,12 +137,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             if (resCode.equals("0000")) {
                 userInfo.setData(info.getJSONObject("data"));
-                SharedPreferences pref = getSharedPreferences("minimon_preference", MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("token",userInfo.getToken());
-                editor.putString("social", userInfo.getSocial());
-                editor.apply();
+//                SharedPreferences pref = getSharedPreferences("minimon_preference", MODE_PRIVATE);
+//                SharedPreferences.Editor editor = pref.edit();
+//                editor.putString("token",userInfo.getToken());
+//                editor.putString("social", userInfo.getSocial());
+//                editor.apply();
 //                pref.setPreferences();
+                saveLoginData();
                 gotoMain();
             } else if (resCode.equals("0402") && !typeSocial.equals("basic")) {
                 newMemberSNS(typeSocial, userInfo.getUID(), userInfo.getEmail());
@@ -471,6 +472,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         return prefs.getString("AutoLogin", "0").equals("1");
     }
 
+    private void saveLoginData(){
+        if(!loadAutoLogin())
+            return;
+        SharedPreferences prefs = getSharedPreferences("minimon-preference",MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("AutoLogin", "1");
+        editor.putString("token", UserInfo.getInstance().getToken());
+        editor.putString("social", UserInfo.getInstance().getSocial());
+        if("basic".equals(UserInfo.getInstance().getSocial())){
+            editor.putString("userUID", getInputUID());
+            editor.putString("userPWD", getInputPassword());
+        }
+        editor.apply();
+    }
+
     public void tryAutoLogin(){
         if(loadAutoLogin()){
             SharedPreferences prefs = getSharedPreferences("minimon-preference",MODE_PRIVATE);
@@ -478,15 +494,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             String social = prefs.getString("social","");
             String userUID = prefs.getString("userUID","");
             String userPWD = prefs.getString("userPWD","");
-            if("".equals(token) || token == null || token.isEmpty()){ // 아이디가 이미 저장되어 있으면 토큰을 저장하도록 하므로 토근이 없으면 로그인시도
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("token", UserInfo.getInstance().getToken());
-                editor.putString("social", UserInfo.getInstance().getSocial());
-                if("".equals(UserInfo.getInstance().getSocial())){
-                    editor.putString("userUID", getInputUID());
-                    editor.putString("userPWD", getInputPassword());
-                }
-                editor.apply();
+            if("".equals(token) || token == null || token.isEmpty()){ // 아이디가 이미 저장되어 있으면 토큰을 저장하도록 하므로 토근이 있으면 로그인시도
+
             }else{ // 토큰이 있는경우 자동로그인 처리
                 if("KK".equals(social)){
                     callback = new SessionCallback();
