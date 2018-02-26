@@ -53,7 +53,8 @@ import org.json.JSONObject;
 
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    private String TAG = "LoginActivity";
+    private final String TAG = "LoginActivity";
+    private final String PREF_NAME = "minimon-preference";
     private String strUID = "";
 
     private OAuthLoginDialogMng mDialogMng;
@@ -77,15 +78,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     String token, social;
 
+    boolean isAutoLogin;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         mContext = this;
-
-        SharedPreferences pref = getSharedPreferences("minimon-preference", MODE_PRIVATE);
-        pref.getString("token","");
 
         init();
     }
@@ -137,6 +137,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             if (resCode.equals("0000")) {
                 userInfo.setData(info.getJSONObject("data"));
+<<<<<<< HEAD
 //                SharedPreferences pref = getSharedPreferences("minimon_preference", MODE_PRIVATE);
 //                SharedPreferences.Editor editor = pref.edit();
 //                editor.putString("token",userInfo.getToken());
@@ -144,6 +145,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //                editor.apply();
 //                pref.setPreferences();
                 saveLoginData();
+=======
+                userInfo.setPWD(getInputPassword());
+                saveLoginInfo();
+>>>>>>> fc2dafbea09fe64dfd4f928b1ccfe8e4a32a7f2b
                 gotoMain();
             } else if (resCode.equals("0402") && !typeSocial.equals("basic")) {
                 newMemberSNS(typeSocial, userInfo.getUID(), userInfo.getEmail());
@@ -260,8 +265,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void initAutoLogin() {
+        isAutoLogin = loadAutoLogin();
         CheckBox checkBox = findViewById(R.id.cbAutoLogin);
-        checkBox.setChecked(loadAutoLogin());
+        checkBox.setChecked(isAutoLogin);
 
         checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
@@ -409,7 +415,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     UserInfo userInfo = UserInfo.getInstance();
                     userInfo.setUID(uid);
                     userInfo.setEmail(email);
-                    loginMinimon(uid, "KK", "social");
+                    loginMinimon(uid, "FB", "social");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -461,14 +467,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void saveAutoLogin(boolean isAuto) {
-        SharedPreferences prefs = getSharedPreferences("minimon_preference", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("AutoLogin", isAuto? "1":"0");
         editor.apply();
+
+        isAutoLogin = isAuto;
     }
 
     public boolean loadAutoLogin() {
-        SharedPreferences prefs = getSharedPreferences("minimon_preference", MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         return prefs.getString("AutoLogin", "0").equals("1");
     }
 
@@ -488,39 +496,38 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void tryAutoLogin(){
-        if(loadAutoLogin()){
-            SharedPreferences prefs = getSharedPreferences("minimon-preference",MODE_PRIVATE);
+        if(isAutoLogin){
+            SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
             String token = prefs.getString("token","");
             String social = prefs.getString("social","");
+<<<<<<< HEAD
             String userUID = prefs.getString("userUID","");
             String userPWD = prefs.getString("userPWD","");
             if("".equals(token) || token == null || token.isEmpty()){ // 아이디가 이미 저장되어 있으면 토큰을 저장하도록 하므로 토근이 있으면 로그인시도
 
+=======
+            if("".equals(token) || token == null || token.isEmpty()){ // 아이디가 이미 저장되어 있으면 토큰을 저장하도록 하므로 토근이 없으면 로그인시도
+>>>>>>> fc2dafbea09fe64dfd4f928b1ccfe8e4a32a7f2b
             }else{ // 토큰이 있는경우 자동로그인 처리
                 if("KK".equals(social)){
-                    callback = new SessionCallback();
-                    Session.getCurrentSession().addCallback(callback);
-                    btn_kakao_login = findViewById(R.id.login_button_activity);
-                    if (!Session.getCurrentSession().checkAndImplicitOpen()) {
-                        btn_kakao_login.performClick();
-                    }
+                    Button loginButton = findViewById(R.id.btnKakao);
+                    loginButton.performClick();
                 }else if("FB".equals(social)){
-                    callbackManager = CallbackManager.Factory.create();
-
-                    btn_facebook_login = findViewById(R.id.login_button_facebook);
-                    btn_facebook_login.setReadPermissions("public_profile", "email");
-                    AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                    if (accessToken == null) {
-                        btn_facebook_login.performClick();
-                    }
+                    Button loginButton = findViewById(R.id.btnFacebook);
+                    loginButton.performClick();
                 }else if("NV".equals(social)){
-                    naverLogin = new NaverLogin(mContext);
-                    naverLogin.forceLogin();
+                    Button loginButton = findViewById(R.id.btnNaver);
+                    loginButton.performClick();
                 }else if("GG".equals(social)){
                     Button loginButton = findViewById(R.id.btnGoogle);
                     loginButton.performClick();
                 }else{
-                    loginMinimon(userUID,userPWD,"basic");
+                    String userUID = prefs.getString("userUID","");
+                    String userPWD = prefs.getString("userPWD","");
+
+                    ((EditText) findViewById(R.id.inUserID)).setText(userUID);
+                    ((EditText) findViewById(R.id.inUserPW)).setText(userPWD);
+                    loginMinimon(userUID, userPWD,"basic");
                 }
             }
         }
@@ -549,5 +556,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         } else {
             view.setText(strID);
         }
+    }
+
+    private void saveLoginInfo() {
+        UserInfo userInfo = UserInfo.getInstance();
+        SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("token",userInfo.getToken());
+        editor.putString("social", userInfo.getSocial());
+        editor.putString("userUID",userInfo.getUID());
+        editor.putString("userPWD",userInfo.getPWD());
+        editor.apply();
     }
 }

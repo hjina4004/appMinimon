@@ -22,11 +22,10 @@ import static com.kakao.util.helper.Utility.getPackageInfo;
 
 public class GateActivity extends AppCompatActivity {
     private final static String TAG = "GateActivity";
+    private final String PREF_NAME = "minimon-preference";
 
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
-
-    String autoLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +34,10 @@ public class GateActivity extends AppCompatActivity {
 
         Log.d(TAG, "Hash Key = " + getKeyHash(this.getApplicationContext()));
 
-        SharedPreferences pref = getSharedPreferences("minimon_preference", MODE_PRIVATE);
-        autoLogin = pref.getString("AutoLogin","0");
-        if("1".equals(autoLogin))
+        SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        String autoLogin = pref.getString("AutoLogin","0");
+        String token = pref.getString("token","");
+        if(token != null && token.length() > 1 && "1".equals(autoLogin))
             gotoLogin();
 
         Button btnLogin = (Button) findViewById(R.id.btn_login);
