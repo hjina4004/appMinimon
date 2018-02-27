@@ -83,6 +83,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private boolean mExoPlayerFullscreen = false;
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
+    private TextView mEpisodeTitle;
 //    private Dialog mFullScreenDialog;
 
     private SimpleExoPlayer player;
@@ -241,6 +242,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            videoUrl = videoObj.getString("playUrl");
            EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
            initializePlayer();
+           initFullscreenButton();
        }catch (JSONException e){
            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
            return;
@@ -305,6 +307,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
        try {
            tv_content_title.setText(obj.getString("title"));
            tv_content_point.setText(obj.getString("point"));
+           EpisodeInfo.getInsatnace().setTitle(obj.getString("title"));
            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
 
            c_title = obj.getString("c_title");
@@ -362,6 +365,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 goFullScreen();
             }
         });
+        mEpisodeTitle = controlView.findViewById(R.id.tv_exo_title);
+        mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
     }
 
     @Override
@@ -369,10 +374,10 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         super.onStart();
         Log.d(TAG+"Test","OnStart");
         if (Util.SDK_INT > 23) {
-            initFullscreenButton();
 //            initFullscreenDialog();
 
             initData();
+//            initFullscreenButton();
             if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
                 sendEpisodeData("645");
             else
@@ -405,10 +410,10 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         super.onResume();
         Log.d(TAG+"Test","OnResume");
         if (Util.SDK_INT <= 23) {
-            initFullscreenButton();
 //            initFullscreenDialog();
 
             initData();
+
             if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
                 sendEpisodeData("645");
             else

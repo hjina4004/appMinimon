@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
@@ -20,6 +21,7 @@ import android.view.Surface;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -69,6 +71,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
+    private ImageView mScreenLock;
+    private RelativeLayout mBottomMenu;
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
@@ -244,6 +248,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 finish();
             }
         });
+        mScreenLock = controlView.findViewById(R.id.img_exo_lock);
+        mBottomMenu = controlView.findViewById(R.id.exo_view_play_info);
+        mScreenLock.setVisibility(View.VISIBLE);
+
+
     }
 
 
@@ -468,4 +477,15 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             }
         }
     }
+
+    private View.OnClickListener mClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.img_exo_lock:
+//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    break;
+            }
+        }
+    };
 }
