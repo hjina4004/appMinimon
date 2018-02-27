@@ -22,17 +22,21 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
     private List<Drama> items;
     private Context mContext;
     private PlayListItemClickListener listener;
+    private String mType;
 
-    public PlaylistDramaAdapter(Context context, List<Drama> modelData){
+    public PlaylistDramaAdapter(Context context, List<Drama> modelData, String type){
         this.items = modelData;
         this.mContext = context;
+        this.mType = type;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.
-                from(parent.getContext()).
-                inflate(R.layout.list_item_drama_play,parent,false);
+        View itemView = null;
+        if("info".equals(mType))
+            itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_drama_play,parent,false);
+        else if("list_".equals(mType))
+            return null;
         return new ListItemViewHolder(itemView, viewType);
     }
 

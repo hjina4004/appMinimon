@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <application
         android:name=".kakao.GlobalApplication"
         android:allowBackup="true"
@@ -46,7 +46,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -86,7 +86,10 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".DramaPlayActivity"></activity>
+        <activity android:name=".DramaPlayActivity" />
+        <activity android:name=".VideoPlayScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

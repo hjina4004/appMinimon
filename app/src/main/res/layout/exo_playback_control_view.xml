@@ -126,5 +126,10 @@
           android:textColor="#ffffff"
           />
    </RelativeLayout>
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/rec_playing_playlist"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:scrollbars="horizontal"/>
 
 </LinearLayout>

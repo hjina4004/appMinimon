@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +69,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private final String STATE_RESUME_WINDOW = "resumeWindow";
     private final String STATE_RESUME_POSITION = "resumePosition";
     private final String STATE_PLAYER_FULLSCREEN = "playerFullscreen";
+    private final int REQUEST_FULLSCREEN = 1;
 
     private NestedScrollView dramaPlayMainScrollView;
 
@@ -79,7 +83,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private boolean mExoPlayerFullscreen = false;
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
-    private Dialog mFullScreenDialog;
+//    private Dialog mFullScreenDialog;
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
@@ -99,13 +103,19 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     //하단 재생목록, 인기목록
     LinearLayoutManager layoutManager;
     RecyclerView rc_playlist;
+    RecyclerView rec_playing_playlist;
     List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
     PlaylistDramaAdapter epiAdapter;
     private String c_title;
+    private String c_idx;
+    private String nowEp;
 
     FloatingActionButton fbScrollToTop;
     FloatingActionButton fbSortLastest;
     FloatingActionButton fbSortEp;
+
+    VideoPlayGestureDetector detector;
+    GestureDetectorCompat detectorCompat;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -137,7 +147,9 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         rc_playlist = findViewById(R.id.rc_playlist);
         rc_playlist.setNestedScrollingEnabled(false);
 
-        epiAdapter = new PlaylistDramaAdapter(this, arrEpisode);
+        rec_playing_playlist = playerView.findViewById(R.id.rec_playing_playlist);
+
+        epiAdapter = new PlaylistDramaAdapter(this, arrEpisode,"info");
         rc_playlist.setAdapter(epiAdapter);
         epiAdapter.setClickListener(this);
 
@@ -153,13 +165,30 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         fbSortEp.setOnClickListener(mClickListener);
     }
 
-    private void sendData(String idx){
+    /*
+    현재 플레이할 에피소드 데이터
+     */
+    private void sendEpisodeData(String idx){
         ContentValues values = new ContentValues();
         values.put("ep_idx",idx);
         values.put("quality","his");
         values.put("id",UserInfo.getInstance().getUID());
 
         minimonEpisode.info(values);
+    }
+
+    /*
+    전체화면시 하단에 나타날 재생목록
+     */
+    private void sendPlaylistData(){
+        ContentValues values = new ContentValues();
+        values.put("c_idx", c_idx);
+        values.put("start",nowEp);
+        values.put("limit","0");
+        values.put("order","ASC");
+        values.put("id",UserInfo.getInstance().getUID());
+
+        minimonEpisode.list_(values);
     }
 
 
@@ -169,11 +198,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             @Override
             public void onResponse(JSONObject info , String responseType) {
                 try{
-                    if("info".equals(responseType))
+                    if("info".equals(responseType)) //현재 플레이할 에피소드 에이터
                         setData(info);
-                    else{
-
-                    }
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -191,7 +217,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        sendData(idx);
+                        sendEpisodeData(idx);
                         dramaPlayMainScrollView.scrollTo(0,0);
                     }
                 });
@@ -231,6 +257,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            setEpisodeData(episodeInformation);
            setPlaylistData(episodeArr);
            videoUrl = videoObj.getString("playUrl");
+           EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
            initializePlayer();
        }catch (JSONException e){
            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
@@ -243,14 +270,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 //            JSONArray playlistArray = (JSONArray) list.
 //        }
 //   }
-
-   private void refreshPlaylistData(JSONObject info){
-        try{
-            JSONArray playlistArr = (JSONArray) info.getJSONObject("data").get("list");
-        }catch (JSONException e){
-
-        }
-   }
 
    public static class Descending implements Comparator<Drama>{
 
@@ -304,7 +323,11 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
        try {
            tv_content_title.setText(obj.getString("title"));
            tv_content_point.setText(obj.getString("point"));
+           EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
+
            c_title = obj.getString("c_title");
+//           c_idx = ;
+           nowEp = obj.getString("ep");
            tv_episode_description.setText(obj.getString("summary"));
            JSONArray jarr = obj.getJSONArray("list_tag");
            String tags = "";
@@ -318,34 +341,33 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
        }
    }
 
-    private void initFullscreenDialog() {
+//    private void initFullscreenDialog() {
+//
+//        mFullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
+//            public void onBackPressed() {
+//                if (mExoPlayerFullscreen)
+//                    closeFullscreenDialog();
+//                super.onBackPressed();
+//            }
+//        };
+//    }
 
-        mFullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
-            public void onBackPressed() {
-                if (mExoPlayerFullscreen)
-                    closeFullscreenDialog();
-                super.onBackPressed();
-            }
-        };
-    }
-
-    private void openFullscreenDialog() {
-        ((ViewGroup) playerView.getParent()).removeView(playerView);
-        mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
-        mExoPlayerFullscreen = true;
-        mFullScreenDialog.show();
-    }
-
-
-    private void closeFullscreenDialog() {
-
-        ((ViewGroup) playerView.getParent()).removeView(playerView);
-        ((FrameLayout) findViewById(R.id.fragment_video)).addView(playerView);
-        mExoPlayerFullscreen = false;
-        mFullScreenDialog.dismiss();
-        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_expand));
-    }
+//    private void openFullscreenDialog() {
+//        ((ViewGroup) playerView.getParent()).removeView(playerView);
+//        mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
+//        mExoPlayerFullscreen = true;
+//        mFullScreenDialog.show();
+//    }
+//
+//
+//    private void closeFullscreenDialog() {
+//        ((ViewGroup) playerView.getParent()).removeView(playerView);
+//        ((FrameLayout) findViewById(R.id.fragment_video)).addView(playerView);
+//        mExoPlayerFullscreen = false;
+//        mFullScreenDialog.dismiss();
+//        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_expand));
+//    }
 
     private void initFullscreenButton() {
 
@@ -355,10 +377,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         mFullScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!mExoPlayerFullscreen)
-                    openFullscreenDialog();
-                else
-                    closeFullscreenDialog();
+                goFullScreen();
             }
         });
     }
@@ -369,16 +388,16 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         Log.d(TAG+"Test","OnStart");
         if (Util.SDK_INT > 23) {
             initFullscreenButton();
-            initFullscreenDialog();
+//            initFullscreenDialog();
 
             initData();
-            sendData("645");
-            if(mExoPlayerFullscreen){
-                ((ViewGroup) playerView.getParent()).removeView(playerView);
-                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
-                mFullScreenDialog.show();
-            }
+            sendEpisodeData("645");
+//            if(mExoPlayerFullscreen){
+//                ((ViewGroup) playerView.getParent()).removeView(playerView);
+//                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//                mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
+//                mFullScreenDialog.show();
+//            }
 //            initFullscreenButton();
 //            initFullscreenDialog();
 //            ContentValues values = new ContentValues();
@@ -402,16 +421,16 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         Log.d(TAG+"Test","OnResume");
         if (Util.SDK_INT <= 23) {
             initFullscreenButton();
-            initFullscreenDialog();
+//            initFullscreenDialog();
 
             initData();
-            sendData("645");
-            if(mExoPlayerFullscreen){
-                ((ViewGroup) playerView.getParent()).removeView(playerView);
-                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
-                mFullScreenDialog.show();
-            }
+            sendEpisodeData("645");
+//            if(mExoPlayerFullscreen){
+//                ((ViewGroup) playerView.getParent()).removeView(playerView);
+//                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//                mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
+//                mFullScreenDialog.show();
+//            }
         }
     }
 
@@ -423,11 +442,12 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             if(playerView!= null&& playerView.getPlayer()!=null){
                 mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
                 mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(mResumePosition);
                 releasePlayer();
 
             }
-            if (mFullScreenDialog != null)
-                mFullScreenDialog.dismiss();
+//            if (mFullScreenDialog != null)
+//                mFullScreenDialog.dismiss();
         }
     }
 
@@ -441,9 +461,14 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
                 releasePlayer();
             }
-            if (mFullScreenDialog != null)
-                mFullScreenDialog.dismiss();
+//            if (mFullScreenDialog != null)
+//                mFullScreenDialog.dismiss();
         }
+    }
+
+    private void goFullScreen(){
+        Intent intent = new Intent(DramaPlayActivity.this, VideoPlayScreenActivity.class);
+        startActivity(intent);
     }
 
     private void initializePlayer() {
@@ -472,10 +497,9 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 //        player.seekTo(currentWindow, playBackPosition);
         playerView.getPlayer().prepare(mediaSources, true, false);
         inErrorState = false;
-        boolean haveResumePosition = mResumeWindow != C.INDEX_UNSET;
-
-        if (haveResumePosition) {
-            playerView.getPlayer().seekTo(mResumeWindow, mResumePosition);
+        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
+            playerView.getPlayer().seekTo(EpisodeInfo.getInsatnace().getResumePosition());
+            playerView.getPlayer().setPlayWhenReady(true);
         }
     }
 
@@ -660,8 +684,4 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-    }
 }
