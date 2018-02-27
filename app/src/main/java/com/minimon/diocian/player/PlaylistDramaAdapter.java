@@ -33,25 +33,35 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = null;
-        if("info".equals(mType))
-            itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_drama_play,parent,false);
-        else if("list_".equals(mType))
-            return null;
+        if("info".equals(mType)) {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_drama_play, parent, false);
+            return new ListItemViewHolder(itemView, viewType);
+        }
+        else if("list_".equals(mType)) {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_playing_playlist, parent, false);
+            return new PlayListItemViewHolder(itemView);
+        }
         return new ListItemViewHolder(itemView, viewType);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Drama item = items.get(position);
-        ListItemViewHolder itemHolder = (ListItemViewHolder) holder;
+        if("info".equals(mType)) {
+            ListItemViewHolder itemHolder = (ListItemViewHolder) holder;
 //        itemHolder.thumbnail.(item.getThumbnailUrl());
-        if(!TextUtils.isEmpty(item.getThumbnailUrl()))
-            Picasso.with(mContext).load(item.getThumbnailUrl()).into(itemHolder.thumbnail);
-        itemHolder.contentTitle.setText(item.getContentTitle());
-        itemHolder.channelName.setText(item.getC_title());
-        itemHolder.playCount.setText(item.getPlayCount());
-        itemHolder.heartCount.setText(item.getHeartCount());
-        itemHolder.point.setText(item.getPoint());
+            if (!TextUtils.isEmpty(item.getThumbnailUrl()))
+                Picasso.with(mContext).load(item.getThumbnailUrl()).into(itemHolder.thumbnail);
+            itemHolder.contentTitle.setText(item.getContentTitle());
+            itemHolder.channelName.setText(item.getC_title());
+            itemHolder.playCount.setText(item.getPlayCount());
+            itemHolder.heartCount.setText(item.getHeartCount());
+            itemHolder.point.setText(item.getPoint());
+        }else{
+            PlayListItemViewHolder itemViewHolder = (PlayListItemViewHolder) holder;
+            if (!TextUtils.isEmpty(item.getThumbnailUrl()))
+                Picasso.with(mContext).load(item.getThumbnailUrl()).into(itemViewHolder.thumbnail);
+        }
     }
 
     @Override
@@ -63,6 +73,7 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
+
     public void setClickListener(PlayListItemClickListener itemClickLsitener){
         this.listener = itemClickLsitener;
     }
@@ -88,6 +99,19 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if(listener != null) listener.onClick(v, items.get(getAdapterPosition()).getIdx().toString());
+        }
+    }
+    public class PlayListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        ImageView thumbnail;
+
+        public PlayListItemViewHolder(View itemView) {
+            super(itemView);
+            thumbnail = itemView.findViewById(R.id.img_playlist_thumbnail);
+        }
+
+        @Override
+        public void onClick(View v) {
+
         }
     }
 }

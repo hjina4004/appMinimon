@@ -103,7 +103,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     //하단 재생목록, 인기목록
     LinearLayoutManager layoutManager;
     RecyclerView rc_playlist;
-    RecyclerView rec_playing_playlist;
     List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
     PlaylistDramaAdapter epiAdapter;
     private String c_title;
@@ -146,8 +145,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 
         rc_playlist = findViewById(R.id.rc_playlist);
         rc_playlist.setNestedScrollingEnabled(false);
-
-        rec_playing_playlist = playerView.findViewById(R.id.rec_playing_playlist);
 
         epiAdapter = new PlaylistDramaAdapter(this, arrEpisode,"info");
         rc_playlist.setAdapter(epiAdapter);

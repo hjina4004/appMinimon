@@ -28,6 +28,14 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     private RectF brightRectf;
 
 //    protected MotionEvent motionEvent = null;
+    public VideoPlayGestureDetectorListener mListener;
+    public interface VideoPlayGestureDetectorListener{
+
+    }
+
+    public void setListener(VideoPlayGestureDetectorListener listener){
+        mListener = listener;
+    }
 
     public VideoPlayGestureDetector(Context context, VideoPlayScreenActivity activity, int width, int height){
         mContext = context;

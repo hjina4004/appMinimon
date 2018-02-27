@@ -1,5 +1,6 @@
 package com.minimon.diocian.player;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
@@ -7,6 +8,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -45,6 +48,13 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class VideoPlayScreenActivity extends AppCompatActivity {
 
     private MinimonEpisode minimonEpisode;
@@ -65,7 +75,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity {
     private int width, height= 0;
     private VideoPlayGestureDetector videoPlayGestureDetector;
     private GestureDetector gestureDetector;
-    private GestureDetectorCompat gestureDetectorCompat;
+
+    private List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
+    private PlaylistDramaAdapter epiAdapter;
+    private RecyclerView rec_playing_playlist;
+    LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +96,67 @@ public class VideoPlayScreenActivity extends AppCompatActivity {
         width = size.x;
         height = size.y;
 
+        rec_playing_playlist = findViewById(R.id.rec_playing_playlist);
+        epiAdapter = new PlaylistDramaAdapter(this, arrEpisode, "list_");
+        rec_playing_playlist.setAdapter(epiAdapter);
+
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rec_playing_playlist.setLayoutManager(layoutManager);
 
         initializePlayer();
         initFullscreenButton();
+        initData();
+        sendPlaylistData();
+    }
+
+    private void initData(){
+        minimonEpisode = new MinimonEpisode();
+        minimonEpisode.setListener(new MinimonEpisode.MinimonEpisodeListener() {
+            @Override
+            public void onResponse(JSONObject info , String responseType) {
+                try{
+                    if("info".equals(responseType)){//현재 플레이할 에피소드 에이터
+
+                    }else{
+                        setPlaylistData(info);
+                    }
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void sendPlaylistData(){
+        ContentValues values = new ContentValues();
+        values.put("c_idx",EpisodeInfo.getInsatnace().getC_idx());
+        values.put("start","1");
+        values.put("limit",0);
+        values.put("order","ASC");
+        values.put("id",UserInfo.getInstance().getUID());
+        minimonEpisode.list_(values);
+    }
+    private void setPlaylistData(JSONObject info){
+        try{
+            JSONArray jArr = (JSONArray)info.getJSONObject("data").get("list");
+            arrEpisode.clear();
+            for(int i=0; i<jArr.length(); i++){
+                JSONObject objEpisode = (JSONObject) jArr.get(i);
+                Drama episode = new Drama();
+                episode.setIdx(objEpisode.getString("idx"));
+                episode.setEp(objEpisode.getInt("ep"));
+                episode.setContentTitle(objEpisode.getString("title"));
+                episode.setThumbnailUrl(objEpisode.getString("image_url"));
+                episode.setPoint(objEpisode.getString("point"));
+                arrEpisode.add(episode);
+            }
+            epiAdapter.notifyDataSetChanged();
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     private void initializePlayer() {
