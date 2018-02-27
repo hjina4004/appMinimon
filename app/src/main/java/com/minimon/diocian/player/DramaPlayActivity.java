@@ -174,21 +174,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         minimonEpisode.info(values);
     }
 
-    /*
-    전체화면시 하단에 나타날 재생목록
-     */
-    private void sendPlaylistData(){
-        ContentValues values = new ContentValues();
-        values.put("c_idx", c_idx);
-        values.put("start",nowEp);
-        values.put("limit","0");
-        values.put("order","ASC");
-        values.put("id",UserInfo.getInstance().getUID());
-
-        minimonEpisode.list_(values);
-    }
-
-
     private void initData(){
         minimonEpisode = new MinimonEpisode();
         minimonEpisode.setListener(new MinimonEpisode.MinimonEpisodeListener() {
@@ -388,7 +373,10 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 //            initFullscreenDialog();
 
             initData();
-            sendEpisodeData("645");
+            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
+                sendEpisodeData("645");
+            else
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
 //            if(mExoPlayerFullscreen){
 //                ((ViewGroup) playerView.getParent()).removeView(playerView);
 //                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -421,7 +409,10 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 //            initFullscreenDialog();
 
             initData();
-            sendEpisodeData("645");
+            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
+                sendEpisodeData("645");
+            else
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
 //            if(mExoPlayerFullscreen){
 //                ((ViewGroup) playerView.getParent()).removeView(playerView);
 //                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

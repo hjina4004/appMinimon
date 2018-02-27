@@ -50,16 +50,16 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         volumePath = new Path();
         brightRectf = new RectF();
         volumeRectf = new RectF();
-        brightPath.moveTo(0,0);
-        brightPath.moveTo(0,height);
-        brightPath.moveTo(width/4,height);
-        brightPath.moveTo(width/4,0);
+        brightPath.moveTo(0,200);
+        brightPath.lineTo(0,height);
+        brightPath.lineTo(width/4,height);
+        brightPath.lineTo(width/4,200);
         brightPath.close();
 
         volumePath.moveTo(width/4*3,0);
-        volumePath.moveTo(width/4*3,height);
-        volumePath.moveTo(width,height);
-        volumePath.moveTo(0,height);
+        volumePath.lineTo(width/4*3,height);
+        volumePath.lineTo(width,height);
+        volumePath.lineTo(0,height);
         volumePath.close();
 
         brightPath.computeBounds(brightRectf,true);

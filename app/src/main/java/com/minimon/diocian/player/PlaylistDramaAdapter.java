@@ -107,11 +107,12 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
         public PlayListItemViewHolder(View itemView) {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.img_playlist_thumbnail);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            if(listener != null) listener.onClick(v,items.get(getAdapterPosition()).getIdx().toString());
         }
     }
 }
