@@ -115,8 +115,16 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
+        controlBottomMenu(e1.getY(), e2.getY());
         return true;
+    }
+
+    private void controlBottomMenu(float y1, float y2){
+        if(y1>y2){
+            videoActivity.findViewById(R.id.rec_playing_playlist).setVisibility(View.VISIBLE);
+        }else{
+            videoActivity.findViewById(R.id.rec_playing_playlist).setVisibility(View.GONE);
+        }
     }
 
     private void controlBright(float y1, float y2){
