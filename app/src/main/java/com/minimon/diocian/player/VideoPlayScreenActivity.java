@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,8 @@ import android.view.Surface;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -81,6 +85,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity {
     private RecyclerView rec_playing_playlist;
     LinearLayoutManager layoutManager;
 
+    private VerticalSeekBar brightSeekBar;
+    private VerticalSeekBar volumeSeekBar;
+    private LinearLayout view_playing_bright_seekbar;
+    private LinearLayout view_playing_volume_seekbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +112,27 @@ public class VideoPlayScreenActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rec_playing_playlist.setLayoutManager(layoutManager);
+
+        brightSeekBar = findViewById(R.id.BrightSeekBar);
+        volumeSeekBar = findViewById(R.id.VolumeSeekBar);
+        view_playing_bright_seekbar = findViewById(R.id.view_playing_bright_seekbar);
+        view_playing_volume_seekbar = findViewById(R.id.view_playing_volume_seekbar);
+        brightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         initializePlayer();
         initFullscreenButton();
@@ -387,5 +417,28 @@ public class VideoPlayScreenActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private void controlBright(int bright){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Settings.System.canWrite(this)) {
+                int brightnessValue = bright;
+                Settings.System.putInt(this.getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS,
+                        brightnessValue);
+//                brightSeekBar.setProgress(brightnessValue);
+            }else{
+                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                intent.setData(Uri.parse("package:" + this.getPackageName()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.startActivity(intent);
+            }
+        }else{
+            int brightnessValue = bright;
+            Settings.System.putInt(this.getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS,
+                    brightnessValue);
+        }
+
     }
 }
