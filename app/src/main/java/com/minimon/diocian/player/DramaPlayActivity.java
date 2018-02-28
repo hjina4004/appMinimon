@@ -161,6 +161,10 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         fbScrollToTop.setOnClickListener(mClickListener);
         fbSortLastest.setOnClickListener(mClickListener);
         fbSortEp.setOnClickListener(mClickListener);
+
+        if(ConfigInfo.getInstance().getBandwidth() !=0 && ConfigInfo.getInstance().getBandwidth() !=1 && ConfigInfo.getInstance().getBandwidth() !=2){
+            ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth480);
+        }
     }
 
     /*
@@ -234,7 +238,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private void setData(JSONObject info){
        try{
            JSONArray videoArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
-           JSONObject videoObj = (JSONObject) videoArr.get(0);
+           JSONObject videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
            JSONArray episodeArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").get("list_ep");
            JSONObject episodeInformation = (JSONObject)info.getJSONObject("data").get("list");
            setEpisodeData(episodeInformation);

@@ -1,6 +1,7 @@
 package com.minimon.diocian.player;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,11 +24,13 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -75,10 +78,18 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private String videoUrl = "";
     private long mResumePosition = 0;
 
+    private Dialog gestureInfoDialog;
+
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
     private ImageView mScreenLock;
     private RelativeLayout mBottomMenu;
+    private ImageView mShowGestureInfo;
+    private TextView mBandWidth;
+    private TextView mBandWidth480;
+    private TextView mBandWidth720;
+    private TextView mBandWidth1080;
+    private LinearLayout mBandWidthView;
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
@@ -107,6 +118,9 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         playerView = findViewById(R.id.player_view);
         componentListener = new ComponentListener();
 
+        gestureInfoDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen){
+
+        };
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -125,52 +139,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rec_playing_playlist.setLayoutManager(layoutManager);
 
-//
         initializePlayer();
-//        brightSeekBar = findViewById(R.id.BrightSeekBar);
-//        volumeSeekBar = findViewById(R.id.VolumeSeekBar);
-//        view_playing_bright_seekbar = findViewById(R.id.view_playing_bright_seekbar);
-//        view_playing_volume_seekbar = findViewById(R.id.view_playing_volume_seekbar);
-//        brightSeekBar.setEnabled(true);
-//        volumeSeekBar.setEnabled(true);
-//        brightSeekBar.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                return true;
-//            }
-//        });
-//        brightSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                controlBright(progress);
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//        });
-//        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//                controlMediaVolume(progress);
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//        });
         initFullscreenButton();
         initData();
         sendPlaylistData();
@@ -224,7 +193,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private void setEpisodeData(JSONObject info){
         try {
             JSONArray videoArr = (JSONArray) info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
-            JSONObject videoObj = (JSONObject) videoArr.get(0);
+            JSONObject videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
             videoUrl = videoObj.getString("playUrl");
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
             EpisodeInfo.getInsatnace().setResumePosition(0);
@@ -280,13 +249,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
         videoPlayGestureDetector = new VideoPlayGestureDetector(this,this,width,height);
         gestureDetector = new GestureDetector(this, videoPlayGestureDetector);
-
-        playerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
 }
 
     private void releasePlayer() {
@@ -314,9 +276,68 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         });
         mScreenLock = controlView.findViewById(R.id.img_exo_lock);
         mBottomMenu = controlView.findViewById(R.id.exo_view_play_info);
-        mScreenLock.setVisibility(View.VISIBLE);
+        mBottomMenu.setVisibility(View.VISIBLE);
 
+        mShowGestureInfo = controlView.findViewById(R.id.img_exo_gesture_info);
+        mShowGestureInfo.setVisibility(View.VISIBLE);
+        mShowGestureInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openInfoDialog();
+            }
+        });
 
+        mBandWidthView = controlView.findViewById(R.id.view_bandwidth);
+        mBandWidth = controlView.findViewById(R.id.tv_bandwidth);
+        String nowBandWidth = "";
+        switch (ConfigInfo.getInstance().getBandwidth()){
+            case 0:
+                nowBandWidth = "480p";
+                break;
+            case 1:
+                nowBandWidth = "720p";
+                break;
+            case 2:
+                nowBandWidth = "1080p";
+                break;
+        }
+        mBandWidth.setText(nowBandWidth);
+        mBandWidth480 = controlView.findViewById(R.id.tv_bandwidth_480);
+        mBandWidth720 = controlView.findViewById(R.id.tv_bandwidth_720);
+        mBandWidth1080 = controlView.findViewById(R.id.tv_bandwidth_1080);
+        mBandWidth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mBandWidthView.getVisibility() == View.VISIBLE)
+                    mBandWidthView.setVisibility(View.GONE);
+                else
+                    mBandWidthView.setVisibility(View.VISIBLE);
+            }
+        });
+        mBandWidth480.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth480);
+                mBandWidthView.setVisibility(View.GONE);
+                mBandWidth.setText("480p");
+            }
+        });
+        mBandWidth720.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth720);
+                mBandWidthView.setVisibility(View.GONE);
+                mBandWidth.setText("720p");
+            }
+        });
+        mBandWidth1080.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth1080);
+                mBandWidthView.setVisibility(View.GONE);
+                mBandWidth.setText("1080p");
+            }
+        });
     }
 
 
@@ -339,6 +360,20 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "exAndroid"), bandwidthMeter);
     }
 
+    private void openInfoDialog(){
+        gestureInfoDialog.setContentView(R.layout.dialog_layout_gesture_info);
+        gestureInfoDialog.findViewById(R.id.img_dialog_gesture_info_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeInfoDialog();
+            }
+        });
+        gestureInfoDialog.show();
+    }
+
+    private void closeInfoDialog(){
+        gestureInfoDialog.dismiss();
+    }
 
     private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {
         @Override

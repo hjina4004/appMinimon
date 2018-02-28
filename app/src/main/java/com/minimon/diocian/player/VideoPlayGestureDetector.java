@@ -145,7 +145,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if(e1.getY()<200)
+        if(e1.getY()>mHeight-200)
             controlBottomMenu(e1.getY(), e2.getY());
         return true;
     }
@@ -193,7 +193,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                     Settings.System.SCREEN_BRIGHTNESS,
                     0
             );
-            if(brightnessValue <= 256 && brightnessValue>= 0) {
+            if(brightnessValue <= 255 && brightnessValue>= 0) {
                 if (y1 > y2) {
                     if (y1 - y2 > 10)
                         brightnessValue += 8;
@@ -201,7 +201,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                     if (y2 - y1 > 10)
                         brightnessValue -= 8;
                 }
-                if (brightnessValue > 256) brightnessValue = 256;
+                if (brightnessValue > 255) brightnessValue = 255;
                 if (brightnessValue < 0) brightnessValue = 0;
                 Settings.System.putInt(mContext.getContentResolver(),
                         Settings.System.SCREEN_BRIGHTNESS,
@@ -215,7 +215,9 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     private void controlMediaVolume(float y1, float y2){
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        if(currentVolume < 15) {
+        if(currentVolume <= 15) {
+            if(currentVolume == 15)
+                return;
             if (y1 > y2) {
                 audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND);
             } else {

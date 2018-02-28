@@ -27,13 +27,25 @@
           android:textColor="#ffffff"/>
 
       <ImageView
+          android:id="@+id/img_exo_gesture_info"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentTop="true"
+          android:layout_marginEnd="13dp"
+          android:layout_marginRight="13dp"
+          android:layout_toLeftOf="@+id/img_exo_lock"
+          android:layout_toStartOf="@+id/img_exo_lock"
+          android:visibility="gone"
+          android:src="@mipmap/a022_play_b_i" />
+
+      <ImageView
           android:id="@+id/img_exo_lock"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_alignParentEnd="true"
           android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:src="@mipmap/a022_play_b_lock_off"
-          android:visibility="gone"/>
+          android:layout_alignParentTop="true"
+          android:src="@mipmap/a022_play_b_lock_on" />
    </RelativeLayout>
    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
        android:layout_width="match_parent"
@@ -129,6 +141,7 @@
           android:id="@+id/exo_view_play_info"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:visibility="gone"
           android:gravity="center_vertical">
          <TextView
              android:id="@+id/tv_bandwidth"
@@ -138,6 +151,40 @@
              android:layout_centerVertical="true"
              android:textColor="#ffffff"
              />
+         <LinearLayout
+             android:id="@+id/view_bandwidth"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_toEndOf="@id/tv_bandwidth"
+             android:layout_toRightOf="@id/tv_bandwidth"
+             android:visibility="gone"
+             android:layout_marginLeft="20dp">
+            <TextView
+                android:id="@+id/tv_bandwidth_480"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="480p"
+                android:textColor="#fff"/>
+            <TextView
+                android:id="@+id/tv_bandwidth_720"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/tv_bandwidth_480"
+                android:layout_toRightOf="@id/tv_bandwidth_480"
+                android:layout_marginLeft="10dp"
+                android:text="720p"
+                android:textColor="#fff"/>
+            <TextView
+                android:id="@+id/tv_bandwidth_1080"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/tv_bandwidth_720"
+                android:layout_toRightOf="@id/tv_bandwidth_720"
+                android:layout_marginLeft="10dp"
+                android:text="1080p"
+                android:textColor="#fff"/>
+         </LinearLayout>
+
          <TextView
              android:id="@+id/tv_playing_playlist"
              android:layout_width="wrap_content"
