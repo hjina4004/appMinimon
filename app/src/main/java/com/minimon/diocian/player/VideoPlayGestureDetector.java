@@ -26,6 +26,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     private RectF volumeRectf;
     private Path brightPath;
     private RectF brightRectf;
+//    private int bottomBarHeight;
+//    private int playlistHeight;
 
     private VerticalSeekBar brightSeekBar;
     private VerticalSeekBar volumeSeekBar;
@@ -75,6 +77,9 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
         brightPath.computeBounds(brightRectf,true);
         volumePath.computeBounds(volumeRectf,true);
+
+//        bottomBarHeight = videoActivity.findViewById(R.id.exo_view_play_info).getHeight();
+//        playlistHeight = videoActivity.findViewById(R.id.rec_playing_playlist).getHeight();
     }
 
     @Override
@@ -145,16 +150,21 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if(e1.getY()>mHeight-200)
-            controlBottomMenu(e1.getY(), e2.getY());
+        if(e1.getY()>mHeight-100)
+            controlBottomMenu(e1.getY(), e2.getY(),true);
+        if(e1.getY()>300 && e1.getY() < 400)
+            controlBottomMenu(e1.getY(), e2.getY(),false);
         return true;
     }
 
-    private void controlBottomMenu(float y1, float y2){
-        if(y1>y2){
-            videoActivity.findViewById(R.id.rec_playing_playlist).setVisibility(View.VISIBLE);
-        }else{
-            videoActivity.findViewById(R.id.rec_playing_playlist).setVisibility(View.GONE);
+    private void controlBottomMenu(float y1, float y2, boolean isShow){
+        if(y1>y2 && isShow){
+            videoActivity.findViewById(R.id.view_playlist).setVisibility(View.VISIBLE);
+            videoActivity.findViewById(R.id.exo_view_play_info).setVisibility(View.GONE);
+        }
+        if(y2>y1 && !isShow){
+            videoActivity.findViewById(R.id.view_playlist).setVisibility(View.GONE);
+            videoActivity.findViewById(R.id.exo_view_play_info).setVisibility(View.VISIBLE);
         }
     }
 

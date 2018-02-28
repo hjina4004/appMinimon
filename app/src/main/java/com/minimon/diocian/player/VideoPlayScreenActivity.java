@@ -85,6 +85,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private ImageView mScreenLock;
     private RelativeLayout mBottomMenu;
     private ImageView mShowGestureInfo;
+    private LinearLayout mNowBandWidth;
     private TextView mBandWidth;
     private TextView mBandWidth480;
     private TextView mBandWidth720;
@@ -289,6 +290,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
         mBandWidthView = controlView.findViewById(R.id.view_bandwidth);
         mBandWidth = controlView.findViewById(R.id.tv_bandwidth);
+        mNowBandWidth = controlView.findViewById(R.id.view_now_bandwidth);
         String nowBandWidth = "";
         switch (ConfigInfo.getInstance().getBandwidth()){
             case 0:
@@ -305,7 +307,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         mBandWidth480 = controlView.findViewById(R.id.tv_bandwidth_480);
         mBandWidth720 = controlView.findViewById(R.id.tv_bandwidth_720);
         mBandWidth1080 = controlView.findViewById(R.id.tv_bandwidth_1080);
-        mBandWidth.setOnClickListener(new View.OnClickListener() {
+        mNowBandWidth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(mBandWidthView.getVisibility() == View.VISIBLE)

@@ -29,11 +29,39 @@
                 android:max="255"/>
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rec_playing_playlist"
+        <LinearLayout
+            android:id="@+id/view_playlist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/a022_play_b_list_down"
+                    android:layout_toLeftOf="@+id/tv_playing_playlist"
+                    android:layout_toStartOf="@+id/tv_playing_playlist"/>
+                <TextView
+                    android:id="@+id/tv_playing_playlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="재생목록"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="#ffffff"
+                    />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rec_playing_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/view_playing_volume_seekbar"

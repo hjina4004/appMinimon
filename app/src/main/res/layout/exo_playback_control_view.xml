@@ -143,20 +143,34 @@
           android:layout_height="wrap_content"
           android:visibility="gone"
           android:gravity="center_vertical">
-         <TextView
-             android:id="@+id/tv_bandwidth"
+         <LinearLayout
+             android:id="@+id/view_now_bandwidth"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:text="bandWidth"
              android:layout_centerVertical="true"
-             android:textColor="#ffffff"
-             />
+             android:background="@drawable/shape_bandwidth">
+            <TextView
+                android:id="@+id/tv_bandwidth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="bandWidth"
+                android:textColor="#ffffff"
+                android:textSize="20dp"
+                android:paddingRight="18dp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/a022_detail_res_arr"
+                android:layout_gravity="center_vertical"/>
+         </LinearLayout>
+
          <LinearLayout
              android:id="@+id/view_bandwidth"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:layout_toEndOf="@id/tv_bandwidth"
-             android:layout_toRightOf="@id/tv_bandwidth"
+             android:layout_toEndOf="@id/view_now_bandwidth"
+             android:layout_toRightOf="@id/view_now_bandwidth"
              android:visibility="gone"
              android:layout_marginLeft="20dp">
             <TextView
@@ -182,7 +196,8 @@
                 android:layout_toRightOf="@id/tv_bandwidth_720"
                 android:layout_marginLeft="10dp"
                 android:text="1080p"
-                android:textColor="#fff"/>
+                android:textColor="#fff"
+                />
          </LinearLayout>
 
          <TextView
@@ -195,6 +210,5 @@
              android:textColor="#ffffff"
              />
       </RelativeLayout>
-
    </LinearLayout>
 </RelativeLayout>
