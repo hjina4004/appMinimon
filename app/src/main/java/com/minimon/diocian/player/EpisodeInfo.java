@@ -9,10 +9,10 @@ import org.json.JSONObject;
 public class EpisodeInfo {
     private static volatile EpisodeInfo insatnace;
 
-    private JSONObject data;
     private String idx;
     private String c_idx;
     private String videoUrl;
+    private String title;
     private long resumePosition;
 
     private EpisodeInfo(){
@@ -59,5 +59,13 @@ public class EpisodeInfo {
 
     public void setResumePosition(long resumePosition) {
         this.resumePosition = resumePosition;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

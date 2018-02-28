@@ -83,6 +83,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private boolean mExoPlayerFullscreen = false;
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
+    private TextView mEpisodeTitle;
 //    private Dialog mFullScreenDialog;
 
     private SimpleExoPlayer player;
@@ -174,21 +175,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         minimonEpisode.info(values);
     }
 
-    /*
-    전체화면시 하단에 나타날 재생목록
-     */
-    private void sendPlaylistData(){
-        ContentValues values = new ContentValues();
-        values.put("c_idx", c_idx);
-        values.put("start",nowEp);
-        values.put("limit","0");
-        values.put("order","ASC");
-        values.put("id",UserInfo.getInstance().getUID());
-
-        minimonEpisode.list_(values);
-    }
-
-
     private void initData(){
         minimonEpisode = new MinimonEpisode();
         minimonEpisode.setListener(new MinimonEpisode.MinimonEpisodeListener() {
@@ -256,6 +242,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            videoUrl = videoObj.getString("playUrl");
            EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
            initializePlayer();
+           initFullscreenButton();
        }catch (JSONException e){
            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
            return;
@@ -320,6 +307,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
        try {
            tv_content_title.setText(obj.getString("title"));
            tv_content_point.setText(obj.getString("point"));
+           EpisodeInfo.getInsatnace().setTitle(obj.getString("title"));
            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
 
            c_title = obj.getString("c_title");
@@ -377,6 +365,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 goFullScreen();
             }
         });
+        mEpisodeTitle = controlView.findViewById(R.id.tv_exo_title);
+        mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
     }
 
     @Override
@@ -384,11 +374,14 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         super.onStart();
         Log.d(TAG+"Test","OnStart");
         if (Util.SDK_INT > 23) {
-            initFullscreenButton();
 //            initFullscreenDialog();
 
             initData();
-            sendEpisodeData("645");
+//            initFullscreenButton();
+            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
+                sendEpisodeData("645");
+            else
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
 //            if(mExoPlayerFullscreen){
 //                ((ViewGroup) playerView.getParent()).removeView(playerView);
 //                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -417,11 +410,14 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         super.onResume();
         Log.d(TAG+"Test","OnResume");
         if (Util.SDK_INT <= 23) {
-            initFullscreenButton();
 //            initFullscreenDialog();
 
             initData();
-            sendEpisodeData("645");
+
+            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
+                sendEpisodeData("645");
+            else
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
 //            if(mExoPlayerFullscreen){
 //                ((ViewGroup) playerView.getParent()).removeView(playerView);
 //                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
