@@ -86,7 +86,8 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".DramaPlayActivity" />
+        <activity android:name=".DramaPlayActivity"
+            android:screenOrientation="nosensor"/>
         <activity android:name=".VideoPlayScreenActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="landscape"/>

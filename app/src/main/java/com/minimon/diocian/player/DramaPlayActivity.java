@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -84,6 +86,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
     private TextView mEpisodeTitle;
+    private ImageView mLockScreen;
+    private boolean isLockSreen;
 //    private Dialog mFullScreenDialog;
 
     private SimpleExoPlayer player;
@@ -129,7 +133,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
-
         dramaPlayMainScrollView = findViewById(R.id.drama_play_main_scrollview);
         if(savedInstanceState != null){
             mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
@@ -165,6 +168,9 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         if(ConfigInfo.getInstance().getBandwidth() !=0 && ConfigInfo.getInstance().getBandwidth() !=1 && ConfigInfo.getInstance().getBandwidth() !=2){
             ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth480);
         }
+
+        if(!isLockSreen)
+            isLockSreen = true;
     }
 
     /*
@@ -371,6 +377,25 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         });
         mEpisodeTitle = controlView.findViewById(R.id.tv_exo_title);
         mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
+        mLockScreen = controlView.findViewById(R.id.img_exo_lock);
+        if(isLockSreen)
+            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
+        else
+            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+        mLockScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isLockSreen){//잠겨있던 잠금 풀 경우
+                    DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+                    isLockSreen = !isLockSreen;
+                }else{ //다시 잠글경우
+                    DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
+                    isLockSreen = !isLockSreen;
+                }
+            }
+        });
     }
 
     @Override
@@ -681,4 +706,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 }
