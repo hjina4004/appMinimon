@@ -37,6 +37,9 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     private SimpleExoPlayerView playerView;
     private int doub = 0;
+    private int moveCount = 0;
+    private long currentTime;
+
 //    private long movingTime = 0;
 
 //    protected MotionEvent motionEvent = null;
@@ -124,6 +127,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onDown(MotionEvent e) {
+        currentTime = playerView.getPlayer().getCurrentPosition();
         return true;
     }
 
@@ -167,24 +171,31 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     private void controlPlayTime(float x1, float x2){
         if(x1 > x2){
-            if(x1-x2>100){
-                doub = Math.round((x1-x2)/100);
-                if(doub > 6) return;
-                Log.d("DETECTORTAG",String.valueOf(doub));
-                long movingTime = doub*10000;
-                long currentTime = playerView.getPlayer().getCurrentPosition();
-                playerView.getPlayer().setPlayWhenReady(false);
-                playerView.getPlayer().seekTo(currentTime-movingTime);
+            if(x1-x2>10){
+                if(Math.round(x1-x2)%10 == 0 && Math.round(x1-x2)<=600){
+                    doub = Math.round((x1-x2)/10);
+                    long movingTime = doub*1000;
+                    playerView.getPlayer().setPlayWhenReady(false);
+                    if(currentTime-movingTime > 0)
+                        playerView.getPlayer().seekTo(currentTime-movingTime);
+                }
+
             }
         }else{
-            if(x2-x1>100){
-                doub = Math.round((x2-x1)/100);
-                if(doub > 6) return;
-                Log.d("DETECTORTAG",String.valueOf(doub));
-                long movingTime = doub*10000;
-                long currentTime = playerView.getPlayer().getCurrentPosition();
-                playerView.getPlayer().setPlayWhenReady(false);
-                playerView.getPlayer().seekTo(currentTime+movingTime);
+            if(x2-x1>10){
+                if(Math.round(x2-x1)%10 == 0 && Math.round(x2-x1)<=600){
+                    doub = Math.round((x2-x1)/10);
+                    long movingTime = doub*1000;
+                    playerView.getPlayer().setPlayWhenReady(false);
+                    playerView.getPlayer().seekTo(currentTime+movingTime);
+                }
+//                doub = Math.round((x2-x1)/100);
+//                if(doub > 6) return;
+//                Log.d("DETECTORTAG",String.valueOf(doub));
+//                long movingTime = doub*10000;
+//                long currentTime = playerView.getPlayer().getCurrentPosition();
+//                playerView.getPlayer().setPlayWhenReady(false);
+//                playerView.getPlayer().seekTo(currentTime+movingTime);
             }
         }
     }
