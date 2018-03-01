@@ -48,7 +48,46 @@
           android:layout_alignParentTop="true"
           android:src="@mipmap/a022_play_b_lock_on" />
    </RelativeLayout>
-   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="fill_parent"
+       android:layout_centerVertical="true"
+       android:layout_centerHorizontal="true">
+
+      <ImageView
+          android:id="@+id/exo_rew"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="95.33dp"
+          android:src="@mipmap/a022_detail_b_pre"/>
+      <ImageView
+          android:id="@id/exo_play"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@mipmap/a022_detail_b_play"
+          android:layout_centerHorizontal="true"
+          android:layout_marginLeft="37dp"
+          android:layout_marginRight="37dp"
+          android:layout_centerVertical="true"/>
+
+      <!--<ImageView-->
+          <!--android:layout_width="wrap_content"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:layout_centerVertical="true"-->
+          <!--android:layout_centerHorizontal="true"-->
+          <!--android:src="a022detail"/>-->
+
+      <ImageView
+          android:id="@+id/exo_ffwd"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:layout_marginRight="95.33dp"
+          android:layout_alignParentRight="true"
+          android:src="@mipmap/a022_detail_b_next" />
+   </RelativeLayout>
+   <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:layout_alignParentBottom="true"
@@ -56,35 +95,35 @@
        android:background="#CC000000"
        android:orientation="vertical">
 
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:paddingTop="4dp"
-          android:orientation="horizontal">
+      <!--<LinearLayout-->
+          <!--android:layout_width="match_parent"-->
+          <!--android:layout_height="wrap_content"-->
+          <!--android:gravity="center"-->
+          <!--android:paddingTop="4dp"-->
+          <!--android:orientation="horizontal">-->
 
-         <ImageButton android:id="@id/exo_prev"
-             style="@style/ExoMediaButton.Previous"/>
+         <!--<ImageButton android:id="@id/exo_prev"-->
+             <!--style="@style/ExoMediaButton.Previous"/>-->
 
-         <ImageButton android:id="@id/exo_rew"
-             style="@style/ExoMediaButton.Rewind"/>
+         <!--&lt;!&ndash;<ImageButton android:id="@id/exo_rew"&ndash;&gt;-->
+             <!--&lt;!&ndash;style="@style/ExoMediaButton.Rewind"/>&ndash;&gt;-->
 
-         <ImageButton android:id="@id/exo_repeat_toggle"
-             style="@style/ExoMediaButton"/>
+         <!--<ImageButton android:id="@id/exo_repeat_toggle"-->
+             <!--style="@style/ExoMediaButton"/>-->
 
-         <ImageButton android:id="@id/exo_play"
-             style="@style/ExoMediaButton.Play"/>
+         <!--&lt;!&ndash;<ImageButton android:id="@id/exo_play"&ndash;&gt;-->
+             <!--&lt;!&ndash;style="@style/ExoMediaButton.Play"/>&ndash;&gt;-->
 
-         <ImageButton android:id="@id/exo_pause"
-             style="@style/ExoMediaButton.Pause"/>
+         <!--<ImageButton android:id="@id/exo_pause"-->
+             <!--style="@style/ExoMediaButton.Pause"/>-->
 
-         <ImageButton android:id="@id/exo_ffwd"
-             style="@style/ExoMediaButton.FastForward"/>
+         <!--&lt;!&ndash;<ImageButton android:id="@id/exo_ffwd"&ndash;&gt;-->
+             <!--&lt;!&ndash;style="@style/ExoMediaButton.FastForward"/>&ndash;&gt;-->
 
-         <ImageButton android:id="@id/exo_next"
-             style="@style/ExoMediaButton.Next"/>
+         <!--<ImageButton android:id="@id/exo_next"-->
+             <!--style="@style/ExoMediaButton.Next"/>-->
 
-      </LinearLayout>
+      <!--</LinearLayout>-->
 
       <LinearLayout
           android:layout_width="match_parent"
