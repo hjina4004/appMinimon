@@ -29,7 +29,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //    private int bottomBarHeight;
 //    private int playlistHeight;
 
-    private VerticalSeekBar brightSeekBar;
+//    private VerticalSeekBar brightSeekBar;
     private VerticalSeekBar volumeSeekBar;
     private boolean isShowBrightSeekBar = false;
     private boolean isShowVolumeSeekBar = false;
@@ -46,16 +46,16 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     public VideoPlayGestureDetector(Context context, VideoPlayScreenActivity activity, int width, int height){
         mContext = context;
-        brightSeekBar = activity.findViewById(R.id.BrightSeekBar);
+//        brightSeekBar = activity.findViewById(R.id.BrightSeekBar);
         volumeSeekBar = activity.findViewById(R.id.VolumeSeekBar);
-        brightSeekBar.setEnabled(false);
+//        brightSeekBar.setEnabled(false);
         volumeSeekBar.setEnabled(false);
         int brightnessValue = Settings.System.getInt(
                 mContext.getContentResolver(),
                 Settings.System.SCREEN_BRIGHTNESS,
                 0
         );
-        brightSeekBar.setProgress(brightnessValue);
+//        brightSeekBar.setProgress(brightnessValue);
         videoActivity = activity;
         mWidth = width;
         mHeight = height;
@@ -135,7 +135,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 //        Log.d("GestureTag", "y1: "+e1.getY()+", y2: "+e2.getY());
         if (brightRectf.contains(e1.getX(), e1.getY()) && brightRectf.contains(e2.getX(), e2.getY()) && isShowBrightSeekBar) {
-            controlBright(e1.getY(), e2.getY());
+//            controlBright(e1.getY(), e2.getY());
         } else if (volumeRectf.contains(e1.getX(), e1.getY()) && volumeRectf.contains(e2.getX(), e2.getY()) && isShowVolumeSeekBar) {
             controlMediaVolume(e1.getY(), e2.getY());
         }
@@ -189,7 +189,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                     Settings.System.putInt(mContext.getContentResolver(),
                             Settings.System.SCREEN_BRIGHTNESS,
                             brightnessValue);
-                    brightSeekBar.setProgress(brightnessValue);
+//                    brightSeekBar.setProgress(brightnessValue);
                 }
             } else {
                 Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
@@ -216,7 +216,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                 Settings.System.putInt(mContext.getContentResolver(),
                         Settings.System.SCREEN_BRIGHTNESS,
                         brightnessValue);
-                brightSeekBar.setProgress(brightnessValue);
+//                brightSeekBar.setProgress(brightnessValue);
             }
         }
     }

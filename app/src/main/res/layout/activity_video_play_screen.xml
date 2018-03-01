@@ -4,30 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.minimon.diocian.player.VideoPlayScreenActivity">
+
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
         android:id="@+id/player_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent">
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/view_playing_bright_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingTop="10dp"
-            android:visibility="gone"
-            android:paddingBottom="10dp">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/a022_play_light"/>
+            android:paddingTop="71dp"
+            android:paddingLeft="41dp"
+            android:paddingBottom="112dp"
+            android:visibility="gone">
             <com.minimon.diocian.player.VerticalSeekBar
                 android:id="@+id/BrightSeekBar"
+                style="@style/VerticalSeekBarStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:layout_gravity="left"
-                android:progressDrawable="@drawable/play_progess"
-                android:max="255"/>
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:minHeight="3dp"
+                android:minWidth="3dp"
+                android:maxHeight="3dp"
+                android:maxWidth="3dp"
+                android:layout_gravity="start"
+                android:thumb="@drawable/ic_bright" />
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/view_playlist"
