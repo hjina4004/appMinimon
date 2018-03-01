@@ -77,6 +77,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private boolean inErrorState;
     private String videoUrl = "";
     private long mResumePosition = 0;
+    private boolean isChangeBandWidth = false;
+    private String nowBandWidth = "";
 
     private Dialog gestureInfoDialog;
 
@@ -194,10 +196,16 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private void setEpisodeData(JSONObject info){
         try {
             JSONArray videoArr = (JSONArray) info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
+            JSONObject list = (JSONObject) info.getJSONObject("data").get("list");
             JSONObject videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
             videoUrl = videoObj.getString("playUrl");
+            EpisodeInfo.getInsatnace().setIdx(list.getString("idx"));
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
-            EpisodeInfo.getInsatnace().setResumePosition(0);
+            if(!isChangeBandWidth)
+                EpisodeInfo.getInsatnace().setResumePosition(0);
+            else {
+                isChangeBandWidth = false;
+            }
             initializePlayer();
         }catch (JSONException e){
             e.printStackTrace();
@@ -291,7 +299,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         mBandWidthView = controlView.findViewById(R.id.view_bandwidth);
         mBandWidth = controlView.findViewById(R.id.tv_bandwidth);
         mNowBandWidth = controlView.findViewById(R.id.view_now_bandwidth);
-        String nowBandWidth = "";
+
         switch (ConfigInfo.getInstance().getBandwidth()){
             case 0:
                 nowBandWidth = "480p";
@@ -319,25 +327,43 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         mBandWidth480.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if("480p".equals(nowBandWidth))
+                    return;
                 ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth480);
                 mBandWidthView.setVisibility(View.GONE);
-                mBandWidth.setText("480p");
+                nowBandWidth = "480p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
         mBandWidth720.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if("720p".equals(nowBandWidth))
+                    return;
                 ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth720);
                 mBandWidthView.setVisibility(View.GONE);
-                mBandWidth.setText("720p");
+                nowBandWidth = "720p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
         mBandWidth1080.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if("1080p".equals(nowBandWidth))
+                    return;
                 ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth1080);
                 mBandWidthView.setVisibility(View.GONE);
-                mBandWidth.setText("1080p");
+                nowBandWidth = "1080p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
     }
@@ -513,12 +539,9 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-        Log.d("VideoPlayerActivity",event.toString());
-//        gestureDetector.onTouchEvent(event);
         if(gestureDetector != null){
             return gestureDetector.onTouchEvent(event);
         }
-//        return super.onTouchEvent(event);
         return false;
     }
 
@@ -531,43 +554,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         }
         return false;
     }
-
-//    private void controlBright(int bright){
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            if (Settings.System.canWrite(this)) {
-//                int brightnessValue = bright;
-//                Settings.System.putInt(this.getContentResolver(),
-//                        Settings.System.SCREEN_BRIGHTNESS,
-//                        brightnessValue);
-////                brightSeekBar.setProgress(brightnessValue);
-//            }else{
-//                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
-//                intent.setData(Uri.parse("package:" + this.getPackageName()));
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                this.startActivity(intent);
-//            }
-//        }else{
-//            int brightnessValue = bright;
-//            Settings.System.putInt(this.getContentResolver(),
-//                    Settings.System.SCREEN_BRIGHTNESS,
-//                    brightnessValue);
-//        }
-//
-//    }
-//
-//    private void controlMediaVolume(int volume){
-//        AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-////        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-//        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,volume,AudioManager.FLAG_PLAY_SOUND);
-////        if(y1>y2){
-////            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND);
-////        }else{
-////            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND);
-////        }
-////        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-////        Log.d("TAGVOLUME", String.valueOf(currentVolume));
-////        volumeSeekBar.setProgress(currentVolume);
-//    }
 
     @Override
     public void onClick(View v, final String idx) {

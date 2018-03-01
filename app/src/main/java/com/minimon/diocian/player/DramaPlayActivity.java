@@ -313,7 +313,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            tv_content_point.setText(obj.getString("point"));
            EpisodeInfo.getInsatnace().setTitle(obj.getString("title"));
            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
-
+           EpisodeInfo.getInsatnace().setIdx(obj.getString("idx"));
            c_title = obj.getString("c_title");
 //           c_idx = ;
            nowEp = obj.getString("ep");

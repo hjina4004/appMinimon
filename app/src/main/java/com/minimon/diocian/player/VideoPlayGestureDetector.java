@@ -13,6 +13,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+
 /**
  * Created by GOOD on 2018-02-26.
  */
@@ -26,13 +29,15 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     private RectF volumeRectf;
     private Path brightPath;
     private RectF brightRectf;
-//    private int bottomBarHeight;
-//    private int playlistHeight;
 
     private VerticalSeekBar brightSeekBar;
     private VerticalSeekBar volumeSeekBar;
     private boolean isShowBrightSeekBar = false;
     private boolean isShowVolumeSeekBar = false;
+
+    private SimpleExoPlayerView playerView;
+    private int doub = 0;
+//    private long movingTime = 0;
 
 //    protected MotionEvent motionEvent = null;
     public VideoPlayGestureDetectorListener mListener;
@@ -57,6 +62,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         );
         brightSeekBar.setProgress(brightnessValue);
         videoActivity = activity;
+        playerView = activity.findViewById(R.id.player_view);
         mWidth = width;
         mHeight = height;
         brightPath = new Path();
@@ -138,6 +144,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             controlBright(e1.getY(), e2.getY());
         } else if (volumeRectf.contains(e1.getX(), e1.getY()) && volumeRectf.contains(e2.getX(), e2.getY()) && isShowVolumeSeekBar) {
             controlMediaVolume(e1.getY(), e2.getY());
+        }else{
+            controlPlayTime(e1.getX(), e2.getX());
         }
 
         return true;
@@ -155,6 +163,30 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         if(e1.getY()>300 && e1.getY() < 400)
             controlBottomMenu(e1.getY(), e2.getY(),false);
         return true;
+    }
+
+    private void controlPlayTime(float x1, float x2){
+        if(x1 > x2){
+            if(x1-x2>100){
+                doub = Math.round((x1-x2)/100);
+                if(doub > 6) return;
+                Log.d("DETECTORTAG",String.valueOf(doub));
+                long movingTime = doub*10000;
+                long currentTime = playerView.getPlayer().getCurrentPosition();
+                playerView.getPlayer().setPlayWhenReady(false);
+                playerView.getPlayer().seekTo(currentTime-movingTime);
+            }
+        }else{
+            if(x2-x1>100){
+                doub = Math.round((x2-x1)/100);
+                if(doub > 6) return;
+                Log.d("DETECTORTAG",String.valueOf(doub));
+                long movingTime = doub*10000;
+                long currentTime = playerView.getPlayer().getCurrentPosition();
+                playerView.getPlayer().setPlayWhenReady(false);
+                playerView.getPlayer().seekTo(currentTime+movingTime);
+            }
+        }
     }
 
     private void controlBottomMenu(float y1, float y2, boolean isShow){
