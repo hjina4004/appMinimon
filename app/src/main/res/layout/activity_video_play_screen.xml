@@ -37,14 +37,15 @@
             android:layout_gravity="bottom">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/a022_play_b_list_down"
                     android:layout_toLeftOf="@+id/tv_playing_playlist"
-                    android:layout_toStartOf="@+id/tv_playing_playlist"/>
+                    android:layout_toStartOf="@+id/tv_playing_playlist"
+                    android:layout_centerVertical="true"/>
                 <TextView
                     android:id="@+id/tv_playing_playlist"
                     android:layout_width="wrap_content"
@@ -59,7 +60,8 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rec_playing_playlist"
                 android:layout_width="match_parent"
-                android:layout_height="300dp">
+                android:layout_height="wrap_content"
+                android:background="#000000">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
