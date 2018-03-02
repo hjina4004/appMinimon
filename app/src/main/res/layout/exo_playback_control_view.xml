@@ -13,7 +13,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<RelativeLayout android:layout_width="match_parent"
+<RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
    <RelativeLayout
@@ -48,7 +50,7 @@
           android:layout_alignParentTop="true"
           android:src="@mipmap/a022_play_b_lock_on" />
    </RelativeLayout>
-   <RelativeLayout
+   <android.support.constraint.ConstraintLayout
        android:layout_width="match_parent"
        android:layout_height="fill_parent"
        android:layout_centerVertical="true"
@@ -59,8 +61,15 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:layout_marginLeft="65.33dp"
-          android:src="@drawable/ic_prev"/>
+          android:layout_marginBottom="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginTop="8dp"
+          android:src="@drawable/ic_prev"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toStartOf="@+id/exo_play"
+          app:layout_constraintHorizontal_bias="0.6"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
 
       <com.minimon.diocian.player.TextAwesome
           android:id="@+id/exo_pause"
@@ -69,32 +78,51 @@
           android:layout_centerHorizontal="true"
           android:layout_centerVertical="true"
           android:text="@string/fa_pause"
+          android:textColor="#ffffff"
           android:textSize="50dp"
-          android:textColor="#ffffff"/>
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
+
       <ImageView
           android:id="@id/exo_play"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:src="@drawable/ic_play"
           android:layout_centerHorizontal="true"
-          android:layout_centerVertical="true"/>
+          android:layout_centerVertical="true"
+          android:src="@drawable/ic_play"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />
 
       <RelativeLayout
           android:id="@+id/view_move_time"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true"
           android:layout_centerVertical="true"
-          android:layout_centerHorizontal="true">
+          android:layout_marginBottom="8dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginTop="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
+
          <TextView
              android:id="@+id/tv_now_playtime"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content" />
+
          <TextView
              android:id="@+id/tv_now_moving_time"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_alignBottom="@+id/tv_now_playtime"
-             android:layout_marginTop="20dp"/>
+             android:layout_marginTop="20dp" />
       </RelativeLayout>
       <!--<ImageView-->
           <!--android:layout_width="wrap_content"-->
@@ -107,11 +135,18 @@
           android:id="@+id/exo_ffwd"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_marginRight="65.33dp"
           android:layout_alignParentRight="true"
-          android:src="@drawable/ic_ffwd" />
-   </RelativeLayout>
+          android:layout_centerVertical="true"
+          android:layout_marginBottom="8dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginTop="8dp"
+          android:src="@drawable/ic_ffwd"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.4"
+          app:layout_constraintStart_toEndOf="@+id/exo_play"
+          app:layout_constraintTop_toTopOf="parent" />
+   </android.support.constraint.ConstraintLayout>
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
