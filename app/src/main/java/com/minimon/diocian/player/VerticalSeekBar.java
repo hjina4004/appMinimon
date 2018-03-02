@@ -4,27 +4,16 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.SeekBar;
 
 public class VerticalSeekBar extends android.support.v7.widget.AppCompatSeekBar {
-
-    public VerticalSeekBar(Context context) {
-        super(context);
-    }
-
-    public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    public VerticalSeekBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+    public VerticalSeekBar(Context c) { super(c); }
+    public VerticalSeekBar(Context c, AttributeSet attrs) { super(c, attrs); }
+    public VerticalSeekBar(Context c, AttributeSet attrs, int defStyle) { super(c, attrs, defStyle); }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(h, w, oldh, oldw);
     }
 
-    @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(heightMeasureSpec, widthMeasureSpec);
         setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
@@ -37,64 +26,70 @@ public class VerticalSeekBar extends android.support.v7.widget.AppCompatSeekBar 
         super.onDraw(c);
     }
 
-    private OnSeekBarChangeListener onChangeListener;
-    @Override
-    public void setOnSeekBarChangeListener(OnSeekBarChangeListener onChangeListener){
-        this.onChangeListener = onChangeListener;
+    private OnSeekBarChangeListener mChangeListener;
+
+    public void setOnSeekBarChangeListener(OnSeekBarChangeListener onChangeListener) {
+        this.mChangeListener = onChangeListener;
     }
 
-    private int lastProgress = 0;
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        if (!isEnabled()) {
-//            return false;
-//        }
-//
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                onChangeListener.onStartTrackingTouch(this);
-//                setPressed(true);
-//                setSelected(true);
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                super.onTouchEvent(event);
-//                int progress = getMax() - (int) (getMax() * event.getY() / getHeight());
-//
-//                // Ensure progress stays within boundaries
-//                if(progress < 0) {progress = 0;}
-//                if(progress > getMax()) {progress = getMax();}
-//                setProgress(progress);  // Draw progress
-//                if(progress != lastProgress) {
-//                    // Only enact listener if the progress has actually changed
-//                    lastProgress = progress;
-//                    onChangeListener.onProgressChanged(this, progress, true);
-//                }
-//
-//                onSizeChanged(getWidth(), getHeight() , 0, 0);
-//                setPressed(true);
-//                setSelected(true);
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                onChangeListener.onStopTrackingTouch(this);
-//                setPressed(false);
-//                setSelected(false);
-//                break;
-//            case MotionEvent.ACTION_CANCEL:
-//                super.onTouchEvent(event);
-//                setPressed(false);
-//                setSelected(false);
-//                break;
-//        }
-//        return true;
-//    }
+    private int mLastProgress = 0;
+
+    public boolean onTouchEvent(MotionEvent event) {
+        if (! isEnabled()) {
+            return false;
+        }
+        switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (mChangeListener != null)
+                    mChangeListener.onStartTrackingTouch(this);
+                setPressed(true);
+                setSelected(true);
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                super.onTouchEvent(event);
+                int nProgress = getMax() - (int) (getMax() * event.getY() / getHeight());
+                if (nProgress < 0) {
+                    nProgress = 0;
+                }
+                if (nProgress > getMax()) {
+                    nProgress = getMax();
+                }
+                setProgress(nProgress); // Draw progress
+                if (nProgress != mLastProgress) {
+                    mLastProgress = nProgress;
+                    if (mChangeListener != null)
+                        mChangeListener.onProgressChanged(this, nProgress, true);
+                }
+                onSizeChanged(getWidth(), getHeight(), 0, 0);
+                setPressed(true);
+                setSelected(true);
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if (mChangeListener != null)
+                    mChangeListener.onStopTrackingTouch(this);
+                setPressed(false);
+                setSelected(false);
+                break;
+
+            case MotionEvent.ACTION_CANCEL:
+                super.onTouchEvent(event);
+                setPressed(false);
+                setSelected(false);
+                break;
+        }
+
+        return true;
+    }
 
     public synchronized void setProgressAndThumb(int progress) {
         setProgress(progress);
-        onSizeChanged(getWidth(), getHeight() , 0, 0);
-        if(progress != lastProgress) {
-            // Only enact listener if the progress has actually changed
-            lastProgress = progress;
-            onChangeListener.onProgressChanged(this, progress, true);
+        onSizeChanged(getWidth(), getHeight(), 0, 0);
+        if (progress != mLastProgress) {
+            mLastProgress = progress;
+            if (mChangeListener != null)
+                mChangeListener.onProgressChanged(this, progress, true);
         }
     }
 

@@ -25,12 +25,14 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -112,6 +114,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 //    private LinearLayout view_playing_bright_seekbar;
 //    private LinearLayout view_playing_volume_seekbar;
 
+    public int now_bright_status;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +126,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         componentListener = new ComponentListener();
 
         gestureInfoDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen){
-
         };
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -146,6 +149,47 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         initFullscreenButton();
         initData();
         sendPlaylistData();
+
+        initVerticalSeekBar();
+    }
+
+    private void initVerticalSeekBar() {
+        try {
+            if (Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE) == 1) {
+                Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, 0);
+            }
+
+            now_bright_status = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
+        } catch(Exception e){
+            Log.e("Exception e "+e.getMessage(), null);
+        }
+
+        final VerticalSeekBar vSeekBar = (VerticalSeekBar) findViewById(R.id.BrightSeekBar);
+
+        vSeekBar.setMax(255);
+        vSeekBar.setProgress(now_bright_status);
+        vSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (progress < 10) {
+                    progress = 10;
+                    vSeekBar.setProgress(progress);
+                } else if (progress > 250) {
+                    progress = 250;
+                    vSeekBar.setProgress(progress);
+                }
+
+                Settings.System.putInt(getContentResolver(), android.provider.Settings.System.SCREEN_BRIGHTNESS, progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
     private void initData(){
