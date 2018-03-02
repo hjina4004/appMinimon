@@ -13,9 +13,9 @@
             android:id="@+id/view_playing_bright_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingTop="71dp"
-            android:paddingLeft="41dp"
-            android:paddingBottom="112dp"
+            android:layout_marginTop="71dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="112dp"
             android:visibility="gone"
             android:orientation="vertical">
             <ImageView
@@ -80,7 +80,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="71dp"
             android:layout_marginBottom="112dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="30dp"
             android:visibility="gone"
             android:orientation="vertical"
             android:layout_gravity="right">

@@ -67,8 +67,6 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerHorizontal="true"
-          android:layout_marginLeft="37dp"
-          android:layout_marginRight="37dp"
           android:layout_centerVertical="true"
           android:text="@string/fa_pause"
           android:textSize="50dp"
@@ -79,8 +77,6 @@
           android:layout_height="wrap_content"
           android:src="@drawable/ic_play"
           android:layout_centerHorizontal="true"
-          android:layout_marginLeft="37dp"
-          android:layout_marginRight="37dp"
           android:layout_centerVertical="true"/>
 
       <RelativeLayout
@@ -208,8 +204,7 @@
       <RelativeLayout
           android:id="@+id/exo_view_play_info"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:visibility="gone"
+          android:layout_height="50px"
           android:gravity="center_vertical">
          <LinearLayout
              android:id="@+id/view_now_bandwidth"

@@ -33,6 +33,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     private boolean isShowBrightSeekBar = false;
     private boolean isShowVolumeSeekBar = false;
+    private boolean isActivePlaylist = false;
 
     private SimpleExoPlayerView playerView;
     private int doub = 0;
@@ -41,18 +42,18 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     private boolean isScroll = false;
 
     public VideoPlayGestureDetectorListener mListener;
-
+//
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-            if(isScroll){
-                isScroll = !isScroll;
-                playerView.findViewById(R.id.exo_rew).setVisibility(View.VISIBLE);
-                playerView.findViewById(R.id.exo_play).setVisibility(View.VISIBLE);
-                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.VISIBLE);
-                playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
-            }
-        }
+//        if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+//            if(isScroll){
+//                isScroll = !isScroll;
+//                playerView.findViewById(R.id.exo_rew).setVisibility(View.VISIBLE);
+//                playerView.findViewById(R.id.exo_play).setVisibility(View.VISIBLE);
+//                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.VISIBLE);
+//                playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+//            }
+//        }
         return false;
     }
 
@@ -86,8 +87,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         volumeRectf = new RectF();
         brightPath.moveTo(0,0);
         brightPath.moveTo(0,height);
-        brightPath.moveTo(width/4,height);
-        brightPath.moveTo(width/4,200);
+        brightPath.moveTo(width/5,height);
+        brightPath.moveTo(width/5,200);
         brightPath.close();
 
         volumePath.moveTo(width/4*3,0);
@@ -116,11 +117,11 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             return false;
         }
 
-        if(brightRectf.contains(e.getX(),e.getY())) {
+        if(brightRectf.contains(e.getX(),e.getY()) && !isActivePlaylist) {
             videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
             isShowBrightSeekBar = true;
         }
-        else if(volumeRectf.contains(e.getX(),e.getY())) {
+        else if(volumeRectf.contains(e.getX(),e.getY()) && !isActivePlaylist) {
             videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
             isShowVolumeSeekBar = true;
         }
@@ -161,7 +162,10 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         } else if (volumeRectf.contains(e1.getX(), e1.getY()) && volumeRectf.contains(e2.getX(), e2.getY()) && isShowVolumeSeekBar) {
 //            controlMediaVolume(e1.getY(), e2.getY());
         }else{
-            controlPlayTime(e1.getX(), e2.getX());
+            if(!isShowBrightSeekBar && !isShowVolumeSeekBar && !isActivePlaylist){
+                controlPlayTime(e1.getX(), e2.getX());
+            }
+
         }
 
         return true;
@@ -176,10 +180,17 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         Log.d("FlingVelocity e1:",String.valueOf(e1.getY()));
         Log.d("FlingVelocity e2:",String.valueOf(e2.getY()));
-        if(e1.getY()>mHeight-100)
-            controlBottomMenu(e1.getY(), e2.getY(),true);
+        if(e1.getY()>mHeight-50 ) {
+            isActivePlaylist = true;
+            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
+            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+            isShowVolumeSeekBar = false;
+            isShowBrightSeekBar = false;
+            controlBottomMenu(e1.getY(), e2.getY(), isActivePlaylist);
+        }
         if(e1.getY() > mHeight-320 && (velocityX<velocityY && velocityX>0)) {
-            controlBottomMenu(e1.getY(), e2.getY(), false);
+            isActivePlaylist = false;
+            controlBottomMenu(e1.getY(), e2.getY(), isActivePlaylist);
             return false;
         }
 
