@@ -95,6 +95,10 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private TextView mBandWidth720;
     private TextView mBandWidth1080;
     private LinearLayout mBandWidthView;
+    private ImageView mPrev;
+    private ImageView mPlay;
+    private ImageView mNext;
+
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
@@ -115,6 +119,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 //    private LinearLayout view_playing_volume_seekbar;
 
     public int now_bright_status;
+    public int now_volume_status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +149,30 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rec_playing_playlist.setLayoutManager(layoutManager);
+//        rec_playing_playlist.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if(dy>0){
+//                    findViewById(R.id.view_playlist).setVisibility(View.GONE);
+//                    findViewById(R.id.exo_view_play_info).setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+        rec_playing_playlist.setOnFlingListener(new RecyclerView.OnFlingListener() {
+            @Override
+            public boolean onFling(int velocityX, int velocityY) {
+                Log.d("RECFLINGX",String.valueOf(velocityX));
+                Log.d("RECFLINGY",String.valueOf(velocityY));
+//                if(velocityY > velocityX){
+                if(velocityY >10 && velocityX<10){
+                    findViewById(R.id.view_playlist).setVisibility(View.GONE);
+                    findViewById(R.id.exo_view_play_info).setVisibility(View.VISIBLE);
+                }
 
+                return false;
+            }
+        });
         initializePlayer();
         initFullscreenButton();
         initData();
@@ -164,7 +192,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             Log.e("Exception e "+e.getMessage(), null);
         }
 
+        final AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        now_volume_status = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+
         final VerticalSeekBar vSeekBar = (VerticalSeekBar) findViewById(R.id.BrightSeekBar);
+        final VerticalSeekBar volumeSeekBar = (VerticalSeekBar) findViewById(R.id.VolumeSeekBar);
 
         vSeekBar.setMax(255);
         vSeekBar.setProgress(now_bright_status);
@@ -188,6 +221,26 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        volumeSeekBar.setProgressAndThumb(now_volume_status);
+        volumeSeekBar.setMax(15);
+        volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                volumeSeekBar.setProgress(i);
+                audio.setStreamVolume(AudioManager.STREAM_MUSIC,i,AudioManager.FLAG_PLAY_SOUND);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
     }
@@ -317,6 +370,17 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     private void initFullscreenButton() {
         PlaybackControlView controlView = playerView.findViewById(R.id.exo_controller);
+//        controlView.findViewById(R.id.exo_prev).setBackgroundResource(R.drawable.icon_b_prev);
+//        controlView.findViewById(R.id.exo_play).setBackgroundResource(R.drawable.icon_b_play);
+//        controlView.findViewById(R.id.exo_ffwd).setBackgroundResource(R.drawable.icon_b_ffwd);
+
+        mPlay = controlView.findViewById(R.id.exo_play);
+        mPlay.setImageResource(R.drawable.icon_b_play);
+        mPrev = controlView.findViewById(R.id.exo_rew);
+        mPrev.setImageResource(R.drawable.icon_b_prev);
+        mNext = controlView.findViewById(R.id.exo_ffwd);
+        mNext.setImageResource(R.drawable.icon_b_ffwd);
+
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
         mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
         mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
@@ -582,25 +646,29 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
         if(gestureDetector != null){
-            return gestureDetector.onTouchEvent(event);
+            if(!gestureDetector.onTouchEvent(event)){
+                return false;
+            }
         }
+        super.onTouchEvent(event);
         return false;
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if(videoPlayGestureDetector != null){
-            gestureDetector.onTouchEvent(ev);
+            if(!gestureDetector.onTouchEvent(ev)){
+                return false;
+            }
             super.dispatchTouchEvent(ev);
-            return true;
         }
         return false;
     }
 
     @Override
     public void onClick(View v, final String idx) {
+        Log.d("DetectorFlingTag","onclick");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("결제 진행");
         builder.setMessage(" 결제를 진행하시겠습니까?");

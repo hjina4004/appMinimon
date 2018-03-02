@@ -9,36 +9,44 @@
         android:id="@+id/player_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/view_playing_bright_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingTop="71dp"
             android:paddingLeft="41dp"
             android:paddingBottom="112dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/a022_play_b_light"/>
             <com.minimon.diocian.player.VerticalSeekBar
                 android:id="@+id/BrightSeekBar"
                 style="@style/VerticalSeekBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:minHeight="3dp"
-                android:minWidth="3dp"
-                android:maxHeight="3dp"
-                android:maxWidth="3dp"
-                android:layout_gravity="start"
-                android:thumb="@drawable/ic_bright" />
-        </FrameLayout>
+                android:minHeight="4dp"
+                android:minWidth="4dp"
+                android:maxHeight="4dp"
+                android:maxWidth="4dp"
+                android:layout_gravity="center_horizontal"
+                android:progressDrawable="@drawable/play_progess"
+                />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/view_playlist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:orientation="vertical"
+            android:visibility="gone"
             android:layout_gravity="bottom">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="40dp"
+                android:background="#000000">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -70,21 +78,26 @@
             android:id="@+id/view_playing_volume_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:layout_marginTop="71dp"
+            android:layout_marginBottom="112dp"
+            android:layout_marginRight="15dp"
             android:visibility="gone"
             android:orientation="vertical"
             android:layout_gravity="right">
             <ImageView
-                android:id="@+id/img_playing_play_sound"
+                android:id="@+id/img_playing_play_b_sound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/a022_play_sound_on"/>
             <com.minimon.diocian.player.VerticalSeekBar
                 android:id="@+id/VolumeSeekBar"
                 android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:layout_gravity="right"
+                android:layout_height="match_parent"
+                android:maxHeight="4dp"
+                android:maxWidth="4dp"
+                android:minHeight="4dp"
+                android:minWidth="4dp"
+                android:layout_gravity="center_horizontal"
                 android:progressDrawable="@drawable/play_progess"
                 android:max="15"/>
         </LinearLayout>

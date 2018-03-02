@@ -59,18 +59,47 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:layout_marginLeft="95.33dp"
-          android:src="@mipmap/a022_detail_b_pre"/>
+          android:layout_marginLeft="65.33dp"
+          android:src="@drawable/ic_prev"/>
+
+      <com.minimon.diocian.player.TextAwesome
+          android:id="@+id/exo_pause"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true"
+          android:layout_marginLeft="37dp"
+          android:layout_marginRight="37dp"
+          android:layout_centerVertical="true"
+          android:text="@string/fa_pause"
+          android:textSize="50dp"
+          android:textColor="#ffffff"/>
       <ImageView
           android:id="@id/exo_play"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:src="@mipmap/a022_detail_b_play"
+          android:src="@drawable/ic_play"
           android:layout_centerHorizontal="true"
           android:layout_marginLeft="37dp"
           android:layout_marginRight="37dp"
           android:layout_centerVertical="true"/>
 
+      <RelativeLayout
+          android:id="@+id/view_move_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerVertical="true"
+          android:layout_centerHorizontal="true">
+         <TextView
+             android:id="@+id/tv_now_playtime"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+         <TextView
+             android:id="@+id/tv_now_moving_time"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignBottom="@+id/tv_now_playtime"
+             android:layout_marginTop="20dp"/>
+      </RelativeLayout>
       <!--<ImageView-->
           <!--android:layout_width="wrap_content"-->
           <!--android:layout_height="wrap_content"-->
@@ -83,9 +112,9 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:layout_marginRight="95.33dp"
+          android:layout_marginRight="65.33dp"
           android:layout_alignParentRight="true"
-          android:src="@mipmap/a022_detail_b_next" />
+          android:src="@drawable/ic_ffwd" />
    </RelativeLayout>
    <LinearLayout
        android:layout_width="match_parent"
@@ -124,24 +153,23 @@
              <!--style="@style/ExoMediaButton.Next"/>-->
 
       <!--</LinearLayout>-->
-
+      <TextView
+          android:id="@id/exo_position"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="24.76dp"
+          android:textStyle="bold"
+          android:paddingLeft="4dp"
+          android:paddingRight="4dp"
+          android:gravity="start"
+          android:includeFontPadding="false"
+          android:textColor="#FFFFFF"/>
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginTop="4dp"
           android:gravity="center_vertical"
           android:orientation="horizontal">
-
-         <TextView android:id="@id/exo_position"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="14sp"
-             android:textStyle="bold"
-             android:paddingLeft="4dp"
-             android:paddingRight="4dp"
-             android:includeFontPadding="false"
-             android:textColor="#FFBEBEBE"/>
-
          <com.google.android.exoplayer2.ui.DefaultTimeBar
              android:id="@id/exo_progress"
              android:layout_width="0dp"

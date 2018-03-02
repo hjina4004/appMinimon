@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
@@ -20,7 +21,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
  * Created by GOOD on 2018-02-26.
  */
 
-public class VideoPlayGestureDetector implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+public class VideoPlayGestureDetector implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, View.OnTouchListener{
     Context mContext;
     VideoPlayScreenActivity videoActivity;
 
@@ -30,8 +31,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     private Path brightPath;
     private RectF brightRectf;
 
-//    private VerticalSeekBar brightSeekBar;
-    private VerticalSeekBar volumeSeekBar;
     private boolean isShowBrightSeekBar = false;
     private boolean isShowVolumeSeekBar = false;
 
@@ -39,11 +38,24 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     private int doub = 0;
     private int moveCount = 0;
     private long currentTime;
+    private boolean isScroll = false;
 
-//    private long movingTime = 0;
-
-//    protected MotionEvent motionEvent = null;
     public VideoPlayGestureDetectorListener mListener;
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+            if(isScroll){
+                isScroll = !isScroll;
+                playerView.findViewById(R.id.exo_rew).setVisibility(View.VISIBLE);
+                playerView.findViewById(R.id.exo_play).setVisibility(View.VISIBLE);
+                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.VISIBLE);
+                playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+            }
+        }
+        return false;
+    }
+
     public interface VideoPlayGestureDetectorListener{
 
     }
@@ -55,9 +67,9 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     public VideoPlayGestureDetector(Context context, VideoPlayScreenActivity activity, int width, int height){
         mContext = context;
 //        brightSeekBar = activity.findViewById(R.id.BrightSeekBar);
-        volumeSeekBar = activity.findViewById(R.id.VolumeSeekBar);
+//        volumeSeekBar = activity.findViewById(R.id.VolumeSeekBar);
 //        brightSeekBar.setEnabled(false);
-        volumeSeekBar.setEnabled(false);
+//        volumeSeekBar.setEnabled(false);
         int brightnessValue = Settings.System.getInt(
                 mContext.getContentResolver(),
                 Settings.System.SCREEN_BRIGHTNESS,
@@ -147,7 +159,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         if (brightRectf.contains(e1.getX(), e1.getY()) && brightRectf.contains(e2.getX(), e2.getY()) && isShowBrightSeekBar) {
 //            controlBright(e1.getY(), e2.getY());
         } else if (volumeRectf.contains(e1.getX(), e1.getY()) && volumeRectf.contains(e2.getX(), e2.getY()) && isShowVolumeSeekBar) {
-            controlMediaVolume(e1.getY(), e2.getY());
+//            controlMediaVolume(e1.getY(), e2.getY());
         }else{
             controlPlayTime(e1.getX(), e2.getX());
         }
@@ -162,19 +174,26 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.d("FlingVelocity e1:",String.valueOf(e1.getY()));
+        Log.d("FlingVelocity e2:",String.valueOf(e2.getY()));
         if(e1.getY()>mHeight-100)
             controlBottomMenu(e1.getY(), e2.getY(),true);
-        if(e1.getY()>300 && e1.getY() < 400)
-            controlBottomMenu(e1.getY(), e2.getY(),false);
+        if(e1.getY() > mHeight-320 && (velocityX<velocityY && velocityX>0)) {
+            controlBottomMenu(e1.getY(), e2.getY(), false);
+            return false;
+        }
+
         return true;
     }
 
     private void controlPlayTime(float x1, float x2){
+        long movingTime;
+        isScroll = true;
         if(x1 > x2){
             if(x1-x2>10){
                 if(Math.round(x1-x2)%10 == 0 && Math.round(x1-x2)<=600){
                     doub = Math.round((x1-x2)/10);
-                    long movingTime = doub*1000;
+                    movingTime = doub*1000;
                     playerView.getPlayer().setPlayWhenReady(false);
                     if(currentTime-movingTime > 0)
                         playerView.getPlayer().seekTo(currentTime-movingTime);
@@ -185,19 +204,21 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             if(x2-x1>10){
                 if(Math.round(x2-x1)%10 == 0 && Math.round(x2-x1)<=600){
                     doub = Math.round((x2-x1)/10);
-                    long movingTime = doub*1000;
+                    movingTime = doub*1000;
                     playerView.getPlayer().setPlayWhenReady(false);
                     playerView.getPlayer().seekTo(currentTime+movingTime);
                 }
-//                doub = Math.round((x2-x1)/100);
-//                if(doub > 6) return;
-//                Log.d("DETECTORTAG",String.valueOf(doub));
-//                long movingTime = doub*10000;
-//                long currentTime = playerView.getPlayer().getCurrentPosition();
-//                playerView.getPlayer().setPlayWhenReady(false);
-//                playerView.getPlayer().seekTo(currentTime+movingTime);
             }
         }
+        playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
+        playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
+        playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
+        playerView.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
+        TextView tv_now_playtime = (TextView) playerView.findViewById(R.id.tv_now_playtime);
+        int now_playtime = (int)playerView.getPlayer().getCurrentPosition()/1000;
+        int now_minute = now_playtime/60;
+        int now_sec = now_playtime%60;
+        tv_now_playtime.setText(now_minute + " : "+now_sec);
     }
 
     private void controlBottomMenu(float y1, float y2, boolean isShow){
@@ -206,6 +227,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             videoActivity.findViewById(R.id.exo_view_play_info).setVisibility(View.GONE);
         }
         if(y2>y1 && !isShow){
+            Log.d("DetectorFlingTag","fling");
             videoActivity.findViewById(R.id.view_playlist).setVisibility(View.GONE);
             videoActivity.findViewById(R.id.exo_view_play_info).setVisibility(View.VISIBLE);
         }
@@ -279,6 +301,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         }
         currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         Log.d("TAGVOLUME", String.valueOf(currentVolume));
-        volumeSeekBar.setProgress(currentVolume);
+//        volumeSeekBar.setProgress(currentVolume);
     }
 }
