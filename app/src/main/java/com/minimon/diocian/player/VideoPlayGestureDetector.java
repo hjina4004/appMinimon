@@ -2,12 +2,14 @@ package com.minimon.diocian.player;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -26,9 +28,9 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     VideoPlayScreenActivity videoActivity;
 
     int mWidth, mHeight = 0;
-    private Path volumePath;
+//    private Path volumePath;
     private RectF volumeRectf;
-    private Path brightPath;
+//    private Path brightPath;
     private RectF brightRectf;
 
     private boolean isShowBrightSeekBar = false;
@@ -65,6 +67,13 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         mListener = listener;
     }
 
+    public float convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return px;
+    }
+
     public VideoPlayGestureDetector(Context context, VideoPlayScreenActivity activity, int width, int height){
         mContext = context;
 //        brightSeekBar = activity.findViewById(R.id.BrightSeekBar);
@@ -79,26 +88,31 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //        brightSeekBar.setProgress(brightnessValue);
         videoActivity = activity;
         playerView = activity.findViewById(R.id.player_view);
+
         mWidth = width;
-        mHeight = height;
-        brightPath = new Path();
-        volumePath = new Path();
-        brightRectf = new RectF();
-        volumeRectf = new RectF();
-        brightPath.moveTo(0,0);
-        brightPath.moveTo(0,height);
-        brightPath.moveTo(width/5,height);
-        brightPath.moveTo(width/5,200);
-        brightPath.close();
+        mHeight = (int) (height - convertDpToPixel(60.0f, mContext));
 
-        volumePath.moveTo(width/4*3,0);
-        volumePath.moveTo(width/4*3,height);
-        volumePath.moveTo(width,height);
-        volumePath.moveTo(width,0);
-        volumePath.close();
-
-        brightPath.computeBounds(brightRectf,true);
-        volumePath.computeBounds(volumeRectf,true);
+        brightRectf = new RectF(0, 0, mWidth/6, mHeight);
+        volumeRectf = new RectF(mWidth/6*5, 0, mWidth, mHeight);
+//
+//        brightPath = new Path();
+//        volumePath = new Path();
+//        brightRectf = new RectF();
+//        volumeRectf = new RectF();
+//        brightPath.moveTo(0,0);
+//        brightPath.moveTo(0,height);
+//        brightPath.moveTo(width/5,height);
+//        brightPath.moveTo(width/5,200);
+//        brightPath.close();
+//
+//        volumePath.moveTo(width/4*3,0);
+//        volumePath.moveTo(width/4*3,height);
+//        volumePath.moveTo(width,height);
+//        volumePath.moveTo(width,0);
+//        volumePath.close();
+//
+//        brightPath.computeBounds(brightRectf,true);
+//        volumePath.computeBounds(volumeRectf,true);
 
 //        bottomBarHeight = videoActivity.findViewById(R.id.exo_view_play_info).getHeight();
 //        playlistHeight = videoActivity.findViewById(R.id.rec_playing_playlist).getHeight();
@@ -176,8 +190,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         Log.d("GestureTag", "onScroll distanceX="+distanceX+", distanceY= "+distanceY);
         float min_distance = 30;
-        boolean inBrightCtrl = brightRectf.contains(e1.getX(), e1.getY());
-        boolean inVolumeCtrl = volumeRectf.contains(e1.getX(), e1.getY());
+        int currentState = videoActivity.getCurrentState();
         if (Math.abs(distanceX) > Math.abs(distanceY)) {    // HORIZONTAL SCROLL
             if (Math.abs(distanceX) > min_distance) {
                 if (distanceX < 0) {                        // Left To Right Swipe
@@ -187,14 +200,19 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                 // not long enough swipe...
             }
         } else {                                            // VERTICAL SCROLL
+            boolean inBrightCtrl = brightRectf.contains(e1.getX(), e1.getY());
+            boolean inVolumeCtrl = volumeRectf.contains(e1.getX(), e1.getY());
+
             if (Math.abs(distanceY) > min_distance) {
                 if (distanceY < 0) {                        // Top To Bottom Swipe
-                    if (!inBrightCtrl && !inVolumeCtrl) {
+                    if (currentState == VideoPlayScreenActivity.STATE_EPISODE_LIST) {
                         videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
                         return false;
                     }
                 } else if (distanceY > 0) {                 // Bottom To Top Swipe
-                    if (!inBrightCtrl && !inVolumeCtrl) {
+                    if (currentState == VideoPlayScreenActivity.STATE_IDLE
+                            || currentState == VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL
+                            || (!inBrightCtrl && !inVolumeCtrl)) {
                         videoActivity.changeState(VideoPlayScreenActivity.STATE_EPISODE_LIST);
                         return false;
                     }
