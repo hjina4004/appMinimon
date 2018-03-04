@@ -464,13 +464,14 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
                 mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
                 EpisodeInfo.getInsatnace().setResumePosition(mResumePosition);
-                releasePlayer();
+                //releasePlayer();
 
             }
 //            if (mFullScreenDialog != null)
 //                mFullScreenDialog.dismiss();
         }
-    }
+        releasePlayer();
+   }
 
     @Override
     protected void onStop() {
@@ -480,11 +481,12 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             if(playerView!= null&& playerView.getPlayer()!=null){
                 mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
                 mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
-                releasePlayer();
+                // releasePlayer();
             }
 //            if (mFullScreenDialog != null)
 //                mFullScreenDialog.dismiss();
         }
+        releasePlayer();
     }
 
     private void goFullScreen(){
