@@ -365,7 +365,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 //    }
 
     private void initFullscreenButton() {
-
         PlaybackControlView controlView = playerView.findViewById(R.id.exo_controller);
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
         mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);

@@ -121,6 +121,13 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     public int now_bright_status;
     public int now_volume_status;
 
+    private int mCurrentState;
+    public static final int STATE_IDLE = 300;             // idle state
+    public static final int STATE_EPISODE_LIST = 301;     // episode list view state
+    public static final int STATE_EXOPLAYER_CTRL = 302;   // exoPlayer controller iew state
+    public static final int STATE_BRIGHT_CTRL = 303;      // bright controller vew state
+    public static final int STATE_VOLUME_CTRL = 304;      // volume controller view state
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +166,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 //                }
 //            }
 //        });
+/*
         rec_playing_playlist.setOnFlingListener(new RecyclerView.OnFlingListener() {
             @Override
             public boolean onFling(int velocityX, int velocityY) {
@@ -173,12 +181,55 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 return false;
             }
         });
+*/
+        mCurrentState = STATE_IDLE;
+        playerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
+            @Override
+            public void onVisibilityChange(int visibility) {
+                Log.d("GestureTag", "onVisibilityChange: " + visibility);
+                if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL)
+                    playerView.hideController();
+            }
+        });
+
         initializePlayer();
         initFullscreenButton();
         initData();
         sendPlaylistData();
 
         initVerticalSeekBar();
+    }
+
+    public int getCurrentState() {
+        return mCurrentState;
+    }
+
+    public void changeState(int state) {
+        int currentState = getCurrentState();
+
+        if (state == STATE_IDLE) {
+            playerView.hideController();
+            findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+            findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
+            findViewById(R.id.view_playlist).setVisibility(View.GONE);
+        } else if (currentState != STATE_EPISODE_LIST) {
+            playerView.hideController();
+            findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+            findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
+            findViewById(R.id.view_playlist).setVisibility(View.GONE);
+
+            if (state == STATE_EPISODE_LIST) {
+                findViewById(R.id.view_playlist).setVisibility(View.VISIBLE);
+            } else if (state == STATE_EXOPLAYER_CTRL) {
+                mCurrentState = state;
+                playerView.showController();
+            } else if (state == STATE_BRIGHT_CTRL) {
+                findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
+            } else if (state == STATE_VOLUME_CTRL) {
+                findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
+            }
+        }
+        mCurrentState = state;
     }
 
     private void initVerticalSeekBar() {
@@ -262,7 +313,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 }
             }
         });
-
     }
 
     /*

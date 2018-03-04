@@ -106,25 +106,43 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
-        if(videoActivity.findViewById(R.id.view_playing_bright_seekbar).getVisibility() ==View.VISIBLE) {
-            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-            isShowBrightSeekBar = false;
+        int currentState = videoActivity.getCurrentState();
+        if (currentState > VideoPlayScreenActivity.STATE_IDLE) {
+            videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
             return false;
-        }
-        if(videoActivity.findViewById(R.id.view_playing_volume_seekbar).getVisibility() == View.VISIBLE) {
-            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
-            isShowVolumeSeekBar = false;
-            return false;
-        }
+        } else {
+            boolean inBrightCtrl = brightRectf.contains(e.getX(), e.getY());
+            boolean inVolumeCtrl = volumeRectf.contains(e.getX(), e.getY());
 
-        if(brightRectf.contains(e.getX(),e.getY()) && !isActivePlaylist) {
-            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
-            isShowBrightSeekBar = true;
+            if (inBrightCtrl) {
+                videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+                return false;
+            } else if (inVolumeCtrl) {
+                videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+                return false;
+            } else {
+                videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
+            }
         }
-        else if(volumeRectf.contains(e.getX(),e.getY()) && !isActivePlaylist) {
-            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
-            isShowVolumeSeekBar = true;
-        }
+//        if(videoActivity.findViewById(R.id.view_playing_bright_seekbar).getVisibility() ==View.VISIBLE) {
+//            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+//            isShowBrightSeekBar = false;
+//            return false;
+//        }
+//        if(videoActivity.findViewById(R.id.view_playing_volume_seekbar).getVisibility() == View.VISIBLE) {
+//            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
+//            isShowVolumeSeekBar = false;
+//            return false;
+//        }
+//
+//        if(brightRectf.contains(e.getX(),e.getY()) && !isActivePlaylist) {
+//            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
+//            isShowBrightSeekBar = true;
+//        }
+//        else if(volumeRectf.contains(e.getX(),e.getY()) && !isActivePlaylist) {
+//            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
+//            isShowVolumeSeekBar = true;
+//        }
         return true;
     }
 
@@ -156,6 +174,37 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.d("GestureTag", "onScroll distanceX="+distanceX+", distanceY= "+distanceY);
+        float min_distance = 30;
+        boolean inBrightCtrl = brightRectf.contains(e1.getX(), e1.getY());
+        boolean inVolumeCtrl = volumeRectf.contains(e1.getX(), e1.getY());
+        if (Math.abs(distanceX) > Math.abs(distanceY)) {    // HORIZONTAL SCROLL
+            if (Math.abs(distanceX) > min_distance) {
+                if (distanceX < 0) {                        // Left To Right Swipe
+                } else if (distanceX > 0) {                 // Right To Left Swipe
+                }
+            } else {
+                // not long enough swipe...
+            }
+        } else {                                            // VERTICAL SCROLL
+            if (Math.abs(distanceY) > min_distance) {
+                if (distanceY < 0) {                        // Top To Bottom Swipe
+                    if (!inBrightCtrl && !inVolumeCtrl) {
+                        videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+                        return false;
+                    }
+                } else if (distanceY > 0) {                 // Bottom To Top Swipe
+                    if (!inBrightCtrl && !inVolumeCtrl) {
+                        videoActivity.changeState(VideoPlayScreenActivity.STATE_EPISODE_LIST);
+                        return false;
+                    }
+                }
+            } else {
+                // not long enough swipe...
+            }
+        }
+
+/*
 //        Log.d("GestureTag", "y1: "+e1.getY()+", y2: "+e2.getY());
         if (brightRectf.contains(e1.getX(), e1.getY()) && brightRectf.contains(e2.getX(), e2.getY()) && isShowBrightSeekBar) {
 //            controlBright(e1.getY(), e2.getY());
@@ -165,9 +214,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             if(!isShowBrightSeekBar && !isShowVolumeSeekBar && !isActivePlaylist){
                 controlPlayTime(e1.getX(), e2.getX());
             }
-
         }
-
+*/
         return true;
     }
 
@@ -178,21 +226,21 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.d("FlingVelocity e1:",String.valueOf(e1.getY()));
-        Log.d("FlingVelocity e2:",String.valueOf(e2.getY()));
-        if(e1.getY()>mHeight-50 ) {
-            isActivePlaylist = true;
-            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
-            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-            isShowVolumeSeekBar = false;
-            isShowBrightSeekBar = false;
-            controlBottomMenu(e1.getY(), e2.getY(), isActivePlaylist);
-        }
-        if(e1.getY() > mHeight-320 && (velocityX<velocityY && velocityX>0)) {
-            isActivePlaylist = false;
-            controlBottomMenu(e1.getY(), e2.getY(), isActivePlaylist);
-            return false;
-        }
+//        Log.d("FlingVelocity e1:",String.valueOf(e1.getY()));
+//        Log.d("FlingVelocity e2:",String.valueOf(e2.getY()));
+//        if(e1.getY()>mHeight-50 ) {
+//            isActivePlaylist = true;
+//            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
+//            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+//            isShowVolumeSeekBar = false;
+//            isShowBrightSeekBar = false;
+//            controlBottomMenu(e1.getY(), e2.getY(), isActivePlaylist);
+//        }
+//        if(e1.getY() > mHeight-320 && (velocityX<velocityY && velocityX>0)) {
+//            isActivePlaylist = false;
+//            controlBottomMenu(e1.getY(), e2.getY(), isActivePlaylist);
+//            return false;
+//        }
 
         return true;
     }
