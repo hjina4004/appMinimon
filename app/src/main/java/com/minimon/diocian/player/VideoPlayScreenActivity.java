@@ -343,7 +343,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         try {
             JSONArray videoArr = (JSONArray) info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
             JSONObject list = (JSONObject) info.getJSONObject("data").get("list");
-            JSONObject videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
+            JSONObject videoObj = null;
+            if(ConfigInfo.getInstance().getBandwidth()!= 3)
+                videoObj= (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
+            else
+                videoObj= (JSONObject) videoArr.get(0);
             videoUrl = videoObj.getString("playUrl");
             EpisodeInfo.getInsatnace().setIdx(list.getString("idx"));
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
@@ -483,6 +487,9 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             case 2:
                 nowBandWidth = "1080p";
                 break;
+            case 3:
+                nowBandWidth = "자동";
+                break;
         }
         mBandWidth.setText(nowBandWidth);
         mBandWidthAuto = controlView.findViewById(R.id.tv_bandwidth_auto);
@@ -548,6 +555,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                     return;
                 ConfigInfo.getInstance().setBandwidth(ConfigInfo.banswidthAuto);
                 nowBandWidth = "자동";
+                mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
                 mResumePosition = Math.max(0,playerView.getPlayer().getContentPosition());
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());

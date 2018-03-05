@@ -262,8 +262,11 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private void setData(JSONObject info){
        try{
            JSONArray videoArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
-//           if(ConfigInfo.getInstance().)
-           JSONObject videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
+           JSONObject videoObj = null;
+           if(ConfigInfo.getInstance().getBandwidth()!= 3)
+               videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
+           else
+               videoObj = (JSONObject) videoArr.get(0);
            JSONArray episodeArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").get("list_ep");
            JSONObject episodeInformation = (JSONObject)info.getJSONObject("data").get("list");
            setEpisodeData(episodeInformation);
@@ -437,6 +440,9 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             case 2:
                 nowBandWidth = "1080p";
                 break;
+            case 3:
+                nowBandWidth = "자동";
+                break;
         }
         mBandWidth.setText(nowBandWidth);
         mBandWidthAuto = controlView.findViewById(R.id.tv_bandwidth_auto);
@@ -502,6 +508,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                     return;
                 ConfigInfo.getInstance().setBandwidth(ConfigInfo.banswidthAuto);
                 nowBandWidth = "자동";
+                mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
                 mResumePosition = Math.max(0,playerView.getPlayer().getContentPosition());
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
