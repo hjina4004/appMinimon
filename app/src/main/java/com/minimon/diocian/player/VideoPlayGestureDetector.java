@@ -107,6 +107,22 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //        playlistHeight = videoActivity.findViewById(R.id.rec_playing_playlist).getHeight();
     }
 
+    private boolean isViewContains(View view, int rx, int ry) {
+        int[] l = new int[2];
+        view.getLocationOnScreen(l);
+        int x = l[0];
+        int y = l[1];
+        int w = view.getWidth();
+        int h = view.getHeight();
+        boolean returnValue = true;
+
+        if (rx < x || rx > x + w || ry < y || ry > y + h) {
+            returnValue = false;
+        }
+        Log.d("isViewContains",String.valueOf(returnValue));
+        return returnValue;
+    }
+
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
         int currentState = videoActivity.getCurrentState();
@@ -120,7 +136,13 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             return false;
         }
         if (currentState > VideoPlayScreenActivity.STATE_IDLE) {
-            videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+            if(!isViewContains(playerView.findViewById(R.id.exo_ffwd),(int)e.getX(),(int) e.getY()) &&
+                    !isViewContains(playerView.findViewById(R.id.exo_rew),(int)e.getX(),(int)e.getY()) &&
+                    !isViewContains(playerView.findViewById(R.id.view_now_bandwidth),(int)e.getX(),(int)e.getY()) &&
+                    !isViewContains(playerView.findViewById(R.id.exo_play),(int)e.getX(),(int)e.getY()) &&
+                    !isViewContains(playerView.findViewById(R.id.exo_pause),(int)e.getX(),(int)e.getY())){
+                videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+            }
             return false;
         } else if (currentState != VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME){
             videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
@@ -198,12 +220,14 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                 dist = e1.getX()-e2.getX();
             else
                 dist = e2.getX()-e1.getX();
-            if (dist > 10 && currentState != VideoPlayScreenActivity.STATE_EPISODE_LIST) {
-                controlPlayTime(e1.getX(), e2.getX());
-            } else {
+            if(!isViewContains(playerView.findViewById(R.id.exo_progress), (int)e1.getX(), (int)e1.getY())) {
+                if (dist > 10 && currentState != VideoPlayScreenActivity.STATE_EPISODE_LIST) {
+                    controlPlayTime(e1.getX(), e2.getX());
+                } else {
 //                // not long enough swipe...
 //                playerView.changeState(VideoPlayScreenActivity.STATE_IDLE);
 //                videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
+                }
             }
         } else {                                            // VERTICAL SCROLL
             boolean inBrightCtrl = brightRectf.contains(e1.getX(), e1.getY());
@@ -271,11 +295,11 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     private void controlPlayTime(float x1, float x2){
         long movingTime = 0;
+        if(isScroll)
+            videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
         isScroll = true;
-        videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
         if(x1 > x2){
             if(x1-x2>10){
-                Log.d("DetectorTag","x1-x2 : "+String.valueOf(Math.round(x1-x2)%10));
                 if(Math.round(x1-x2)%10 == 0 && Math.round(x1-x2)<=600){
                     doub = Math.round((x1-x2)/10);
                     movingTime = doub*1000;
@@ -283,13 +307,10 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                     if(currentTime-movingTime > 0)
                         playerView.getPlayer().seekTo(currentTime-movingTime);
                 }
-
             }
         }else{
             if(x2-x1>10){
-                Log.d("DetectorTag","x2-x1 : "+String.valueOf(Math.round(x2-x1)%10));
                 if(Math.round(x2-x1)%10 == 0 && Math.round(x2-x1)<=600){
-
                     doub = Math.round((x2-x1)/10);
                     movingTime = doub*1000;
                     playerView.getPlayer().setPlayWhenReady(false);
@@ -297,11 +318,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                 }
             }
         }
-//        playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
-//        playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
-//        playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
-//        videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
-//        playerView.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
+
         TextView tv_now_playtime = (TextView) videoActivity.findViewById(R.id.tv_now_playtime);
         TextView tv_now_moving_time = (TextView) videoActivity.findViewById(R.id.tv_now_moving_time);
         int now_playtime = (int)playerView.getPlayer().getCurrentPosition()/1000;

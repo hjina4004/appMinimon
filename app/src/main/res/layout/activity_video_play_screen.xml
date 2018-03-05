@@ -33,8 +33,42 @@
                 android:maxWidth="4dp"
                 android:layout_gravity="center_horizontal"
                 android:progressDrawable="@drawable/play_progess"
+                android:thumb="@color/MainColor"
                 />
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/view_move_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:id="@+id/tv_now_playtime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="34.78dp"
+                android:textColor="@color/MainColor"
+                android:layout_centerHorizontal="true"
+                android:text="playtime"/>
+
+            <TextView
+                android:id="@+id/tv_now_moving_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/tv_now_playtime"
+                android:textColor="#fff"
+                android:textSize="24.76dp"
+                android:text="movingtime"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/view_playlist"
@@ -99,6 +133,7 @@
                 android:minWidth="4dp"
                 android:layout_gravity="center_horizontal"
                 android:progressDrawable="@drawable/play_progess"
+                android:thumb="@color/MainColor"
                 android:max="15"/>
         </LinearLayout>
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>

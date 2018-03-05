@@ -21,7 +21,7 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:background="#CC000000"
-       android:padding="3dp">
+       android:padding="8dp">
       <TextView
           android:id="@+id/tv_exo_title"
           android:layout_width="wrap_content"
@@ -98,42 +98,7 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
 
-      <RelativeLayout
-          android:id="@+id/view_move_time"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerHorizontal="true"
-          android:layout_centerVertical="true"
-          android:layout_marginBottom="8dp"
-          android:layout_marginEnd="8dp"
-          android:layout_marginStart="8dp"
-          android:layout_marginTop="8dp"
-          android:visibility="gone"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent">
 
-         <TextView
-             android:id="@+id/tv_now_playtime"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="34.78dp"
-             android:textColor="@color/MainColor"
-             android:layout_centerHorizontal="true"
-             android:text="playtime"/>
-
-         <TextView
-             android:id="@+id/tv_now_moving_time"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="20dp"
-             android:layout_centerHorizontal="true"
-             android:layout_below="@+id/tv_now_playtime"
-             android:textColor="#fff"
-             android:textSize="24.76dp"
-             android:text="movingtime"/>
-      </RelativeLayout>
       <!--<ImageView-->
           <!--android:layout_width="wrap_content"-->
           <!--android:layout_height="wrap_content"-->
@@ -239,13 +204,17 @@
       <RelativeLayout
           android:id="@+id/exo_view_play_info"
           android:layout_width="match_parent"
-          android:layout_height="50px"
-          android:gravity="center_vertical">
+          android:layout_height="30dp"
+          android:gravity="center_vertical"
+          android:paddingLeft="15dp">
          <LinearLayout
              android:id="@+id/view_now_bandwidth"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_centerVertical="true"
+             android:paddingRight="9.67dp"
+             android:paddingTop="6dp"
+             android:paddingBottom="6dp"
              android:orientation="horizontal"
              android:background="@drawable/shape_bandwidth">
             <TextView
@@ -255,7 +224,8 @@
                 android:text="bandWidth"
                 android:textColor="#ffffff"
                 android:autoSizeTextType="uniform"
-                android:layout_marginRight="18dp"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 />
@@ -264,6 +234,7 @@
                 android:layout_height="wrap_content"
                 android:src="@mipmap/a022_detail_res_arr"
                 android:layout_gravity="center_vertical"
+                android:paddingRight="6dp"
                 />
          </LinearLayout>
 
@@ -273,6 +244,7 @@
              android:layout_height="wrap_content"
              android:layout_toEndOf="@id/view_now_bandwidth"
              android:layout_toRightOf="@id/view_now_bandwidth"
+             android:layout_centerVertical="true"
              android:visibility="gone"
              android:layout_marginLeft="20dp">
             <TextView
@@ -287,7 +259,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:text="480p"
                 android:textColor="#fff"/>
             <TextView
@@ -297,7 +269,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/tv_bandwidth_480"
                 android:layout_toRightOf="@id/tv_bandwidth_480"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:text="720p"
                 android:textColor="#fff"/>
             <TextView
@@ -305,7 +277,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="5dp"
                 android:text="1080p"
                 android:textColor="#fff"
                 />

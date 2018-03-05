@@ -166,7 +166,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             @Override
             public void onVisibilityChange(int visibility) {
                 Log.d("GestureTag", "onVisibilityChange: " + visibility);
-                if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL && getCurrentState() != STATE_SHOW_MOVING_TIME)
+                if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL)
                     playerView.hideController();
             }
         });
@@ -193,11 +193,13 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playlist).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+            playerView.findViewById(R.id.view_bandwidth).setVisibility(View.GONE);
         } else if (currentState != STATE_EPISODE_LIST) {
             playerView.hideController();
             findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playlist).setVisibility(View.GONE);
+            findViewById(R.id.view_move_time).setVisibility(View.GONE);
 
             if (state == STATE_EPISODE_LIST) {
                 findViewById(R.id.view_playlist).setVisibility(View.VISIBLE);
@@ -220,12 +222,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             } else if (state == STATE_VOLUME_CTRL) {
                 findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
             } else if (state == STATE_SHOW_MOVING_TIME){
-                playerView.showController();
-                playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
-                playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
-                playerView.findViewById(R.id.exo_pause).setVisibility(View.GONE);
-                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
-                playerView.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
+//                playerView.showController();
+//                playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
+//                playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
+//                playerView.findViewById(R.id.exo_pause).setVisibility(View.GONE);
+//                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
+                findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
             }
         }
         mCurrentState = state;
