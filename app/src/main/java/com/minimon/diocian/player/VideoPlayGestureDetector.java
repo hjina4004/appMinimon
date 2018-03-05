@@ -47,16 +47,10 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-//        if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-//            if(isScroll){
-//                isScroll = !isScroll;
-//                playerView.findViewById(R.id.exo_rew).setVisibility(View.VISIBLE);
-//                playerView.findViewById(R.id.exo_play).setVisibility(View.VISIBLE);
-//                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.VISIBLE);
-//                playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
-//            }
-//        }
-        return false;
+        if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+
+        }
+        return true;
     }
 
     public interface VideoPlayGestureDetectorListener{
@@ -76,16 +70,11 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     public VideoPlayGestureDetector(Context context, VideoPlayScreenActivity activity, int width, int height){
         mContext = context;
-//        brightSeekBar = activity.findViewById(R.id.BrightSeekBar);
-//        volumeSeekBar = activity.findViewById(R.id.VolumeSeekBar);
-//        brightSeekBar.setEnabled(false);
-//        volumeSeekBar.setEnabled(false);
         int brightnessValue = Settings.System.getInt(
                 mContext.getContentResolver(),
                 Settings.System.SCREEN_BRIGHTNESS,
                 0
         );
-//        brightSeekBar.setProgress(brightnessValue);
         videoActivity = activity;
         playerView = activity.findViewById(R.id.player_view);
 
@@ -121,23 +110,22 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
         int currentState = videoActivity.getCurrentState();
+        boolean inBrightCtrl = brightRectf.contains(e.getX(), e.getY());
+        boolean inVolumeCtrl = volumeRectf.contains(e.getX(), e.getY());
+        if (inBrightCtrl) {
+            videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+            return false;
+        } else if (inVolumeCtrl) {
+            videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+            return false;
+        }
         if (currentState > VideoPlayScreenActivity.STATE_IDLE) {
             videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
             return false;
-        } else {
-            boolean inBrightCtrl = brightRectf.contains(e.getX(), e.getY());
-            boolean inVolumeCtrl = volumeRectf.contains(e.getX(), e.getY());
-
-            if (inBrightCtrl) {
-                videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
-                return false;
-            } else if (inVolumeCtrl) {
-                videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
-                return false;
-            } else {
-                videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
-            }
+        } else if (currentState != VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME){
+            videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
         }
+
 //        if(videoActivity.findViewById(R.id.view_playing_bright_seekbar).getVisibility() ==View.VISIBLE) {
 //            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
 //            isShowBrightSeekBar = false;
@@ -183,21 +171,39 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
+        Log.d("OnSingleTapUp", "in Scroll");
         return true;
     }
 
+    public void onUp(){
+        if(isScroll){
+            isScroll = !isScroll;
+            playerView.getPlayer().setPlayWhenReady(true);
+            playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
+            playerView.findViewById(R.id.exo_pause).setVisibility(View.GONE);
+//            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+
+            playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
+//            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+        }
+    }
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         Log.d("GestureTag", "onScroll distanceX="+distanceX+", distanceY= "+distanceY);
         float min_distance = 30;
         int currentState = videoActivity.getCurrentState();
         if (Math.abs(distanceX) > Math.abs(distanceY)) {    // HORIZONTAL SCROLL
-            if (Math.abs(distanceX) > min_distance) {
-                if (distanceX < 0) {                        // Left To Right Swipe
-                } else if (distanceX > 0) {                 // Right To Left Swipe
-                }
+            float dist = 0;
+            if(e1.getX()>e2.getX())
+                dist = e1.getX()-e2.getX();
+            else
+                dist = e2.getX()-e1.getX();
+            if (dist > 10 && currentState != VideoPlayScreenActivity.STATE_EPISODE_LIST) {
+                controlPlayTime(e1.getX(), e2.getX());
             } else {
-                // not long enough swipe...
+//                // not long enough swipe...
+//                playerView.changeState(VideoPlayScreenActivity.STATE_IDLE);
+//                videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
             }
         } else {                                            // VERTICAL SCROLL
             boolean inBrightCtrl = brightRectf.contains(e1.getX(), e1.getY());
@@ -264,10 +270,12 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     }
 
     private void controlPlayTime(float x1, float x2){
-        long movingTime;
+        long movingTime = 0;
         isScroll = true;
+        videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
         if(x1 > x2){
             if(x1-x2>10){
+                Log.d("DetectorTag","x1-x2 : "+String.valueOf(Math.round(x1-x2)%10));
                 if(Math.round(x1-x2)%10 == 0 && Math.round(x1-x2)<=600){
                     doub = Math.round((x1-x2)/10);
                     movingTime = doub*1000;
@@ -279,7 +287,9 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             }
         }else{
             if(x2-x1>10){
+                Log.d("DetectorTag","x2-x1 : "+String.valueOf(Math.round(x2-x1)%10));
                 if(Math.round(x2-x1)%10 == 0 && Math.round(x2-x1)<=600){
+
                     doub = Math.round((x2-x1)/10);
                     movingTime = doub*1000;
                     playerView.getPlayer().setPlayWhenReady(false);
@@ -287,15 +297,22 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                 }
             }
         }
-        playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
-        playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
-        playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
-        playerView.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
-        TextView tv_now_playtime = (TextView) playerView.findViewById(R.id.tv_now_playtime);
+//        playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
+//        playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
+//        playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
+//        videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
+//        playerView.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
+        TextView tv_now_playtime = (TextView) videoActivity.findViewById(R.id.tv_now_playtime);
+        TextView tv_now_moving_time = (TextView) videoActivity.findViewById(R.id.tv_now_moving_time);
         int now_playtime = (int)playerView.getPlayer().getCurrentPosition()/1000;
         int now_minute = now_playtime/60;
         int now_sec = now_playtime%60;
-        tv_now_playtime.setText(now_minute + " : "+now_sec);
+        if(doub == 60){
+            tv_now_moving_time.setText("1:00");
+        }else if (doub < 60){
+            tv_now_moving_time.setText("0:"+String.valueOf(doub));
+        }
+        tv_now_playtime.setText(now_minute + ":"+now_sec);
     }
 
     private void controlBottomMenu(float y1, float y2, boolean isShow){

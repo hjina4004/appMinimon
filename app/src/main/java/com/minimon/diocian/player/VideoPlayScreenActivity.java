@@ -70,7 +70,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoPlayScreenActivity extends AppCompatActivity implements PlayListItemClickListener{
+public class VideoPlayScreenActivity extends AppCompatActivity implements PlayListItemClickListener, View.OnTouchListener{
 
     private MinimonEpisode minimonEpisode;
 
@@ -91,6 +91,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private ImageView mShowGestureInfo;
     private LinearLayout mNowBandWidth;
     private TextView mBandWidth;
+    private TextView mBandWidthAuto;
     private TextView mBandWidth480;
     private TextView mBandWidth720;
     private TextView mBandWidth1080;
@@ -98,6 +99,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private ImageView mPrev;
     private ImageView mPlay;
     private ImageView mNext;
+    private TextView mTitle;
 
 
     private SimpleExoPlayer player;
@@ -106,7 +108,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     private int width, height= 0;
     private VideoPlayGestureDetector videoPlayGestureDetector;
-    private GestureDetector gestureDetector;
+    private TouchGestureDetector gestureDetector;
 
     private List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
     private PlaylistDramaAdapter epiAdapter;
@@ -118,6 +120,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 //    private LinearLayout view_playing_bright_seekbar;
 //    private LinearLayout view_playing_volume_seekbar;
 
+    private boolean isplaying;
+
     public int now_bright_status;
     public int now_volume_status;
 
@@ -127,6 +131,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     public static final int STATE_EXOPLAYER_CTRL = 302;   // exoPlayer controller iew state
     public static final int STATE_BRIGHT_CTRL = 303;      // bright controller vew state
     public static final int STATE_VOLUME_CTRL = 304;      // volume controller view state
+    public static final int STATE_SHOW_MOVING_TIME = 305; // seek drag show
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,38 +161,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rec_playing_playlist.setLayoutManager(layoutManager);
-//        rec_playing_playlist.setOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                if(dy>0){
-//                    findViewById(R.id.view_playlist).setVisibility(View.GONE);
-//                    findViewById(R.id.exo_view_play_info).setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-/*
-        rec_playing_playlist.setOnFlingListener(new RecyclerView.OnFlingListener() {
-            @Override
-            public boolean onFling(int velocityX, int velocityY) {
-                Log.d("RECFLINGX",String.valueOf(velocityX));
-                Log.d("RECFLINGY",String.valueOf(velocityY));
-//                if(velocityY > velocityX){
-                if(velocityY >10 && velocityX<10){
-                    findViewById(R.id.view_playlist).setVisibility(View.GONE);
-                    findViewById(R.id.exo_view_play_info).setVisibility(View.VISIBLE);
-                }
-
-                return false;
-            }
-        });
-*/
         mCurrentState = STATE_IDLE;
         playerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
             @Override
             public void onVisibilityChange(int visibility) {
                 Log.d("GestureTag", "onVisibilityChange: " + visibility);
-                if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL)
+                if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL && getCurrentState() != STATE_SHOW_MOVING_TIME)
                     playerView.hideController();
             }
         });
@@ -207,11 +186,13 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     public void changeState(int state) {
         int currentState = getCurrentState();
 
+        Log.d("ChangeState : ", String.valueOf(state));
         if (state == STATE_IDLE) {
             playerView.hideController();
             findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playlist).setVisibility(View.GONE);
+            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
         } else if (currentState != STATE_EPISODE_LIST) {
             playerView.hideController();
             findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
@@ -223,10 +204,28 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             } else if (state == STATE_EXOPLAYER_CTRL) {
                 mCurrentState = state;
                 playerView.showController();
+                playerView.findViewById(R.id.exo_rew).setVisibility(View.VISIBLE);
+                if(playerView.getPlayer().getPlayWhenReady()) {
+                    playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
+                    playerView.findViewById(R.id.exo_pause).setVisibility(View.VISIBLE);
+                }
+                else {
+                    playerView.findViewById(R.id.exo_play).setVisibility(View.VISIBLE);
+                    playerView.findViewById(R.id.exo_pause).setVisibility(View.GONE);
+                }
+                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.VISIBLE);
+                playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
             } else if (state == STATE_BRIGHT_CTRL) {
                 findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
             } else if (state == STATE_VOLUME_CTRL) {
                 findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
+            } else if (state == STATE_SHOW_MOVING_TIME){
+                playerView.showController();
+                playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
+                playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
+                playerView.findViewById(R.id.exo_pause).setVisibility(View.GONE);
+                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
+                playerView.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
             }
         }
         mCurrentState = state;
@@ -404,7 +403,13 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         }
 
         videoPlayGestureDetector = new VideoPlayGestureDetector(this,this,width,height);
-        gestureDetector = new GestureDetector(this, videoPlayGestureDetector);
+        gestureDetector = new TouchGestureDetector(this, videoPlayGestureDetector);
+        gestureDetector.setListner(new TouchGestureDetector.touchListner() {
+            @Override
+            public void onUp() {
+                videoPlayGestureDetector.onUp();
+            }
+        });
 }
 
     private void releasePlayer() {
@@ -430,9 +435,19 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         mPrev.setImageResource(R.drawable.icon_b_prev);
         mNext = controlView.findViewById(R.id.exo_ffwd);
         mNext.setImageResource(R.drawable.icon_b_ffwd);
+        mTitle = controlView.findViewById(R.id.tv_exo_title);
+        mTitle.setText(EpisodeInfo.getInsatnace().getTitle());
+        mTitle.setTextSize(19);
+        TextView mPosition = controlView.findViewById(R.id.exo_position);
+        TextView mDuration = controlView.findViewById(R.id.exo_duration);
+        mDuration.setTextSize(19);
+        mPosition.setTextSize(19);
+
+        controlView.findViewById(R.id.tv_playing_playlist).setVisibility(View.VISIBLE);
+        controlView.findViewById(R.id.img_playing_playlist).setVisibility(View.VISIBLE);
 
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
-        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
+        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.a022_play_zoom_in));
         mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
         mFullScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -470,6 +485,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 break;
         }
         mBandWidth.setText(nowBandWidth);
+        mBandWidthAuto = controlView.findViewById(R.id.tv_bandwidth_auto);
         mBandWidth480 = controlView.findViewById(R.id.tv_bandwidth_480);
         mBandWidth720 = controlView.findViewById(R.id.tv_bandwidth_720);
         mBandWidth1080 = controlView.findViewById(R.id.tv_bandwidth_1080);
@@ -524,6 +540,19 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
+        mBandWidthAuto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBandWidthView.setVisibility(View.GONE);
+                if("자동".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.banswidthAuto);
+                nowBandWidth = "자동";
+                isChangeBandWidth = true;
+                mResumePosition = Math.max(0,playerView.getPlayer().getContentPosition());
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
+        });
     }
 
 
@@ -559,6 +588,17 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     private void closeInfoDialog(){
         gestureInfoDialog.dismiss();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        switch (motionEvent.getActionMasked()){
+            case MotionEvent.ACTION_DOWN:
+                return true;
+            case MotionEvent.ACTION_UP:
+                return true;
+        }
+        return true;
     }
 
     private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {

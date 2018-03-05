@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +100,15 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private TextView tv_episode_description;
     private TextView tv_episode_tag;
 
+    private String nowBandWidth = "";
+    private boolean isChangeBandWidth = false;
+    private LinearLayout mNowBandWidth;
+    private TextView mBandWidth;
+    private TextView mBandWidthAuto;
+    private TextView mBandWidth480;
+    private TextView mBandWidth720;
+    private TextView mBandWidth1080;
+    private LinearLayout mBandWidthView;
 //    private boolean isnew = true;
 
     private int mResumeWindow;
@@ -136,9 +146,10 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         dramaPlayMainScrollView = findViewById(R.id.drama_play_main_scrollview);
         if(savedInstanceState != null){
             mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
-            mResumePosition = savedInstanceState.getLong(STATE_RESUME_POSITION);
+            mResumePosition = savedInstanceState.getInt(STATE_RESUME_POSITION);
             mExoPlayerFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN);
         }
+        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
         tv_content_point = findViewById(R.id.tv_content_point);
         tv_content_title = findViewById(R.id.tv_content_title);
         tv_episode_description = findViewById(R.id.tv_episode_description);
@@ -173,13 +184,20 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             isLockSreen = true;
     }
 
+    private void setLayout(){
+
+    }
+
     /*
     현재 플레이할 에피소드 데이터
      */
     private void sendEpisodeData(String idx){
         ContentValues values = new ContentValues();
         values.put("ep_idx",idx);
-        values.put("quality","his");
+        if(ConfigInfo.getInstance().getBandwidth() == 3)
+            values.put("quality","hlsabr");
+        else
+            values.put("quality","his");
         values.put("id",UserInfo.getInstance().getUID());
 
         minimonEpisode.info(values);
@@ -244,6 +262,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private void setData(JSONObject info){
        try{
            JSONArray videoArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
+//           if(ConfigInfo.getInstance().)
            JSONObject videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
            JSONArray episodeArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").get("list_ep");
            JSONObject episodeInformation = (JSONObject)info.getJSONObject("data").get("list");
@@ -251,6 +270,11 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            setPlaylistData(episodeArr);
            videoUrl = videoObj.getString("playUrl");
            EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
+           if (!isChangeBandWidth) {
+               EpisodeInfo.getInsatnace().setResumePosition(0);
+           }else{
+               isChangeBandWidth = !isChangeBandWidth;
+           }
            initializePlayer();
            initFullscreenButton();
        }catch (JSONException e){
@@ -381,6 +405,9 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
         else
             mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+
+        controlView.findViewById(R.id.tv_playing_playlist).setVisibility(View.GONE);
+        controlView.findViewById(R.id.img_playing_playlist).setVisibility(View.GONE);
         mLockScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -393,6 +420,91 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                     mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
                     isLockSreen = !isLockSreen;
                 }
+            }
+        });
+
+        mBandWidthView = controlView.findViewById(R.id.view_bandwidth);
+        mBandWidth = controlView.findViewById(R.id.tv_bandwidth);
+        mNowBandWidth = controlView.findViewById(R.id.view_now_bandwidth);
+
+        switch (ConfigInfo.getInstance().getBandwidth()){
+            case 0:
+                nowBandWidth = "480p";
+                break;
+            case 1:
+                nowBandWidth = "720p";
+                break;
+            case 2:
+                nowBandWidth = "1080p";
+                break;
+        }
+        mBandWidth.setText(nowBandWidth);
+        mBandWidthAuto = controlView.findViewById(R.id.tv_bandwidth_auto);
+        mBandWidth480 = controlView.findViewById(R.id.tv_bandwidth_480);
+        mBandWidth720 = controlView.findViewById(R.id.tv_bandwidth_720);
+        mBandWidth1080 = controlView.findViewById(R.id.tv_bandwidth_1080);
+        mNowBandWidth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mBandWidthView.getVisibility() == View.VISIBLE)
+                    mBandWidthView.setVisibility(View.GONE);
+                else
+                    mBandWidthView.setVisibility(View.VISIBLE);
+            }
+        });
+        mBandWidth480.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("480p".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth480);
+                mBandWidthView.setVisibility(View.GONE);
+                nowBandWidth = "480p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
+        });
+        mBandWidth720.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("720p".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth720);
+                mBandWidthView.setVisibility(View.GONE);
+                nowBandWidth = "720p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
+        });
+        mBandWidth1080.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("1080p".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth1080);
+                mBandWidthView.setVisibility(View.GONE);
+                nowBandWidth = "1080p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
+        });
+        mBandWidthAuto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBandWidthView.setVisibility(View.GONE);
+                if("자동".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.banswidthAuto);
+                nowBandWidth = "자동";
+                isChangeBandWidth = true;
+                mResumePosition = Math.max(0,playerView.getPlayer().getContentPosition());
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
     }
@@ -520,8 +632,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 //        player.seekTo(currentWindow, playBackPosition);
         playerView.getPlayer().prepare(mediaSources, true, false);
         inErrorState = false;
-        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
-            playerView.getPlayer().seekTo(EpisodeInfo.getInsatnace().getResumePosition());
+        if(mResumePosition != 0){
+            playerView.getPlayer().seekTo(mResumePosition);
             playerView.getPlayer().setPlayWhenReady(true);
         }
     }
