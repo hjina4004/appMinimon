@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
+import java.util.List;
+
 
 public class JUtil {
     public interface JUtilListener {
@@ -25,5 +27,9 @@ public class JUtil {
 
         final AlertDialog alert = dialog.create();
         alert.show();
+    }
+
+    public void showList(Context context, List<SettingItem> list, final JUtilListener listener){
+
     }
 }

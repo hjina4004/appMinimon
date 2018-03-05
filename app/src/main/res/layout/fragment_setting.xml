@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorBaseEditText">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_player_set"
+            android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
+            android:textSize="15.66dp"
+            android:textColor="#fff"
+            android:paddingTop="17dp"
+            android:paddingBottom="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/view_setting_set_bandwidth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#222222"
+        android:paddingTop="7dp"
+        android:paddingBottom="7dp"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="17dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:textSize="15.66dp"
+                android:text="@string/setting_player_set_data"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="WIFI"
+                android:textColor="@color/MainColor"
+                android:textSize="15.66dp" />
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13.92dp"
+            android:textColor="@color/colorEditTextAddone"
+            android:text="@string/setting_player_set_data_info"
+            />
+    </LinearLayout>
+</LinearLayout>

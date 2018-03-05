@@ -454,7 +454,7 @@ public class MainActivity extends AppCompatActivity
                     startActivity(intent);
                     break;
                 case R.id.tv_userInfo:
-                    fragment = new UserInfoFragment();
+                    fragment = new SettingFragment();
                     break;
                 case R.id.tv_logout:
                     tryLogout();

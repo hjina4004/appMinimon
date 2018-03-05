@@ -78,4 +78,8 @@
     <string name="init_nickname">User nickname</string>
     <string name="init_point">96,500</string>
     <string name="init_fixed">2018.12.24</string>
+
+    <string name="setting_player_set">플레이어 설정</string>
+    <string name="setting_player_set_data">플레이어 기본화질 설정</string>
+    <string name="setting_player_set_data_info">플레이어에서 자동으로 재생되는 화질을 선택합니다.</string>
 </resources>
