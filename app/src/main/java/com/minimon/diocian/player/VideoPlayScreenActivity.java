@@ -275,14 +275,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-
-        volumeSeekBar.setProgressAndThumb(now_volume_status);
-        volumeSeekBar.setMax(15);
+        volumeSeekBar.setMax(audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+        volumeSeekBar.setProgress(now_volume_status);
         volumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                volumeSeekBar.setProgress(i);
-                audio.setStreamVolume(AudioManager.STREAM_MUSIC,i,AudioManager.FLAG_PLAY_SOUND);
+                audio.setStreamVolume(AudioManager.STREAM_MUSIC,i,0);
             }
 
             @Override

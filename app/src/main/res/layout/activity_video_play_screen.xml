@@ -33,7 +33,6 @@
                 android:maxWidth="4dp"
                 android:layout_gravity="center_horizontal"
                 android:progressDrawable="@drawable/play_progess"
-                android:thumb="@color/MainColor"
                 />
         </LinearLayout>
 
@@ -125,6 +124,7 @@
                 android:src="@mipmap/a022_play_sound_on"/>
             <com.minimon.diocian.player.VerticalSeekBar
                 android:id="@+id/VolumeSeekBar"
+                style="@style/VerticalSeekBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:maxHeight="4dp"
@@ -132,9 +132,7 @@
                 android:minHeight="4dp"
                 android:minWidth="4dp"
                 android:layout_gravity="center_horizontal"
-                android:progressDrawable="@drawable/play_progess"
-                android:thumb="@color/MainColor"
-                android:max="15"/>
+                android:progressDrawable="@drawable/play_progess"/>
         </LinearLayout>
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 </RelativeLayout>

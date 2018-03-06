@@ -27,6 +27,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textColor="#ffffff"
+          android:layout_centerVertical="true"
           android:autoSizeTextType="uniform"/>
 
       <ImageView
@@ -38,6 +39,7 @@
           android:layout_marginRight="13dp"
           android:layout_toLeftOf="@+id/img_exo_lock"
           android:layout_toStartOf="@+id/img_exo_lock"
+          android:layout_centerVertical="true"
           android:visibility="gone"
           android:src="@mipmap/a022_play_b_i" />
 
@@ -47,6 +49,7 @@
           android:layout_height="wrap_content"
           android:layout_alignParentEnd="true"
           android:layout_alignParentRight="true"
+          android:layout_centerVertical="true"
           android:layout_alignParentTop="true"
           android:src="@mipmap/a022_play_b_lock_on" />
    </RelativeLayout>

@@ -108,6 +108,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     }
 
     private boolean isViewContains(View view, int rx, int ry) {
+        if(view.getVisibility() == View.GONE)
+            return false;
         int[] l = new int[2];
         view.getLocationOnScreen(l);
         int x = l[0];
@@ -215,18 +217,12 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         float min_distance = 30;
         int currentState = videoActivity.getCurrentState();
         if (Math.abs(distanceX) > Math.abs(distanceY)) {    // HORIZONTAL SCROLL
-            float dist = 0;
-            if(e1.getX()>e2.getX())
-                dist = e1.getX()-e2.getX();
-            else
-                dist = e2.getX()-e1.getX();
-            if(!isViewContains(playerView.findViewById(R.id.exo_progress), (int)e1.getX(), (int)e1.getY())) {
-                if (dist > 10 && currentState != VideoPlayScreenActivity.STATE_EPISODE_LIST) {
+            if(Math.abs(distanceX) > 10 && currentState != VideoPlayScreenActivity.STATE_EPISODE_LIST) {
+                if (!isViewContains(videoActivity.findViewById(R.id.view_playing_volume_seekbar),(int)e1.getX(),(int)e1.getY())&&
+                        !isViewContains(playerView.findViewById(R.id.exo_progress), (int)e1.getX(), (int)e1.getY())) {
                     controlPlayTime(e1.getX(), e2.getX());
                 } else {
 //                // not long enough swipe...
-//                playerView.changeState(VideoPlayScreenActivity.STATE_IDLE);
-//                videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
                 }
             }
         } else {                                            // VERTICAL SCROLL
