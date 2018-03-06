@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
@@ -143,6 +145,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
+        checkWifi();
         dramaPlayMainScrollView = findViewById(R.id.drama_play_main_scrollview);
         if(savedInstanceState != null){
             mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
@@ -184,8 +187,31 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             isLockSreen = true;
     }
 
-    private void setLayout(){
-
+    private void checkWifi(){
+        if(!ConfigInfo.getInstance().isUseData()){
+            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+            boolean wifiEnabled = wifiManager.isWifiEnabled();
+            if(!wifiEnabled){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(getString(R.string.alert_wifi_not_found));
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ConfigInfo.getInstance().setUseData(true);
+                        SharedPreferences preferences = getSharedPreferences("minimon-preference", MODE_PRIVATE);
+                        preferences.edit().putBoolean("useData",ConfigInfo.getInstance().isUseData());
+                        preferences.edit().apply();
+                    }
+                });
+                builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+                builder.show();
+            }
+        }
     }
 
     /*
@@ -639,7 +665,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 //        player.seekTo(currentWindow, playBackPosition);
         playerView.getPlayer().prepare(mediaSources, true, false);
         inErrorState = false;
-        if(mResumePosition != 0){
+        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
             playerView.getPlayer().seekTo(mResumePosition);
             playerView.getPlayer().setPlayWhenReady(true);
         }

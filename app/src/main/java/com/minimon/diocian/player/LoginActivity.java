@@ -560,7 +560,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         configInfo.setBandwidth(pref.getInt("BandWidth",1));
         configInfo.setUseData(pref.getBoolean("useData",true));
         configInfo.setAlertEvent(pref.getBoolean("alertEvent",true));
-        configInfo.setAlertEvent(pref.getBoolean("alertNotice",true));
+        configInfo.setAlertNotice(pref.getBoolean("alertNotice",true));
         editor.putInt("BandWidth",configInfo.getBandwidth());
         editor.putBoolean("userData",configInfo.isUseData());
         editor.putBoolean("alertEvent",configInfo.isAlertEvent());

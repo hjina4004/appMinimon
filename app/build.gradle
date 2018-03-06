@@ -47,6 +47,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.2.0'
 
     compile 'com.squareup.picasso:picasso:2.5.2' //picasso : 이미지 처리를 위한 라이브러리
+
+    compile 'com.google.firebase:firebase-messaging:11.2.0'
 }
 
 

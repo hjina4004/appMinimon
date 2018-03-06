@@ -17,7 +17,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/a001_intro_tl"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:paddingTop="17dp"
+                android:paddingBottom="8dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,9 +28,7 @@
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="7dp"
                 android:textSize="15.66dp"
-                android:textColor="#fff"
-                android:paddingTop="17dp"
-                android:paddingBottom="8dp"/>
+                android:textColor="#fff"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/view_setting_set_data"
@@ -36,15 +36,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
             android:paddingLeft="6dp"
             android:paddingRight="6dp">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="17dp"
-                android:paddingBottom="17dp">
+                android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -81,8 +79,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
             android:paddingLeft="6dp"
             android:paddingRight="6dp">
             <RelativeLayout
@@ -131,7 +129,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/a001_intro_tl"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:paddingTop="17dp"
+                android:paddingBottom="8dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,9 +140,7 @@
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="7dp"
                 android:textSize="15.66dp"
-                android:textColor="#fff"
-                android:paddingTop="17dp"
-                android:paddingBottom="8dp"/>
+                android:textColor="#fff"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/view_setting_alert_event"
@@ -150,8 +148,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
             android:paddingLeft="6dp"
             android:paddingRight="6dp">
             <RelativeLayout
@@ -168,6 +166,7 @@
                     android:gravity="center_vertical"/>
 
                 <Switch
+                    android:id="@+id/switch_setting_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -194,8 +193,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
             android:paddingLeft="6dp"
             android:paddingRight="6dp">
             <RelativeLayout
@@ -213,6 +212,7 @@
                     android:layout_gravity="center_vertical"/>
 
                 <Switch
+                    android:id="@+id/switch_setting_service"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -229,5 +229,183 @@
                 android:text="@string/setting_alert_service_info"
                 />
         </LinearLayout>
+        <!--
+            앱 정보
+        -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/colorBaseEditText"
+            android:paddingLeft="20dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/a001_intro_tl"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="17dp"
+                android:paddingBottom="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_app_info"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="7dp"
+                android:textSize="15.66dp"
+                android:textColor="#fff"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_setting_app_delete_cache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#222222"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="17dp"
+                android:paddingBottom="17dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="15.66dp"
+                    android:text="@string/setting_app_delete_cache"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/tv_setting_app_delete_cache"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="삭제"
+                    android:textColor="@color/MainColor"
+                    android:textSize="15.66dp" />
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13.92dp"
+                android:textColor="@color/colorEditTextAddone"
+                android:text="@string/setting_app_delete_cache_info"
+                />
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#b0b0b0"/>
+        <LinearLayout
+            android:id="@+id/view_setting_app_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#222222"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="프로그램 버전"
+                    android:textColor="#777c80"
+                    android:textSize="15.66dp"/>
+                <TextView
+                    android:id="@+id/tv_setting_app_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="15.66dp"
+                    android:paddingLeft="5dp"
+                    android:text="ver 0.0.0"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Release date"
+                    android:textColor="#777c80"
+                    android:textSize="15.66dp"/>
+                <TextView
+                    android:id="@+id/tv_setting_app_release_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="15.66dp"
+                    android:paddingLeft="5dp"
+                    android:text="YYYY.MM.DD"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="프로그램 제작"
+                    android:textColor="#777c80"
+                    android:textSize="15.66dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="15.66dp"
+                    android:paddingLeft="5dp"
+                    android:text="MINIMON"/>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#b0b0b0"/>
+        <LinearLayout
+            android:id="@+id/view_setting_app_license"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#222222"
+            android:paddingTop="17dp"
+            android:paddingBottom="17dp"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="17dp"
+                android:paddingBottom="17dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="15.66dp"
+                    android:text="@string/setting_app_license"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="보기"
+                    android:textColor="@color/MainColor"
+                    android:textSize="15.66dp" />
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
+
 </ScrollView>
