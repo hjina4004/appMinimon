@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.media.AudioManager;
@@ -78,8 +79,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private boolean playWhenReady = false;
     private boolean inErrorState;
     private String videoUrl = "";
-    private long mResumePosition = 0;
-    private boolean isChangeBandWidth = false;
+//    private long mResumePosition;
+    private boolean isChangeBandWidth = true;
     private String nowBandWidth = "";
 
     private Dialog gestureInfoDialog;
@@ -138,7 +139,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_play_screen);
         videoUrl = EpisodeInfo.getInsatnace().getVideoUrl();
-        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
+//        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
         playerView = findViewById(R.id.player_view);
         componentListener = new ComponentListener();
 
@@ -351,7 +352,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             videoUrl = videoObj.getString("playUrl");
             EpisodeInfo.getInsatnace().setIdx(list.getString("idx"));
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
-            if(!isChangeBandWidth)
+            if(!isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0)
                 EpisodeInfo.getInsatnace().setResumePosition(0);
             else {
                 isChangeBandWidth = false;
@@ -401,8 +402,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
         playerView.getPlayer().prepare(mediaSources, true, false);
         inErrorState = false;
-        if(mResumePosition != 0){
-            player.seekTo(mResumePosition);
+        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
+            player.seekTo(EpisodeInfo.getInsatnace().getResumePosition());
             player.setPlayWhenReady(true);
         }
 
@@ -515,7 +516,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 nowBandWidth = "480p";
                 mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
@@ -529,7 +530,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 nowBandWidth = "720p";
                 mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
@@ -543,7 +544,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 nowBandWidth = "1080p";
                 mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
@@ -557,7 +558,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 nowBandWidth = "자동";
                 mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
-                mResumePosition = Math.max(0,playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
@@ -793,8 +794,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         super.onPause();
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
-                EpisodeInfo.getInsatnace().setResumePosition(mResumePosition);
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 releasePlayer();
             }
         }
@@ -805,16 +805,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         super.onStop();
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
-                EpisodeInfo.getInsatnace().setResumePosition(mResumePosition);
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 releasePlayer();
             }
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
-    }
+
 }

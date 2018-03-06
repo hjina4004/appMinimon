@@ -85,7 +85,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 //    private int currentWindow;
     private String videoUrl = "";
 
-    private boolean mExoPlayerFullscreen = false;
+//    private boolean mExoPlayerFullscreen = false;
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
     private TextView mEpisodeTitle;
@@ -103,7 +103,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private TextView tv_episode_tag;
 
     private String nowBandWidth = "";
-    private boolean isChangeBandWidth = false;
+    private boolean isChangeBandWidth;
     private LinearLayout mNowBandWidth;
     private TextView mBandWidth;
     private TextView mBandWidthAuto;
@@ -113,8 +113,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private LinearLayout mBandWidthView;
 //    private boolean isnew = true;
 
-    private int mResumeWindow;
-    private long mResumePosition;
+//    private int mResumeWindow;
+//    private long mResumePosition;
     MinimonEpisode minimonEpisode;
 
     //하단 재생목록, 인기목록
@@ -132,14 +132,14 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 
     VideoPlayGestureDetector detector;
     GestureDetectorCompat detectorCompat;
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_RESUME_WINDOW, mResumeWindow);
-        outState.putLong(STATE_RESUME_POSITION, mResumePosition);
-        outState.putBoolean(STATE_PLAYER_FULLSCREEN, mExoPlayerFullscreen);
-    }
+//
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putInt(STATE_RESUME_WINDOW, mResumeWindow);
+//        outState.putLong(STATE_RESUME_POSITION, mResumePosition);
+//        outState.putBoolean(STATE_PLAYER_FULLSCREEN, mExoPlayerFullscreen);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,12 +147,12 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         setContentView(R.layout.activity_drama_play);
         checkWifi();
         dramaPlayMainScrollView = findViewById(R.id.drama_play_main_scrollview);
-        if(savedInstanceState != null){
-            mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
-            mResumePosition = savedInstanceState.getInt(STATE_RESUME_POSITION);
-            mExoPlayerFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN);
-        }
-        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
+//        if(savedInstanceState != null){
+//            mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
+//            mResumePosition = savedInstanceState.getInt(STATE_RESUME_POSITION);
+//            mExoPlayerFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN);
+//        }
+//        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
         tv_content_point = findViewById(R.id.tv_content_point);
         tv_content_title = findViewById(R.id.tv_content_title);
         tv_episode_description = findViewById(R.id.tv_episode_description);
@@ -299,7 +299,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            setPlaylistData(episodeArr);
            videoUrl = videoObj.getString("playUrl");
            EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
-           if (!isChangeBandWidth) {
+           if (!isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
                EpisodeInfo.getInsatnace().setResumePosition(0);
            }else{
                isChangeBandWidth = !isChangeBandWidth;
@@ -430,7 +430,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         mEpisodeTitle = controlView.findViewById(R.id.tv_exo_title);
         mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
         mLockScreen = controlView.findViewById(R.id.img_exo_lock);
-        if(isLockSreen)
+        if(this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR)
             mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
         else
             mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
@@ -440,12 +440,12 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         mLockScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isLockSreen){//잠겨있던 잠금 풀 경우
+                if(DramaPlayActivity.this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR){//잠겨있던 잠금 풀 경우
                     DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                     mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
                     isLockSreen = !isLockSreen;
                 }else{ //다시 잠글경우
-                    DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+                    DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
                     mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
                     isLockSreen = !isLockSreen;
                 }
@@ -494,7 +494,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 nowBandWidth = "480p";
                 mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
@@ -508,7 +508,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 nowBandWidth = "720p";
                 mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
@@ -522,7 +522,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 nowBandWidth = "1080p";
                 mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
@@ -536,7 +536,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                 nowBandWidth = "자동";
                 mBandWidth.setText(nowBandWidth);
                 isChangeBandWidth = true;
-                mResumePosition = Math.max(0,playerView.getPlayer().getContentPosition());
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
         });
@@ -606,9 +606,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         Log.d(TAG+"Test","OnPause");
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
-                EpisodeInfo.getInsatnace().setResumePosition(mResumePosition);
+//                mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 //releasePlayer();
 
             }
@@ -624,8 +623,8 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         Log.d(TAG+"Test","OnStop");
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
-                mResumePosition = Math.max(0, playerView.getPlayer().getContentPosition());
+//                mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 // releasePlayer();
             }
 //            if (mFullScreenDialog != null)
@@ -666,14 +665,14 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         playerView.getPlayer().prepare(mediaSources, true, false);
         inErrorState = false;
         if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
-            playerView.getPlayer().seekTo(mResumePosition);
+            playerView.getPlayer().seekTo(EpisodeInfo.getInsatnace().getResumePosition());
             playerView.getPlayer().setPlayWhenReady(true);
         }
     }
 
     private void releasePlayer() {
         if (player != null) {
-            mResumeWindow = player.getCurrentWindowIndex();
+//            mResumeWindow = player.getCurrentWindowIndex();
             playWhenReady = player.getPlayWhenReady();
             player.removeListener(componentListener);
             player.setAudioDebugListener(null);
@@ -855,5 +854,13 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences pref = getSharedPreferences("minimon-preference",MODE_PRIVATE);
+        EpisodeInfo.getInsatnace().setResumePosition(0);
+        ConfigInfo.getInstance().setBandwidth(pref.getInt("BandWidth",1));
     }
 }
