@@ -138,6 +138,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             if (resCode.equals("0000")) {
                 userInfo.setData(info.getJSONObject("data"));
                 userInfo.setPWD(getInputPassword());
+                setSetting();
                 saveLoginInfo();
                 gotoMain();
             } else if (resCode.equals("0402") && !typeSocial.equals("basic")) {
@@ -549,6 +550,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         editor.putString("social", userInfo.getSocial());
         editor.putString("userUID",userInfo.getUID());
         editor.putString("userPWD",userInfo.getPWD());
+        editor.apply();
+    }
+
+    private void setSetting(){
+        ConfigInfo configInfo = ConfigInfo.getInstance();
+        SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        configInfo.setBandwidth(pref.getInt("BandWidth",1));
+        configInfo.setUseData(pref.getBoolean("useData",true));
+        configInfo.setAlertEvent(pref.getBoolean("alertEvent",true));
+        configInfo.setAlertEvent(pref.getBoolean("alertNotice",true));
+        editor.putInt("BandWidth",configInfo.getBandwidth());
+        editor.putBoolean("userData",configInfo.isUseData());
+        editor.putBoolean("alertEvent",configInfo.isAlertEvent());
+        editor.putBoolean("alertNotice",configInfo.isAlertNotice());
         editor.apply();
     }
 }

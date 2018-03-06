@@ -26,6 +26,9 @@ public class ConfigInfo {
     }
 
     private int bandwidth;
+    private boolean isUseData;
+    private boolean isAlertEvent;
+    private boolean isAlertNotice;
 
     public int getBandwidth() {
         return bandwidth;
@@ -33,5 +36,29 @@ public class ConfigInfo {
 
     public void setBandwidth(int bandwidth) {
         this.bandwidth = bandwidth;
+    }
+
+    public boolean isUseData() {
+        return isUseData;
+    }
+
+    public void setUseData(boolean useData) {
+        isUseData = useData;
+    }
+
+    public boolean isAlertEvent() {
+        return isAlertEvent;
+    }
+
+    public void setAlertEvent(boolean alertEvent) {
+        isAlertEvent = alertEvent;
+    }
+
+    public boolean isAlertNotice() {
+        return isAlertNotice;
+    }
+
+    public void setAlertNotice(boolean alertNotice) {
+        isAlertNotice = alertNotice;
     }
 }
