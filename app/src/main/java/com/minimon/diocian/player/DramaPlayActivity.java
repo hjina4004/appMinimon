@@ -129,9 +129,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     FloatingActionButton fbScrollToTop;
     FloatingActionButton fbSortLastest;
     FloatingActionButton fbSortEp;
-
-    VideoPlayGestureDetector detector;
-    GestureDetectorCompat detectorCompat;
 //
 //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
@@ -178,10 +175,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         fbScrollToTop.setOnClickListener(mClickListener);
         fbSortLastest.setOnClickListener(mClickListener);
         fbSortEp.setOnClickListener(mClickListener);
-
-        if(ConfigInfo.getInstance().getBandwidth() !=0 && ConfigInfo.getInstance().getBandwidth() !=1 && ConfigInfo.getInstance().getBandwidth() !=2){
-            ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth480);
-        }
 
         if(!isLockSreen)
             isLockSreen = true;
@@ -293,6 +286,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
                videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
            else
                videoObj = (JSONObject) videoArr.get(0);
+           Log.d("VideoObjTag",videoObj.toString());
            JSONArray episodeArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").get("list_ep");
            JSONObject episodeInformation = (JSONObject)info.getJSONObject("data").get("list");
            setEpisodeData(episodeInformation);
@@ -311,12 +305,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            return;
        }
    }
-
-//   private void setPlayingPlaylistData(JSONObject list){
-//        try{
-//            JSONArray playlistArray = (JSONArray) list.
-//        }
-//   }
 
    public static class Descending implements Comparator<Drama>{
 
@@ -374,7 +362,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
            EpisodeInfo.getInsatnace().setIdx(obj.getString("idx"));
            c_title = obj.getString("c_title");
-//           c_idx = ;
            nowEp = obj.getString("ep");
            tv_episode_description.setText(obj.getString("summary"));
            JSONArray jarr = obj.getJSONArray("list_tag");
@@ -388,34 +375,6 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            e.printStackTrace();
        }
    }
-
-//    private void initFullscreenDialog() {
-//
-//        mFullScreenDialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
-//            public void onBackPressed() {
-//                if (mExoPlayerFullscreen)
-//                    closeFullscreenDialog();
-//                super.onBackPressed();
-//            }
-//        };
-//    }
-
-//    private void openFullscreenDialog() {
-//        ((ViewGroup) playerView.getParent()).removeView(playerView);
-//        mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
-//        mExoPlayerFullscreen = true;
-//        mFullScreenDialog.show();
-//    }
-//
-//
-//    private void closeFullscreenDialog() {
-//        ((ViewGroup) playerView.getParent()).removeView(playerView);
-//        ((FrameLayout) findViewById(R.id.fragment_video)).addView(playerView);
-//        mExoPlayerFullscreen = false;
-//        mFullScreenDialog.dismiss();
-//        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_expand));
-//    }
 
     private void initFullscreenButton() {
         PlaybackControlView controlView = playerView.findViewById(R.id.exo_controller);

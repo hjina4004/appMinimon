@@ -174,6 +174,7 @@ public class SettingFragment extends Fragment {
         title.setGravity(Gravity.CENTER);
         title.setTextSize(16);
         title.setTextColor(Color.BLACK);
+        title.setPadding(0,52,0,52);
 
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override

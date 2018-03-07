@@ -47,12 +47,12 @@ public class SettingBandwidthAdapter extends BaseAdapter {
         }
         final SettingItem item = mList.get(i);
         TextView tv_setting = (TextView) view.findViewById(R.id.tv_setting_list_item);
-        ImageView img_setting_select = (ImageView) view.findViewById(R.id.img_setting_list_item);
+        TextView img_setting_select = (TextView) view.findViewById(R.id.img_setting_list_item);
         tv_setting.setText(item.getName());
         if(!item.isSelect()){
-            img_setting_select.setImageResource(0);
+            img_setting_select.setVisibility(View.GONE);
         }else{
-            img_setting_select.setImageResource(R.mipmap.a001_intro_tl);
+            img_setting_select.setVisibility(View.VISIBLE);
         }
         return view;
     }

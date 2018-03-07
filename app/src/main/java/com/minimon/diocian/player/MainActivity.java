@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,14 +55,7 @@ public class MainActivity extends AppCompatActivity
     private static final int GOOGLE_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
 
-//    private SimpleExoPlayer player;
-//    private SimpleExoPlayerView playerView;
-//    private ComponentListener componentListener;
-//
-//    private long playBackPosition;
-//    private int currentWindow;
-//    private boolean playWhenReady = true;
-//    private boolean inErrorState;
+    private WebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +91,10 @@ public class MainActivity extends AppCompatActivity
 
         Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
         viewUserInfo();
+
+        mWebView = (WebView) findViewById(R.id.main_web_view);
+        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.loadUrl("http://lmfriends.com/android-web-view/");
     }
 
     @Override

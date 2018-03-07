@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <ImageView
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp">
+    <com.minimon.diocian.player.TextAwesome
         android:id="@+id/img_setting_list_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/a001_intro_tl"
+        android:text="@string/fa_check"
+        android:textColor="@color/MainColor"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:background="@color/MainColor"
+        android:paddingLeft="52dp"
         />
     <TextView
         android:id="@+id/tv_setting_list_item"

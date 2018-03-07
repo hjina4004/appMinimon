@@ -321,7 +321,10 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private void sendEpisodeData(String idx){
         ContentValues values = new ContentValues();
         values.put("ep_idx",idx);
-        values.put("quality","his");
+        if(ConfigInfo.getInstance().getBandwidth() == 3)
+            values.put("quality","hlsabr");
+        else
+            values.put("quality","his");
         values.put("id",UserInfo.getInstance().getUID());
 
         minimonEpisode.info(values);
@@ -349,6 +352,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 videoObj= (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
             else
                 videoObj= (JSONObject) videoArr.get(0);
+            Log.d("VideoObjTag",videoObj.toString());
             videoUrl = videoObj.getString("playUrl");
             EpisodeInfo.getInsatnace().setIdx(list.getString("idx"));
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
