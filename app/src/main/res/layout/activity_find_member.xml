@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/base_padding_right"
-                android:src="@mipmap/a001_intro_tl" />
+                android:src="@drawable/a001_intro_tl" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/base_padding_right"
-                android:src="@mipmap/a001_intro_tl" />
+                android:src="@drawable/a001_intro_tl" />
 
             <TextView
                 android:layout_width="match_parent"

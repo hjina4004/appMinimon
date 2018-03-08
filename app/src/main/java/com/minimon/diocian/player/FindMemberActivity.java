@@ -28,7 +28,7 @@ public class FindMemberActivity extends AppCompatActivity {
         setContentView(R.layout.activity_find_member);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.a001_top_back);
 
         initMinimon();
 

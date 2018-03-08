@@ -18,8 +18,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.webkit.*;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -137,6 +139,11 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Fragment fragment = new SettingFragment();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.main_media_frame, fragment);
+            ft.commit();
             return true;
         }
 
@@ -416,22 +423,24 @@ public class MainActivity extends AppCompatActivity
         View view  = navigationView.getHeaderView(0);
 
         TextView tvUserNickname = view.findViewById(R.id.tv_user_nickname);
-        TextView tvUserPoint = view.findViewById(R.id.tv_user_point);
-        TextView tvUserFixed = view.findViewById(R.id.tv_user_fixed);
+        TextView tvUserPoint = view.findViewById(R.id.tv_menu_point);
+        TextView tvUserFixed = view.findViewById(R.id.tv_menu_charge);
 
         UserInfo userInfo = UserInfo.getInstance();
         tvUserNickname.setText(userInfo.getNickname());
         tvUserPoint.setText(userInfo.getPoint());
         tvUserFixed.setText(checkFixed(userInfo.getFixed()));
 
-        TextView tv_serviceCenter = view.findViewById(R.id.tv_serviceCenter);
-        TextView tv_userInfo = view.findViewById(R.id.tv_userInfo);
-        TextView tv_logout = view.findViewById(R.id.tv_logout);
-        TextView tv_playlist = view.findViewById(R.id.tv_playlist);
-        tv_serviceCenter.setOnClickListener(drawerClickListenr);
-        tv_userInfo.setOnClickListener(drawerClickListenr);
-        tv_logout.setOnClickListener(drawerClickListenr);
-        tv_playlist.setOnClickListener(drawerClickListenr);
+//        TextView tv_serviceCenter = view.findViewById(R.id.tv_serviceCenter);
+//        TextView tv_userInfo = view.findViewById(R.id.tv_userInfo);
+        RelativeLayout view_logout = view.findViewById(R.id.view_menu_logout);
+        view_logout.setOnClickListener(drawerClickListenr);
+        RelativeLayout view_menu_go_home = view.findViewById(R.id.view_menu_go_home);
+        view_menu_go_home.setOnClickListener(drawerClickListenr);
+        ImageView img_menu_close = view.findViewById(R.id.img_menu_close);
+        img_menu_close.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_cookies = view.findViewById(R.id.view_menu_cookies);
+        view_menu_cookies.setOnClickListener(drawerClickListenr);
     }
 
     private String checkFixed(String fixed){
@@ -448,15 +457,28 @@ public class MainActivity extends AppCompatActivity
             Fragment fragment = null;
 
             switch (v.getId()){
-                case R.id.tv_playlist:
-                    Intent intent = new Intent(getApplicationContext(), DramaPlayActivity.class);
-                    startActivity(intent);
-                    break;
-                case R.id.tv_userInfo:
-                    fragment = new SettingFragment();
-                    break;
-                case R.id.tv_logout:
+//                case R.id.tv_playlist:
+//                    Intent intent = new Intent(getApplicationContext(), DramaPlayActivity.class);
+//                    startActivity(intent);
+//                    break;
+//                case R.id.tv_userInfo:
+//                    ConfigInfo.getInstance().setWebViewUrl("http://lmfriends.com/android-web-view/user-info/");
+//                    fragment = new WebViewFragment();
+//                    break;
+                case R.id.view_menu_logout:
                     tryLogout();
+                    break;
+                case R.id.img_menu_close:
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.view_menu_go_home:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/main");
+                    fragment = new WebViewFragment();
+                    break;
+                case R.id.view_menu_cookies:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/cookie.list");
+                    fragment = new WebViewFragment();
                     break;
             }
 

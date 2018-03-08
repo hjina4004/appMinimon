@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_alignParentLeft="true"
-                        android:src="@mipmap/a021_detail_point"
+                        android:src="@drawable/a021_detail_point"
                         />
 
                     <TextView
@@ -78,7 +78,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:background="@color/colorBaseBG"
-                        android:src="@mipmap/a021_heart_on" />
+                        android:src="@drawable/a021_heart_on" />
                 </RelativeLayout>
 
                 <View
@@ -117,7 +117,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@mipmap/a017_txt_open_down"/>
+                        android:src="@drawable/a017_txt_open_down"/>
                 </LinearLayout>
 
                 <View
@@ -221,6 +221,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:src="@mipmap/a009_quick_top"
+        android:src="@drawable/a009_quick_top"
         app:backgroundTint="#fb450b"/>
 </android.support.design.widget.CoordinatorLayout>

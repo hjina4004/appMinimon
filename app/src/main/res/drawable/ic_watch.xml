@@ -8,7 +8,7 @@
         </shape>
     </item>
     <item>
-        <bitmap android:src="@mipmap/a008_gnb_watch"
+        <bitmap android:src="@drawable/a008_gnb_watch"
             android:gravity="center"/>
     </item>
 </layer-list>

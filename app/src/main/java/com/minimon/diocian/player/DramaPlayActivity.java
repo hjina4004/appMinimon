@@ -390,9 +390,9 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
         mLockScreen = controlView.findViewById(R.id.img_exo_lock);
         if(this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
+            mLockScreen.setImageResource(R.drawable.a022_play_b_lock_on);
         else
-            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+            mLockScreen.setImageResource(R.drawable.a022_play_b_lock_off);
 
         controlView.findViewById(R.id.tv_playing_playlist).setVisibility(View.GONE);
         controlView.findViewById(R.id.img_playing_playlist).setVisibility(View.GONE);
@@ -401,11 +401,11 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             public void onClick(View view) {
                 if(DramaPlayActivity.this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR){//잠겨있던 잠금 풀 경우
                     DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+                    mLockScreen.setImageResource(R.drawable.a022_play_b_lock_off);
                     isLockSreen = !isLockSreen;
                 }else{ //다시 잠글경우
                     DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
+                    mLockScreen.setImageResource(R.drawable.a022_play_b_lock_on);
                     isLockSreen = !isLockSreen;
                 }
             }

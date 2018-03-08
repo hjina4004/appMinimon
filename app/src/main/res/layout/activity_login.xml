@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/base_padding_right"
-                android:src="@mipmap/a001_intro_tl" />
+                android:src="@drawable/a001_intro_tl" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -134,7 +134,7 @@
             android:minHeight="38.67dp"
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_naver"
-            android:drawableLeft="@mipmap/a001_social_naver"
+            android:drawableLeft="@drawable/a001_social_naver"
             android:text="@string/login_naver"
             android:textSize="@dimen/btn_md_font_size" />
 
@@ -146,7 +146,7 @@
             android:minHeight="38.67dp"
             android:textColor="@color/colorKakao"
             android:background="@drawable/btn_login_kakao"
-            android:drawableLeft="@mipmap/a001_social_kakao"
+            android:drawableLeft="@drawable/a001_social_kakao"
             android:text="@string/login_kakao"
             android:textSize="@dimen/btn_md_font_size" />
         <com.kakao.usermgmt.LoginButton
@@ -167,7 +167,7 @@
             android:minHeight="38.67dp"
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_facebook"
-            android:drawableLeft="@mipmap/a001_social_facebook"
+            android:drawableLeft="@drawable/a001_social_facebook"
             android:text="@string/login_facebook"
             android:textSize="@dimen/btn_md_font_size" />
         <com.facebook.login.widget.LoginButton
@@ -185,7 +185,7 @@
             android:minHeight="38.67dp"
             android:textColor="@color/colorBaseText"
             android:background="@drawable/btn_login_google"
-            android:drawableLeft="@mipmap/a001_social_google"
+            android:drawableLeft="@drawable/a001_social_google"
             android:text="@string/login_google"
             android:textSize="@dimen/btn_md_font_size" />
     </LinearLayout>

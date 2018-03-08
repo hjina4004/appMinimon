@@ -41,7 +41,7 @@ public class NewMemberActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_member);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.a001_top_back);
 
         strType = getIntent().getStringExtra("type");
         strDeviceID = DeviceUuidFactory.getDeviceUuid(this.getApplicationContext());

@@ -29,6 +29,7 @@ public class ConfigInfo {
     private boolean isUseData;
     private boolean isAlertEvent;
     private boolean isAlertNotice;
+    private String  webViewUrl;
 
     public int getBandwidth() {
         return bandwidth;
@@ -60,5 +61,13 @@ public class ConfigInfo {
 
     public void setAlertNotice(boolean alertNotice) {
         isAlertNotice = alertNotice;
+    }
+
+    public String getWebViewUrl() {
+        return webViewUrl;
+    }
+
+    public void setWebViewUrl(String webViewUrl) {
+        this.webViewUrl = webViewUrl;
     }
 }

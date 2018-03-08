@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public void init() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.a001_top_back);
 
         strUID = getIntent().getStringExtra("uid");
         if (strUID != null && strUID.length() > 0) {

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,21 +9,14 @@
     android:paddingLeft="@dimen/base_padding"
     android:paddingRight="@dimen/base_padding"
     android:paddingStart="@dimen/base_padding"
-    android:paddingTop="@dimen/base_padding">
-
-    <TextView
-        android:id="@+id/home"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/base_padding"
-        android:drawableRight="@mipmap/a008_home"
-        android:drawableEnd="@mipmap/a008_home"
-        android:drawablePadding="19dp"
-        android:gravity="center_vertical|end"
-        android:text="@string/btn_home"
-        android:textColor="@color/colorBaseText"
-        android:textSize="@dimen/menu_font_size_home" />
-
+    android:paddingTop="23.33dp">
+    <ImageView
+        android:id="@+id/img_menu_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:src="@drawable/a015_search_close"
+        />
     <TextView
         android:id="@+id/tv_user_nickname"
         android:layout_width="wrap_content"
@@ -36,213 +28,662 @@
         android:text="@string/init_nickname"
         android:textColor="@color/colorBaseText"
         android:textSize="@dimen/menu_font_size_uid" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.67dp"
-        android:layout_marginBottom="8.67dp"
-        android:layout_marginTop="8.67dp"
-        android:background="#e63614" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:drawableLeft="@drawable/ic_point"
-            android:drawableStart="@drawable/ic_point"
-            android:drawablePadding="17.67dp"
-            android:gravity="center_vertical"
-            android:text="@string/user_point"
-            android:textColor="@color/colorBaseText"
-            android:textSize="@dimen/menu_font_size_point" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+        android:orientation="horizontal"
+        android:paddingTop="11.33dp"
+        android:paddingBottom="14dp">
+        <RelativeLayout
+            android:id="@+id/view_menu_go_home"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="#333"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a008_home"
+                android:layout_toLeftOf="@+id/tv_go_home"
+                android:layout_toStartOf="@+id/tv_go_home"
+                android:layout_centerVertical="true"
+                android:paddingRight="23dp"
+                android:paddingLeft="15dp"/>
             <TextView
-                android:id="@+id/tv_user_point"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="35dp"
-                android:layout_marginRight="35dp"
-                android:gravity="center_vertical|end"
-                android:text="@string/init_point"
-                android:textColor="@color/colorError"
-                android:textSize="@dimen/menu_font_size_point_value" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|end">
-
-                <TextView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/shape_circle"
-                    android:gravity="center"
-                    android:text="@string/mark_point"
-                    android:textColor="@color/colorBaseText"
-                    android:textSize="@dimen/menu_font_size_link" />
-            </LinearLayout>
-        </FrameLayout>
+                android:id="@+id/tv_go_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_home"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/view_menu_logout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="#333"
+            android:layout_marginLeft="9dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/a008_logout"
+                android:layout_toLeftOf="@+id/tv_logout"
+                android:layout_toStartOf="@+id/tv_logout"
+                android:layout_centerVertical="true"
+                android:paddingRight="23dp"
+                android:paddingLeft="15dp"/>
+            <TextView
+                android:id="@+id/tv_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_logout"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
     </LinearLayout>
-
-    <TextView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="0.67dp"
-        android:layout_marginBottom="8.67dp"
-        android:layout_marginTop="8.67dp"
-        android:background="#404348" />
-
+        android:layout_height="0.33dp"
+        android:background="@color/MainColor" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:drawableLeft="@drawable/ic_fixed"
-            android:drawableStart="@drawable/ic_fixed"
-            android:drawablePadding="17.67dp"
-            android:gravity="center_vertical"
-            android:text="@string/user_fixed"
-            android:textColor="@color/colorBaseText"
-            android:textSize="@dimen/menu_font_size_point" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
+        android:layout_height="40.33dp"
+        android:orientation="horizontal"
+        >
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
             <TextView
-                android:id="@+id/tv_user_fixed"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="35dp"
-                android:layout_marginRight="35dp"
-                android:gravity="center_vertical|end"
-                android:text="@string/init_fixed"
+                android:id="@+id/img_menu_point"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/shape_circle"
+                android:text="@string/mark_point"
                 android:textColor="@color/colorBaseText"
-                android:textSize="@dimen/menu_font_size_fixed_value" />
+                android:textSize="@dimen/menu_font_size_link"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/tv_menu_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/user_point"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/img_menu_point"
+                android:layout_marginLeft="9dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:textColor="@color/MainColor"
+                android:text="@string/init_point"
+                android:layout_toRightOf="@id/tv_menu_point"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
+            <TextView
+                android:id="@+id/img_menu_ticket"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/shape_circle"
+                android:text="@string/mark_fixed"
+                android:textColor="@color/colorBaseText"
+                android:textSize="@dimen/menu_font_size_link"
+                android:gravity="center"
+                />
+            <TextView
+                android:id="@+id/tv_menu_ticket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_charge"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/img_menu_ticket"
+                android:layout_marginLeft="9dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"/>
+            <TextView
+                android:id="@+id/tv_menu_charge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:textColor="#fff"
+                android:text="@string/init_point"
+                android:layout_toRightOf="@id/tv_menu_ticket"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.33dp"
+        android:background="#767b7f" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#222222"
+        android:paddingLeft="@dimen/base_padding"
+        android:paddingStart="@dimen/base_padding"
+        android:paddingRight="@dimen/base_padding"
+        android:paddingEnd="@dimen/base_padding"
+        android:paddingTop="18dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#767b7f"
+            android:orientation="horizontal">
+            <!--이용권-->
+            <LinearLayout
+                android:id="@+id/view_menu_fix"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:layout_margin="0.33dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:background="#222222">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/a008_gnb_charge"
+                    android:paddingLeft="13.33dp"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/menu_charge"
+                    android:textSize="15.66dp"
+                    android:textColor="#fff"
+                    android:layout_gravity="center"
+                    android:paddingLeft="8.67dp"
+                    />
+            </LinearLayout>
+            <!--최근 본 영상-->
+            <LinearLayout
+                android:id="@+id/view_menu_cookies"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0.33dp"
+                android:layout_margin="0.33dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:background="#222222">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/a008_logout"
+                    android:paddingLeft="13.33dp"
+                    android:layout_gravity="center_vertical"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/menu_last_watched"
+                    android:textSize="15.66dp"
+                    android:textColor="#fff"
+                    android:layout_gravity="center"
+                    android:paddingLeft="8.67dp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:text="@string/menu_my_info"
+            android:paddingTop="18dp"
+            android:paddingBottom="11.33dp"/>
+        <!--내정보-->
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#767b7f">
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*"
+                android:background="#333333">
+                <TableRow
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/view_menu_user_info"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="6.67dp"
+                        android:background="#222222"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginLeft="0.33dp"
+                        android:layout_marginStart="0.33dp"
+                        android:layout_marginTop="0.33dp"
+                        android:layout_marginBottom="0.33dp">
+                        <ImageView
+                            android:id="@+id/img_gnb_member"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/a008_gnb_member"
+                            android:layout_gravity="center_horizontal"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8.67dp"
+                            android:paddingBottom="11.33dp"
+                            android:gravity="center_horizontal"
+                            android:text="회원정보"
+                            android:textColor="#ffffff"
+                            android:textSize="10.43dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/view_menu_purchase"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical"
+                        android:paddingTop="6.67dp"
+                        android:layout_marginTop="0.33dp"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginBottom="0.33dp"
+                        android:background="#222222"
+                        android:gravity="bottom">
+
+                        <ImageView
+                            android:id="@+id/img_gnb_watch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/a008_gnb_watch" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingBottom="11.33dp"
+                            android:paddingTop="8.67dp"
+                            android:text="시청영상"
+                            android:textColor="#ffffff"
+                            android:textSize="10.43dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/view_menu_favorite"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginTop="0.33dp"
+                        android:layout_marginBottom="0.33dp"
+                        android:background="#222222"
+                        android:gravity="bottom">
+                        <ImageView
+                            android:id="@+id/img_gnb_hearth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/a008_gnb_heart"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8.67dp"
+                            android:paddingBottom="11.33dp"
+                            android:gravity="center_horizontal"
+                            android:text="찜한영상"
+                            android:textColor="#ffffff"
+                            android:textSize="10.43dp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/view_menu_subscribe"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical"
+                        android:background="#222222"
+                        android:layout_marginTop="0.33dp"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginBottom="0.33dp"
+                        android:gravity="bottom">
+                        <ImageView
+                            android:id="@+id/img_gnb_subscribe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/a008_gnb_subscribe"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="8.67dp"
+                            android:paddingBottom="11.33dp"
+                            android:text="구독채널"
+                            android:textColor="#ffffff"
+                            android:textSize="10.43dp"
+                            />
+                    </LinearLayout>
+                </TableRow>
+                <TableRow>
+                    <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.33dp"-->
+                    <!--android:background="#767b7f"/>-->
+                </TableRow>
+                <TableRow>
+                    <LinearLayout
+                        android:id="@+id/view_menu_point_history"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginBottom="0.33dp"
+                        android:layout_marginLeft="0.33dp"
+                        android:layout_marginStart="0.33dp"
+                        android:gravity="bottom"
+                        android:background="#222222">
+                        <ImageView
+                            android:id="@+id/img_gnb_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/a008_gnb_history"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="8.67dp"
+                            android:paddingBottom="11.33dp"
+                            android:text="포인트내역"
+                            android:textColor="#ffffff"
+                            android:textSize="10.43dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/view_menu_pay_history"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginBottom="0.33dp"
+                        android:gravity="bottom"
+                        android:background="#222">
+                        <ImageView
+                            android:id="@+id/img_gnb_payment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/a008_gnb_payment"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="8.67dp"
+                            android:paddingBottom="11.33dp"
+                            android:text="결제내역"
+                            android:textColor="#ffffff"
+                            android:textSize="10.43dp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/view_menu_setting"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="#222222"
+                        android:paddingTop="6.67dp"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginBottom="0.33dp"
+                        android:gravity="bottom">
+                        <ImageView
+                            android:id="@+id/img_gnb_setting"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/a008_gnb_setting"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8.67dp"
+                            android:paddingBottom="11.33dp"
+                            android:text="환경설정"
+                            android:textColor="#ffffff"
+                            android:textSize="10.43dp"
+                            android:gravity="center_horizontal"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical"
+                        android:background="#222222">
+                    </LinearLayout>
+                </TableRow>
+            </TableLayout>
+        </android.support.constraint.ConstraintLayout>
+        <!--고객센터-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="17.33dp"
+            android:paddingBottom="11.33dp"
+            android:text="고객센터"
+            android:textColor="#fff"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#767b7f">
+            <LinearLayout
+                android:id="@+id/view_menu_notice"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:paddingTop="6.67dp"
+                android:orientation="vertical"
+                android:background="#222222"
+                android:layout_marginLeft="0.33dp"
+                android:layout_marginStart="0.33dp"
+                android:layout_marginTop="0.33dp"
+                android:layout_marginBottom="0.33dp"
+                android:gravity="bottom">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/a008_gnb_notice"
+                    android:layout_gravity="center_horizontal"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="8.67dp"
+                    android:paddingBottom="11.33dp"
+                    android:text="공지사항"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_menu_faq"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:paddingTop="6.67dp"
+                android:orientation="vertical"
+                android:background="#222222"
+                android:layout_marginLeft="0.33dp"
+                android:layout_marginStart="0.33dp"
+                android:layout_marginTop="0.33dp"
+                android:layout_marginBottom="0.33dp"
+                android:gravity="bottom">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/a008_gnb_faq"
+                    android:layout_gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="8.67dp"
+                    android:paddingBottom="11.33dp"
+                    android:text="FAQ"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_menu_qna"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="fill_parent"
+                android:paddingTop="6.67dp"
+                android:orientation="vertical"
+                android:background="#222222"
+                android:layout_marginLeft="0.33dp"
+                android:layout_marginStart="0.33dp"
+                android:layout_marginTop="0.33dp"
+                android:layout_marginBottom="0.33dp"
+                android:gravity="bottom">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/a008_gnb_qna"
+                    android:layout_gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="8.67dp"
+                    android:paddingBottom="11.33dp"
+                    android:text="1:1 Q&amp;A"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/view_menu_policy"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:paddingTop="6.67dp"
+                android:orientation="vertical"
+                android:background="#222222"
+                android:layout_marginLeft="0.33dp"
+                android:layout_marginStart="0.33dp"
+                android:layout_marginTop="0.33dp"
+                android:layout_marginBottom="0.33dp"
+                android:layout_marginRight="0.33dp"
+                android:layout_marginEnd="0.33dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/a008_gnb_polic"
+                    android:layout_gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="8.67dp"
+                    android:paddingBottom="11.33dp"
+                    android:text="이용약관"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21.33dp"
+            android:background="#767b7f">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|end">
-
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#222222"
+                android:layout_margin="0.33dp"
+                android:paddingLeft="16.67dp"
+                android:paddingTop="7.67dp"
+                android:paddingBottom="7.67dp">
                 <TextView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/shape_circle"
-                    android:gravity="center"
-                    android:text="@string/mark_fixed"
-                    android:textColor="@color/colorBaseText"
-                    android:textSize="@dimen/menu_font_size_link" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="고객센터"
+                    android:textColor="#fff"
+                    android:paddingRight="16.67dp"/>
+                <View
+                    android:layout_width="0.33dp"
+                    android:layout_height="match_parent"
+                    android:background="#767b7f"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16.67dp"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tel"
+                            android:textSize="12.18dp"
+                            android:textColor="#767b7f"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mail"
+                            android:textSize="12.18dp"
+                            android:textColor="#767b7f"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="7.67dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="02-6953-1020"
+                            android:textSize="12.18dp"
+                            android:textColor="#fff"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="customer@minimon.com"
+                            android:textSize="12.18dp"
+                            android:textColor="#fff"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.67dp"
-        android:layout_marginTop="8.67dp"
-        android:background="#e63614" />
-
-    <TextView
-        android:id="@+id/tv_tickets"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8.67dp"
-        android:drawableLeft="@drawable/ic_charge"
-        android:drawableStart="@drawable/ic_charge"
-        android:drawableRight="@mipmap/a008_gnb_arr"
-        android:drawableEnd="@mipmap/a008_gnb_arr"
-        android:drawablePadding="17.67dp"
-        android:gravity="center_vertical"
-        android:text="@string/menu_charge"
-        android:textColor="@color/colorBaseText"
-        android:textSize="@dimen/menu_font_size_point" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.67dp"
-        android:layout_marginTop="8.67dp"
-        android:background="#404348" />
-
-    <TextView
-        android:id="@+id/tv_playlist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8.67dp"
-        android:drawableLeft="@drawable/ic_watch"
-        android:drawableStart="@drawable/ic_watch"
-        android:drawableRight="@mipmap/a008_gnb_arr"
-        android:drawableEnd="@mipmap/a008_gnb_arr"
-        android:drawablePadding="17.67dp"
-        android:gravity="center_vertical"
-        android:text="@string/menu_watch"
-        android:textColor="@color/colorBaseText"
-        android:textSize="@dimen/menu_font_size_point" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.67dp"
-        android:layout_marginTop="8.67dp"
-        android:background="#404348" />
-
-    <TextView
-        android:id="@+id/tv_userInfo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8.67dp"
-        android:drawableLeft="@drawable/ic_mypage"
-        android:drawableStart="@drawable/ic_mypage"
-        android:drawableRight="@mipmap/a008_gnb_arr"
-        android:drawableEnd="@mipmap/a008_gnb_arr"
-        android:drawablePadding="17.67dp"
-        android:gravity="center_vertical"
-        android:text="@string/menu_mypage"
-        android:textColor="@color/colorBaseText"
-        android:textSize="@dimen/menu_font_size_point" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.67dp"
-        android:layout_marginTop="8.67dp"
-        android:background="#404348" />
-
-    <TextView
-        android:id="@+id/tv_serviceCenter"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8.67dp"
-        android:drawableLeft="@drawable/ic_customer"
-        android:drawableStart="@drawable/ic_customer"
-        android:drawableRight="@mipmap/a008_gnb_arr"
-        android:drawableEnd="@mipmap/a008_gnb_arr"
-        android:drawablePadding="17.67dp"
-        android:gravity="center_vertical"
-        android:text="@string/menu_customer"
-        android:textColor="@color/colorBaseText"
-        android:textSize="@dimen/menu_font_size_point" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0.67dp"
-        android:layout_marginTop="8.67dp"
-        android:background="#404348" />
-
-    <TextView
-        android:id="@+id/tv_logout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8.67dp"
-        android:drawableRight="@mipmap/a008_logout"
-        android:drawableEnd="@mipmap/a008_logout"
-        android:drawablePadding="17.67dp"
-        android:gravity="center_vertical|end"
-        android:text="@string/menu_logout"
-        android:textColor="@color/colorBaseText"
-        android:textSize="@dimen/menu_font_size_point" />
 </LinearLayout>
