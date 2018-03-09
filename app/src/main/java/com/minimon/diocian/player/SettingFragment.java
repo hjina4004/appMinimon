@@ -37,7 +37,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by ICARUSUD on 2018. 3. 4..
  */
 
-public class SettingFragment extends Fragment {
+public class SettingFragment extends Fragment implements MainActivity.onKeypressListenr{
     private View mView;
     private final String PREF_NAME = "minimon-preference";
     private List<SettingItem> mSettingList = new ArrayList<>();
@@ -234,41 +234,17 @@ public class SettingFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    public void setMobileDataEnabled(Context context, boolean enabled) {
-      //final ConnectivityManager conman = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        final ConnectivityManager conman = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        try {
-//            final Class conmanClass = Class.forName(conman.getClass().getName());
-//            final Field iConnectivityManagerField = conmanClass.getDeclaredField("mService");
-//            iConnectivityManagerField.setAccessible(true);
-//            final Object iConnectivityManager = iConnectivityManagerField.get(conman);
-//            final Class iConnectivityManagerClass = Class.forName(
-//                    iConnectivityManager.getClass().getName());
-//            final Method setMobileDataEnabledMethod = iConnectivityManagerClass
-//                    .getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
-//            setMobileDataEnabledMethod.setAccessible(true);
-//
-//            setMobileDataEnabledMethod.invoke(iConnectivityManager, enabled);
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setOnKeypressListener(this);
+    }
 
-//        Intent intent = new Intent();
-//        intent.setClassName("com.android.settings",
-//                "com.android.settings.Settings$DataUsageSummaryActivity");
-//        startActivity(intent);
-
-//        ConnectivityManager connectivityManager =
-//                (ConnectivityManager) getActivity().getSystemService(CONNECTIVITY_SERVICE);
-//        NetworkInfo mobileInfo =
-//                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+    @Override
+    public void onBack() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setOnKeypressListener(null);
+        activity.onBackPressed();
     }
 }

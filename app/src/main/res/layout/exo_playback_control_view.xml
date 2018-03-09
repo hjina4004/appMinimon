@@ -41,7 +41,7 @@
           android:layout_toStartOf="@+id/img_exo_lock"
           android:layout_centerVertical="true"
           android:visibility="gone"
-          android:src="@drawable/a022_play_b_i" />
+          android:src="@mipmap/a022_play_b_i" />
 
       <ImageView
           android:id="@+id/img_exo_lock"
@@ -51,7 +51,7 @@
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:layout_alignParentTop="true"
-          android:src="@drawable/a022_play_b_lock_on" />
+          android:src="@mipmap/a022_play_b_lock_on" />
    </RelativeLayout>
    <android.support.constraint.ConstraintLayout
        android:layout_width="match_parent"
@@ -235,7 +235,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/a022_detail_res_arr"
+                android:src="@mipmap/a022_detail_res_arr"
                 android:layout_gravity="center_vertical"
                 android:paddingRight="6dp"
                 />
@@ -290,7 +290,7 @@
              android:id="@+id/img_playing_playlist"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:src="@drawable/a022_play_b_list_up"
+             android:src="@mipmap/a022_play_b_list_up"
              android:layout_toLeftOf="@+id/tv_playing_playlist"
              android:layout_centerVertical="true"
              android:layout_marginLeft="2dp"/>
@@ -318,7 +318,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/a022_play_zoom_out"/>
+                android:src="@mipmap/a022_play_zoom_out"/>
 
          </FrameLayout>
       </RelativeLayout>

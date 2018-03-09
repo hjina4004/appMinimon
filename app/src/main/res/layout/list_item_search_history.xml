@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="#fff"
+    >
+    <TextView
+        android:id="@+id/tv_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="19dp"
+        android:textColor="#222222"
+        android:paddingTop="10.67dp"
+        android:paddingBottom="10.67dp"
+        android:paddingLeft="11dp"
+        android:text="검색기록"
+        android:layout_centerVertical="true"/>
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="YYYY.MM.DD"
+        android:textSize="13.75dp"
+        android:textColor="#a3a3a3"
+        android:layout_centerVertical="true"
+        android:paddingRight="22dp"
+        android:layout_toLeftOf="@id/img_delete_history"/>
+
+    <ImageView
+        android:id="@+id/img_delete_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingRight="13dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/a015_search_del" />
+</RelativeLayout>

@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center">
                 <ImageView
-                    android:src="@drawable/a009_thum_s_play"
+                    android:src="@mipmap/a009_thum_s_play"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
@@ -60,7 +60,7 @@
                 android:paddingLeft="4dp"
                 android:gravity="center">
                 <ImageView
-                    android:src="@drawable/a009_thum_s_heart"
+                    android:src="@mipmap/a009_thum_s_heart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
@@ -77,7 +77,7 @@
                 android:paddingLeft="4dp"
                 android:gravity="center">
                 <ImageView
-                    android:src="@drawable/a009_thum_s_point"
+                    android:src="@mipmap/a009_thum_s_point"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView

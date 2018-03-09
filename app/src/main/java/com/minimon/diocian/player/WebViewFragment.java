@@ -20,7 +20,7 @@ import android.webkit.WebViewClient;
  * to handle interaction events.
  * create an instance of this fragment.
  */
-public class WebViewFragment extends Fragment {
+public class WebViewFragment extends Fragment implements MainActivity.onKeypressListenr{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_WEBVIEW = "webViewUrl";
@@ -63,12 +63,30 @@ public class WebViewFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        mWebView = view.findViewById(R.id.webview_other);
-        mWebView.setWebViewClient(new WebViewClient());
-        mWebView.setWebChromeClient(new WebChromeClient());
-        mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl());
         super.onViewCreated(view, savedInstanceState);
+        mWebView = view.findViewById(R.id.webview_other);
+        mWebView.setWebViewClient(new MyWebviewClient());
+        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl());
+//        getActivity().findViewById(R.id.view_main_toolbar).setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setOnKeypressListener(this);
+    }
+
+    @Override
+    public void onBack() {
+        if(mWebView.canGoBack()){
+            mWebView.goBack();
+        }else{
+            MainActivity activity = (MainActivity) getActivity();
+            activity.setOnKeypressListener(null);
+            activity.onBackPressed();
+        }
+    }
 }

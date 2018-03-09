@@ -2,9 +2,11 @@ package com.minimon.diocian.player;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,12 +15,19 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.webkit.*;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -43,6 +52,14 @@ import com.google.android.gms.common.api.Status;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import io.realm.Realm;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener{
 
@@ -53,35 +70,43 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
     private final String PREF_NAME = "minimon-preference";
 
+    private RelativeLayout view_main_toolbar;
+    private TextAwesome tv_toolbar_open_drawer;
+    private TextAwesome tv_toolbar_search;
+    private ImageView tv_toolbar_go_back;
+    private EditText ed_toolbar_search;
+    private DrawerLayout drawer;
+    private RelativeLayout view_delete_search_history;
+    private RecyclerView rec_search_history;
+    private SearchhistoryAdapter adapter;
+    private List<SearchItem> arrHistory = new ArrayList<SearchItem>();
+    private LinearLayoutManager manager;
+    private Realm realm;
+
     // for Google
     private static final int GOOGLE_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
 
     private WebView mWebView;
+    private boolean isMain;
 
+    public interface onKeypressListenr{
+        public void onBack();
+
+    }
+
+    private onKeypressListenr mListenr;
+    public void setOnKeypressListener(onKeypressListenr listener){
+        mListenr = listener;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        componentListener = new ComponentListener();
-//        playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -91,12 +116,63 @@ public class MainActivity extends AppCompatActivity
 
         initGoogle();
 
+        Realm.init(this);
+        realm = Realm.getDefaultInstance();
+
         Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
+        view_main_toolbar = (RelativeLayout)  findViewById(R.id.view_main_toolbar);
+        tv_toolbar_open_drawer = (TextAwesome) findViewById(R.id.tv_toolbar_open_drawer);
+        tv_toolbar_search = (TextAwesome) findViewById(R.id.tv_toolbar_search);
+        tv_toolbar_go_back = findViewById(R.id.tv_toolbar_go_back);
+        ed_toolbar_search = (EditText) findViewById(R.id.ed_toolbar_search);
+
+        manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        view_delete_search_history = findViewById(R.id.view_delete_search_history);
+        rec_search_history = findViewById(R.id.rec_search_history);
+        rec_search_history.setLayoutManager(manager);
+        DividerItemDecoration deco = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
+        rec_search_history.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        tv_toolbar_open_drawer.setOnClickListener(toolbarClickListenr);
+        tv_toolbar_search.setOnClickListener(toolbarClickListenr);
+        tv_toolbar_go_back.setOnClickListener(toolbarClickListenr);
+        view_delete_search_history.setOnClickListener(toolbarClickListenr);
+
+
+        adapter = new SearchhistoryAdapter(this,arrHistory);
+        rec_search_history.setAdapter(adapter);
+
+        ed_toolbar_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_NEXT ||
+                        i == EditorInfo.IME_ACTION_DONE ||
+                        keyEvent != null &&
+                                keyEvent.getAction() == KeyEvent.ACTION_DOWN &&
+                                keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if (keyEvent == null || !keyEvent.isShiftPressed()) {
+                        // the user is done typing.
+                        Date today = Calendar.getInstance().getTime();
+                        textView.getText();
+                        SearchItem s = new SearchItem();
+                        s.setDate(String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
+                        s.setHistory(textView.getText().toString());
+                        SearchItemList listArr = new SearchItemList();
+                        arrHistory.add(s);
+                        adapter.notifyDataSetChanged();
+                        realm.beginTransaction();
+                        final SearchItem item = realm.copyToRealm(s);
+
+                        return true; // consume.
+                    }
+                }
+                return false;
+            }
+        });
+
         viewUserInfo();
 
-        mWebView = (WebView) findViewById(R.id.main_web_view);
-        mWebView.setWebViewClient(new WebViewClient());
-        mWebView.loadUrl("http://lmfriends.com/android-web-view/");
+        goMainWeb();
     }
 
     @Override
@@ -111,14 +187,22 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            long tempTime = System.currentTimeMillis();
-            long intervalTime = tempTime - backPressedTime;
+            if(mListenr!=null){
+                mListenr.onBack();
+            }else {
+                if(isMain) {
+                    long tempTime = System.currentTimeMillis();
+                    long intervalTime = tempTime - backPressedTime;
 
-            if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
-                super.onBackPressed();
-            } else {
-                backPressedTime = tempTime;
-                Toast.makeText(getApplicationContext(), R.string.notice_exit_app, Toast.LENGTH_SHORT).show();
+                    if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime) {
+                        super.onBackPressed();
+                    } else {
+                        backPressedTime = tempTime;
+                        Toast.makeText(getApplicationContext(), R.string.notice_exit_app, Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    goMainWeb();
+                }
             }
         }
     }
@@ -433,14 +517,38 @@ public class MainActivity extends AppCompatActivity
 
 //        TextView tv_serviceCenter = view.findViewById(R.id.tv_serviceCenter);
 //        TextView tv_userInfo = view.findViewById(R.id.tv_userInfo);
-        RelativeLayout view_logout = view.findViewById(R.id.view_menu_logout);
+        LinearLayout view_logout = view.findViewById(R.id.view_menu_logout);
         view_logout.setOnClickListener(drawerClickListenr);
-        RelativeLayout view_menu_go_home = view.findViewById(R.id.view_menu_go_home);
+        LinearLayout view_menu_go_home = view.findViewById(R.id.view_menu_go_home);
         view_menu_go_home.setOnClickListener(drawerClickListenr);
         ImageView img_menu_close = view.findViewById(R.id.img_menu_close);
         img_menu_close.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_cookies = view.findViewById(R.id.view_menu_cookies);
         view_menu_cookies.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_user_info = view.findViewById(R.id.view_menu_user_info);
+        view_menu_user_info.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_purchase = view.findViewById(R.id.view_menu_purchase);
+        view_menu_purchase.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_favorite = view.findViewById(R.id.view_menu_favorite);
+        view_menu_favorite.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_subscribe = view.findViewById(R.id.view_menu_subscribe);
+        view_menu_subscribe.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_point_history = view.findViewById(R.id.view_menu_point_history);
+        view_menu_point_history.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_pay_history = view.findViewById(R.id.view_menu_pay_history);
+        view_menu_pay_history.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_setting = view.findViewById(R.id.view_menu_setting);
+        view_menu_setting.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_notice = view.findViewById(R.id.view_menu_notice);
+        view_menu_notice.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_faq = view.findViewById(R.id.view_menu_faq);
+        view_menu_faq.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_qna = view.findViewById(R.id.view_menu_qna);
+        view_menu_qna.setOnClickListener(drawerClickListenr);
+        LinearLayout view_menu_policy = view.findViewById(R.id.view_menu_policy);
+        view_menu_policy.setOnClickListener(drawerClickListenr);
+
+
     }
 
     private String checkFixed(String fixed){
@@ -450,6 +558,41 @@ public class MainActivity extends AppCompatActivity
             return fixed;
         }
     }
+
+    private View.OnClickListener toolbarClickListenr = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.tv_toolbar_open_drawer:
+                    drawer.openDrawer(Gravity.LEFT);
+                    break;
+                case R.id.tv_toolbar_search:
+                    ed_toolbar_search.setVisibility(View.VISIBLE);
+                    view_delete_search_history.setVisibility(View.VISIBLE);
+                    rec_search_history.setVisibility(View.VISIBLE);
+                    tv_toolbar_go_back.setVisibility(View.VISIBLE);
+                    tv_toolbar_search.setVisibility(View.GONE);
+                    tv_toolbar_open_drawer.setVisibility(View.GONE);
+                    view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
+                    break;
+                case R.id.tv_toolbar_go_back:
+                    ed_toolbar_search.setVisibility(View.GONE);
+                    view_delete_search_history.setVisibility(View.GONE);
+                    rec_search_history.setVisibility(View.GONE);
+                    tv_toolbar_go_back.setVisibility(View.GONE);
+                    tv_toolbar_search.setVisibility(View.VISIBLE);
+                    tv_toolbar_open_drawer.setVisibility(View.VISIBLE);
+                    if(isMain){
+                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    }
+                    break;
+                case R.id.view_delete_search_history:
+                    arrHistory.clear();
+                    adapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
 
     private View.OnClickListener drawerClickListenr = new View.OnClickListener() {
         @Override
@@ -471,14 +614,71 @@ public class MainActivity extends AppCompatActivity
                 case R.id.img_menu_close:
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                     drawer.closeDrawer(GravityCompat.START);
+                    if(isMain){
+                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    }
                     break;
                 case R.id.view_menu_go_home:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/main");
-                    fragment = new WebViewFragment();
+                    goMainWeb();
                     break;
                 case R.id.view_menu_cookies:
                     ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/cookie.list");
                     fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_user_info:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/info");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_purchase:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/purchase");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_favorite:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/like");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_subscribe:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/keep");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_point_history:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/point.list");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_pay_history:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/pay.list");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_setting:
+                    fragment = new SettingFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_notice:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/notice");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_faq:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/faq");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_qna:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/qna.list");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
+                case R.id.view_menu_policy:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/policy");
+                    fragment = new WebViewFragment();
+                    isMain = false;
                     break;
             }
 
@@ -490,8 +690,19 @@ public class MainActivity extends AppCompatActivity
             }
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
+            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
         }
     };
+
+    public void goMainWeb(){
+        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+        isMain = true;
+        ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/main");
+        Fragment fragment = new WebViewFragment();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.main_media_frame,fragment);
+        ft.commit();
+    }
 
     private void initGoogle() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)

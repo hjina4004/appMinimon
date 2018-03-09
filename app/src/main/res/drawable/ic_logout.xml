@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <size android:height="27.67dp"
+                android:width="27dp"/>
+        </shape>
+    </item>
+    <item>
+        <bitmap android:src="@mipmap/a008_logout"
+            android:gravity="center"/>
+    </item>
+</layer-list>

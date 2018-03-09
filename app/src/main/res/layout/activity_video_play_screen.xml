@@ -21,7 +21,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/a022_play_b_light"/>
+                android:src="@mipmap/a022_play_b_light"/>
             <com.minimon.diocian.player.VerticalSeekBar
                 android:id="@+id/BrightSeekBar"
                 style="@style/VerticalSeekBarStyle"
@@ -84,7 +84,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/a022_play_b_list_down"
+                    android:src="@mipmap/a022_play_b_list_down"
                     android:layout_toLeftOf="@+id/tv_playing_playlist"
                     android:layout_toStartOf="@+id/tv_playing_playlist"
                     android:layout_centerVertical="true"/>
@@ -121,7 +121,7 @@
                 android:id="@+id/img_playing_play_b_sound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/a022_play_sound_on"/>
+                android:src="@mipmap/a022_play_sound_on"/>
             <com.minimon.diocian.player.VerticalSeekBar
                 android:id="@+id/VolumeSeekBar"
                 style="@style/VerticalSeekBarStyle"

@@ -25,7 +25,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:src="@drawable/a008_gnb_member"/>
+                    android:src="@mipmap/a008_gnb_member"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:src="@drawable/a008_gnb_watch"/>
+                    android:src="@mipmap/a008_gnb_watch"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:src="@drawable/a008_gnb_heart"
+                    android:src="@mipmap/a008_gnb_heart"
                     android:layout_gravity="center"/>
 
                 <TextView
@@ -107,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:src="@drawable/a008_gnb_subscribe"
+                    android:src="@mipmap/a008_gnb_subscribe"
                     android:layout_gravity="center"/>
 
                 <TextView
@@ -143,7 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:src="@drawable/a008_gnb_comment"
+                    android:src="@mipmap/a008_gnb_comment"
                     android:layout_gravity="center_horizontal"/>
 
                 <TextView
@@ -172,7 +172,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:src="@drawable/a008_gnb_history"/>
+                    android:src="@mipmap/a008_gnb_history"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -199,7 +199,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:src="@drawable/a008_gnb_payment"
+                    android:src="@mipmap/a008_gnb_payment"
                     android:layout_gravity="center"/>
 
                 <TextView
@@ -226,7 +226,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:src="@drawable/a008_gnb_setting"
+                    android:src="@mipmap/a008_gnb_setting"
                     android:layout_gravity="center"/>
 
                 <TextView
