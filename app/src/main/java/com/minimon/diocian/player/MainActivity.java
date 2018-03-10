@@ -680,6 +680,11 @@ public class MainActivity extends AppCompatActivity
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
+                case R.id.view_menu_fix:
+                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/index");
+                    fragment = new WebViewFragment();
+                    isMain = false;
+                    break;
             }
 
             if(fragment != null){
@@ -690,7 +695,8 @@ public class MainActivity extends AppCompatActivity
             }
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
-            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
+            if(!isMain)
+                view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
         }
     };
 
