@@ -65,7 +65,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mWebView = view.findViewById(R.id.webview_other);
-        mWebView.setWebViewClient(new MyWebviewClient());
+        mWebView.setWebViewClient(new MyWebviewClient(getActivity()));
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl());

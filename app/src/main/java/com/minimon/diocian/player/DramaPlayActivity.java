@@ -23,6 +23,9 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -68,7 +71,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DramaPlayActivity extends AppCompatActivity implements PlayListItemClickListener {
+public class DramaPlayActivity extends AppCompatActivity{
 
     private final String TAG = "DramaPlayActivity";
     private final String STATE_RESUME_WINDOW = "resumeWindow";
@@ -76,7 +79,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private final String STATE_PLAYER_FULLSCREEN = "playerFullscreen";
     private final int REQUEST_FULLSCREEN = 1;
 
-    private NestedScrollView dramaPlayMainScrollView;
+//    private NestedScrollView dramaPlayMainScrollView;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private boolean playWhenReady = false;
@@ -97,10 +100,10 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     private SimpleExoPlayerView playerView;
     private ComponentListener componentListener;
 
-    private TextView tv_content_title;
-    private TextView tv_content_point;
-    private TextView tv_episode_description;
-    private TextView tv_episode_tag;
+//    private TextView tv_content_title;
+//    private TextView tv_content_point;
+//    private TextView tv_episode_description;
+//    private TextView tv_episode_tag;
 
     private String nowBandWidth = "";
     private boolean isChangeBandWidth;
@@ -118,17 +121,18 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     MinimonEpisode minimonEpisode;
 
     //하단 재생목록, 인기목록
-    LinearLayoutManager layoutManager;
-    RecyclerView rc_playlist;
-    List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
-    PlaylistDramaAdapter epiAdapter;
+//    LinearLayoutManager layoutManager;
+//    RecyclerView rc_playlist;
+//    List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
+//    PlaylistDramaAdapter epiAdapter;
     private String c_title;
     private String c_idx;
     private String nowEp;
 
-    FloatingActionButton fbScrollToTop;
-    FloatingActionButton fbSortLastest;
-    FloatingActionButton fbSortEp;
+    private WebView mWebView;
+//    FloatingActionButton fbScrollToTop;
+//    FloatingActionButton fbSortLastest;
+//    FloatingActionButton fbSortEp;
 //
 //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
@@ -143,38 +147,42 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
         checkWifi();
-        dramaPlayMainScrollView = findViewById(R.id.drama_play_main_scrollview);
+//        dramaPlayMainScrollView = findViewById(R.id.drama_play_main_scrollview);
 //        if(savedInstanceState != null){
 //            mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
 //            mResumePosition = savedInstanceState.getInt(STATE_RESUME_POSITION);
 //            mExoPlayerFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN);
 //        }
 //        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
-        tv_content_point = findViewById(R.id.tv_content_point);
-        tv_content_title = findViewById(R.id.tv_content_title);
-        tv_episode_description = findViewById(R.id.tv_episode_description);
-        tv_episode_tag = findViewById(R.id.tv_episode_tag);
+//        tv_content_point = findViewById(R.id.tv_content_point);
+//        tv_content_title = findViewById(R.id.tv_content_title);
+//        tv_episode_description = findViewById(R.id.tv_episode_description);
+//        tv_episode_tag = findViewById(R.id.tv_episode_tag);
 
+        mWebView = findViewById(R.id.webview_dramaplay);
+        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.loadUrl("http://dev.api.minimon.com/Test/view/episode");
         componentListener = new ComponentListener();
         playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
 
-        rc_playlist = findViewById(R.id.rc_playlist);
-        rc_playlist.setNestedScrollingEnabled(false);
-
-        epiAdapter = new PlaylistDramaAdapter(this, arrEpisode,"info");
-        rc_playlist.setAdapter(epiAdapter);
-        epiAdapter.setClickListener(this);
-
-        layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rc_playlist.setLayoutManager(layoutManager);
-
-        fbScrollToTop = findViewById(R.id.fb_scroll_to_top);
-        fbSortLastest = findViewById(R.id.fb_sort_lastest);
-        fbSortEp = findViewById(R.id.fb_sort_episode);
-        fbScrollToTop.setOnClickListener(mClickListener);
-        fbSortLastest.setOnClickListener(mClickListener);
-        fbSortEp.setOnClickListener(mClickListener);
+//        rc_playlist = findViewById(R.id.rc_playlist);
+//        rc_playlist.setNestedScrollingEnabled(false);
+//
+//        epiAdapter = new PlaylistDramaAdapter(this, arrEpisode,"info");
+//        rc_playlist.setAdapter(epiAdapter);
+//        epiAdapter.setClickListener(this);
+//
+//        layoutManager = new LinearLayoutManager(this);
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        rc_playlist.setLayoutManager(layoutManager);
+//
+//        fbScrollToTop = findViewById(R.id.fb_scroll_to_top);
+//        fbSortLastest = findViewById(R.id.fb_sort_lastest);
+//        fbSortEp = findViewById(R.id.fb_sort_episode);
+//        fbScrollToTop.setOnClickListener(mClickListener);
+//        fbSortLastest.setOnClickListener(mClickListener);
+//        fbSortEp.setOnClickListener(mClickListener);
 
         if(!isLockSreen)
             isLockSreen = true;
@@ -211,6 +219,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
     현재 플레이할 에피소드 데이터
      */
     private void sendEpisodeData(String idx){
+        Log.d("sendEpisodeData",idx);
         ContentValues values = new ContentValues();
         values.put("ep_idx",idx);
         if(ConfigInfo.getInstance().getBandwidth() == 3)
@@ -238,45 +247,45 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 
     }
 
-    @Override
-    public void onClick(View v, final String idx) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("결제 진행");
-        builder.setMessage(" 결제를 진행하시겠습니까?");
-        builder.setPositiveButton("예",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendEpisodeData(idx);
-                        dramaPlayMainScrollView.scrollTo(0,0);
-                    }
-                });
-        builder.setNegativeButton("아니오",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        return;
-                    }
-                });
-        builder.show();
-    }
+//    @Override
+//    public void onClick(View v, final String idx) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("결제 진행");
+//        builder.setMessage(" 결제를 진행하시겠습니까?");
+//        builder.setPositiveButton("예",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        sendEpisodeData(idx);
+//                        dramaPlayMainScrollView.scrollTo(0,0);
+//                    }
+//                });
+//        builder.setNegativeButton("아니오",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        return;
+//                    }
+//                });
+//        builder.show();
+//    }
 
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.fb_scroll_to_top:
-                    dramaPlayMainScrollView.scrollTo(0,0);
-                    break;
-                case R.id.fb_sort_episode:
-                    sortEpiArr("asc");
-                    break;
-                case R.id.fb_sort_lastest:
-                    sortEpiArr("desc");
-                    break;
-            }
-        }
-    };
+//    private View.OnClickListener mClickListener = new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            switch (v.getId()){
+//                case R.id.fb_scroll_to_top:
+//                    dramaPlayMainScrollView.scrollTo(0,0);
+//                    break;
+//                case R.id.fb_sort_episode:
+//                    sortEpiArr("asc");
+//                    break;
+//                case R.id.fb_sort_lastest:
+//                    sortEpiArr("desc");
+//                    break;
+//            }
+//        }
+//    };
 
     private void setData(JSONObject info){
        try{
@@ -290,7 +299,7 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
            JSONArray episodeArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").get("list_ep");
            JSONObject episodeInformation = (JSONObject)info.getJSONObject("data").get("list");
            setEpisodeData(episodeInformation);
-           setPlaylistData(episodeArr);
+//           setPlaylistData(episodeArr);
            videoUrl = videoObj.getString("playUrl");
            EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
            if (!isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
@@ -320,57 +329,57 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
             return o1.getEp() - o2.getEp();
         }
     }
-   private void sortEpiArr(String type){
-       if("asc".equals(type)){
-           Asc asc = new Asc();
-           Collections.sort(arrEpisode,asc);
-       }else{
-           Descending desc = new Descending();
-           Collections.sort(arrEpisode, desc);
-       }
-       epiAdapter.notifyDataSetChanged();
-   }
+//   private void sortEpiArr(String type){
+//       if("asc".equals(type)){
+//           Asc asc = new Asc();
+//           Collections.sort(arrEpisode,asc);
+//       }else{
+//           Descending desc = new Descending();
+//           Collections.sort(arrEpisode, desc);
+//       }
+//       epiAdapter.notifyDataSetChanged();
+//   }
 
-   private void setPlaylistData(JSONArray jarr){
-       try {
-           arrEpisode.clear();
-           for (int i = 0; i < jarr.length(); i++) {
-               JSONObject objEpisode = (JSONObject) jarr.get(i);
-               Drama episode = new Drama();
-               episode.setIdx(objEpisode.get("idx").toString());
-               episode.setContentTitle(objEpisode.getString("title"));
-               episode.setPoint(objEpisode.getString("point"));
-               episode.setEp(objEpisode.getInt("ep"));
-               episode.setPlayTime(objEpisode.getString("play_time"));
-               episode.setHeartCount(objEpisode.getString("like_cnt"));
-               episode.setPlayCount(objEpisode.getString("play_cnt"));
-               episode.setThumbnailUrl(objEpisode.getString("image_url"));
-               episode.setC_title(c_title);
-               arrEpisode.add(episode);
-           }
-           epiAdapter.notifyDataSetChanged();
-       }catch (JSONException e){
-           e.printStackTrace();
-       }
-   }
+//   private void setPlaylistData(JSONArray jarr){
+//       try {
+//           arrEpisode.clear();
+//           for (int i = 0; i < jarr.length(); i++) {
+//               JSONObject objEpisode = (JSONObject) jarr.get(i);
+//               Drama episode = new Drama();
+//               episode.setIdx(objEpisode.get("idx").toString());
+//               episode.setContentTitle(objEpisode.getString("title"));
+//               episode.setPoint(objEpisode.getString("point"));
+//               episode.setEp(objEpisode.getInt("ep"));
+//               episode.setPlayTime(objEpisode.getString("play_time"));
+//               episode.setHeartCount(objEpisode.getString("like_cnt"));
+//               episode.setPlayCount(objEpisode.getString("play_cnt"));
+//               episode.setThumbnailUrl(objEpisode.getString("image_url"));
+//               episode.setC_title(c_title);
+//               arrEpisode.add(episode);
+//           }
+//           epiAdapter.notifyDataSetChanged();
+//       }catch (JSONException e){
+//           e.printStackTrace();
+//       }
+//   }
 
    private void setEpisodeData(JSONObject obj){
        try {
-           tv_content_title.setText(obj.getString("title"));
-           tv_content_point.setText(obj.getString("point"));
+//           tv_content_title.setText(obj.getString("title"));
+//           tv_content_point.setText(obj.getString("point"));
            EpisodeInfo.getInsatnace().setTitle(obj.getString("title"));
            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
            EpisodeInfo.getInsatnace().setIdx(obj.getString("idx"));
            c_title = obj.getString("c_title");
            nowEp = obj.getString("ep");
-           tv_episode_description.setText(obj.getString("summary"));
+//           tv_episode_description.setText(obj.getString("summary"));
            JSONArray jarr = obj.getJSONArray("list_tag");
            String tags = "";
            for(int i=0; i<jarr.length(); i++){
                JSONObject objTag = (JSONObject) jarr.get(i);
                tags += "#"+objTag.getString("tag") + " ";
            }
-           tv_episode_tag.setText(tags);
+//           tv_episode_tag.setText(tags);
        }catch (JSONException e){
            e.printStackTrace();
        }
@@ -510,10 +519,14 @@ public class DramaPlayActivity extends AppCompatActivity implements PlayListItem
 
             initData();
 //            initFullscreenButton();
-            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
+            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty()) {
+                Log.d("LoadingUrl_isEmpty","true");
                 sendEpisodeData("645");
-            else
+            }
+            else {
+                Log.d("LoadingUrl_isEmpty","false");
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
 //            if(mExoPlayerFullscreen){
 //                ((ViewGroup) playerView.getParent()).removeView(playerView);
 //                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

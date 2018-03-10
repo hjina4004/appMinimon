@@ -456,7 +456,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         controlView.findViewById(R.id.img_playing_playlist).setVisibility(View.VISIBLE);
 
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
-        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.a022_play_zoom_in));
+        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.a022_play_zoom_in));
         mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
         mFullScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
