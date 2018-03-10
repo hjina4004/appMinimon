@@ -78,9 +78,20 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private RelativeLayout view_delete_search_history;
     private RecyclerView rec_search_history;
+
+    private RelativeLayout view_main_toolbar2;
+    private TextAwesome tv_toolbar_open_drawer2;
+    private TextAwesome tv_toolbar_search2;
+    private ImageView tv_toolbar_go_back2;
+    private EditText ed_toolbar_search2;
+    private DrawerLayout drawer2;
+    private RelativeLayout view_delete_search_history2;
+    private RecyclerView rec_search_history2;
+
     private SearchhistoryAdapter adapter;
     private List<SearchItem> arrHistory = new ArrayList<SearchItem>();
     private LinearLayoutManager manager;
+    private LinearLayoutManager manager2;
     private Realm realm;
 
     // for Google
@@ -121,6 +132,7 @@ public class MainActivity extends AppCompatActivity
 
         Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
         view_main_toolbar = (RelativeLayout)  findViewById(R.id.view_main_toolbar);
+        view_main_toolbar2 = (RelativeLayout)  findViewById(R.id.view_main_toolbar2);
         tv_toolbar_open_drawer = (TextAwesome) findViewById(R.id.tv_toolbar_open_drawer);
         tv_toolbar_search = (TextAwesome) findViewById(R.id.tv_toolbar_search);
         tv_toolbar_go_back = findViewById(R.id.tv_toolbar_go_back);
@@ -137,6 +149,24 @@ public class MainActivity extends AppCompatActivity
         tv_toolbar_search.setOnClickListener(toolbarClickListenr);
         tv_toolbar_go_back.setOnClickListener(toolbarClickListenr);
         view_delete_search_history.setOnClickListener(toolbarClickListenr);
+
+
+
+        manager2 = new LinearLayoutManager(this);
+        manager2.setOrientation(LinearLayoutManager.VERTICAL);
+        tv_toolbar_open_drawer2 = (TextAwesome) findViewById(R.id.tv_toolbar_open_drawer2);
+        tv_toolbar_search2 = (TextAwesome) findViewById(R.id.tv_toolbar_search2);
+        tv_toolbar_go_back2 = findViewById(R.id.tv_toolbar_go_back2);
+        ed_toolbar_search2 = (EditText) findViewById(R.id.ed_toolbar_search2);
+
+        view_delete_search_history2 = findViewById(R.id.view_delete_search_history2);
+        rec_search_history2 = findViewById(R.id.rec_search_history2);
+        rec_search_history2.setLayoutManager(manager2);
+        rec_search_history2.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        tv_toolbar_open_drawer2.setOnClickListener(toolbarClickListenr);
+        tv_toolbar_search2.setOnClickListener(toolbarClickListenr);
+        tv_toolbar_go_back2.setOnClickListener(toolbarClickListenr);
+        view_delete_search_history2.setOnClickListener(toolbarClickListenr);
 
 
         adapter = new SearchhistoryAdapter(this,arrHistory);
@@ -582,9 +612,33 @@ public class MainActivity extends AppCompatActivity
                     tv_toolbar_go_back.setVisibility(View.GONE);
                     tv_toolbar_search.setVisibility(View.VISIBLE);
                     tv_toolbar_open_drawer.setVisibility(View.VISIBLE);
-                    if(isMain){
-                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-                    }
+//                    if(isMain){
+//                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+//                    }
+                    break;
+                case R.id.view_delete_search_history2:
+                    arrHistory.clear();
+                    adapter.notifyDataSetChanged();
+                    break;
+                case R.id.tv_toolbar_open_drawer2:
+                    drawer.openDrawer(Gravity.LEFT);
+                    break;
+                case R.id.tv_toolbar_search2:
+                    ed_toolbar_search2.setVisibility(View.VISIBLE);
+                    view_delete_search_history2.setVisibility(View.VISIBLE);
+                    rec_search_history2.setVisibility(View.VISIBLE);
+                    tv_toolbar_go_back2.setVisibility(View.VISIBLE);
+                    tv_toolbar_search2.setVisibility(View.GONE);
+                    tv_toolbar_open_drawer2.setVisibility(View.GONE);
+                    view_main_toolbar2.setBackgroundColor(getResources().getColor(R.color.MainColor));
+                    break;
+                case R.id.tv_toolbar_go_back2:
+                    ed_toolbar_search2.setVisibility(View.GONE);
+                    view_delete_search_history2.setVisibility(View.GONE);
+                    rec_search_history2.setVisibility(View.GONE);
+                    tv_toolbar_go_back2.setVisibility(View.GONE);
+                    tv_toolbar_search2.setVisibility(View.VISIBLE);
+                    tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
                     break;
                 case R.id.view_delete_search_history:
                     arrHistory.clear();
@@ -695,8 +749,16 @@ public class MainActivity extends AppCompatActivity
             }
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
-            if(!isMain)
-                view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
+            if(isMain){
+                Log.d("isMain",String.valueOf(isMain));
+                view_main_toolbar.setVisibility(View.VISIBLE);
+                view_main_toolbar2.setVisibility(View.GONE);
+            }else{
+                Log.d("isMain",String.valueOf(isMain));
+                view_main_toolbar.setVisibility(View.GONE);
+                view_main_toolbar2.setVisibility(View.VISIBLE);
+            }
+//                view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
         }
     };
 

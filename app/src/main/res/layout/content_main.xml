@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.minimon.diocian.player.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
 
-
-    <FrameLayout
-        android:id="@+id/main_media_frame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-    </FrameLayout>
     <LinearLayout
-        android:id="@+id/view_main_search"
+        android:id="@+id/view_main_search2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/view_main"
         android:orientation="vertical">
         <RelativeLayout
-            android:id="@+id/view_main_toolbar"
+            android:id="@+id/view_main_toolbar2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/transparent">
+            android:visibility="gone"
+            android:background="@color/MainColor">
             <com.minimon.diocian.player.TextAwesome
-                android:id="@+id/tv_toolbar_open_drawer"
+                android:id="@+id/tv_toolbar_open_drawer2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -40,7 +36,7 @@
                 android:text="@string/fa_bars"
                 />
             <ImageView
-                android:id="@+id/tv_toolbar_go_back"
+                android:id="@+id/tv_toolbar_go_back2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -52,18 +48,18 @@
                 android:src="@mipmap/a001_top_back"
                 android:textColor="#fff"/>
             <EditText
-                android:id="@+id/ed_toolbar_search"
+                android:id="@+id/ed_toolbar_search2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tv_toolbar_go_back"
-                android:layout_toEndOf="@+id/tv_toolbar_go_back"
+                android:layout_toRightOf="@+id/tv_toolbar_go_back2"
+                android:layout_toEndOf="@+id/tv_toolbar_go_back2"
                 android:visibility="gone"
                 android:hint="검색어를 입력하세요"
                 android:inputType="text"
                 android:textColorHint="#fff"
                 />
             <com.minimon.diocian.player.TextAwesome
-                android:id="@+id/tv_toolbar_search"
+                android:id="@+id/tv_toolbar_search2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/fa_search"
@@ -74,7 +70,7 @@
                 android:textColor="#fff"/>
         </RelativeLayout>
         <RelativeLayout
-            android:id="@+id/view_delete_search_history"
+            android:id="@+id/view_delete_search_history2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="19dp"
@@ -99,11 +95,122 @@
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rec_search_history"
+            android:id="@+id/rec_search_history2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#cccccc"
             android:visibility="gone"/>
     </LinearLayout>
 
-</FrameLayout>
+    <FrameLayout
+        android:id="@+id/view_main"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <FrameLayout
+            android:id="@+id/main_media_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/view_main_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/view_main_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/transparent">
+
+                <com.minimon.diocian.player.TextAwesome
+                    android:id="@+id/tv_toolbar_open_drawer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="10dp"
+                    android:text="@string/fa_bars"
+                    android:textColor="#fff"
+                    android:textSize="30dp" />
+
+                <ImageView
+                    android:id="@+id/tv_toolbar_go_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="5dp"
+                    android:src="@mipmap/a001_top_back"
+                    android:textColor="#fff"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/ed_toolbar_search"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/tv_toolbar_go_back"
+                    android:layout_toRightOf="@+id/tv_toolbar_go_back"
+                    android:hint="검색어를 입력하세요"
+                    android:inputType="text"
+                    android:textColorHint="#fff"
+                    android:visibility="gone" />
+
+                <com.minimon.diocian.player.TextAwesome
+                    android:id="@+id/tv_toolbar_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dp"
+                    android:text="@string/fa_search"
+                    android:textColor="#fff"
+                    android:textSize="30dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/view_delete_search_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:paddingBottom="19dp"
+                android:paddingTop="19dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:paddingLeft="11dp"
+                    android:text="검색기록"
+                    android:textColor="#000"
+                    android:textSize="19dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:paddingRight="11dp"
+                    android:text="모두지우기"
+                    android:textColor="#a3a3a3"
+                    android:textSize="15.5dp" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rec_search_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#cccccc"
+                android:visibility="gone" />
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+</LinearLayout>
