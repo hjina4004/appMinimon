@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 
 /**
@@ -20,12 +21,13 @@ import android.webkit.WebViewClient;
  * to handle interaction events.
  * create an instance of this fragment.
  */
-public class WebViewFragment extends Fragment implements MainActivity.onKeypressListenr{
+public class WebViewFragment extends Fragment implements MainActivity.onKeypressListenr, MyWebChromeClient.ProgressListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_WEBVIEW = "webViewUrl";
 
     private WebView mWebView;
+    private ProgressBar mProgressBar;
 
     // TODO: Rename and change types of parameters
 
@@ -64,8 +66,9 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mProgressBar = view.findViewById(R.id.progress_bar);
         mWebView = view.findViewById(R.id.webview_other);
-        mWebView.setWebViewClient(new MyWebviewClient(getActivity()));
+        mWebView.setWebViewClient(new MyWebviewClient(getActivity(),mProgressBar));
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl());
@@ -87,6 +90,14 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             MainActivity activity = (MainActivity) getActivity();
             activity.setOnKeypressListener(null);
             activity.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onUpdateProgress(int progressValue) {
+        mProgressBar.setProgress(progressValue);
+        if(progressValue == 100){
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 }

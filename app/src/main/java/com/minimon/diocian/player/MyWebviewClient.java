@@ -2,10 +2,13 @@ package com.minimon.diocian.player;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.UrlQuerySanitizer;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +20,7 @@ import java.util.Map;
 public class MyWebviewClient extends WebViewClient {
 
     private Context mContext;
+    private ProgressBar bar;
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         if(url.startsWith("minimon://goToWeb")){
@@ -44,7 +48,21 @@ public class MyWebviewClient extends WebViewClient {
             return super.shouldOverrideUrlLoading(view, url);
         }
     }
-    public MyWebviewClient(Context context){
+
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        super.onPageStarted(view, url, favicon);
+        bar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+        bar.setVisibility(View.GONE);
+    }
+
+    public MyWebviewClient(Context context, ProgressBar progress){
         mContext = context;
+        bar = progress;
     }
 }
