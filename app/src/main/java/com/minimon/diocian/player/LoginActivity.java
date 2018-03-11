@@ -425,6 +425,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void loginMinimon(String uid, String password, String type) {
+        if("social".equals(type)){
+            saveAutoLogin(true);
+        }
         ContentValues loginInfo = new ContentValues();
         loginInfo.put("type", type);
         loginInfo.put("id", uid);
