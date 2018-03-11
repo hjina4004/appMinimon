@@ -107,4 +107,17 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="url_cookies">http://dev.api.minimon.com/Test/view/cookie.list</string>
+    <string name="url_user_info">http://dev.api.minimon.com/Test/view/info</string>
+    <string name="url_purchase">http://dev.api.minimon.com/Test/view/purchase</string>
+    <string name="url_favorite">http://dev.api.minimon.com/Test/view/like</string>
+    <string name="url_subscribe">http://dev.api.minimon.com/Test/view/keep</string>
+    <string name="url_point_history">http://dev.api.minimon.com/Test/view/point.list</string>
+    <string name="url_pay_history">http://dev.api.minimon.com/Test/view/pay.list</string>
+    <string name="url_notice">http://dev.api.minimon.com/Test/view/notice</string>
+    <string name="url_faq">http://dev.api.minimon.com/Test/view/faq</string>
+    <string name="url_qna">http://dev.api.minimon.com/Test/view/qna.list</string>
+    <string name="url_policy">http://dev.api.minimon.com/Test/view/policy</string>
+    <string name="url_fix">http://dev.api.minimon.com/Test/view/index</string>
 </resources>

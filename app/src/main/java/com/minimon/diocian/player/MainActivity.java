@@ -676,37 +676,37 @@ public class MainActivity extends AppCompatActivity
                     goMainWeb();
                     break;
                 case R.id.view_menu_cookies:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/cookie.list");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_cookies));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_user_info:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/info");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_user_info));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_purchase:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/purchase");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_purchase));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_favorite:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/like");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_favorite));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_subscribe:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/keep");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_subscribe));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_point_history:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/point.list");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_point_history));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_pay_history:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/pay.list");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_pay_history));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
@@ -715,27 +715,27 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
                 case R.id.view_menu_notice:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/notice");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_notice));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_faq:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/faq");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_faq));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_qna:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/qna.list");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_qna));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_policy:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/policy");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_policy));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
                 case R.id.view_menu_fix:
-                    ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/index");
+                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_fix));
                     fragment = new WebViewFragment();
                     isMain = false;
                     break;
