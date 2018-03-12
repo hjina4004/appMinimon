@@ -33,7 +33,7 @@
                 android:maxWidth="4dp"
                 android:layout_gravity="center_horizontal"
                 android:progressDrawable="@drawable/play_progess"
-                />
+                android:thumb="@drawable/custom_thumb" />
         </LinearLayout>
 
         <RelativeLayout
@@ -132,7 +132,8 @@
                 android:minHeight="4dp"
                 android:minWidth="4dp"
                 android:layout_gravity="center_horizontal"
-                android:progressDrawable="@drawable/play_progess"/>
+                android:progressDrawable="@drawable/play_progess"
+                android:thumb="@drawable/custom_thumb" />
         </LinearLayout>
     </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 </RelativeLayout>
