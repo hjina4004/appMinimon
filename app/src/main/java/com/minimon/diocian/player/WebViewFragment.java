@@ -70,8 +70,9 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView = view.findViewById(R.id.webview_other);
         mWebView.setWebViewClient(new MyWebviewClient(getActivity(),mProgressBar));
         mWebView.setWebChromeClient(new WebChromeClient());
-        mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl());
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.addJavascriptInterface(new JavascriptInterface(getActivity(),mWebView),"minimon");
 //        getActivity().findViewById(R.id.view_main_toolbar).setVisibility(View.VISIBLE);
     }
 

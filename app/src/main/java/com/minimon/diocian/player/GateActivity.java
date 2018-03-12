@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +20,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -43,6 +50,9 @@ public class GateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gate);
 
         Log.d(TAG, "Hash Key = " + getKeyHash(this.getApplicationContext()));
+
+        NetworkAsync task = new NetworkAsync();
+        task.execute();
 
         SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         String autoLogin = pref.getString("AutoLogin","0");
@@ -159,5 +169,45 @@ public class GateActivity extends AppCompatActivity {
             params.setMargins(10, 0, 10, 0);
             pager_indicator.addView(dots[i], params);
         }
+    }
+
+    public class NetworkAsync extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            isReachable();
+            return null;
+        }
+    }
+
+    private boolean isReachable(){
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = cm.getActiveNetworkInfo();
+        if(info!=null && info.isConnected()){
+            try{
+                URL url = new URL("http://dev.api.minimon.com");
+                HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
+                urlc.setConnectTimeout(10 * 1000);          // 10 s.
+                urlc.connect();
+                if (urlc.getResponseCode() == 200) {        // 200 = "OK" code (http connection is fine).
+                    Log.wtf("Connection", "Success !");
+                    return true;
+                } else {
+                    goServerErr();
+                    return false;
+                }
+            }catch (IOException e){
+                Log.d("GateException",e.toString());
+                return false;
+            }
+        }
+        goServerErr();
+        return false;
+    }
+
+    private void goServerErr(){
+        Intent intent = new Intent(this,ServerErrorActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

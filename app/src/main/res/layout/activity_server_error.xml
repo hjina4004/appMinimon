@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="54.67dp"
+    android:background="#f6f6f6"
+    tools:context="com.minimon.diocian.player.ServerErrorActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/a001_logo"
+        android:layout_gravity="center_horizontal"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/server_error_title"
+            android:textSize="17.39dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="71dp"
+            android:textColor="@color/MainColor"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/server_error_explain"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="17.33dp"
+            android:textSize="13.04dp"
+            android:textColor="#222222"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17.33dp"
+            android:paddingTop="26.67dp"
+            android:paddingBottom="26.67dp"
+            android:paddingLeft="46.67dp"
+            android:paddingStart="46.67dp"
+            android:paddingRight="46.67dp"
+            android:paddingEnd="46.67dp"
+            android:orientation="vertical"
+            android:background="#fff">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/service_update"
+                android:textSize="11.06dp"
+                android:textColor="#222"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11.06dp"
+                android:textColor="#222"
+                android:textStyle="bold"
+                android:text="@string/service_update_date"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/service_update_srr"
+                android:textSize="11.06dp"
+                android:textColor="#222"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

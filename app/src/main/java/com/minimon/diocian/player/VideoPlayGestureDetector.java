@@ -236,6 +236,13 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                         return false;
                     }
                 } else if (distanceY > 0) {                 // Bottom To Top Swipe
+                    if (inBrightCtrl) {
+                        videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+                        return false;
+                    } else if (inVolumeCtrl) {
+                        videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+                        return false;
+                    }
                     if (currentState == VideoPlayScreenActivity.STATE_IDLE
                             || currentState == VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL
                             || (!inBrightCtrl && !inVolumeCtrl)) {

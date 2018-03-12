@@ -18,6 +18,7 @@ import java.util.Set;
 public class SearchhistoryAdapter extends RecyclerView.Adapter {
     private List<SearchItem> items;
     private Context mContext;
+    private DBHelper dbHelper;
 
     public SearchhistoryAdapter(Context context,  List<SearchItem> modelData){
         this.items = modelData;
@@ -27,6 +28,7 @@ public class SearchhistoryAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_search_history,parent,false);
+        dbHelper = new DBHelper(mContext.getApplicationContext(), "SearchLog.db",null,1);
         return new SearchHistoryViewHolder(itemView);
     }
 
@@ -39,6 +41,7 @@ public class SearchhistoryAdapter extends RecyclerView.Adapter {
         itemHolder.img_delete_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dbHelper.delete(items.get(position).getHistory());
                 items.remove(position);
                 notifyDataSetChanged();
             }

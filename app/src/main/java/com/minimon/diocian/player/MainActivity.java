@@ -52,16 +52,18 @@ import com.google.android.gms.common.api.Status;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import io.realm.Realm;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, DBHelper.dbHelperListenr{
 
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
@@ -81,10 +83,12 @@ public class MainActivity extends AppCompatActivity
 
     private RelativeLayout view_main_toolbar2;
     private TextAwesome tv_toolbar_open_drawer2;
+    private ImageView tv_toolbar_frag_go_back2;
     private TextAwesome tv_toolbar_search2;
     private ImageView tv_toolbar_go_back2;
     private EditText ed_toolbar_search2;
-    private DrawerLayout drawer2;
+    private TextView tv_frag_title;
+//    private DrawerLayout drawer2;
     private RelativeLayout view_delete_search_history2;
     private RecyclerView rec_search_history2;
 
@@ -92,7 +96,7 @@ public class MainActivity extends AppCompatActivity
     private List<SearchItem> arrHistory = new ArrayList<SearchItem>();
     private LinearLayoutManager manager;
     private LinearLayoutManager manager2;
-    private Realm realm;
+//    private Realm realm;
 
     // for Google
     private static final int GOOGLE_SIGN_IN = 9001;
@@ -100,6 +104,47 @@ public class MainActivity extends AppCompatActivity
 
     private WebView mWebView;
     private boolean isMain;
+    private boolean isShowSearch;
+
+    private DBHelper dbHelper;
+
+    @Override
+    public void onSucess(JSONObject data) {
+        try{
+            String funcName = data.getString("functionName");
+            if("update".equals(funcName)){
+                String history = data.getString("history");
+                int index = findAtList(history);
+                SearchItem item = new SearchItem();
+                item.setHistory(data.getString("history"));
+                item.setDate(data.getString("date"));
+                arrHistory.set(index,item);
+            }else if("insert".equals(funcName)){
+                SearchItem item = new SearchItem();
+                item.setHistory(data.getString("history"));
+                item.setDate(data.getString("date"));
+                arrHistory.add(item);
+            }
+        }catch (JSONException e){
+
+        }
+
+    }
+
+    @Override
+    public void onFail(JSONObject data) {
+
+    }
+
+    private int findAtList(String history){
+        for(int i=0; i<arrHistory.size(); i++){
+            SearchItem item = arrHistory.get(i);
+            if(item.getHistory().equals(history)){
+                return i;
+            }
+        }
+        return -1;
+    }
 
     public interface onKeypressListenr{
         public void onBack();
@@ -121,14 +166,15 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        dbHelper = new DBHelper(getApplicationContext(),"SearchLog.db",null,1);
+        dbHelper.setListener(this);
+        arrHistory = dbHelper.getResult();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setBackgroundColor(getResources().getColor(R.color.colorBaseBG));
 
         initGoogle();
-
-        Realm.init(this);
-        realm = Realm.getDefaultInstance();
 
         Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
         view_main_toolbar = (RelativeLayout)  findViewById(R.id.view_main_toolbar);
@@ -157,7 +203,9 @@ public class MainActivity extends AppCompatActivity
         tv_toolbar_open_drawer2 = (TextAwesome) findViewById(R.id.tv_toolbar_open_drawer2);
         tv_toolbar_search2 = (TextAwesome) findViewById(R.id.tv_toolbar_search2);
         tv_toolbar_go_back2 = findViewById(R.id.tv_toolbar_go_back2);
+        tv_toolbar_frag_go_back2 = findViewById(R.id.tv_toolbar_frag_go_back2);
         ed_toolbar_search2 = (EditText) findViewById(R.id.ed_toolbar_search2);
+        tv_frag_title = findViewById(R.id.tv_frag_title);
 
         view_delete_search_history2 = findViewById(R.id.view_delete_search_history2);
         rec_search_history2 = findViewById(R.id.rec_search_history2);
@@ -166,6 +214,7 @@ public class MainActivity extends AppCompatActivity
         tv_toolbar_open_drawer2.setOnClickListener(toolbarClickListenr);
         tv_toolbar_search2.setOnClickListener(toolbarClickListenr);
         tv_toolbar_go_back2.setOnClickListener(toolbarClickListenr);
+        tv_toolbar_frag_go_back2.setOnClickListener(toolbarClickListenr);
         view_delete_search_history2.setOnClickListener(toolbarClickListenr);
 
 
@@ -182,17 +231,15 @@ public class MainActivity extends AppCompatActivity
                                 keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
                     if (keyEvent == null || !keyEvent.isShiftPressed()) {
                         // the user is done typing.
-                        Date today = Calendar.getInstance().getTime();
-                        textView.getText();
+                        Date today = Calendar.getInstance().getTime();Log.d("DBHELPER","add");
                         SearchItem s = new SearchItem();
                         s.setDate(String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
                         s.setHistory(textView.getText().toString());
-                        SearchItemList listArr = new SearchItemList();
-                        arrHistory.add(s);
+                        dbHelper.insert(textView.getText().toString(),String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
+//                        arrHistory.add(s);
+                        textView.setText("");
+//                        arrHistory = dbHelper.getResult();
                         adapter.notifyDataSetChanged();
-                        realm.beginTransaction();
-                        final SearchItem item = realm.copyToRealm(s);
-
                         return true; // consume.
                     }
                 }
@@ -205,6 +252,9 @@ public class MainActivity extends AppCompatActivity
         goMainWeb();
     }
 
+    private void update(String history, String date){
+
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -250,17 +300,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Fragment fragment = new SettingFragment();
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.main_media_frame, fragment);
-            ft.commit();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -289,249 +328,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        if (Util.SDK_INT > 23) {
-//            initializePlayer();
-//        }
-//    }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        hideSytemUi();
-//        if (Util.SDK_INT <= 23 || player == null) {
-//            initializePlayer();
-//        }
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        if (Util.SDK_INT <= 23) {
-//            releasePlayer();
-//        }
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        if (Util.SDK_INT > 23) {
-//            releasePlayer();
-//        }
-//    }
-
-    // Internal methods
-
-//    private void initializePlayer() {
-//        if (player == null) {
-//            TrackSelection.Factory adaptiveTrackSelectionFactory =
-//                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
-//            player = ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(this),
-//                    new DefaultTrackSelector(adaptiveTrackSelectionFactory), new DefaultLoadControl());
-//
-//            player.addListener(componentListener);
-//            player.setAudioDebugListener(componentListener);
-//            player.setVideoDebugListener(componentListener);
-//            PlaybackControlView simpleExoplayerView;
-//            playerView.setPlayer(player);
-//
-//            player.setPlayWhenReady(playWhenReady);
-//        }
-//
-//        MediaSource mediaSources = buildMediaSource(Uri.parse(getString(R.string.media_url_hls)));
-//        player.seekTo(currentWindow, playBackPosition);
-//        player.prepare(mediaSources, true, false);
-//        inErrorState = false;
-//    }
-//
-//    private void releasePlayer() {
-//        if (player != null) {
-//            currentWindow = player.getCurrentWindowIndex();
-//            playWhenReady = player.getPlayWhenReady();
-//            player.removeListener(componentListener);
-//            player.setAudioDebugListener(null);
-//            player.setVideoDebugListener(null);
-//            player.release();
-//            player = null;
-//        }
-//    }
-
-    private MediaSource buildMediaSource(Uri uri) {
-        DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
-        return new HlsMediaSource.Factory(mediaDataSourceFactory).createMediaSource(uri, null, null);
-    }
-
-
-    public DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return new DefaultDataSourceFactory(this, bandwidthMeter,
-                buildHttpDataSourceFactory(true));
-    }
-
-    public HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "exAndroid"), bandwidthMeter);
-    }
-
-    @SuppressLint("InlineApi")
-    private void hideSytemUi() {
-//        playerView.setSytemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-//            | View.SYSTEM_UI_FLAG_FULLSCREEN
-//            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-//            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-    }
-
-//    private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {
-//        @Override
-//        public void onTimelineChanged(Timeline timeline, Object manifest) {
-//
-//        }
-//
-//        @Override
-//        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-//
-//        }
-//
-//        @Override
-//        public void onLoadingChanged(boolean isLoading) {
-//
-//        }
-//
-//        @Override
-//        public void onPlayerStateChanged(boolean playWhenReady, int state) {
-//            String stateString;
-//            switch (state) {
-//                case ExoPlayer.STATE_IDLE:
-//                    stateString = "STATE_IDLE";
-//                    break;
-//                case ExoPlayer.STATE_BUFFERING:
-//                    stateString = "STATE_BUFFERING";
-//                    break;
-//                case ExoPlayer.STATE_READY:
-//                    stateString = "STATE_READY";
-//                    break;
-//                case ExoPlayer.STATE_ENDED:
-//                    stateString = "STATE_ENDED";
-//                    break;
-//                default:
-//                    stateString = "UNKNOWN STATE";
-//                    break;
-//            }
-//            Log.d(TAG, "state [" + playWhenReady + ", " + stateString + "]");
-//        }
-//
-//        @Override
-//        public void onRepeatModeChanged(int repeatMode) {
-//
-//        }
-//
-//        @Override
-//        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-//
-//        }
-//
-//        @Override
-//        public void onPlayerError(ExoPlaybackException error) {
-//            inErrorState = true;
-//        }
-//
-//        @Override
-//        public void onPositionDiscontinuity(int reason) {
-//            if (inErrorState) {
-//                // This will only occur if the user has performed a seek whilst in the error state. Update
-//                // the resume position so that if the user then retries, playback will resume from the
-//                // position to which they seeked.
-//                updateResumePosition();
-//            }
-//        }
-//
-//        private void updateResumePosition() {
-//            currentWindow = player.getCurrentWindowIndex();
-//            playBackPosition = Math.max(0, player.getContentPosition());
-//        }
-//
-//
-//        @Override
-//        public void onSeekProcessed() {
-//            Log.d(TAG, "seekProcessed");
-//        }
-//
-//        @Override
-//        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-//            Log.d(TAG, "playbackParameters " + String.format(
-//                    "[speed=%.2f, pitch=%.2f]", playbackParameters.speed, playbackParameters.pitch));
-//        }
-//
-//        @Override
-//        public void onAudioEnabled(DecoderCounters counters) {
-//
-//        }
-//
-//        @Override
-//        public void onAudioSessionId(int audioSessionId) {
-//
-//        }
-//
-//        @Override
-//        public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
-//
-//        }
-//
-//        @Override
-//        public void onAudioInputFormatChanged(Format format) {
-//
-//        }
-//
-//        @Override
-//        public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-//
-//        }
-//
-//        @Override
-//        public void onAudioDisabled(DecoderCounters counters) {
-//
-//        }
-//
-//        @Override
-//        public void onVideoEnabled(DecoderCounters counters) {
-//
-//        }
-//
-//        @Override
-//        public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
-//
-//        }
-//
-//        @Override
-//        public void onVideoInputFormatChanged(Format format) {
-//
-//        }
-//
-//        @Override
-//        public void onDroppedFrames(int count, long elapsedMs) {
-//
-//        }
-//
-//        @Override
-//        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-//
-//        }
-//
-//        @Override
-//        public void onRenderedFirstFrame(Surface surface) {
-//
-//        }
-//
-//        @Override
-//        public void onVideoDisabled(DecoderCounters counters) {
-//
-//        }
-//    }
-
     private void viewUserInfo() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         View view  = navigationView.getHeaderView(0);
@@ -545,8 +341,6 @@ public class MainActivity extends AppCompatActivity
         tvUserPoint.setText(userInfo.getPoint());
         tvUserFixed.setText(checkFixed(userInfo.getFixed()));
 
-//        TextView tv_serviceCenter = view.findViewById(R.id.tv_serviceCenter);
-//        TextView tv_userInfo = view.findViewById(R.id.tv_userInfo);
         LinearLayout view_logout = view.findViewById(R.id.view_menu_logout);
         view_logout.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_go_home = view.findViewById(R.id.view_menu_go_home);
@@ -577,7 +371,8 @@ public class MainActivity extends AppCompatActivity
         view_menu_qna.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_policy = view.findViewById(R.id.view_menu_policy);
         view_menu_policy.setOnClickListener(drawerClickListenr);
-
+        LinearLayout view_menu_fix = view.findViewById(R.id.view_menu_fix);
+        view_menu_fix.setOnClickListener(drawerClickListenr);
 
     }
 
@@ -612,11 +407,12 @@ public class MainActivity extends AppCompatActivity
                     tv_toolbar_go_back.setVisibility(View.GONE);
                     tv_toolbar_search.setVisibility(View.VISIBLE);
                     tv_toolbar_open_drawer.setVisibility(View.VISIBLE);
-//                    if(isMain){
-//                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-//                    }
+                    if(isMain){
+                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    }
                     break;
                 case R.id.view_delete_search_history2:
+                    dbHelper.deleteAll();
                     arrHistory.clear();
                     adapter.notifyDataSetChanged();
                     break;
@@ -641,8 +437,12 @@ public class MainActivity extends AppCompatActivity
                     tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
                     break;
                 case R.id.view_delete_search_history:
+                    dbHelper.deleteAll();
                     arrHistory.clear();
                     adapter.notifyDataSetChanged();
+                    break;
+                case R.id.tv_toolbar_frag_go_back2:
+                    goMainWeb();
                     break;
             }
         }
@@ -654,14 +454,6 @@ public class MainActivity extends AppCompatActivity
             Fragment fragment = null;
 
             switch (v.getId()){
-//                case R.id.tv_playlist:
-//                    Intent intent = new Intent(getApplicationContext(), DramaPlayActivity.class);
-//                    startActivity(intent);
-//                    break;
-//                case R.id.tv_userInfo:
-//                    ConfigInfo.getInstance().setWebViewUrl("http://lmfriends.com/android-web-view/user-info/");
-//                    fragment = new WebViewFragment();
-//                    break;
                 case R.id.view_menu_logout:
                     tryLogout();
                     break;
@@ -678,94 +470,139 @@ public class MainActivity extends AppCompatActivity
                 case R.id.view_menu_cookies:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_cookies));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.GONE);
+                    isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_user_info:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_user_info));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText(getResources().getString(R.string.menu_user_page));
+                    isShowSearch = false;
                     isMain = false;
                     break;
                 case R.id.view_menu_purchase:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_purchase));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.GONE);
+                    isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_favorite:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_favorite));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.GONE);
+                    isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_subscribe:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_subscribe));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.GONE);
+                    isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_point_history:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_point_history));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText(getResources().getString(R.string.menu_point_history));
+                    isShowSearch = false;
                     isMain = false;
                     break;
                 case R.id.view_menu_pay_history:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_pay_history));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText(getResources().getString(R.string.menu_pay_history));
+                    isShowSearch = false;
                     isMain = false;
                     break;
                 case R.id.view_menu_setting:
+                    tv_toolbar_search2.setVisibility(View.GONE);
                     fragment = new SettingFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText(getResources().getString(R.string.menu_setting));
+                    isShowSearch = false;
                     isMain = false;
                     break;
                 case R.id.view_menu_notice:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_notice));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText("공지사항");
                     isMain = false;
                     break;
                 case R.id.view_menu_faq:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_faq));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText("FAQ");
+                    isShowSearch = false;
                     isMain = false;
                     break;
                 case R.id.view_menu_qna:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_qna));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText("1:1 QNA");
+                    isShowSearch = false;
                     isMain = false;
                     break;
                 case R.id.view_menu_policy:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_policy));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText("이용약관");
+                    isShowSearch = false;
                     isMain = false;
                     break;
                 case R.id.view_menu_fix:
                     ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_fix));
                     fragment = new WebViewFragment();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText("이용권");
+                    isShowSearch = false;
                     isMain = false;
                     break;
             }
 
             if(fragment != null){
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.main_media_frame, fragment);
                 ft.commit();
             }
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
-            if(isMain){
-                Log.d("isMain",String.valueOf(isMain));
-                view_main_toolbar.setVisibility(View.VISIBLE);
-                view_main_toolbar2.setVisibility(View.GONE);
-            }else{
-                Log.d("isMain",String.valueOf(isMain));
-                view_main_toolbar.setVisibility(View.GONE);
-                view_main_toolbar2.setVisibility(View.VISIBLE);
-            }
+            changeToolbarVisibility(isMain);
 //                view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
         }
     };
 
+    private void changeToolbarVisibility(boolean ismain){
+        if(ismain){
+            view_main_toolbar.setVisibility(View.VISIBLE);
+            view_main_toolbar2.setVisibility(View.GONE);
+        }else{
+            view_main_toolbar.setVisibility(View.GONE);
+            view_main_toolbar2.setVisibility(View.VISIBLE);
+            if(isShowSearch){
+                tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
+                tv_toolbar_search2.setVisibility(View.VISIBLE);
+                tv_toolbar_frag_go_back2.setVisibility(View.GONE);
+            }else{
+                tv_toolbar_open_drawer2.setVisibility(View.GONE);
+                tv_toolbar_search2.setVisibility(View.GONE);
+                tv_toolbar_frag_go_back2.setVisibility(View.VISIBLE);
+            }
+        }
+    }
     public void goMainWeb(){
         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         isMain = true;
-        ConfigInfo.getInstance().setWebViewUrl("http://dev.api.minimon.com/Test/view/main");
+        ConfigInfo.getInstance().setWebViewUrl("http://lmfriends.com/android-web-view/");
+        changeToolbarVisibility(true);
         Fragment fragment = new WebViewFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.main_media_frame,fragment);

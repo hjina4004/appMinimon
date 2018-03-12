@@ -1,12 +1,11 @@
 package com.minimon.diocian.player;
 
-import io.realm.RealmObject;
 
 /**
  * Created by ICARUSUD on 2018. 3. 9..
  */
 
-public class SearchItem extends RealmObject{
+public class SearchItem{
     private String history;
     private String date;
 

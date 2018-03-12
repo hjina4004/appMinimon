@@ -1,5 +1,6 @@
 package com.minimon.diocian.player;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -11,6 +12,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -19,6 +21,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
@@ -32,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -186,6 +190,20 @@ public class DramaPlayActivity extends AppCompatActivity{
 
         if(!isLockSreen)
             isLockSreen = true;
+
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void checkWifi(){
@@ -371,6 +389,7 @@ public class DramaPlayActivity extends AppCompatActivity{
            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
            EpisodeInfo.getInsatnace().setIdx(obj.getString("idx"));
            c_title = obj.getString("c_title");
+           setTitle(c_title);
            nowEp = obj.getString("ep");
 //           tv_episode_description.setText(obj.getString("summary"));
            JSONArray jarr = obj.getJSONArray("list_tag");
@@ -399,9 +418,9 @@ public class DramaPlayActivity extends AppCompatActivity{
         mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
         mLockScreen = controlView.findViewById(R.id.img_exo_lock);
         if(this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-            mLockScreen.setImageResource(R.drawable.a022_play_b_lock_on);
+            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
         else
-            mLockScreen.setImageResource(R.drawable.a022_play_b_lock_off);
+            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
 
         controlView.findViewById(R.id.tv_playing_playlist).setVisibility(View.GONE);
         controlView.findViewById(R.id.img_playing_playlist).setVisibility(View.GONE);
@@ -410,11 +429,11 @@ public class DramaPlayActivity extends AppCompatActivity{
             public void onClick(View view) {
                 if(DramaPlayActivity.this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR){//잠겨있던 잠금 풀 경우
                     DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                    mLockScreen.setImageResource(R.drawable.a022_play_b_lock_off);
+                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
                     isLockSreen = !isLockSreen;
                 }else{ //다시 잠글경우
                     DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-                    mLockScreen.setImageResource(R.drawable.a022_play_b_lock_on);
+                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
                     isLockSreen = !isLockSreen;
                 }
             }
