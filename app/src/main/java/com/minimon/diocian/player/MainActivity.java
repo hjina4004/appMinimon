@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity
         LinearLayout view_menu_policy = view.findViewById(R.id.view_menu_policy);
         view_menu_policy.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_fix = view.findViewById(R.id.view_menu_fix);
-        view_menu_fix.setOnClickListener(drawerClickListenr);
+        view_menu_policy.setOnClickListener(drawerClickListenr);
 
     }
 
@@ -601,7 +601,7 @@ public class MainActivity extends AppCompatActivity
     public void goMainWeb(){
         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         isMain = true;
-        ConfigInfo.getInstance().setWebViewUrl("http://lmfriends.com/android-web-view/");
+        ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_main));
         changeToolbarVisibility(true);
         Fragment fragment = new WebViewFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();

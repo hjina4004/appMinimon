@@ -120,6 +120,7 @@
     <string name="url_qna">http://dev.api.minimon.com/Test/view/qna.list</string>
     <string name="url_policy">http://dev.api.minimon.com/Test/view/policy</string>
     <string name="url_fix">http://dev.api.minimon.com/Test/view/index</string>
+    <string name="url_main">"http://dev.api.minimon.com/Test/view/main"</string>
 
     <string name="intro_1">10분의 힐링, 미니몬</string>
     <string name="intro_2">국내 최초 웹드라마 플랫폼 미니몬\n언제 어디서나 고화질로 즐기세요.</string>
