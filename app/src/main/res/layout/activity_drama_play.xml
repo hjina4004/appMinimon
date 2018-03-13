@@ -5,38 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBaseBG">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBaseBG"
+        android:orientation="vertical"
+        android:paddingTop="17.33dp">
 
-    <!--<android.support.v4.widget.NestedScrollView-->
-        <!--android:id="@+id/drama_play_main_scrollview"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/fragment_video"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorBaseBG"
-            android:orientation="vertical"
-            android:paddingTop="17.33dp">
-            <FrameLayout
-                android:id="@+id/fragment_video"
+            android:layout_height="200dp"
+            android:background="#000000"
+            >
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                android:id="@+id/player_view"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#000000"
-                >
-                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-                    android:id="@+id/player_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <!--<RelativeLayout-->
-                        <!--android:layout_width="100dp"-->
-                        <!--android:layout_height="wrap_content"></RelativeLayout>-->
-                    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
-            </FrameLayout>
-            <WebView
-                android:id="@+id/webview_dramaplay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                android:layout_height="match_parent">
+            </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+        </FrameLayout>
+        <WebView
+            android:id="@+id/webview_dramaplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </LinearLayout>

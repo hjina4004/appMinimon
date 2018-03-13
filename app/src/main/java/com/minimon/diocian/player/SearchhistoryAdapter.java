@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by ICARUSUD on 2018. 3. 9..
@@ -19,6 +18,15 @@ public class SearchhistoryAdapter extends RecyclerView.Adapter {
     private List<SearchItem> items;
     private Context mContext;
     private DBHelper dbHelper;
+    private SearchHistoryAdapterListener mListener;
+
+    public interface SearchHistoryAdapterListener{
+        void onClick();
+    }
+
+    public void setHistorySearchListener(SearchHistoryAdapterListener listener){
+        mListener = listener;
+    }
 
     public SearchhistoryAdapter(Context context,  List<SearchItem> modelData){
         this.items = modelData;
@@ -53,7 +61,7 @@ public class SearchhistoryAdapter extends RecyclerView.Adapter {
         return items.size();
     }
 
-    public class SearchHistoryViewHolder extends RecyclerView.ViewHolder{
+    public class SearchHistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView tv_history;
         TextView tv_date;
@@ -63,13 +71,12 @@ public class SearchhistoryAdapter extends RecyclerView.Adapter {
             tv_history = itemView.findViewById(R.id.tv_history);
             tv_date = itemView.findViewById(R.id.tv_date);
             img_delete_history = itemView.findViewById(R.id.img_delete_history);
-//            img_delete_history.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                }
-//            });
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View view) {
+            if(mListener!=null) mListener.onClick();
+        }
     }
 }

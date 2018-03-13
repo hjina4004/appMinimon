@@ -63,7 +63,7 @@ import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, DBHelper.dbHelperListenr{
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, DBHelper.dbHelperListenr, SearchhistoryAdapter.SearchHistoryAdapterListener{
 
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView rec_search_history2;
 
     private SearchhistoryAdapter adapter;
-    private List<SearchItem> arrHistory = new ArrayList<SearchItem>();
     private LinearLayoutManager manager;
+    private List<SearchItem> arrHistory = new ArrayList<SearchItem>();
     private LinearLayoutManager manager2;
 //    private Realm realm;
 
@@ -219,6 +219,7 @@ public class MainActivity extends AppCompatActivity
 
 
         adapter = new SearchhistoryAdapter(this,arrHistory);
+        adapter.setHistorySearchListener(this);
         rec_search_history.setAdapter(adapter);
 
         ed_toolbar_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -240,6 +241,40 @@ public class MainActivity extends AppCompatActivity
                         textView.setText("");
 //                        arrHistory = dbHelper.getResult();
                         adapter.notifyDataSetChanged();
+                        hideSearch();
+                        ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_search));
+                        Fragment fragment = new WebViewFragment();
+                        changeFragment(fragment);
+                        return true; // consume.
+                    }
+                }
+                return false;
+            }
+        });
+
+        ed_toolbar_search2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_NEXT ||
+                        i == EditorInfo.IME_ACTION_DONE ||
+                        keyEvent != null &&
+                                keyEvent.getAction() == KeyEvent.ACTION_DOWN &&
+                                keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if (keyEvent == null || !keyEvent.isShiftPressed()) {
+                        // the user is done typing.
+                        Date today = Calendar.getInstance().getTime();Log.d("DBHELPER","add");
+                        SearchItem s = new SearchItem();
+                        s.setDate(String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
+                        s.setHistory(textView.getText().toString());
+                        dbHelper.insert(textView.getText().toString(),String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
+//                        arrHistory.add(s);
+                        textView.setText("");
+//                        arrHistory = dbHelper.getResult();
+                        adapter.notifyDataSetChanged();
+                        hideSearch2();
+                        ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_search));
+                        Fragment fragment = new WebViewFragment();
+                        changeFragment(fragment);
                         return true; // consume.
                     }
                 }
@@ -252,9 +287,6 @@ public class MainActivity extends AppCompatActivity
         goMainWeb();
     }
 
-    private void update(String history, String date){
-
-    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -401,15 +433,7 @@ public class MainActivity extends AppCompatActivity
                     view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
                     break;
                 case R.id.tv_toolbar_go_back:
-                    ed_toolbar_search.setVisibility(View.GONE);
-                    view_delete_search_history.setVisibility(View.GONE);
-                    rec_search_history.setVisibility(View.GONE);
-                    tv_toolbar_go_back.setVisibility(View.GONE);
-                    tv_toolbar_search.setVisibility(View.VISIBLE);
-                    tv_toolbar_open_drawer.setVisibility(View.VISIBLE);
-                    if(isMain){
-                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-                    }
+                    hideSearch();
                     break;
                 case R.id.view_delete_search_history2:
                     dbHelper.deleteAll();
@@ -429,12 +453,7 @@ public class MainActivity extends AppCompatActivity
                     view_main_toolbar2.setBackgroundColor(getResources().getColor(R.color.MainColor));
                     break;
                 case R.id.tv_toolbar_go_back2:
-                    ed_toolbar_search2.setVisibility(View.GONE);
-                    view_delete_search_history2.setVisibility(View.GONE);
-                    rec_search_history2.setVisibility(View.GONE);
-                    tv_toolbar_go_back2.setVisibility(View.GONE);
-                    tv_toolbar_search2.setVisibility(View.VISIBLE);
-                    tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
+                    hideSearch2();
                     break;
                 case R.id.view_delete_search_history:
                     dbHelper.deleteAll();
@@ -447,6 +466,27 @@ public class MainActivity extends AppCompatActivity
             }
         }
     };
+
+    private void hideSearch(){
+        ed_toolbar_search.setVisibility(View.GONE);
+        view_delete_search_history.setVisibility(View.GONE);
+        rec_search_history.setVisibility(View.GONE);
+        tv_toolbar_go_back.setVisibility(View.GONE);
+        tv_toolbar_search.setVisibility(View.VISIBLE);
+        tv_toolbar_open_drawer.setVisibility(View.VISIBLE);
+        if(isMain){
+            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+        }
+    }
+
+    private void hideSearch2(){
+        ed_toolbar_search2.setVisibility(View.GONE);
+        view_delete_search_history2.setVisibility(View.GONE);
+        rec_search_history2.setVisibility(View.GONE);
+        tv_toolbar_go_back2.setVisibility(View.GONE);
+        tv_toolbar_search2.setVisibility(View.VISIBLE);
+        tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
+    }
 
     private View.OnClickListener drawerClickListenr = new View.OnClickListener() {
         @Override
@@ -567,18 +607,20 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
             }
-
-            if(fragment != null){
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.main_media_frame, fragment);
-                ft.commit();
-            }
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
-            changeToolbarVisibility(isMain);
-//                view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
+            changeFragment(fragment);
         }
     };
+
+    private void changeFragment(Fragment frag){
+        if(frag != null){
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.main_media_frame, frag);
+            ft.commit();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        changeToolbarVisibility(isMain);
+    }
 
     private void changeToolbarVisibility(boolean ismain){
         if(ismain){
@@ -680,5 +722,14 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(MainActivity.this, GateActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onClick() {
+        hideSearch();
+        hideSearch2();
+        ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_search));
+        Fragment fragment = new WebViewFragment();
+        changeFragment(fragment);
     }
 }

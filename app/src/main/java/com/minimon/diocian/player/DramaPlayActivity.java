@@ -15,12 +15,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -29,10 +31,12 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -83,31 +87,20 @@ public class DramaPlayActivity extends AppCompatActivity{
     private final String STATE_PLAYER_FULLSCREEN = "playerFullscreen";
     private final int REQUEST_FULLSCREEN = 1;
 
-//    private NestedScrollView dramaPlayMainScrollView;
-
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private boolean playWhenReady = false;
     private boolean inErrorState;
-//    private long playBackPosition;
-//    private int currentWindow;
     private String videoUrl = "";
 
-//    private boolean mExoPlayerFullscreen = false;
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
     private TextView mEpisodeTitle;
     private ImageView mLockScreen;
     private boolean isLockSreen;
-//    private Dialog mFullScreenDialog;
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
     private ComponentListener componentListener;
-
-//    private TextView tv_content_title;
-//    private TextView tv_content_point;
-//    private TextView tv_episode_description;
-//    private TextView tv_episode_tag;
 
     private String nowBandWidth = "";
     private boolean isChangeBandWidth;
@@ -118,50 +111,20 @@ public class DramaPlayActivity extends AppCompatActivity{
     private TextView mBandWidth720;
     private TextView mBandWidth1080;
     private LinearLayout mBandWidthView;
-//    private boolean isnew = true;
-
-//    private int mResumeWindow;
-//    private long mResumePosition;
     MinimonEpisode minimonEpisode;
 
     //하단 재생목록, 인기목록
-//    LinearLayoutManager layoutManager;
-//    RecyclerView rc_playlist;
-//    List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
-//    PlaylistDramaAdapter epiAdapter;
     private String c_title;
     private String c_idx;
     private String nowEp;
 
     private WebView mWebView;
-//    FloatingActionButton fbScrollToTop;
-//    FloatingActionButton fbSortLastest;
-//    FloatingActionButton fbSortEp;
-//
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putInt(STATE_RESUME_WINDOW, mResumeWindow);
-//        outState.putLong(STATE_RESUME_POSITION, mResumePosition);
-//        outState.putBoolean(STATE_PLAYER_FULLSCREEN, mExoPlayerFullscreen);
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
         checkWifi();
-//        dramaPlayMainScrollView = findViewById(R.id.drama_play_main_scrollview);
-//        if(savedInstanceState != null){
-//            mResumeWindow = savedInstanceState.getInt(STATE_RESUME_WINDOW);
-//            mResumePosition = savedInstanceState.getInt(STATE_RESUME_POSITION);
-//            mExoPlayerFullscreen = savedInstanceState.getBoolean(STATE_PLAYER_FULLSCREEN);
-//        }
-//        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
-//        tv_content_point = findViewById(R.id.tv_content_point);
-//        tv_content_title = findViewById(R.id.tv_content_title);
-//        tv_episode_description = findViewById(R.id.tv_episode_description);
-//        tv_episode_tag = findViewById(R.id.tv_episode_tag);
 
         mWebView = findViewById(R.id.webview_dramaplay);
         mWebView.setWebViewClient(new WebViewClient());
@@ -170,29 +133,12 @@ public class DramaPlayActivity extends AppCompatActivity{
         componentListener = new ComponentListener();
         playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
 
-//        rc_playlist = findViewById(R.id.rc_playlist);
-//        rc_playlist.setNestedScrollingEnabled(false);
-//
-//        epiAdapter = new PlaylistDramaAdapter(this, arrEpisode,"info");
-//        rc_playlist.setAdapter(epiAdapter);
-//        epiAdapter.setClickListener(this);
-//
-//        layoutManager = new LinearLayoutManager(this);
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        rc_playlist.setLayoutManager(layoutManager);
-//
-//        fbScrollToTop = findViewById(R.id.fb_scroll_to_top);
-//        fbSortLastest = findViewById(R.id.fb_sort_lastest);
-//        fbSortEp = findViewById(R.id.fb_sort_episode);
-//        fbScrollToTop.setOnClickListener(mClickListener);
-//        fbSortLastest.setOnClickListener(mClickListener);
-//        fbSortEp.setOnClickListener(mClickListener);
-
         if(!isLockSreen)
             isLockSreen = true;
 
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
@@ -265,46 +211,6 @@ public class DramaPlayActivity extends AppCompatActivity{
 
     }
 
-//    @Override
-//    public void onClick(View v, final String idx) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("결제 진행");
-//        builder.setMessage(" 결제를 진행하시겠습니까?");
-//        builder.setPositiveButton("예",
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        sendEpisodeData(idx);
-//                        dramaPlayMainScrollView.scrollTo(0,0);
-//                    }
-//                });
-//        builder.setNegativeButton("아니오",
-//                new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        return;
-//                    }
-//                });
-//        builder.show();
-//    }
-
-//    private View.OnClickListener mClickListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            switch (v.getId()){
-//                case R.id.fb_scroll_to_top:
-//                    dramaPlayMainScrollView.scrollTo(0,0);
-//                    break;
-//                case R.id.fb_sort_episode:
-//                    sortEpiArr("asc");
-//                    break;
-//                case R.id.fb_sort_lastest:
-//                    sortEpiArr("desc");
-//                    break;
-//            }
-//        }
-//    };
-
     private void setData(JSONObject info){
        try{
            JSONArray videoArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
@@ -317,7 +223,6 @@ public class DramaPlayActivity extends AppCompatActivity{
            JSONArray episodeArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").get("list_ep");
            JSONObject episodeInformation = (JSONObject)info.getJSONObject("data").get("list");
            setEpisodeData(episodeInformation);
-//           setPlaylistData(episodeArr);
            videoUrl = videoObj.getString("playUrl");
            EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
            if (!isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
@@ -347,58 +252,21 @@ public class DramaPlayActivity extends AppCompatActivity{
             return o1.getEp() - o2.getEp();
         }
     }
-//   private void sortEpiArr(String type){
-//       if("asc".equals(type)){
-//           Asc asc = new Asc();
-//           Collections.sort(arrEpisode,asc);
-//       }else{
-//           Descending desc = new Descending();
-//           Collections.sort(arrEpisode, desc);
-//       }
-//       epiAdapter.notifyDataSetChanged();
-//   }
-
-//   private void setPlaylistData(JSONArray jarr){
-//       try {
-//           arrEpisode.clear();
-//           for (int i = 0; i < jarr.length(); i++) {
-//               JSONObject objEpisode = (JSONObject) jarr.get(i);
-//               Drama episode = new Drama();
-//               episode.setIdx(objEpisode.get("idx").toString());
-//               episode.setContentTitle(objEpisode.getString("title"));
-//               episode.setPoint(objEpisode.getString("point"));
-//               episode.setEp(objEpisode.getInt("ep"));
-//               episode.setPlayTime(objEpisode.getString("play_time"));
-//               episode.setHeartCount(objEpisode.getString("like_cnt"));
-//               episode.setPlayCount(objEpisode.getString("play_cnt"));
-//               episode.setThumbnailUrl(objEpisode.getString("image_url"));
-//               episode.setC_title(c_title);
-//               arrEpisode.add(episode);
-//           }
-//           epiAdapter.notifyDataSetChanged();
-//       }catch (JSONException e){
-//           e.printStackTrace();
-//       }
-//   }
 
    private void setEpisodeData(JSONObject obj){
        try {
-//           tv_content_title.setText(obj.getString("title"));
-//           tv_content_point.setText(obj.getString("point"));
            EpisodeInfo.getInsatnace().setTitle(obj.getString("title"));
            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
            EpisodeInfo.getInsatnace().setIdx(obj.getString("idx"));
            c_title = obj.getString("c_title");
            setTitle(c_title);
            nowEp = obj.getString("ep");
-//           tv_episode_description.setText(obj.getString("summary"));
            JSONArray jarr = obj.getJSONArray("list_tag");
            String tags = "";
            for(int i=0; i<jarr.length(); i++){
                JSONObject objTag = (JSONObject) jarr.get(i);
                tags += "#"+objTag.getString("tag") + " ";
            }
-//           tv_episode_tag.setText(tags);
        }catch (JSONException e){
            e.printStackTrace();
        }
@@ -614,12 +482,8 @@ public class DramaPlayActivity extends AppCompatActivity{
         Log.d(TAG+"Test","OnStop");
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-//                mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
-                // releasePlayer();
             }
-//            if (mFullScreenDialog != null)
-//                mFullScreenDialog.dismiss();
         }
         releasePlayer();
     }
@@ -674,12 +538,6 @@ public class DramaPlayActivity extends AppCompatActivity{
     }
 
     private MediaSource buildMediaSource(Uri uri, String videoType) {
-//        Uri mp4VideoUri = uri;
-//        DefaultBandwidthMeter bandwidthMeter1 = new DefaultBandwidthMeter();
-//        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,Util.getUserAgent(getActivity(), "yourApplicationName"),
-//                bandwidthMeter1); ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-//        MediaSource videoSource = new ExtractorMediaSource(mp4VideoUri,dataSourceFactory, extractorsFactory, null, null);
-//        player.prepare(videoSource); player_view.setUseController(false);
 
         DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
         if("mp4".equals(videoType))
@@ -757,10 +615,6 @@ public class DramaPlayActivity extends AppCompatActivity{
         @Override
         public void onPositionDiscontinuity(int reason) {
             if (inErrorState) {
-                // This will only occur if the user has performed a seek whilst in the error state. Update
-                // the resume position so that if the user then retries, playback will resume from the
-                // position to which they seeked.
-//                updateResumePosition();
             }
         }
 
