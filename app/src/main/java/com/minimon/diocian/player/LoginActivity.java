@@ -125,6 +125,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onResponseHtml(String html) {
+
+            }
         });
     }
 

@@ -402,38 +402,13 @@ public class DramaPlayActivity extends AppCompatActivity{
         super.onStart();
         Log.d(TAG+"Test","OnStart");
         if (Util.SDK_INT > 23) {
-//            initFullscreenDialog();
-
             initData();
-//            initFullscreenButton();
             if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty()) {
-                Log.d("LoadingUrl_isEmpty","true");
                 sendEpisodeData("645");
             }
             else {
-                Log.d("LoadingUrl_isEmpty","false");
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
-//            if(mExoPlayerFullscreen){
-//                ((ViewGroup) playerView.getParent()).removeView(playerView);
-//                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//                mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
-//                mFullScreenDialog.show();
-//            }
-//            initFullscreenButton();
-//            initFullscreenDialog();
-//            ContentValues values = new ContentValues();
-//            values.put("ep_idx","645");
-//            values.put("quality","his");
-//            values.put("id",UserInfo.getInstance().getUID());
-//            minimonEpisode.info(values);
-//            if(mExoPlayerFullscreen){
-//                ((ViewGroup) playerView.getParent()).removeView(playerView);
-//                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//                mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
-//                mFullScreenDialog.show();
-//            }
-//            isnew = false;
         }
     }
 
@@ -442,20 +417,12 @@ public class DramaPlayActivity extends AppCompatActivity{
         super.onResume();
         Log.d(TAG+"Test","OnResume");
         if (Util.SDK_INT <= 23) {
-//            initFullscreenDialog();
-
             initData();
 
             if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
                 sendEpisodeData("645");
             else
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
-//            if(mExoPlayerFullscreen){
-//                ((ViewGroup) playerView.getParent()).removeView(playerView);
-//                mFullScreenDialog.addContentView(playerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//                mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_fullscreen_skrink));
-//                mFullScreenDialog.show();
-//            }
         }
     }
 
@@ -465,13 +432,9 @@ public class DramaPlayActivity extends AppCompatActivity{
         Log.d(TAG+"Test","OnPause");
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-//                mResumeWindow = playerView.getPlayer().getCurrentWindowIndex();
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
-                //releasePlayer();
 
             }
-//            if (mFullScreenDialog != null)
-//                mFullScreenDialog.dismiss();
         }
         releasePlayer();
    }
@@ -499,24 +462,18 @@ public class DramaPlayActivity extends AppCompatActivity{
                     new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
             TrackSelector trackSelector =
                     new DefaultTrackSelector(adaptiveTrackSelectionFactory);
-//            ExoPlayerFactory.newSimpleInstance(getActivity(),trackSelector);
             player = ExoPlayerFactory.newSimpleInstance(this,trackSelector);
-//                    ExoPlayerFactory.newSimpleInstance(new DefaultRenderersFactory(getActivity()),
-//                    new DefaultTrackSelector(adaptiveTrackSelectionFactory), new DefaultLoadControl());
 
             player.addListener(componentListener);
             player.setAudioDebugListener(componentListener);
             player.setVideoDebugListener(componentListener);
-//            PlaybackControlView simpleExoplayerView;
             playerView.setPlayer(player);
 
             player.setPlayWhenReady(playWhenReady);
         }
 
 
-//        videoUrl.replace("&","&26");
         MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
-//        player.seekTo(currentWindow, playBackPosition);
         playerView.getPlayer().prepare(mediaSources, true, false);
         inErrorState = false;
         if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
@@ -527,7 +484,6 @@ public class DramaPlayActivity extends AppCompatActivity{
 
     private void releasePlayer() {
         if (player != null) {
-//            mResumeWindow = player.getCurrentWindowIndex();
             playWhenReady = player.getPlayWhenReady();
             player.removeListener(componentListener);
             player.setAudioDebugListener(null);

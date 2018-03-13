@@ -6,10 +6,17 @@ import android.graphics.Bitmap;
 import android.net.UrlQuerySanitizer;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,6 +68,42 @@ public class MyWebviewClient extends WebViewClient {
             return super.shouldOverrideUrlLoading(view, url);
         }
     }
+
+
+
+//    @Override
+//    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+//        try {
+//            URL mUrl = new URL(url);
+//            HttpURLConnection connection = (HttpURLConnection) mUrl.openConnection();
+//            Log.d("InterCeptMethod", connection.getRequestMethod().toString());
+//            Log.d("InterCeptProperty", connection.getRequestProperties().toString());
+//            connection.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
+//            connection.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
+//            connection.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;charset=UTF-8");
+//            connection.setRequestProperty("Authorization", UserInfo.getInstance().getToken());
+//
+//            Log.d("InterCeptUrlRe",url);
+//            String strParams = url.split("\\?")[1];
+//            Log.d("InterCeptUrl",strParams);
+//
+//            OutputStream os = connection.getOutputStream();
+//            os.write(strParams.getBytes("UTF-8")); // 출력 스트림에 출력.
+//            os.flush(); // 출력 스트림을 플러시(비운다)하고 버퍼링 된 모든 출력 바이트를 강제 실행.
+//            os.close(); // 출력 스트림을 닫고 모든 시스템 자원을 해제.
+//
+////            connection.setDoInput(true);
+//            connection.connect();
+//
+//            InputStream resultInputStream = connection.getInputStream();
+//
+//            return new WebResourceResponse("text/html","utf-8",resultInputStream);
+//        }catch (MalformedURLException e){
+//            return null;
+//        }catch (IOException e){
+//            return null;
+//        }
+//    }
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {

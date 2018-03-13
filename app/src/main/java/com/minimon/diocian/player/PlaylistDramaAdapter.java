@@ -61,6 +61,8 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
             PlayListItemViewHolder itemViewHolder = (PlayListItemViewHolder) holder;
             if (!TextUtils.isEmpty(item.getThumbnailUrl()))
                 Picasso.with(mContext).load(item.getThumbnailUrl()).into(itemViewHolder.thumbnail);
+            itemViewHolder.mCount.setText(item.getContentTitle());
+            itemViewHolder.mChannelName.setText(item.getC_title());
         }
     }
 
@@ -103,10 +105,14 @@ public class PlaylistDramaAdapter extends RecyclerView.Adapter {
     }
     public class PlayListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView thumbnail;
+        TextView mCount;
+        TextView mChannelName;
 
         public PlayListItemViewHolder(View itemView) {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.img_playlist_thumbnail);
+            mCount = itemView.findViewById(R.id.tv_playlist_count);
+            mChannelName = itemView.findViewById(R.id.tv_playlist_channelName);
             itemView.setOnClickListener(this);
         }
 

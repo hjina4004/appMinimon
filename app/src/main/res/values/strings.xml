@@ -120,7 +120,7 @@
     <string name="url_qna">http://dev.api.minimon.com/Test/view/qna.list</string>
     <string name="url_policy">http://dev.api.minimon.com/Test/view/policy</string>
     <string name="url_fix">http://dev.api.minimon.com/Test/view/index</string>
-    <string name="url_main">"http://dev.api.minimon.com/Test/view/main"</string>
+    <string name="url_main">"http://dev.api.minimon.com/Contents/view"</string>
     <string name="url_search">http://dev.api.minimon.com/Test/view/search</string>
 
     <string name="intro_1">10분의 힐링, 미니몬</string>

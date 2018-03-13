@@ -106,6 +106,11 @@ public class NewMemberActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onResponseHtml(String html) {
+
+            }
         });
     }
     private void resultMinimonSignup(JSONObject info) {

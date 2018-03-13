@@ -1,11 +1,13 @@
 package com.minimon.diocian.player;
 
 import android.app.Fragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,7 +29,7 @@ import android.widget.ProgressBar;
  * to handle interaction events.
  * create an instance of this fragment.
  */
-public class WebViewFragment extends Fragment implements MainActivity.onKeypressListenr, MyWebChromeClient.ProgressListener{
+public class WebViewFragment extends Fragment implements MainActivity.onKeypressListenr, MyWebChromeClient.ProgressListener, MinimonUser.MinimonUserListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_WEBVIEW = "webViewUrl";
@@ -66,17 +74,36 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        UserInfo info = UserInfo.getInstance();
-        String postValue = "userId="+info.getUID()+"&loc="+info.getLoc()+"&apiToken="+info.getToken();
-        mProgressBar = view.findViewById(R.id.progress_bar);
+
         mWebView = view.findViewById(R.id.webview_other);
+        mProgressBar = view.findViewById(R.id.progress_bar);
         mWebView.setWebViewClient(new MyWebviewClient(getActivity(),mProgressBar));
         mWebView.setWebChromeClient(new WebChromeClient());
-//        mWebView.postUrl(ConfigInfo.getInstance().getWebViewUrl(), postValue.getBytes());
-        mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl()+"?"+postValue);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.addJavascriptInterface(new JavascriptInterface(getActivity(),mWebView),"minimon");
-//        getActivity().findViewById(R.id.view_main_toolbar).setVisibility(View.VISIBLE);
+
+//        MinimonUser user = new MinimonUser();
+//        UserInfo userInfo = UserInfo.getInstance();
+//        ContentValues content = new ContentValues();
+//        content.put("id", userInfo.getUID());
+//        content.put("loc","Android");
+//        content.put("page","main");
+//        user.setListener(this);
+//        user.goToMain(content);
+//        return;
+
+
+        UserInfo info = UserInfo.getInstance();
+        String postValue = "id="+info.getUID()+"&loc=Android"+"&page=main";
+        HashMap<String,String> hashMap = new HashMap<String,String>();
+
+
+        hashMap.put("Authorization",info.getToken());
+//        mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl()+"?"+postValue,null);
+
+        mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl()+"?"+postValue,hashMap);
+//
+//        mWebView.addJavascriptInterface(new JavascriptInterface(getActivity(),mWebView),"minimon");
+////        getActivity().findViewById(R.id.view_main_toolbar).setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -103,5 +130,16 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         if(progressValue == 100){
             mProgressBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onResponse(JSONObject info) {
+        Log.d("PostAPITOKEN", info.toString());
+    }
+
+    @Override
+    public void onResponseHtml(String html) {
+        Log.d("PostAPITOKEN", html);
+        mWebView.loadData(html, "text/html","utf-8");
     }
 }

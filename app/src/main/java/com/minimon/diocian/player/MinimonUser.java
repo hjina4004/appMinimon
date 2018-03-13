@@ -412,12 +412,14 @@ import org.json.JSONObject;
 public class MinimonUser {
     private final String TAG = "MinimonUser";
     private final String API_URL = "http://dev.api.minimon.com/User/";
+    private final String WEBVIEW_URL = "http://dev.api.minimon.com/";
     private String currentRequest;
     private String typeSocial;
 
     public interface MinimonUserListener {
         // These methods are the different events and need to pass relevant arguments with the event
         public void onResponse(JSONObject info);
+        public void onResponseHtml(String html);
     }
     private MinimonUserListener listener;
 
@@ -445,6 +447,13 @@ public class MinimonUser {
         typeSocial = info.getAsString("value");
         NetworkTask networkTask = new NetworkTask(API_URL+current, info);
 //        networkTask.setToken(UserInfo.getInstance().getToken());
+        networkTask.execute();
+    }
+
+    private void requestFunctionToWebview(String current, ContentValues info) {
+        currentRequest = current;
+        NetworkTask networkTask = new NetworkTask(WEBVIEW_URL+current, info);
+        networkTask.setToken(UserInfo.getInstance().getToken());
         networkTask.execute();
     }
 
@@ -591,6 +600,13 @@ public class MinimonUser {
             return;
         }
         try {
+            Log.d("ResponseNetworkValue",s);
+            if(s.contains("<!DOCTYPE html>")){
+                if(listener!=null){
+                    listener.onResponseHtml(s);
+                }
+                return;
+            }
             JSONObject objJSON = new JSONObject(s);
             objJSON.put("current_request", currentRequest);
             objJSON.put("current_social", typeSocial);
@@ -601,5 +617,9 @@ public class MinimonUser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void goToMain(ContentValues info){
+        requestFunctionToWebview("Contents/view", info);
     }
 }

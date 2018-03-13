@@ -58,6 +58,11 @@ public class FindMemberActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onResponseHtml(String html) {
+
+            }
         });
     }
 

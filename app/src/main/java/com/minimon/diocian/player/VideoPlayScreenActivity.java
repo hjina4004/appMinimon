@@ -379,6 +379,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 episode.setContentTitle(objEpisode.getString("title"));
                 episode.setThumbnailUrl(objEpisode.getString("image_url"));
                 episode.setPoint(objEpisode.getString("point"));
+                episode.setPlayCount(objEpisode.getString("play_cnt"));
                 arrEpisode.add(episode);
             }
             epiAdapter.notifyDataSetChanged();
