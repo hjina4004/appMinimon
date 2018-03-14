@@ -59,10 +59,6 @@ public class FindMemberActivity extends AppCompatActivity {
                 }
             }
 
-            @Override
-            public void onResponseHtml(String html) {
-
-            }
         });
     }
 

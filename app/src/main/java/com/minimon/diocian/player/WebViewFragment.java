@@ -29,13 +29,19 @@ import java.util.HashMap;
  * to handle interaction events.
  * create an instance of this fragment.
  */
-public class WebViewFragment extends Fragment implements MainActivity.onKeypressListenr, MyWebChromeClient.ProgressListener, MinimonUser.MinimonUserListener{
+public class WebViewFragment extends Fragment implements MainActivity.onKeypressListenr,
+        MyWebChromeClient.ProgressListener,
+        MinimonUser.MinimonUserListener,
+        MinimonWebView.MinimonWebviewListener,
+        JavascriptInterface.JavascriptInterfaceListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_WEBVIEW = "webViewUrl";
 
     private WebView mWebView;
     private ProgressBar mProgressBar;
+    private MinimonWebView minimonWebView;
+    private JavascriptInterface javascriptInterface;
 
     // TODO: Rename and change types of parameters
 
@@ -75,35 +81,25 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        minimonWebView = new MinimonWebView();
+        minimonWebView.setListener(this);
+        javascriptInterface = new JavascriptInterface(getActivity(),mWebView);
+        javascriptInterface.setListener(this);
+
         mWebView = view.findViewById(R.id.webview_other);
         mProgressBar = view.findViewById(R.id.progress_bar);
         mWebView.setWebViewClient(new MyWebviewClient(getActivity(),mProgressBar));
         mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.addJavascriptInterface(javascriptInterface,"minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
 
-//        MinimonUser user = new MinimonUser();
-//        UserInfo userInfo = UserInfo.getInstance();
-//        ContentValues content = new ContentValues();
-//        content.put("id", userInfo.getUID());
-//        content.put("loc","Android");
-//        content.put("page","main");
-//        user.setListener(this);
-//        user.goToMain(content);
-//        return;
-
-
         UserInfo info = UserInfo.getInstance();
-        String postValue = "id="+info.getUID()+"&loc=Android"+"&page=main";
-        HashMap<String,String> hashMap = new HashMap<String,String>();
 
-
-        hashMap.put("Authorization",info.getToken());
-//        mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl()+"?"+postValue,null);
-
-        mWebView.loadUrl(ConfigInfo.getInstance().getWebViewUrl()+"?"+postValue,hashMap);
-//
-//        mWebView.addJavascriptInterface(new JavascriptInterface(getActivity(),mWebView),"minimon");
-////        getActivity().findViewById(R.id.view_main_toolbar).setVisibility(View.VISIBLE);
+        ContentValues content = new ContentValues();
+        content.put("id", info.getUID());
+        content.put("loc","Android");
+        content.put("page",WebViewInfo.getInstance().getPageName());
+        minimonWebView.goToWeb("Contents/view", content);
     }
 
     @Override
@@ -136,10 +132,58 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onResponse(JSONObject info) {
         Log.d("PostAPITOKEN", info.toString());
     }
+//
+//    @Override
+//    public void onResponseHtml(String html) {
+//        Log.d("PostAPITOKEN", html);
+//        mWebView.loadData(html, "text/html","utf-8");
+//    }
 
     @Override
-    public void onResponseHtml(String html) {
-        Log.d("PostAPITOKEN", html);
-        mWebView.loadData(html, "text/html","utf-8");
+    public void onGoToWeb(String url, String page, String key, String value) {
+        Log.d("onGoToWeb",url);
+        UserInfo info = UserInfo.getInstance();
+        ContentValues content = new ContentValues();
+        content.put("id",info.getUID());
+        content.put("loc","Android");
+        content.put("page",page);
+        content.put(key,value);
+        Log.d("onGoToWebUID",info.getUID());
+        minimonWebView.goToWeb(url, content);
+    }
+
+    @Override
+    public void onResponseHtml(String html, String baseUrl) {
+        Log.d("BasrUrl",baseUrl);
+        Log.d("BaseUrlHtml",html);
+        mWebView.loadDataWithBaseURL(baseUrl,html,"text/html","utf-8",null);
+    }
+
+    @Override
+    public void closeRefreshWeb(String url, String page, String key, String value) {
+        UserInfo info = UserInfo.getInstance();
+        ContentValues content = new ContentValues();
+        content.put("id",info.getUID());
+        content.put("loc","Android");
+        content.put("page",page);
+        content.put(key,value);
+        Log.d("onGoToWebUID",info.getUID());
+        minimonWebView.goToWeb(url, content);
+    }
+
+    @Override
+    public void closeDepthRefreshWeb(String depth) {
+        if(mWebView.canGoBackOrForward(Integer.parseInt(depth)))
+            mWebView.goBackOrForward(Integer.parseInt(depth));
+    }
+
+    @Override
+    public void goToPg(String url, String item, String how) {
+
+    }
+
+    @Override
+    public void goToSearch() {
+
     }
 }

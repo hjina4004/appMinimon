@@ -492,7 +492,13 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View v) {
             Fragment fragment = null;
-
+            WebViewInfo info = WebViewInfo.getInstance();
+            info.setC_id("");
+            info.setC_idx("");
+            info.setCategory("");
+            info.setEp_idx("");
+            info.setPageName("");
+            info.setSearch_tag("");
             switch (v.getId()){
                 case R.id.view_menu_logout:
                     tryLogout();
@@ -515,7 +521,7 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
                 case R.id.view_menu_user_info:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_user_info));
+                    info.setPageName(getResources().getString(R.string.page_name_info));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText(getResources().getString(R.string.menu_user_page));
@@ -523,28 +529,28 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
                 case R.id.view_menu_purchase:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_purchase));
+                    info.setPageName(getResources().getString(R.string.page_name_purchase));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.GONE);
                     isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_favorite:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_favorite));
+                    info.setPageName(getResources().getString(R.string.page_name_like));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.GONE);
                     isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_subscribe:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_subscribe));
+                    info.setPageName(getResources().getString(R.string.page_name_keep));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.GONE);
                     isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_point_history:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_point_history));
+                    info.setPageName(getResources().getString(R.string.page_name_point_list));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText(getResources().getString(R.string.menu_point_history));
@@ -552,7 +558,7 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
                 case R.id.view_menu_pay_history:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_pay_history));
+                    info.setPageName(getResources().getString(R.string.page_name_pay_list));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText(getResources().getString(R.string.menu_pay_history));
@@ -568,14 +574,14 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
                 case R.id.view_menu_notice:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_notice));
+                    info.setPageName(getResources().getString(R.string.page_name_notice));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("공지사항");
                     isMain = false;
                     break;
                 case R.id.view_menu_faq:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_faq));
+                    info.setPageName(getResources().getString(R.string.page_name_faq));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("FAQ");
@@ -583,7 +589,7 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
                 case R.id.view_menu_qna:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_qna));
+                    info.setPageName(getResources().getString(R.string.page_name_qna_list));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("1:1 QNA");
@@ -591,7 +597,7 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
                 case R.id.view_menu_policy:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_policy));
+                    info.setPageName(getResources().getString(R.string.page_name_policy));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("이용약관");
@@ -599,7 +605,7 @@ public class MainActivity extends AppCompatActivity
                     isMain = false;
                     break;
                 case R.id.view_menu_fix:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_fix));
+                    info.setPageName(getResources().getString(R.string.page_name_index));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("이용권");
@@ -643,7 +649,7 @@ public class MainActivity extends AppCompatActivity
     public void goMainWeb(){
         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         isMain = true;
-        ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_main));
+        WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_main));
         changeToolbarVisibility(true);
         Fragment fragment = new WebViewFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();

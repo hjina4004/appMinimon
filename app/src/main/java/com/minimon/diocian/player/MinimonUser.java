@@ -419,7 +419,7 @@ public class MinimonUser {
     public interface MinimonUserListener {
         // These methods are the different events and need to pass relevant arguments with the event
         public void onResponse(JSONObject info);
-        public void onResponseHtml(String html);
+//        public void onResponseHtml(String html);
     }
     private MinimonUserListener listener;
 
@@ -601,12 +601,12 @@ public class MinimonUser {
         }
         try {
             Log.d("ResponseNetworkValue",s);
-            if(s.contains("<!DOCTYPE html>")){
-                if(listener!=null){
-                    listener.onResponseHtml(s);
-                }
-                return;
-            }
+//            if(s.contains("<!DOCTYPE html>")){
+//                if(listener!=null){
+//                    listener.onResponseHtml(s);
+//                }
+//                return;
+//            }
             JSONObject objJSON = new JSONObject(s);
             objJSON.put("current_request", currentRequest);
             objJSON.put("current_social", typeSocial);

@@ -123,6 +123,39 @@
     <string name="url_main">"http://dev.api.minimon.com/Contents/view"</string>
     <string name="url_search">http://dev.api.minimon.com/Test/view/search</string>
 
+    <string name="page_name_main">main</string>
+    <string name="page_name_info">info</string>
+    <string name="page_name_update_info">update.info</string>
+    <string name="page_name_update_pwd">update.pwd</string>
+    <string name="page_name_pay_list">pay.list</string>
+    <string name="page_name_point_list">point.list</string>
+    <string name="page_name_purchase">purchase</string>
+    <string name="page_name_like">like</string>
+    <string name="page_name_keep">keep</string>
+    <string name="page_name_cookie_list">cookie.list</string>
+    <string name="page_name_policy">policy</string>
+    <string name="page_name_faq">faq</string>
+    <string name="page_name_notice">notice</string>
+    <string name="page_name_qna_list">qna.list</string>
+    <string name="page_name_qna_write">qna.write</string>
+    <string name="page_name_index">index</string>
+    <string name="page_name_fixed_cancel">fixed.cancel</string>
+    <string name="page_name_result_vaccount">result.veccount</string>
+    <string name="page_name_result_succ">result.succ</string>
+    <string name="page_name_result_fail">result_fail</string>
+    <string name="page_name_result_cancel">result.cancel</string>
+    <string name="page_name_search">search</string>
+    <string name="page_name_episode">episode</string>
+    <string name="page_name_episode_list">episode.list</string>
+    <string name="page_name_category">category</string>
+    <string name="page_name_steelcut">steelcut</string>
+    <!--point.list:포인트내역 , purchase: 시청영상, like: 찜영상, keep: 구독채널, cookie.list:최근 본영상
+policy:이용약관, faq:FAQ, notice:공지사항, qna.list: Q&A 목록, qna.wirte:Q&A 문의하기
+index:충전, fixed.cancle: 이용권 연장해지,result.vaccount: 가상계좌신청, result.succ: 결제성공,
+result_fail: 결제실패, result.cancel: 결제취소
+main: 메인, search: 검색, channel: 채널메인, episode: 에피소드메인,  episode.list: 재생영상,
+category: 장르목록, steelcut: 스틸컷-->
+
     <string name="intro_1">10분의 힐링, 미니몬</string>
     <string name="intro_2">국내 최초 웹드라마 플랫폼 미니몬\n언제 어디서나 고화질로 즐기세요.</string>
     <string name="server_error_title">미니몬 서비스 이용에 불편을 드려 죄송합니다.</string>

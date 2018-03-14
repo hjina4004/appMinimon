@@ -126,10 +126,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             }
 
-            @Override
-            public void onResponseHtml(String html) {
-
-            }
         });
     }
 
