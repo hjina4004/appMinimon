@@ -1,19 +1,30 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.minimon.diocian.player.WebViewFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <WebView
-        android:id="@+id/webview_other"
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/player_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="200dp"
+        android:visibility="gone">
+    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- TODO: Update blank fragment layout -->
+        <WebView
+            android:id="@+id/webview_other"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-</FrameLayout>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
+</LinearLayout>

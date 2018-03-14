@@ -27,6 +27,7 @@ public class WebViewInfo {
     private String ep_idx;
     private String category;
     private String search_tag;
+    private String htmlCode;
 
     public String getPageName() {
         return pageName;
@@ -74,5 +75,13 @@ public class WebViewInfo {
 
     public void setSearch_tag(String search_tag) {
         this.search_tag = search_tag;
+    }
+
+    public String getHtmlCode() {
+        return htmlCode;
+    }
+
+    public void setHtmlCode(String htmlCode) {
+        this.htmlCode = htmlCode;
     }
 }

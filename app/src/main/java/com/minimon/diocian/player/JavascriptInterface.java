@@ -29,7 +29,7 @@ public class JavascriptInterface {
 
     @android.webkit.JavascriptInterface
     public void goToWeb(String url, String page, String key, String value){
-        Log.d("JavascriptInterface", "goToWeb");
+        Log.d("JavascriptInterface", value);
         if(mListener!=null)
             mListener.onGoToWeb(url,page,key,value);
 //        mWebView.loadUrl("window.minimon.goToWeb('"+url+"','"+page+"','"+key+"','"+value+"'");

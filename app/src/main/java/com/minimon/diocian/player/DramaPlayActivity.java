@@ -89,7 +89,6 @@ public class DramaPlayActivity extends AppCompatActivity{
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private boolean playWhenReady = false;
-    private boolean inErrorState;
     private String videoUrl = "";
 
     private FrameLayout mFullScreenButton;
@@ -237,21 +236,6 @@ public class DramaPlayActivity extends AppCompatActivity{
            return;
        }
    }
-
-   public static class Descending implements Comparator<Drama>{
-
-       @Override
-       public int compare(Drama o1, Drama o2) {
-           return o2.getEp() - o1.getEp();
-       }
-   }
-    public static class Asc implements Comparator<Drama>{
-
-        @Override
-        public int compare(Drama o1, Drama o2) {
-            return o1.getEp() - o2.getEp();
-        }
-    }
 
    private void setEpisodeData(JSONObject obj){
        try {
@@ -475,7 +459,6 @@ public class DramaPlayActivity extends AppCompatActivity{
 
         MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
         playerView.getPlayer().prepare(mediaSources, true, false);
-        inErrorState = false;
         if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
             playerView.getPlayer().seekTo(EpisodeInfo.getInsatnace().getResumePosition());
             playerView.getPlayer().setPlayWhenReady(true);
@@ -565,13 +548,11 @@ public class DramaPlayActivity extends AppCompatActivity{
 
         @Override
         public void onPlayerError(ExoPlaybackException error) {
-            inErrorState = true;
         }
 
         @Override
         public void onPositionDiscontinuity(int reason) {
-            if (inErrorState) {
-            }
+
         }
 
 
