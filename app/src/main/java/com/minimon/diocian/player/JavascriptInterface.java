@@ -19,6 +19,7 @@ public class JavascriptInterface {
         void closeDepthRefreshWeb(String depth);
         void goToPg(String url, String item, String how);
         void goToSearch();
+        void changePlayer(String idx);
     }
     private JavascriptInterfaceListener mListener;
     public void setListener(JavascriptInterfaceListener listener){mListener = listener;}
@@ -71,12 +72,13 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void closeGoToNative(String page){
         Log.d("JavascriptInterface", "closeGoToNative");
-        Toast.makeText(mContext,"closeDepthRefreshWeb",Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext,"closeGoToNative",Toast.LENGTH_SHORT).show();
     }
 
     @android.webkit.JavascriptInterface
     public void changePlayer(String idx){
-        Log.d("JavascriptInterface", "changePlayer");
-        Toast.makeText(mContext,"closeDepthRefreshWeb",Toast.LENGTH_SHORT).show();
+        Log.d("changeplayer", idx);
+        if(mListener!=null)
+            mListener.changePlayer(idx);
     }
 }

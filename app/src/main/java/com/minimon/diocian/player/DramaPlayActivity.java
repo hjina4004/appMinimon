@@ -33,6 +33,7 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +74,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DramaPlayActivity extends AppCompatActivity implements MinimonWebView.MinimonWebviewListener{
+public class DramaPlayActivity extends AppCompatActivity implements MinimonWebView.MinimonWebviewListener, JavascriptInterface.JavascriptInterfaceListener{
 
     private final String TAG = "DramaPlayActivity";
     private final String STATE_RESUME_WINDOW = "resumeWindow";
@@ -119,14 +120,24 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     private String value;
     private MinimonWebView minimonWebView;
 
+    private ProgressBar progress_bar_drama_play;
+    private JavascriptInterface javascriptInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
 //        checkWifi();
+        progress_bar_drama_play = findViewById(R.id.progress_bar_drama_play);
         mWebView = findViewById(R.id.webview_dramaplay);
-        mWebView.setWebViewClient(new WebViewClient());
+        javascriptInterface = new JavascriptInterface(this, mWebView);
+        javascriptInterface.setListener(this);
+
+        mWebView.setWebViewClient(new MyWebviewClient(this, progress_bar_drama_play));
         mWebView.setWebChromeClient(new WebChromeClient());
+        mWebView.addJavascriptInterface(javascriptInterface,"minimon");
+        mWebView.getSettings().setJavaScriptEnabled(true);
+
 
         url = getIntent().getStringExtra("url");
         page = getIntent().getStringExtra("page");
@@ -516,6 +527,60 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     public void onResponseHtml(String html, String baseUrl) {
         Log.d("onResponseHtmlDramaPlay",baseUrl);
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
+    }
+
+    @Override
+    public void onGoToWeb(String url, String page, String key, String value) {
+        UserInfo info = UserInfo.getInstance();
+        ContentValues content = new ContentValues();
+        content.put("id", info.getUID());
+        content.put("loc", "Android");
+        content.put("page", page);
+        if("episode".equals(page)) {
+            Log.d("episodeValue",value);
+            goToEpisodeMain(url,page,key,value);
+            return;
+        }
+        Log.d("WebViewFragmentisSearch","page is not Search");
+        content.put(key, value);
+        Log.d("onGoToWebUID", info.getUID());
+        minimonWebView.goToWeb(url, content);
+    }
+
+    private void goToEpisodeMain(String url, String page, String key, String value)
+    {
+        Intent intent = new Intent(this,DramaPlayActivity.class);
+        intent.putExtra("url",url);
+        intent.putExtra("page",page);
+        intent.putExtra("key",key);
+        intent.putExtra("value",value);
+        startActivity(intent);
+    }
+
+    @Override
+    public void closeRefreshWeb(String url, String page, String key, String value) {
+        Log.d("closeRefreshWeb", url+","+page+","+key+","+value);
+    }
+
+    @Override
+    public void closeDepthRefreshWeb(String depth) {
+
+    }
+
+    @Override
+    public void goToPg(String url, String item, String how) {
+
+    }
+
+    @Override
+    public void goToSearch() {
+
+    }
+
+    @Override
+    public void changePlayer(String idx) {
+        Log.d("DramaPlayChangePlayer",idx);
+        sendEpisodeData(idx);
     }
 
     private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {

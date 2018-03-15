@@ -291,4 +291,9 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void goToSearch() {
 
     }
+
+    @Override
+    public void changePlayer(String idx) {
+
+    }
 }
