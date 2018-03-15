@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -34,6 +35,8 @@ public class NewMemberActivity extends AppCompatActivity {
     private CheckBox cbAgreeTemrsOfUse;
     private CheckBox cbAgreePrivacyPolicy;
 
+    private Button btnTermOfUse;
+    private Button btnPrivacyPolicy;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +46,22 @@ public class NewMemberActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
 
+        btnTermOfUse = findViewById(R.id.btnTermOfUse);
+        btnTermOfUse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewMemberActivity.this, PolicyActivity.class);
+                startActivity(intent);
+            }
+        });
+        btnPrivacyPolicy = findViewById(R.id.btnPrivacyPolicy);
+        btnPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewMemberActivity.this, PolicyActivity.class);
+                startActivity(intent);
+            }
+        });
         strType = getIntent().getStringExtra("type");
         strDeviceID = DeviceUuidFactory.getDeviceUuid(this.getApplicationContext());
         Log.i("strType", strType);
