@@ -406,7 +406,7 @@ public class MainActivity extends AppCompatActivity
         LinearLayout view_menu_policy = view.findViewById(R.id.view_menu_policy);
         view_menu_policy.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_fix = view.findViewById(R.id.view_menu_fix);
-        view_menu_policy.setOnClickListener(drawerClickListenr);
+        view_menu_fix.setOnClickListener(drawerClickListenr);
 
     }
 
@@ -520,7 +520,7 @@ public class MainActivity extends AppCompatActivity
                     goMainWeb();
                     break;
                 case R.id.view_menu_cookies:
-                    info.setPageName(getResources().getString(R.string.page_name_index));
+                    info.setPageName(getResources().getString(R.string.page_name_cookie_list));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.GONE);
                     isShowSearch = true;

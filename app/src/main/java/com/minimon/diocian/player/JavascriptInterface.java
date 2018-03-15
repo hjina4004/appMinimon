@@ -3,6 +3,7 @@ package com.minimon.diocian.player;
 import android.content.Context;
 import android.util.Log;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 /**
  * Created by GOOD on 2018-03-12.
@@ -38,6 +39,7 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void closeRefreshWeb(String url, String page, String key, String value){
         Log.d("JavascriptInterface", "closeRefreshWeb");
+        Toast.makeText(mContext,"closeRefreshWeb",Toast.LENGTH_SHORT).show();
         if(mListener!=null)
             mListener.closeRefreshWeb(url,page,key,value);
     }
@@ -45,6 +47,7 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void closeDepthRefreshWeb(String depth){
         Log.d("JavascriptInterface", "closeDepthRefreshWeb");
+        Toast.makeText(mContext,"closeDepthRefreshWeb",Toast.LENGTH_SHORT).show();
         if(mListener!=null){
             mListener.closeDepthRefreshWeb(depth);
         }
@@ -53,6 +56,9 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void goToPG(String url, String item, String how){
         Log.d("JavascriptInterface", "goToPG");
+        if(mListener != null){
+            mListener.goToPg(url,item,how);
+        }
     }
 
     @android.webkit.JavascriptInterface
@@ -65,10 +71,12 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void closeGoToNative(String page){
         Log.d("JavascriptInterface", "closeGoToNative");
+        Toast.makeText(mContext,"closeDepthRefreshWeb",Toast.LENGTH_SHORT).show();
     }
 
     @android.webkit.JavascriptInterface
     public void changePlayer(String idx){
         Log.d("JavascriptInterface", "changePlayer");
+        Toast.makeText(mContext,"closeDepthRefreshWeb",Toast.LENGTH_SHORT).show();
     }
 }

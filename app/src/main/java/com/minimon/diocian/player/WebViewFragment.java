@@ -277,7 +277,14 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void goToPg(String url, String item, String how) {
-
+        Log.d("goToPgValues",url+","+item+","+how);
+        UserInfo info = UserInfo.getInstance();
+        ContentValues content = new ContentValues();
+        content.put("id", info.getUID());
+        content.put("loc", "Android");
+        content.put("item",item);
+        content.put("how",how);
+        minimonWebView.goToPayWeb(url,content);
     }
 
     @Override

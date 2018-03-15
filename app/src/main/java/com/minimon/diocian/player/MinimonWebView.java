@@ -29,6 +29,13 @@ public class MinimonWebView {
         task.execute();
     }
 
+    private void requestPayFunctionWebView(String url, ContentValues info)
+    {
+        baseUrl = url;
+        WebViewNetworkTask task = new WebViewNetworkTask(url, info);
+        task.setToken(UserInfo.getInstance().getToken());
+        task.execute();
+    }
     public class WebViewNetworkTask extends AsyncTask<Void,Void,String>{
 
         private String url;
@@ -59,15 +66,19 @@ public class MinimonWebView {
     }
 
     public void responseNetworkTask(String s){
-        Log.d("responseNetworkTask",s);
         if(s == null)
             return;
         if(mListener !=null){
+            Log.d("responseNetworkTask",s);
             mListener.onResponseHtml(s,baseUrl);
         }
     }
 
     public void goToWeb(String url, ContentValues info){
         requestFunctionWebView(url, info);
+    }
+
+    public void goToPayWeb(String url, ContentValues info){
+        requestPayFunctionWebView(url, info);
     }
 }
