@@ -554,7 +554,10 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                     stateString = "UNKNOWN STATE";
                     break;
             }
-            Log.d(TAG, "state [" + playWhenReady + ", " + stateString + "]");
+            if("STATE_READY".equals(stateString) && playWhenReady){
+                checkWifi();
+            }
+            Log.d(TAG, "DramaPlaystate [" + playWhenReady + ", " + stateString + "]");
         }
 
         @Override
