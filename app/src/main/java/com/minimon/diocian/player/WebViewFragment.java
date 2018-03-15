@@ -235,6 +235,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         }
         else {
             Log.d("WebViewFragmentisSearch","page is not Search");
+            Log.d("WebViewFragmentvalue",key+","+value);
             content.put(key, value);
         }
         Log.d("onGoToWebUID", info.getUID());
