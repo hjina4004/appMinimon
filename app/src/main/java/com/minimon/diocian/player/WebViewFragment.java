@@ -132,6 +132,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mPage = WebViewInfo.getInstance().getPageName();
+
         minimonWebView = new MinimonWebView();
         minimonWebView.setListener(this);
         javascriptInterface = new JavascriptInterface(getActivity(), mWebView);
@@ -156,6 +158,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
                         Log.d("webViewScroll","isTop");
                         view_main_search.setBackgroundColor(getResources().getColor(R.color.transparent));
                     }
+                }else{
+                    view_main_search.setBackgroundColor(getResources().getColor(R.color.MainColor));
                 }
             }
         });
@@ -165,7 +169,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         content.put("id", info.getUID());
         content.put("loc", "Android");
         content.put("page", WebViewInfo.getInstance().getPageName());
-        mPage = WebViewInfo.getInstance().getPageName();
         Log.d("FragmentCreated",mPage);
         if("search".equals(mPage)){
             content.put("searchTag",WebViewInfo.getInstance().getSearch_tag());
@@ -184,7 +187,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onBack() {
         if (mWebView.canGoBack()) {
             mWebView.goBack();
-            mPage = "main";
+            if(!mWebView.canGoBack())
+                view_main_search.setBackgroundColor(getResources().getColor(R.color.transparent));
         } else {
             MainActivity activity = (MainActivity) getActivity();
             activity.setOnKeypressListener(null);
@@ -220,6 +224,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         content.put("loc", "Android");
         content.put("page", page);
         mPage = page;
+
         if("episode".equals(page)) {
 //            playerView.setVisibility(View.VISIBLE);
 //            changePlayerVisibility(true);
@@ -257,6 +262,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         Log.d("BasrUrl", baseUrl);
         Log.d("BaseUrlHtml", html);
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
+        if(!mPage.equals("main") || mWebView.canGoBack())
+            view_main_search.setBackgroundColor(getResources().getColor(R.color.MainColor));
     }
 
     @Override
