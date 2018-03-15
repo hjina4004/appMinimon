@@ -242,7 +242,8 @@ public class MainActivity extends AppCompatActivity
 //                        arrHistory = dbHelper.getResult();
                         adapter.notifyDataSetChanged();
                         hideSearch();
-                        ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_search));
+                        WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
+                        WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
                         Fragment fragment = new WebViewFragment();
                         changeFragment(fragment);
                         return true; // consume.
@@ -272,7 +273,8 @@ public class MainActivity extends AppCompatActivity
 //                        arrHistory = dbHelper.getResult();
                         adapter.notifyDataSetChanged();
                         hideSearch2();
-                        ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_search));
+                        WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
+                        WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search2.getText().toString());
                         Fragment fragment = new WebViewFragment();
                         changeFragment(fragment);
                         return true; // consume.
@@ -416,6 +418,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void SearchResult(){
+
+    }
+
     private View.OnClickListener toolbarClickListenr = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -514,7 +520,7 @@ public class MainActivity extends AppCompatActivity
                     goMainWeb();
                     break;
                 case R.id.view_menu_cookies:
-                    ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_cookies));
+                    info.setPageName(getResources().getString(R.string.page_name_index));
                     fragment = new WebViewFragment();
                     tv_frag_title.setVisibility(View.GONE);
                     isShowSearch = true;
@@ -734,8 +740,16 @@ public class MainActivity extends AppCompatActivity
     public void onClick() {
         hideSearch();
         hideSearch2();
-        ConfigInfo.getInstance().setWebViewUrl(getResources().getString(R.string.url_search));
-        Fragment fragment = new WebViewFragment();
-        changeFragment(fragment);
+        if(findViewById(R.id.view_main_search).getVisibility() == View.VISIBLE) {
+            WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
+            WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
+            Fragment fragment = new WebViewFragment();
+            changeFragment(fragment);
+        }else if (findViewById(R.id.view_main_search2).getVisibility() == View.VISIBLE){
+            WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
+            WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search2.getText().toString());
+            Fragment fragment = new WebViewFragment();
+            changeFragment(fragment);
+        }
     }
 }

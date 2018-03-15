@@ -2,6 +2,7 @@ package com.minimon.diocian.player;
 
 import android.content.ContentValues;
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Created by GOOD on 2018-03-14.
@@ -22,7 +23,7 @@ public class MinimonWebView {
 
     private void requestFunctionWebView(String current, ContentValues info){
         currentRequest = current;
-        baseUrl = WEBVIEW_URL;
+        baseUrl = WEBVIEW_URL+current;
         WebViewNetworkTask task = new WebViewNetworkTask( WEBVIEW_URL+current,info);
         task.setToken(UserInfo.getInstance().getToken());
         task.execute();
@@ -58,6 +59,7 @@ public class MinimonWebView {
     }
 
     public void responseNetworkTask(String s){
+        Log.d("responseNetworkTask",s);
         if(s == null)
             return;
         if(mListener !=null){
