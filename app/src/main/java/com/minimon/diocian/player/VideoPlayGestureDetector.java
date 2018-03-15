@@ -312,12 +312,25 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                 moving = "+";
             }
         }
+
         if(doub == 60){
             tv_now_moving_time.setText("1:00");
         }else if (doub < 60){
             tv_now_moving_time.setText(moving+"0:"+String.valueOf(doub));
         }
         tv_now_playtime.setText(now_minute + ":"+now_sec);
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(1000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        tv_now_moving_time.setText("");
+        tv_now_playtime.setText("");
 //        try {
 
 //
