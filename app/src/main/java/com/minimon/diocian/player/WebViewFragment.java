@@ -147,7 +147,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
             @Override
             public void onScroll(int l, int t) {
-                Log.d("scroll changed",String.valueOf(l) + "," + String.valueOf(t));
+                Log.d("scrollChanged",String.valueOf(l) + "," + String.valueOf(t)+", mPage : "+mPage);
                 if("main".equals(mPage)){
                     if(t!=0){
                         Log.d("webViewScroll","notTop");
@@ -184,6 +184,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onBack() {
         if (mWebView.canGoBack()) {
             mWebView.goBack();
+            mPage = "main";
         } else {
             MainActivity activity = (MainActivity) getActivity();
             activity.setOnKeypressListener(null);
@@ -264,6 +265,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         content.put("id", info.getUID());
         content.put("loc", "Android");
         content.put("page", page);
+        mPage = page;
         content.put(key, value);
         Log.d("onGoToWebUID", info.getUID());
         minimonWebView.goToWeb(url, content);
