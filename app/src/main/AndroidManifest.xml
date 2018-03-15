@@ -93,7 +93,7 @@
         </activity>
         <activity
             android:name=".DramaPlayActivity"
-            android:screenOrientation="nosensor" >
+            android:screenOrientation="nosensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
@@ -114,7 +114,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ServerErrorActivity"></activity>
+        <activity android:name=".ServerErrorActivity" />
+        <activity android:name=".PolicyActivity"></activity>
     </application>
 
 </manifest>
