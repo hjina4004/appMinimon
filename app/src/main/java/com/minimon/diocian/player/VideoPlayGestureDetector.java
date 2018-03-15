@@ -8,6 +8,8 @@ import android.graphics.RectF;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -48,7 +50,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-
+            Log.d("ActionUp","real");
         }
         return true;
     }
@@ -185,6 +187,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     @Override
     public boolean onDown(MotionEvent e) {
         currentTime = playerView.getPlayer().getCurrentPosition();
+        doub = 0;
         return true;
     }
 
@@ -216,11 +219,11 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         Log.d("GestureTag", "onScroll distanceX="+distanceX+", distanceY= "+distanceY);
         float min_distance = 30;
         int currentState = videoActivity.getCurrentState();
-        if (Math.abs(distanceX) > Math.abs(distanceY)) {    // HORIZONTAL SCROLL
-            if(Math.abs(distanceX) > 10 && currentState != VideoPlayScreenActivity.STATE_EPISODE_LIST) {
-                if (!isViewContains(videoActivity.findViewById(R.id.view_playing_volume_seekbar),(int)e1.getX(),(int)e1.getY())&&
-                        !isViewContains(playerView.findViewById(R.id.exo_progress), (int)e1.getX(), (int)e1.getY())) {
-                    controlPlayTime(e1.getX(), e2.getX());
+        Log.d("absDistance",String.valueOf(Math.abs(distanceX)));
+        if (Math.abs(distanceX) > 1) {    // HORIZONTAL SCROLL
+            if(Math.abs(distanceX) > 1) {
+                if (Math.abs(distanceX) > Math.abs(distanceY)) {
+                    controlPlayTime(distanceX);
                 } else {
 //                // not long enough swipe...
                 }
@@ -230,12 +233,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             boolean inVolumeCtrl = volumeRectf.contains(e1.getX(), e1.getY());
 
             if (Math.abs(distanceY) > min_distance) {
-                if (distanceY < 0) {                        // Top To Bottom Swipe
-                    if (currentState == VideoPlayScreenActivity.STATE_EPISODE_LIST) {
-                        videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-                        return false;
-                    }
-                } else if (distanceY > 0) {                 // Bottom To Top Swipe
+                if (distanceY > 0) {                 // Bottom To Top Swipe
                     if (inBrightCtrl) {
                         videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
                         return false;
@@ -243,30 +241,11 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                         videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
                         return false;
                     }
-                    if (currentState == VideoPlayScreenActivity.STATE_IDLE
-                            || currentState == VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL
-                            || (!inBrightCtrl && !inVolumeCtrl)) {
-                        videoActivity.changeState(VideoPlayScreenActivity.STATE_EPISODE_LIST);
-                        return false;
-                    }
                 }
             } else {
                 // not long enough swipe...
             }
         }
-
-/*
-//        Log.d("GestureTag", "y1: "+e1.getY()+", y2: "+e2.getY());
-        if (brightRectf.contains(e1.getX(), e1.getY()) && brightRectf.contains(e2.getX(), e2.getY()) && isShowBrightSeekBar) {
-//            controlBright(e1.getY(), e2.getY());
-        } else if (volumeRectf.contains(e1.getX(), e1.getY()) && volumeRectf.contains(e2.getX(), e2.getY()) && isShowVolumeSeekBar) {
-//            controlMediaVolume(e1.getY(), e2.getY());
-        }else{
-            if(!isShowBrightSeekBar && !isShowVolumeSeekBar && !isActivePlaylist){
-                controlPlayTime(e1.getX(), e2.getX());
-            }
-        }
-*/
         return true;
     }
 
@@ -296,43 +275,57 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         return true;
     }
 
-    private void controlPlayTime(float x1, float x2){
+    private void controlPlayTime(float x1){
         long movingTime = 0;
         if(isScroll)
             videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
         isScroll = true;
-        if(x1 > x2){
-            if(x1-x2>10){
-                if(Math.round(x1-x2)%10 == 0 && Math.round(x1-x2)<=600){
-                    doub = Math.round((x1-x2)/10);
-                    movingTime = doub*1000;
-                    playerView.getPlayer().setPlayWhenReady(false);
-                    if(currentTime-movingTime > 0)
-                        playerView.getPlayer().seekTo(currentTime-movingTime);
-                }
-            }
-        }else{
-            if(x2-x1>10){
-                if(Math.round(x2-x1)%10 == 0 && Math.round(x2-x1)<=600){
-                    doub = Math.round((x2-x1)/10);
-                    movingTime = doub*1000;
-                    playerView.getPlayer().setPlayWhenReady(false);
-                    playerView.getPlayer().seekTo(currentTime+movingTime);
-                }
-            }
+        Log.d("distanceXControl",String.valueOf(x1));
+
+//        doub = Math.round(x1);
+//        movingTime = doub*1000;
+//
+        doub+=1;
+        if(doub>60)
+            return;
+        if(x1 > 1){
+            movingTime = doub*1000;
+            playerView.getPlayer().setPlayWhenReady(false);
+            playerView.getPlayer().seekTo(currentTime-movingTime);
+        }else if(x1<-1){
+            movingTime = doub*1000;
+            playerView.getPlayer().setPlayWhenReady(false);
+            playerView.getPlayer().seekTo(currentTime+movingTime);
         }
+        Log.d("doub",String.valueOf(doub));
 
         TextView tv_now_playtime = (TextView) videoActivity.findViewById(R.id.tv_now_playtime);
         TextView tv_now_moving_time = (TextView) videoActivity.findViewById(R.id.tv_now_moving_time);
         int now_playtime = (int)playerView.getPlayer().getCurrentPosition()/1000;
         int now_minute = now_playtime/60;
         int now_sec = now_playtime%60;
+        String moving ="";
+        if(moving.isEmpty()){
+            if (x1 > 1){
+                moving = "-";
+            }else{
+                moving = "+";
+            }
+        }
         if(doub == 60){
             tv_now_moving_time.setText("1:00");
         }else if (doub < 60){
-            tv_now_moving_time.setText("0:"+String.valueOf(doub));
+            tv_now_moving_time.setText(moving+"0:"+String.valueOf(doub));
         }
         tv_now_playtime.setText(now_minute + ":"+now_sec);
+//        try {
+
+//
+//        }catch (InterruptedException e){
+//
+//        }
+//        tv_now_moving_time.setVisibility(View.GONE);
+//        tv_now_playtime.setVisibility(View.GONE);
     }
 
     private void controlBottomMenu(float y1, float y2, boolean isShow){

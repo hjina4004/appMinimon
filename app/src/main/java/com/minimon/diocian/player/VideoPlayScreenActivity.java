@@ -111,11 +111,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private VideoPlayGestureDetector videoPlayGestureDetector;
     private TouchGestureDetector gestureDetector;
 
-    private List<Drama> arrEpisode = new ArrayList<>();// = new List<Drama>();
-    private PlaylistDramaAdapter epiAdapter;
-    private RecyclerView rec_playing_playlist;
-    LinearLayoutManager layoutManager;
-
 //    private VerticalSeekBar brightSeekBar;
 //    private VerticalSeekBar volumeSeekBar;
 //    private LinearLayout view_playing_bright_seekbar;
@@ -128,7 +123,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     private int mCurrentState;
     public static final int STATE_IDLE = 300;             // idle state
-    public static final int STATE_EPISODE_LIST = 301;     // episode list view state
+//    public static final int STATE_EPISODE_LIST = 301;     // episode list view state
     public static final int STATE_EXOPLAYER_CTRL = 302;   // exoPlayer controller iew state
     public static final int STATE_BRIGHT_CTRL = 303;      // bright controller vew state
     public static final int STATE_VOLUME_CTRL = 304;      // volume controller view state
@@ -152,16 +147,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         width = size.x;
         height = size.y;
 
-        rec_playing_playlist = findViewById(R.id.rec_playing_playlist);
-        rec_playing_playlist.setNestedScrollingEnabled(false);
-
-        epiAdapter = new PlaylistDramaAdapter(this, arrEpisode, "list_");
-        rec_playing_playlist.setAdapter(epiAdapter);
-        epiAdapter.setClickListener(this);
-
-        layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rec_playing_playlist.setLayoutManager(layoutManager);
         mCurrentState = STATE_IDLE;
         playerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
             @Override
@@ -175,7 +160,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         initializePlayer();
         initFullscreenButton();
         initData();
-        sendPlaylistData();
 
         initVerticalSeekBar();
     }
@@ -195,16 +179,14 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             findViewById(R.id.view_playlist).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_bandwidth).setVisibility(View.GONE);
-        } else if (currentState != STATE_EPISODE_LIST) {
+        } else {
             playerView.hideController();
             findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playlist).setVisibility(View.GONE);
             findViewById(R.id.view_move_time).setVisibility(View.GONE);
 
-            if (state == STATE_EPISODE_LIST) {
-                findViewById(R.id.view_playlist).setVisibility(View.VISIBLE);
-            } else if (state == STATE_EXOPLAYER_CTRL) {
+            if (state == STATE_EXOPLAYER_CTRL) {
                 mCurrentState = state;
                 playerView.showController();
                 playerView.findViewById(R.id.exo_rew).setVisibility(View.VISIBLE);
@@ -304,8 +286,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 try{
                     if("info".equals(responseType)){//현재 플레이할 에피소드 에이터
                         setEpisodeData(info);
-                    }else{
-                        setPlaylistData(info);
                     }
 
                 }catch (Exception e){
@@ -330,19 +310,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         minimonEpisode.info(values);
     }
 
-    /**
-     * 하단 재생목록을 불러오기
-     */
-    private void sendPlaylistData(){
-        ContentValues values = new ContentValues();
-        values.put("c_idx",EpisodeInfo.getInsatnace().getC_idx());
-        values.put("start","1");
-        values.put("limit",0);
-        values.put("order","ASC");
-        values.put("id",UserInfo.getInstance().getUID());
-        minimonEpisode.list_(values);
-    }
-
     private void setEpisodeData(JSONObject info){
         try {
             JSONArray videoArr = (JSONArray) info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
@@ -362,27 +329,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 isChangeBandWidth = false;
             }
             initializePlayer();
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-    }
-
-    private void setPlaylistData(JSONObject info){
-        try{
-            JSONArray jArr = (JSONArray)info.getJSONObject("data").get("list");
-            arrEpisode.clear();
-            for(int i=0; i<jArr.length(); i++){
-                JSONObject objEpisode = (JSONObject) jArr.get(i);
-                Drama episode = new Drama();
-                episode.setIdx(objEpisode.getString("idx"));
-                episode.setEp(objEpisode.getInt("ep"));
-                episode.setContentTitle(objEpisode.getString("title"));
-                episode.setThumbnailUrl(objEpisode.getString("image_url"));
-                episode.setPoint(objEpisode.getString("point"));
-                episode.setPlayCount(objEpisode.getString("play_cnt"));
-                arrEpisode.add(episode);
-            }
-            epiAdapter.notifyDataSetChanged();
         }catch (JSONException e){
             e.printStackTrace();
         }

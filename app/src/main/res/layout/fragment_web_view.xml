@@ -1,20 +1,30 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.minimon.diocian.player.WebViewFragment">
 
-
+    <LinearLayout
+        android:id="@+id/layout_player_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:visibility="gone"
+        android:background="#ff0000">
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"/>
+    </LinearLayout>
+    <!-- TODO: Update blank fragment layout -->
     <FrameLayout
-        android:layout_below="@id/player_view"
+        android:id="@+id/view_frag_webview"
         android:layout_width="match_parent"
         android:layout_height="fill_parent">
-        <!-- TODO: Update blank fragment layout -->
-        <WebView
+        <com.minimon.diocian.player.ObservableWebView
             android:id="@+id/webview_other"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"/>
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
@@ -22,10 +32,4 @@
             android:layout_gravity="center" />
     </FrameLayout>
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/player_view"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:visibility="gone">
-    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
-</RelativeLayout>
+</LinearLayout>

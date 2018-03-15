@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -83,7 +84,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_WEBVIEW = "webViewUrl";
 
-    private WebView mWebView;
+    private ObservableWebView mWebView;
     private ProgressBar mProgressBar;
     private MinimonWebView minimonWebView;
     private JavascriptInterface javascriptInterface;
@@ -104,6 +105,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     private SimpleExoPlayer player;
     private SimpleExoPlayerView playerView;
+    private LinearLayout layout_player_view;
     private ComponentListener componentListener;
 
     private String nowBandWidth = "";
@@ -121,7 +123,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private String c_title;
     private String c_idx;
     private String nowEp;
-
+    private String mPage;
+    LinearLayout view_main_search;
     // TODO: Rename and change types of parameters
 
     public WebViewFragment() {
@@ -165,17 +168,37 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         javascriptInterface = new JavascriptInterface(getActivity(), mWebView);
         javascriptInterface.setListener(this);
 
-        mWebView = view.findViewById(R.id.webview_other);
+        mWebView = (ObservableWebView) view.findViewById(R.id.webview_other);
         mProgressBar = view.findViewById(R.id.progress_bar);
         mWebView.setWebViewClient(new MyWebviewClient(getActivity(), mProgressBar));
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface, "minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
+        view_main_search = getActivity().findViewById(R.id.view_main_search);
+        mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
+            @Override
+            public void onScroll(int l, int t) {
+                Log.d("scroll changed",String.valueOf(l) + "," + String.valueOf(t));
+                if("main".equals(mPage)){
+                    if(t!=0){
+                        Log.d("webViewScroll","notTop");
+                        view_main_search.setBackgroundColor(Color.parseColor("#BFFB450B"));
+                    }else{
+                        Log.d("webViewScroll","isTop");
+                        view_main_search.setBackgroundColor(getResources().getColor(R.color.transparent));
+                    }
+                }
+            }
+        });
 
         componentListener = new ComponentListener();
         playerView = (SimpleExoPlayerView) view.findViewById(R.id.player_view);
+        layout_player_view = view.findViewById(R.id.layout_player_view);
+//        layout_player_view.setVisibility(View.VISIBLE);
         if(!isLockSreen)
             isLockSreen = true;
+
+        initData();
 
         UserInfo info = UserInfo.getInstance();
 
@@ -183,6 +206,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         content.put("id", info.getUID());
         content.put("loc", "Android");
         content.put("page", WebViewInfo.getInstance().getPageName());
+        mPage = WebViewInfo.getInstance().getPageName();
         minimonWebView.goToWeb("Contents/view", content);
     }
 
@@ -231,16 +255,29 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         content.put("id", info.getUID());
         content.put("loc", "Android");
         content.put("page", page);
+        mPage = page;
         if("episode".equals(page)) {
+//            playerView.setVisibility(View.VISIBLE);
+//            changePlayerVisibility(true);
+//            EpisodeInfo.getInsatnace().setIdx(value);
+//            sendEpisodeData(value);
             Log.d("episodeValue",value);
-            playerView.setVisibility(View.VISIBLE);
-            EpisodeInfo.getInsatnace().setIdx(value);
-            initData();
-            sendEpisodeData(value);
+           goToEpisodeMain(url,page,key,value);
+            return;
         }
         content.put(key, value);
         Log.d("onGoToWebUID", info.getUID());
         minimonWebView.goToWeb(url, content);
+    }
+
+    private void goToEpisodeMain(String url, String page, String key, String value)
+    {
+        Intent intent = new Intent(getActivity(),DramaPlayActivity.class);
+        intent.putExtra("url",url);
+        intent.putExtra("page",page);
+        intent.putExtra("key",key);
+        intent.putExtra("value",value);
+        startActivity(intent);
     }
 
     @Override
@@ -514,7 +551,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
-            initData();
+//            initData();
             if (EpisodeInfo.getInsatnace().getIdx() == null || EpisodeInfo.getInsatnace().getIdx().isEmpty()) {
                 sendEpisodeData("645");
             } else {
@@ -527,7 +564,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onResume() {
         super.onResume();
         if (Util.SDK_INT <= 23) {
-            initData();
+//            initData();
 
             if (EpisodeInfo.getInsatnace().getIdx() == null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
                 sendEpisodeData("645");

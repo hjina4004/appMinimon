@@ -27,21 +27,15 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -79,7 +73,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class DramaPlayActivity extends AppCompatActivity{
+public class DramaPlayActivity extends AppCompatActivity implements MinimonWebView.MinimonWebviewListener{
 
     private final String TAG = "DramaPlayActivity";
     private final String STATE_RESUME_WINDOW = "resumeWindow";
@@ -119,16 +113,37 @@ public class DramaPlayActivity extends AppCompatActivity{
 
     private WebView mWebView;
 
+    private String url;
+    private String page;
+    private String key;
+    private String value;
+    private MinimonWebView minimonWebView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
-        checkWifi();
-
+//        checkWifi();
         mWebView = findViewById(R.id.webview_dramaplay);
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebChromeClient(new WebChromeClient());
-        mWebView.loadUrl("http://dev.api.minimon.com/Test/view/episode");
+
+        url = getIntent().getStringExtra("url");
+        page = getIntent().getStringExtra("page");
+        key = getIntent().getStringExtra("key");
+        value = getIntent().getStringExtra("value");
+        EpisodeInfo.getInsatnace().setIdx(value);
+
+        minimonWebView = new MinimonWebView();
+        minimonWebView.setListener(this);
+
+        ContentValues content = new ContentValues();
+        content.put("id", UserInfo.getInstance().getUID());
+        content.put("loc", "Android");
+        content.put("page", page);
+        content.put(key, value);
+        minimonWebView.goToWeb(url,content);
+
         componentListener = new ComponentListener();
         playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
 
@@ -495,6 +510,12 @@ public class DramaPlayActivity extends AppCompatActivity{
     public HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
         return new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "exAndroid"), bandwidthMeter);
+    }
+
+    @Override
+    public void onResponseHtml(String html, String baseUrl) {
+        Log.d("onResponseHtmlDramaPlay",baseUrl);
+        mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
     }
 
     private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {
