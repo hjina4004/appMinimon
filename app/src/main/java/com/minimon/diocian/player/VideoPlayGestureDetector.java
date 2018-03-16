@@ -166,32 +166,13 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     }
 
     public void onUp(){
-        if(isScroll){
+        if(isScroll && !isShowVolumeSeekBar && !isShowBrightSeekBar){
             isScroll = !isScroll;
             playerView.getPlayer().setPlayWhenReady(true);
             playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
             playerView.findViewById(R.id.exo_pause).setVisibility(View.GONE);
-//            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
 
             playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                }
-//            },1000);
-//            ((VideoPlayScreenActivity) mContext).runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-////                            videoActivity.findViewById(R.id.view_move_time).setVisibility(View.GONE);
-//                        }
-//                    },1000);
-//
-//                }
-//            });
             ((VideoPlayScreenActivity) mContext)
                     .runOnUiThread(new Runnable() {
                        @Override
@@ -215,7 +196,58 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                    }
             );
 
-//            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+        }
+        else if(isShowBrightSeekBar){
+            videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+            ((VideoPlayScreenActivity) mContext)
+                    .runOnUiThread(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           final Handler mHander = new Handler(){
+                                               @Override
+                                               public void handleMessage(Message msg) {
+//                        super.handleMessage(msg);
+                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+                                                   isShowBrightSeekBar = false;
+                                               }
+                                           };
+                                           new Handler().postDelayed(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+                                                   mHander.sendEmptyMessage(0);
+                                               }
+                                           },5000);
+
+                                       }
+                                   }
+                    );
+        }
+        else if(isShowVolumeSeekBar){
+            videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+            ((VideoPlayScreenActivity) mContext)
+                    .runOnUiThread(new Runnable() {
+                                       @Override
+                                       public void run() {
+                                           final Handler mHander = new Handler(){
+                                               @Override
+                                               public void handleMessage(Message msg) {
+//                        super.handleMessage(msg);
+                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+//                                                   isShowVolumeSeekBar = false;
+                                               }
+                                           };
+                                           new Handler().postDelayed(new Runnable() {
+                                               @Override
+                                               public void run() {
+//                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+                                                   mHander.sendEmptyMessage(0);
+                                               }
+                                           },5000);
+
+                                       }
+                                   }
+                    );
         }
     }
     @Override
@@ -303,19 +335,11 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         int now_playtime = (int)playerView.getPlayer().getCurrentPosition()/1000;
         int now_minute = now_playtime/60;
         int now_sec = now_playtime%60;
-        String moving ="";
-        if(moving.isEmpty()){
-            if (x1 > 1){
-                moving = "-";
-            }else{
-                moving = "+";
-            }
-        }
 
         if(doub == 60){
-            tv_now_moving_time.setText(moving+"1:00");
+            tv_now_moving_time.setText("1:00");
         }else if (doub < 60){
-            tv_now_moving_time.setText(moving+"0:"+String.valueOf(doub));
+            tv_now_moving_time.setText("0:"+String.valueOf(doub));
         }
         tv_now_playtime.setText(now_minute + ":"+now_sec);
 //        Thread thread = new Thread(){
