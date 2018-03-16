@@ -85,28 +85,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
         brightRectf = new RectF(0, 0, mWidth/6, mHeight);
         volumeRectf = new RectF(mWidth/6*5, 0, mWidth, mHeight);
-//
-//        brightPath = new Path();
-//        volumePath = new Path();
-//        brightRectf = new RectF();
-//        volumeRectf = new RectF();
-//        brightPath.moveTo(0,0);
-//        brightPath.moveTo(0,height);
-//        brightPath.moveTo(width/5,height);
-//        brightPath.moveTo(width/5,200);
-//        brightPath.close();
-//
-//        volumePath.moveTo(width/4*3,0);
-//        volumePath.moveTo(width/4*3,height);
-//        volumePath.moveTo(width,height);
-//        volumePath.moveTo(width,0);
-//        volumePath.close();
-//
-//        brightPath.computeBounds(brightRectf,true);
-//        volumePath.computeBounds(volumeRectf,true);
-
-//        bottomBarHeight = videoActivity.findViewById(R.id.exo_view_play_info).getHeight();
-//        playlistHeight = videoActivity.findViewById(R.id.rec_playing_playlist).getHeight();
     }
 
     private boolean isViewContains(View view, int rx, int ry) {
@@ -132,11 +110,15 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         int currentState = videoActivity.getCurrentState();
         boolean inBrightCtrl = brightRectf.contains(e.getX(), e.getY());
         boolean inVolumeCtrl = volumeRectf.contains(e.getX(), e.getY());
+        isShowVolumeSeekBar = false;
+        isShowBrightSeekBar = false;
         if (inBrightCtrl) {
             videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+            isShowBrightSeekBar = true;
             return false;
         } else if (inVolumeCtrl) {
             videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+            isShowVolumeSeekBar = true;
             return false;
         }
         if (currentState > VideoPlayScreenActivity.STATE_IDLE) {
@@ -151,26 +133,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         } else if (currentState != VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME){
             videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
         }
-
-//        if(videoActivity.findViewById(R.id.view_playing_bright_seekbar).getVisibility() ==View.VISIBLE) {
-//            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-//            isShowBrightSeekBar = false;
-//            return false;
-//        }
-//        if(videoActivity.findViewById(R.id.view_playing_volume_seekbar).getVisibility() == View.VISIBLE) {
-//            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
-//            isShowVolumeSeekBar = false;
-//            return false;
-//        }
-//
-//        if(brightRectf.contains(e.getX(),e.getY()) && !isActivePlaylist) {
-//            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
-//            isShowBrightSeekBar = true;
-//        }
-//        else if(volumeRectf.contains(e.getX(),e.getY()) && !isActivePlaylist) {
-//            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
-//            isShowVolumeSeekBar = true;
-//        }
         return true;
     }
 
@@ -211,6 +173,20 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
 
             playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            },1000);
+//            ((VideoPlayScreenActivity) mContext).runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    new Handler().sendEmptyMessage(1000);
+//                }
+//            });
+
+            videoActivity.findViewById(R.id.view_move_time).setVisibility(View.GONE);
 //            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
         }
     }
@@ -220,7 +196,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         float min_distance = 30;
         int currentState = videoActivity.getCurrentState();
         Log.d("absDistance",String.valueOf(Math.abs(distanceX)));
-        if (Math.abs(distanceX) > 1) {    // HORIZONTAL SCROLL
+        if (!isShowBrightSeekBar && !isShowVolumeSeekBar) {    // HORIZONTAL SCROLL
             if(Math.abs(distanceX) > 1) {
                 if (Math.abs(distanceX) > Math.abs(distanceY)) {
                     controlPlayTime(distanceX);
@@ -275,7 +251,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         return true;
     }
 
-    private void controlPlayTime(float x1){
+    private void controlPlayTime(final float x1){
         long movingTime = 0;
         if(isScroll)
             videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
@@ -299,6 +275,14 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         }
         Log.d("doub",String.valueOf(doub));
 
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                videoActivity.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
+//
+//            }
+//        },1000);
         TextView tv_now_playtime = (TextView) videoActivity.findViewById(R.id.tv_now_playtime);
         TextView tv_now_moving_time = (TextView) videoActivity.findViewById(R.id.tv_now_moving_time);
         int now_playtime = (int)playerView.getPlayer().getCurrentPosition()/1000;
@@ -314,23 +298,21 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         }
 
         if(doub == 60){
-            tv_now_moving_time.setText("1:00");
+            tv_now_moving_time.setText(moving+"1:00");
         }else if (doub < 60){
             tv_now_moving_time.setText(moving+"0:"+String.valueOf(doub));
         }
         tv_now_playtime.setText(now_minute + ":"+now_sec);
-        Thread thread = new Thread(){
-            @Override
-            public void run() {
-                try{
-                    Thread.sleep(1000);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
-        };
-        tv_now_moving_time.setText("");
-        tv_now_playtime.setText("");
+//        Thread thread = new Thread(){
+//            @Override
+//            public void run() {
+//                try{
+//                    Thread.sleep(1000);
+//                }catch (InterruptedException e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
 //        try {
 
 //
@@ -339,18 +321,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //        }
 //        tv_now_moving_time.setVisibility(View.GONE);
 //        tv_now_playtime.setVisibility(View.GONE);
-    }
-
-    private void controlBottomMenu(float y1, float y2, boolean isShow){
-        if(y1>y2 && isShow){
-            videoActivity.findViewById(R.id.view_playlist).setVisibility(View.VISIBLE);
-            videoActivity.findViewById(R.id.exo_view_play_info).setVisibility(View.GONE);
-        }
-        if(y2>y1 && !isShow){
-            Log.d("DetectorFlingTag","fling");
-            videoActivity.findViewById(R.id.view_playlist).setVisibility(View.GONE);
-            videoActivity.findViewById(R.id.exo_view_play_info).setVisibility(View.VISIBLE);
-        }
     }
 
     private void controlBright(float y1, float y2) {

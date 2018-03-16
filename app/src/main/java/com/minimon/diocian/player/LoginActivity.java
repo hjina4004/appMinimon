@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -294,6 +296,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == GOOGLE_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            mDialogMng.hideProgressDlg();
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
@@ -301,7 +304,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...
-                mDialogMng.hideProgressDlg();
+//                mDialogMng.hideProgressDlg();
             }
         }
     }
@@ -429,11 +432,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if("social".equals(type)){
             saveAutoLogin(true);
         }
+        String myVersion = Build.VERSION.RELEASE;
+        String myDeviceModel = Build.MODEL;
         ContentValues loginInfo = new ContentValues();
         loginInfo.put("type", type);
         loginInfo.put("id", uid);
         loginInfo.put("value", password);
         loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
+        loginInfo.put("device_token", FirebaseInstanceId.getInstance().getToken());
+        loginInfo.put("device_os",myVersion);
+        loginInfo.put("device_device",myDeviceModel);
 
         print_error(null);
         minimonUser.login(loginInfo);

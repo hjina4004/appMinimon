@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity
         adapter = new SearchhistoryAdapter(this,arrHistory);
         adapter.setHistorySearchListener(this);
         rec_search_history.setAdapter(adapter);
+        rec_search_history2.setAdapter(adapter);
 
         ed_toolbar_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

@@ -9,7 +9,7 @@ import android.util.Log;
  */
 
 public class MinimonWebView {
-    private final String WEBVIEW_URL = "http://dev.api.minimon.com/";
+    private final String WEBVIEW_URL = "https://api.minimon.com/";
     private String currentRequest;
     private String baseUrl;
 

@@ -150,7 +150,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             @Override
             public void onScroll(int l, int t) {
                 Log.d("scrollChanged",String.valueOf(l) + "," + String.valueOf(t)+", mPage : "+mPage);
-                if("main".equals(mPage)){
+                if("main".equals(mPage) || "channel".equals(mPage)|| "episode".equals(mPage)){
                     if(t!=0){
                         Log.d("webViewScroll","notTop");
                         view_main_search.setBackgroundColor(Color.parseColor("#BFFB450B"));
@@ -158,8 +158,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
                         Log.d("webViewScroll","isTop");
                         view_main_search.setBackgroundColor(getResources().getColor(R.color.transparent));
                     }
-                }else{
-                    view_main_search.setBackgroundColor(getResources().getColor(R.color.MainColor));
                 }
             }
         });
@@ -226,11 +224,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mPage = page;
 
         if("episode".equals(page)) {
-//            playerView.setVisibility(View.VISIBLE);
-//            changePlayerVisibility(true);
-//            EpisodeInfo.getInsatnace().setIdx(value);
-//            sendEpisodeData(value);
-            Log.d("episodeValue",value);
+            Log.d("ongotodramaplay",url+","+page+","+key+","+value);
            goToEpisodeMain(url,page,key,value);
             return;
         }
@@ -262,8 +256,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         Log.d("BasrUrl", baseUrl);
         Log.d("BaseUrlHtml", html);
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
-        if(!mPage.equals("main") || mWebView.canGoBack())
-            view_main_search.setBackgroundColor(getResources().getColor(R.color.MainColor));
+//        if(!mPage.equals("main") || !"channel".equals(mPage)|| !"episode".equals(mPage) || mWebView.canGoBack())
+//            view_main_search.setBackgroundColor(getResources().getColor(R.color.MainColor));
     }
 
     @Override

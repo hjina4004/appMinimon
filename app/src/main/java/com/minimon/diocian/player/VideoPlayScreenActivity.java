@@ -176,14 +176,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             playerView.hideController();
             findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
-            findViewById(R.id.view_playlist).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_bandwidth).setVisibility(View.GONE);
         } else {
             playerView.hideController();
             findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
-            findViewById(R.id.view_playlist).setVisibility(View.GONE);
             findViewById(R.id.view_move_time).setVisibility(View.GONE);
 
             if (state == STATE_EXOPLAYER_CTRL) {
@@ -399,8 +397,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         mDuration.setTextSize(19);
         mPosition.setTextSize(19);
 
-        controlView.findViewById(R.id.tv_playing_playlist).setVisibility(View.VISIBLE);
-        controlView.findViewById(R.id.img_playing_playlist).setVisibility(View.VISIBLE);
 
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
         mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.a022_play_zoom_in));

@@ -286,23 +286,7 @@
                 />
          </LinearLayout>
 
-         <ImageView
-             android:id="@+id/img_playing_playlist"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:src="@mipmap/a022_play_b_list_up"
-             android:layout_toLeftOf="@+id/tv_playing_playlist"
-             android:layout_centerVertical="true"
-             android:layout_marginLeft="2dp"/>
-         <TextView
-             android:id="@+id/tv_playing_playlist"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="재생목록"
-             android:layout_centerVertical="true"
-             android:layout_centerHorizontal="true"
-             android:textColor="#ffffff"
-             />
+
          <FrameLayout
              android:id="@+id/exo_fullscreen_button"
              android:layout_width="32dp"

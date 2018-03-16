@@ -185,7 +185,7 @@ public class GateActivity extends AppCompatActivity {
         NetworkInfo info = cm.getActiveNetworkInfo();
         if(info!=null && info.isConnected()){
             try{
-                URL url = new URL("http://dev.api.minimon.com");
+                URL url = new URL("https://api.minimon.com");
                 HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                 urlc.setConnectTimeout(10 * 1000);          // 10 s.
                 urlc.connect();

@@ -300,8 +300,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         else
             mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
 
-        controlView.findViewById(R.id.tv_playing_playlist).setVisibility(View.GONE);
-        controlView.findViewById(R.id.img_playing_playlist).setVisibility(View.GONE);
         mLockScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -525,7 +523,8 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     @Override
     public void onResponseHtml(String html, String baseUrl) {
-        Log.d("onResponseHtmlDramaPlay",baseUrl);
+        Log.d("onResponseDramaPlay",baseUrl);
+        Log.d("onResponseDramaPlayHtml",html);
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
     }
 

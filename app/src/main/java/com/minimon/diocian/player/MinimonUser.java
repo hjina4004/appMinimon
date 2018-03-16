@@ -411,8 +411,8 @@ import org.json.JSONObject;
 //        0201				목록 요청시 등록된 데이터 없음
 public class MinimonUser {
     private final String TAG = "MinimonUser";
-    private final String API_URL = "http://dev.api.minimon.com/User/";
-    private final String WEBVIEW_URL = "http://dev.api.minimon.com/";
+    private final String API_URL = "https://api.minimon.com/User/";
+    private final String WEBVIEW_URL = "https://api.minimon.com/";
     private String currentRequest;
     private String typeSocial;
 

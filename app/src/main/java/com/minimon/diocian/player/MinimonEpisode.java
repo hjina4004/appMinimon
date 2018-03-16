@@ -20,7 +20,7 @@ import java.net.URL;
 
 public class MinimonEpisode {
     private final String TAG = "MinimonEpisode";
-    private final String API_URL = "http://dev.api.minimon.com/Episode/";
+    private final String API_URL = "https://api.minimon.com/Episode/";
     private String currentRequest;
     String responseType = "";
 
