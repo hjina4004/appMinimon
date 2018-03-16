@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -173,20 +174,47 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
 
             playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                }
-            },1000);
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                }
+//            },1000);
 //            ((VideoPlayScreenActivity) mContext).runOnUiThread(new Runnable() {
 //                @Override
 //                public void run() {
-//                    new Handler().sendEmptyMessage(1000);
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+////                            videoActivity.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+//                        }
+//                    },1000);
+//
 //                }
 //            });
+            ((VideoPlayScreenActivity) mContext)
+                    .runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           final Handler mHander = new Handler(){
+                               @Override
+                               public void handleMessage(Message msg) {
+//                        super.handleMessage(msg);
+                                   videoActivity.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+                               }
+                           };
+                           new Handler().postDelayed(new Runnable() {
+                               @Override
+                               public void run() {
+                                   videoActivity.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
+                                   mHander.sendEmptyMessage(0);
+                               }
+                           },1000);
 
-            videoActivity.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+                       }
+                   }
+            );
+
 //            playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
         }
     }
@@ -232,22 +260,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//        Log.d("FlingVelocity e1:",String.valueOf(e1.getY()));
-//        Log.d("FlingVelocity e2:",String.valueOf(e2.getY()));
-//        if(e1.getY()>mHeight-50 ) {
-//            isActivePlaylist = true;
-//            videoActivity.findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
-//            videoActivity.findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-//            isShowVolumeSeekBar = false;
-//            isShowBrightSeekBar = false;
-//            controlBottomMenu(e1.getY(), e2.getY(), isActivePlaylist);
-//        }
-//        if(e1.getY() > mHeight-320 && (velocityX<velocityY && velocityX>0)) {
-//            isActivePlaylist = false;
-//            controlBottomMenu(e1.getY(), e2.getY(), isActivePlaylist);
-//            return false;
-//        }
-
         return true;
     }
 
@@ -283,6 +295,9 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //
 //            }
 //        },1000);
+
+
+
         TextView tv_now_playtime = (TextView) videoActivity.findViewById(R.id.tv_now_playtime);
         TextView tv_now_moving_time = (TextView) videoActivity.findViewById(R.id.tv_now_moving_time);
         int now_playtime = (int)playerView.getPlayer().getCurrentPosition()/1000;
