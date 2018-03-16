@@ -166,13 +166,12 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
             @Override
             public void onScroll(int l, int t) {
-                if("main".equals(mPage) || "channel".equals(mPage)|| "episode".equals(mPage)){
                     if(t!=0){
                         view_main_toolbar.setBackgroundColor(Color.parseColor("#BFFB450B"));
                     }else{
                         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
                     }
-                }
+
             }
         });
         changeToolbar();
@@ -224,12 +223,15 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onBack() {
         if (mWebView.canGoBack()) {
             mWebView.goBack();
-            arrPageNameHistory.remove(arrPageNameHistory.size()-1);
-            String temptS = "";
-            if(arrPageNameHistory.size() > 0)
-                temptS = arrPageNameHistory.get(arrPageNameHistory.size()-1);
+
+            if(arrPageNameHistory.size() > 0) {
+                arrPageNameHistory.remove(arrPageNameHistory.size() - 1);
+                String temptS = "";
+                if(arrPageNameHistory.size() > 0)
+                    temptS = arrPageNameHistory.get(arrPageNameHistory.size() - 1);
 //            main_tv_frag_title.setText(temptS);
-            setToolbarTitle(temptS);
+                setToolbarTitle(temptS);
+            }
             changeToolbar();
         } else {
             MainActivity activity = (MainActivity) getActivity();
