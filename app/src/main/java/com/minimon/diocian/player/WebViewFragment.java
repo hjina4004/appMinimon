@@ -225,7 +225,9 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         if (mWebView.canGoBack()) {
             mWebView.goBack();
             arrPageNameHistory.remove(arrPageNameHistory.size()-1);
-            String temptS = arrPageNameHistory.get(arrPageNameHistory.size()-1);
+            String temptS = "";
+            if(arrPageNameHistory.size() > 0)
+                temptS = arrPageNameHistory.get(arrPageNameHistory.size()-1);
 //            main_tv_frag_title.setText(temptS);
             setToolbarTitle(temptS);
             changeToolbar();
@@ -260,6 +262,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             main_tv_frag_title.setText("이용약관");
         }else if(getResources().getString(R.string.page_name_cookie_list).equals(pageN)){
             main_tv_frag_title.setText("최근 본 영상");
+        }else{
+            main_tv_frag_title.setText("");
         }
     }
     @Override

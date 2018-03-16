@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
     private WebView mWebView;
     private boolean isMain;
-    private boolean isShowSearch;
+    private boolean isShowSearch = false;
 
     private DBHelper dbHelper;
 
@@ -309,6 +309,8 @@ public class MainActivity extends AppCompatActivity
         } else {
             if(mListenr!=null){
                 mListenr.onBack();
+                isShowSearch = true;
+                changeToolbarVisibility(isMain);
             }else {
                 if(isMain) {
                     long tempTime = System.currentTimeMillis();
@@ -653,11 +655,11 @@ public class MainActivity extends AppCompatActivity
             view_main_toolbar2.setVisibility(View.VISIBLE);
             if(isShowSearch){
                 tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
-                tv_toolbar_search2.setVisibility(View.VISIBLE);
+//                tv_toolbar_search2.setVisibility(View.VISIBLE);
                 tv_toolbar_frag_go_back2.setVisibility(View.GONE);
             }else{
                 tv_toolbar_open_drawer2.setVisibility(View.GONE);
-                tv_toolbar_search2.setVisibility(View.GONE);
+//                tv_toolbar_search2.setVisibility(View.GONE);
                 tv_toolbar_frag_go_back2.setVisibility(View.VISIBLE);
             }
         }
