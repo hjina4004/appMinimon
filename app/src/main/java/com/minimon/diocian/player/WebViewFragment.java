@@ -26,6 +26,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,7 +94,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
 
     private String mPage;
-    LinearLayout view_main_search;
+    RelativeLayout view_main_toolbar;
     // TODO: Rename and change types of parameters
 
     public WebViewFragment() {
@@ -145,7 +146,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface, "minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
-        view_main_search = getActivity().findViewById(R.id.view_main_search);
+        view_main_toolbar = getActivity().findViewById(R.id.view_main_toolbar);
         mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
             @Override
             public void onScroll(int l, int t) {
@@ -153,10 +154,10 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
                 if("main".equals(mPage) || "channel".equals(mPage)|| "episode".equals(mPage)){
                     if(t!=0){
                         Log.d("webViewScroll","notTop");
-                        view_main_search.setBackgroundColor(Color.parseColor("#BFFB450B"));
+                        view_main_toolbar.setBackgroundColor(Color.parseColor("#BFFB450B"));
                     }else{
                         Log.d("webViewScroll","isTop");
-                        view_main_search.setBackgroundColor(getResources().getColor(R.color.transparent));
+                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
                     }
                 }
             }
@@ -186,7 +187,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         if (mWebView.canGoBack()) {
             mWebView.goBack();
             if(!mWebView.canGoBack())
-                view_main_search.setBackgroundColor(getResources().getColor(R.color.transparent));
+                view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         } else {
             MainActivity activity = (MainActivity) getActivity();
             activity.setOnKeypressListener(null);
