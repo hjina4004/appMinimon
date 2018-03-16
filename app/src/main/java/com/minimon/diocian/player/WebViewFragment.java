@@ -64,7 +64,9 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.WIFI_SERVICE;
@@ -80,7 +82,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         MyWebChromeClient.ProgressListener,
         MinimonUser.MinimonUserListener,
         MinimonWebView.MinimonWebviewListener,
-        JavascriptInterface.JavascriptInterfaceListener {
+        JavascriptInterface.JavascriptInterfaceListener,
+        MyWebviewClient.myWebViewClientListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_WEBVIEW = "webViewUrl";
@@ -90,11 +93,16 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private MinimonWebView minimonWebView;
     private JavascriptInterface javascriptInterface;
 
+    private RelativeLayout view_main_toolbar;
+    private RelativeLayout view_main_toolbar2;
+    private TextView main_tv_frag_title;
+
+    private List<String> arrPageNameHistory = new ArrayList<>();
+
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
 
     private String mPage;
-    RelativeLayout view_main_toolbar;
     // TODO: Rename and change types of parameters
 
     public WebViewFragment() {
@@ -135,14 +143,22 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
         mPage = WebViewInfo.getInstance().getPageName();
 
-        minimonWebView = new MinimonWebView();
-        minimonWebView.setListener(this);
+        if(minimonWebView == null){
+            minimonWebView = new MinimonWebView();
+            minimonWebView.setListener(this);
+        }
         javascriptInterface = new JavascriptInterface(getActivity(), mWebView);
         javascriptInterface.setListener(this);
 
+        view_main_toolbar = getActivity().findViewById(R.id.view_main_toolbar);
+        view_main_toolbar2 = getActivity().findViewById(R.id.view_main_toolbar2);
+        main_tv_frag_title = getActivity().findViewById(R.id.tv_frag_title);
+
         mWebView = (ObservableWebView) view.findViewById(R.id.webview_other);
         mProgressBar = view.findViewById(R.id.progress_bar);
-        mWebView.setWebViewClient(new MyWebviewClient(getActivity(), mProgressBar));
+        MyWebviewClient client = new MyWebviewClient(getActivity(), mProgressBar);
+        client.setMyWebViewClientListener(this);
+        mWebView.setWebViewClient(client);
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface, "minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -150,29 +166,51 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
             @Override
             public void onScroll(int l, int t) {
-                Log.d("scrollChanged",String.valueOf(l) + "," + String.valueOf(t)+", mPage : "+mPage);
                 if("main".equals(mPage) || "channel".equals(mPage)|| "episode".equals(mPage)){
                     if(t!=0){
-                        Log.d("webViewScroll","notTop");
                         view_main_toolbar.setBackgroundColor(Color.parseColor("#BFFB450B"));
                     }else{
-                        Log.d("webViewScroll","isTop");
                         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
                     }
                 }
             }
         });
-        UserInfo info = UserInfo.getInstance();
+        changeToolbar();
+    }
 
+    public void clearHistory(){
+        if(mWebView!=null)
+            mWebView.clearHistory();
+    }
+
+    public void moveWebUrl(){
+        UserInfo info = UserInfo.getInstance();
+        if(minimonWebView == null){
+            minimonWebView = new MinimonWebView();
+            minimonWebView.setListener(this);
+        }
         ContentValues content = new ContentValues();
         content.put("id", info.getUID());
         content.put("loc", "Android");
         content.put("page", WebViewInfo.getInstance().getPageName());
-        Log.d("FragmentCreated",mPage);
-        if("search".equals(mPage)){
+        arrPageNameHistory.add(WebViewInfo.getInstance().getPageName());
+        Log.d("FragmentCreated",WebViewInfo.getInstance().getPageName());
+        if("search".equals(WebViewInfo.getInstance().getPageName())){
             content.put("searchTag",WebViewInfo.getInstance().getSearch_tag());
         }
         minimonWebView.goToWeb("Contents/view", content);
+//        if(mWebView!=null)
+//            changeToolbar();
+    }
+
+    public void changeToolbar(){
+        if(mWebView.canGoBack()){
+            view_main_toolbar.setVisibility(View.GONE);
+            view_main_toolbar2.setVisibility(View.VISIBLE);
+        }else{
+            view_main_toolbar.setVisibility(View.VISIBLE);
+            view_main_toolbar2.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -186,8 +224,11 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onBack() {
         if (mWebView.canGoBack()) {
             mWebView.goBack();
-            if(!mWebView.canGoBack())
-                view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+            arrPageNameHistory.remove(arrPageNameHistory.size()-1);
+            String temptS = arrPageNameHistory.get(arrPageNameHistory.size()-1);
+//            main_tv_frag_title.setText(temptS);
+            setToolbarTitle(temptS);
+            changeToolbar();
         } else {
             MainActivity activity = (MainActivity) getActivity();
             activity.setOnKeypressListener(null);
@@ -195,6 +236,32 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         }
     }
 
+
+    private void setToolbarTitle(String pageN){
+        if(getResources().getString(R.string.page_name_index).equals(pageN)){
+            main_tv_frag_title.setText("이용권");
+        }else if(getResources().getString(R.string.page_name_purchase).equals(pageN)){
+            main_tv_frag_title.setText(getResources().getString(R.string.menu_watch));
+        }else if(getResources().getString(R.string.page_name_like).equals(pageN)){
+            main_tv_frag_title.setText(getResources().getString(R.string.menu_favorite));
+        }else if(getResources().getString(R.string.page_name_keep).equals(pageN)){
+            main_tv_frag_title.setText(getResources().getString(R.string.menu_subscribe));
+        }else if(getResources().getString(R.string.page_name_point_list).equals(pageN)){
+            main_tv_frag_title.setText(getResources().getString(R.string.menu_point_history));
+        }else if(getResources().getString(R.string.page_name_pay_list).equals(pageN)){
+            main_tv_frag_title.setText(getResources().getString(R.string.menu_pay_history));
+        }else if(getResources().getString(R.string.page_name_notice).equals(pageN)){
+            main_tv_frag_title.setText("공지사항");
+        }else if(getResources().getString(R.string.page_name_faq).equals(pageN)){
+            main_tv_frag_title.setText("FAQ");
+        }else if(getResources().getString(R.string.page_name_qna_list).equals(pageN)){
+            main_tv_frag_title.setText("1:1 QNA");
+        }else if(getResources().getString(R.string.page_name_policy).equals(pageN)){
+            main_tv_frag_title.setText("이용약관");
+        }else if(getResources().getString(R.string.page_name_cookie_list).equals(pageN)){
+            main_tv_frag_title.setText("최근 본 영상");
+        }
+    }
     @Override
     public void onUpdateProgress(int progressValue) {
         mProgressBar.setProgress(progressValue);
@@ -257,6 +324,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         Log.d("BasrUrl", baseUrl);
         Log.d("BaseUrlHtml", html);
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
+//        changeToolbar();
 //        if(!mPage.equals("main") || !"channel".equals(mPage)|| !"episode".equals(mPage) || mWebView.canGoBack())
 //            view_main_search.setBackgroundColor(getResources().getColor(R.color.MainColor));
     }
@@ -300,5 +368,15 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     @Override
     public void changePlayer(String idx) {
 
+    }
+
+    @Override
+    public void loadingFinished() {
+        if("main".equals(WebViewInfo.getInstance().getPageName())){
+            WebViewInfo.getInstance().setPageName("");
+            mWebView.clearHistory();
+        }
+        changeToolbar();
+        WebViewInfo.getInstance().setPageName("");
     }
 }

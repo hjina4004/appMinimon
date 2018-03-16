@@ -108,6 +108,9 @@ public class MainActivity extends AppCompatActivity
 
     private DBHelper dbHelper;
 
+    private WebViewFragment webViewFragment;
+//    private Fragment fragment;
+
     @Override
     public void onSucess(JSONObject data) {
         try{
@@ -155,6 +158,7 @@ public class MainActivity extends AppCompatActivity
     public void setOnKeypressListener(onKeypressListenr listener){
         mListenr = listener;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,8 +200,6 @@ public class MainActivity extends AppCompatActivity
         tv_toolbar_go_back.setOnClickListener(toolbarClickListenr);
         view_delete_search_history.setOnClickListener(toolbarClickListenr);
 
-
-
         manager2 = new LinearLayoutManager(this);
         manager2.setOrientation(LinearLayoutManager.VERTICAL);
         tv_toolbar_open_drawer2 = (TextAwesome) findViewById(R.id.tv_toolbar_open_drawer2);
@@ -216,7 +218,6 @@ public class MainActivity extends AppCompatActivity
         tv_toolbar_go_back2.setOnClickListener(toolbarClickListenr);
         tv_toolbar_frag_go_back2.setOnClickListener(toolbarClickListenr);
         view_delete_search_history2.setOnClickListener(toolbarClickListenr);
-
 
         adapter = new SearchhistoryAdapter(this,arrHistory);
         adapter.setHistorySearchListener(this);
@@ -245,8 +246,8 @@ public class MainActivity extends AppCompatActivity
                         hideSearch();
                         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
                         WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
-                        Fragment fragment = new WebViewFragment();
-                        changeFragment(fragment);
+                        webViewFragment.moveWebUrl();
+                        changeFragment(webViewFragment);
                         return true; // consume.
                     }
                 }
@@ -276,8 +277,8 @@ public class MainActivity extends AppCompatActivity
                         hideSearch2();
                         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
                         WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search2.getText().toString());
-                        Fragment fragment = new WebViewFragment();
-                        changeFragment(fragment);
+                        webViewFragment.moveWebUrl();
+                        changeFragment(webViewFragment);
                         return true; // consume.
                     }
                 }
@@ -286,6 +287,10 @@ public class MainActivity extends AppCompatActivity
         });
 
         viewUserInfo();
+
+        webViewFragment = new WebViewFragment();
+//        WebViewInfo.getInstance().setPageName("main");
+//        webViewFragment.moveWebUrl();
 
         goMainWeb();
     }
@@ -458,6 +463,7 @@ public class MainActivity extends AppCompatActivity
                     tv_toolbar_search2.setVisibility(View.GONE);
                     tv_toolbar_open_drawer2.setVisibility(View.GONE);
                     view_main_toolbar2.setBackgroundColor(getResources().getColor(R.color.MainColor));
+                    tv_frag_title.setText("");
                     break;
                 case R.id.tv_toolbar_go_back2:
                     hideSearch2();
@@ -468,7 +474,7 @@ public class MainActivity extends AppCompatActivity
                     adapter.notifyDataSetChanged();
                     break;
                 case R.id.tv_toolbar_frag_go_back2:
-                    goMainWeb();
+                    webViewFragment.onBack();
                     break;
             }
         }
@@ -498,7 +504,6 @@ public class MainActivity extends AppCompatActivity
     private View.OnClickListener drawerClickListenr = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Fragment fragment = null;
             WebViewInfo info = WebViewInfo.getInstance();
             info.setC_id("");
             info.setC_idx("");
@@ -522,14 +527,14 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_cookies:
                     info.setPageName(getResources().getString(R.string.page_name_cookie_list));
-                    fragment = new WebViewFragment();
-                    tv_frag_title.setVisibility(View.GONE);
+                    webViewFragment.moveWebUrl();
+                    tv_frag_title.setText("최근 본 영상");
                     isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_user_info:
                     info.setPageName(getResources().getString(R.string.page_name_info));
-                    fragment = new WebViewFragment();
+                    webViewFragment.moveWebUrl();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText(getResources().getString(R.string.menu_user_page));
                     isShowSearch = false;
@@ -537,28 +542,31 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_purchase:
                     info.setPageName(getResources().getString(R.string.page_name_purchase));
-                    fragment = new WebViewFragment();
-                    tv_frag_title.setVisibility(View.GONE);
+                    webViewFragment.moveWebUrl();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText(getResources().getString(R.string.menu_watch));
                     isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_favorite:
                     info.setPageName(getResources().getString(R.string.page_name_like));
-                    fragment = new WebViewFragment();
-                    tv_frag_title.setVisibility(View.GONE);
+                    webViewFragment.moveWebUrl();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText(getResources().getString(R.string.menu_favorite));
                     isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_subscribe:
                     info.setPageName(getResources().getString(R.string.page_name_keep));
-                    fragment = new WebViewFragment();
-                    tv_frag_title.setVisibility(View.GONE);
+                    webViewFragment.moveWebUrl();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText(getResources().getString(R.string.menu_subscribe));
                     isShowSearch = true;
                     isMain = false;
                     break;
                 case R.id.view_menu_point_history:
                     info.setPageName(getResources().getString(R.string.page_name_point_list));
-                    fragment = new WebViewFragment();
+                    webViewFragment.moveWebUrl();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText(getResources().getString(R.string.menu_point_history));
                     isShowSearch = false;
@@ -566,30 +574,22 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_pay_history:
                     info.setPageName(getResources().getString(R.string.page_name_pay_list));
-                    fragment = new WebViewFragment();
+                    webViewFragment.moveWebUrl();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText(getResources().getString(R.string.menu_pay_history));
                     isShowSearch = false;
                     isMain = false;
                     break;
-                case R.id.view_menu_setting:
-                    tv_toolbar_search2.setVisibility(View.GONE);
-                    fragment = new SettingFragment();
-                    tv_frag_title.setVisibility(View.VISIBLE);
-                    tv_frag_title.setText(getResources().getString(R.string.menu_setting));
-                    isShowSearch = false;
-                    isMain = false;
-                    break;
                 case R.id.view_menu_notice:
                     info.setPageName(getResources().getString(R.string.page_name_notice));
-                    fragment = new WebViewFragment();
+                    webViewFragment.moveWebUrl();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("공지사항");
                     isMain = false;
                     break;
                 case R.id.view_menu_faq:
                     info.setPageName(getResources().getString(R.string.page_name_faq));
-                    fragment = new WebViewFragment();
+                    webViewFragment.moveWebUrl();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("FAQ");
                     isShowSearch = false;
@@ -597,7 +597,7 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_qna:
                     info.setPageName(getResources().getString(R.string.page_name_qna_list));
-                    fragment = new WebViewFragment();
+                    webViewFragment.moveWebUrl();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("1:1 QNA");
                     isShowSearch = false;
@@ -605,7 +605,7 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_policy:
                     info.setPageName(getResources().getString(R.string.page_name_policy));
-                    fragment = new WebViewFragment();
+                    webViewFragment.moveWebUrl();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("이용약관");
                     isShowSearch = false;
@@ -613,14 +613,23 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_fix:
                     info.setPageName(getResources().getString(R.string.page_name_index));
-                    fragment = new WebViewFragment();
+                    webViewFragment.moveWebUrl();
                     tv_frag_title.setVisibility(View.VISIBLE);
                     tv_frag_title.setText("이용권");
                     isShowSearch = false;
                     isMain = false;
                     break;
+                case R.id.view_menu_setting:
+                    tv_toolbar_search2.setVisibility(View.GONE);
+//                    webViewFragment.moveWebUrl();
+                    tv_frag_title.setVisibility(View.VISIBLE);
+                    tv_frag_title.setText(getResources().getString(R.string.menu_setting));
+                    isShowSearch = false;
+                    isMain = false;
+                    changeFragment(new SettingFragment());
+                    return;
             }
-            changeFragment(fragment);
+            changeFragment(webViewFragment);
         }
     };
 
@@ -654,14 +663,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
     public void goMainWeb(){
-        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         isMain = true;
         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_main));
+        webViewFragment.moveWebUrl();
         changeToolbarVisibility(true);
-        Fragment fragment = new WebViewFragment();
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.main_media_frame,fragment);
-        ft.commit();
+        changeFragment(webViewFragment);
     }
 
     private void initGoogle() {
@@ -744,13 +750,13 @@ public class MainActivity extends AppCompatActivity
         if(findViewById(R.id.view_main_search).getVisibility() == View.VISIBLE) {
             WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
             WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
-            Fragment fragment = new WebViewFragment();
-            changeFragment(fragment);
+            webViewFragment.moveWebUrl();
+            changeFragment(webViewFragment);
         }else if (findViewById(R.id.view_main_search2).getVisibility() == View.VISIBLE){
             WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
             WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search2.getText().toString());
-            Fragment fragment = new WebViewFragment();
-            changeFragment(fragment);
+            webViewFragment.moveWebUrl();
+            changeFragment(webViewFragment);
         }
     }
 }
