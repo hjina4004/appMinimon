@@ -197,7 +197,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             );
 
         }
-        else if(isShowBrightSeekBar){
+        if(isShowBrightSeekBar){
             videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
             ((VideoPlayScreenActivity) mContext)
                     .runOnUiThread(new Runnable() {
@@ -214,7 +214,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                                            new Handler().postDelayed(new Runnable() {
                                                @Override
                                                public void run() {
-                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+//                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
                                                    mHander.sendEmptyMessage(0);
                                                }
                                            },5000);
@@ -234,7 +234,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                                                public void handleMessage(Message msg) {
 //                        super.handleMessage(msg);
                                                    videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-//                                                   isShowVolumeSeekBar = false;
+                                                   isShowVolumeSeekBar = false;
                                                }
                                            };
                                            new Handler().postDelayed(new Runnable() {
