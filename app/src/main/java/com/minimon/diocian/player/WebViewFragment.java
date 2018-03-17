@@ -224,15 +224,15 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         if (mWebView.canGoBack()) {
             mWebView.goBack();
 
-            if(arrPageNameHistory.size() > 0) {
-                arrPageNameHistory.remove(arrPageNameHistory.size() - 1);
-                String temptS = "";
-                if(arrPageNameHistory.size() > 0)
-                    temptS = arrPageNameHistory.get(arrPageNameHistory.size() - 1);
-//            main_tv_frag_title.setText(temptS);
-                setToolbarTitle(temptS);
-            }
-            changeToolbar();
+//            if(arrPageNameHistory.size() > 0) {
+//                arrPageNameHistory.remove(arrPageNameHistory.size() - 1);
+//                String temptS = "";
+//                if(arrPageNameHistory.size() > 0)
+//                    temptS = arrPageNameHistory.get(arrPageNameHistory.size() - 1);
+////            main_tv_frag_title.setText(temptS);
+//                setToolbarTitle(temptS);
+//            }
+//            changeToolbar();
         } else {
             MainActivity activity = (MainActivity) getActivity();
             activity.setOnKeypressListener(null);
@@ -241,33 +241,33 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     }
 
 
-    private void setToolbarTitle(String pageN){
-        if(getResources().getString(R.string.page_name_index).equals(pageN)){
-            main_tv_frag_title.setText("이용권");
-        }else if(getResources().getString(R.string.page_name_purchase).equals(pageN)){
-            main_tv_frag_title.setText(getResources().getString(R.string.menu_watch));
-        }else if(getResources().getString(R.string.page_name_like).equals(pageN)){
-            main_tv_frag_title.setText(getResources().getString(R.string.menu_favorite));
-        }else if(getResources().getString(R.string.page_name_keep).equals(pageN)){
-            main_tv_frag_title.setText(getResources().getString(R.string.menu_subscribe));
-        }else if(getResources().getString(R.string.page_name_point_list).equals(pageN)){
-            main_tv_frag_title.setText(getResources().getString(R.string.menu_point_history));
-        }else if(getResources().getString(R.string.page_name_pay_list).equals(pageN)){
-            main_tv_frag_title.setText(getResources().getString(R.string.menu_pay_history));
-        }else if(getResources().getString(R.string.page_name_notice).equals(pageN)){
-            main_tv_frag_title.setText("공지사항");
-        }else if(getResources().getString(R.string.page_name_faq).equals(pageN)){
-            main_tv_frag_title.setText("FAQ");
-        }else if(getResources().getString(R.string.page_name_qna_list).equals(pageN)){
-            main_tv_frag_title.setText("1:1 QNA");
-        }else if(getResources().getString(R.string.page_name_policy).equals(pageN)){
-            main_tv_frag_title.setText("이용약관");
-        }else if(getResources().getString(R.string.page_name_cookie_list).equals(pageN)){
-            main_tv_frag_title.setText("최근 본 영상");
-        }else{
-            main_tv_frag_title.setText("");
-        }
-    }
+//    private void setToolbarTitle(String pageN){
+//        if(getResources().getString(R.string.page_name_index).equals(pageN)){
+//            main_tv_frag_title.setText("이용권");
+//        }else if(getResources().getString(R.string.page_name_purchase).equals(pageN)){
+//            main_tv_frag_title.setText(getResources().getString(R.string.menu_watch));
+//        }else if(getResources().getString(R.string.page_name_like).equals(pageN)){
+//            main_tv_frag_title.setText(getResources().getString(R.string.menu_favorite));
+//        }else if(getResources().getString(R.string.page_name_keep).equals(pageN)){
+//            main_tv_frag_title.setText(getResources().getString(R.string.menu_subscribe));
+//        }else if(getResources().getString(R.string.page_name_point_list).equals(pageN)){
+//            main_tv_frag_title.setText(getResources().getString(R.string.menu_point_history));
+//        }else if(getResources().getString(R.string.page_name_pay_list).equals(pageN)){
+//            main_tv_frag_title.setText(getResources().getString(R.string.menu_pay_history));
+//        }else if(getResources().getString(R.string.page_name_notice).equals(pageN)){
+//            main_tv_frag_title.setText("공지사항");
+//        }else if(getResources().getString(R.string.page_name_faq).equals(pageN)){
+//            main_tv_frag_title.setText("FAQ");
+//        }else if(getResources().getString(R.string.page_name_qna_list).equals(pageN)){
+//            main_tv_frag_title.setText("1:1 QNA");
+//        }else if(getResources().getString(R.string.page_name_policy).equals(pageN)){
+//            main_tv_frag_title.setText("이용약관");
+//        }else if(getResources().getString(R.string.page_name_cookie_list).equals(pageN)){
+//            main_tv_frag_title.setText("최근 본 영상");
+//        }else{
+//            main_tv_frag_title.setText("");
+//        }
+//    }
     @Override
     public void onUpdateProgress(int progressValue) {
         mProgressBar.setProgress(progressValue);
