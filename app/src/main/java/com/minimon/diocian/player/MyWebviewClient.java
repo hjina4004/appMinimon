@@ -40,21 +40,41 @@ public class MyWebviewClient extends WebViewClient {
     }
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        Log.d("LoadingUrl",url);
+        Log.d("MyWebviewClient","shouldOverrideUrlLoading1");
         return true;
     }
 
     @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+        Log.d("MyWebviewClient","shouldInterceptRequest");
+        return super.shouldInterceptRequest(view, request);
+    }
+
+    @Override
+    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
+        Log.d("MyWebviewClient","shouldInterceptRequest2");
+        return super.shouldInterceptRequest(view, url);
+    }
+
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        Log.d("MyWebviewClient","shouldOverrideUrlLoading2");
+        return super.shouldOverrideUrlLoading(view, request);
+    }
+
+    @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        bar.setVisibility(View.VISIBLE);
+        Log.d("MyWebviewClient","onPageStarted");
         super.onPageStarted(view, url, favicon);
+        bar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onPageFinished(WebView view, String url) {
+        Log.d("MyWebviewClient","onPageFinished");
+        super.onPageFinished(view, url);
         bar.setVisibility(View.GONE);
         if(mListener!=null) mListener.loadingFinished();
-        super.onPageFinished(view, url);
     }
 
 

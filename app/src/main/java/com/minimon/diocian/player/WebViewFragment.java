@@ -91,19 +91,23 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private ObservableWebView mWebView;
     private ProgressBar mProgressBar;
     private MinimonWebView minimonWebView;
-    private MainActivity activity;
+    private MainActivity mActivity;
     private JavascriptInterface javascriptInterface;
 
     private RelativeLayout view_main_toolbar;
     private RelativeLayout view_main_toolbar2;
     private TextView main_tv_frag_title;
 
-    private List<String> arrPageNameHistory = new ArrayList<>();
+//    private List<String> arrPageNameHistory = new ArrayList<>();
+    private String webViewPageName;
+    private String webViewUrl;
+    private String webViewKey;
+    private String webViewValue;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
 
-    private String mPage;
+//    private String mPage;
     // TODO: Rename and change types of parameters
 
     public WebViewFragment() {
@@ -128,8 +132,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 //    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        activity = (MainActivity) getActivity();
-        activity.setOnKeypressListener(this);
+        mActivity = (MainActivity) getActivity();
+        mActivity.setOnKeypressListener(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -137,6 +141,10 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        webViewPageName = getArguments().getString("pageName");
+        webViewUrl = getArguments().getString("pageUrl");
+        webViewKey = getArguments().getString("pageKey");
+        webViewValue = getArguments().getString("pageValue");
         return inflater.inflate(R.layout.fragment_web_view, container, false);
     }
 
@@ -144,7 +152,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPage = WebViewInfo.getInstance().getPageName();
+//        mPage = WebViewInfo.getInstance().getPageName();
 
         if(minimonWebView == null){
             minimonWebView = new MinimonWebView();
@@ -177,7 +185,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
             }
         });
-        changeToolbar();
+//        changeToolbar();
+        moveWebUrl();
     }
 
     public void clearHistory(){
@@ -194,26 +203,29 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         ContentValues content = new ContentValues();
         content.put("id", info.getUID());
         content.put("loc", "Android");
-        content.put("page", WebViewInfo.getInstance().getPageName());
-        arrPageNameHistory.add(WebViewInfo.getInstance().getPageName());
-        Log.d("FragmentCreated",WebViewInfo.getInstance().getPageName());
-        if("search".equals(WebViewInfo.getInstance().getPageName())){
+        content.put("page", webViewPageName);
+        Log.d("moveWebUrlPageName",webViewPageName);
+//        arrPageNameHistory.add(WebViewInfo.getInstance().getPageName());
+//        Log.d("FragmentCreated",WebViewInfo.getInstance().getPageName());
+        if("search".equals(webViewPageName)){
             content.put("searchTag",WebViewInfo.getInstance().getSearch_tag());
+        }else{
+            content.put(webViewKey,webViewValue);
         }
-        minimonWebView.goToWeb("Contents/view", content);
+        minimonWebView.goToWeb(webViewUrl, content);
 //        if(mWebView!=null)
 //            changeToolbar();
     }
 
-    public void changeToolbar(){
-        if(mWebView.canGoBack()){
-            view_main_toolbar.setVisibility(View.GONE);
-            view_main_toolbar2.setVisibility(View.VISIBLE);
-        }else{
-            view_main_toolbar.setVisibility(View.VISIBLE);
-            view_main_toolbar2.setVisibility(View.GONE);
-        }
-    }
+//    public void changeToolbar(){
+//        if(mWebView.canGoBack()){
+//            view_main_toolbar.setVisibility(View.GONE);
+//            view_main_toolbar2.setVisibility(View.VISIBLE);
+//        }else{
+//            view_main_toolbar.setVisibility(View.VISIBLE);
+//            view_main_toolbar2.setVisibility(View.GONE);
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {
@@ -242,8 +254,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         }
     }
 
-    public void setListener(){
-        activity.setOnKeypressListener(this);
+    private void setAcListener(){
+        mActivity.setOnKeypressListener(this);
     }
 
 
@@ -301,7 +313,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         content.put("id", info.getUID());
         content.put("loc", "Android");
         content.put("page", page);
-        mPage = page;
+//        mPage = page;
 
         if("episode".equals(page)) {
             Log.d("ongotodramaplay",url+","+page+","+key+","+value);
@@ -318,7 +330,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             content.put(key, value);
         }
         Log.d("onGoToWebUID", info.getUID());
-        minimonWebView.goToWeb(url, content);
+        goToWebMain(url,page,key,value);
+//        minimonWebView.goToWeb(url, content);
     }
 
     private void goToEpisodeMain(String url, String page, String key, String value)
@@ -331,11 +344,20 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         startActivity(intent);
     }
 
+    private void goToWebMain(String url, String page, String key, String value){
+        Intent intent = new Intent(getActivity(),MainActivity.class);
+        intent.putExtra("pageUrl",url);
+        intent.putExtra("pageName",page);
+        intent.putExtra("pageKey",key);
+        intent.putExtra("pageValue",value);
+        startActivity(intent);
+    }
+
     @Override
     public void onResponseHtml(String html, String baseUrl) {
         Log.d("BasrUrl", baseUrl);
         Log.d("BaseUrlHtml", html);
-        setListener();
+        setAcListener();
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
 //        changeToolbar();
 //        if(!mPage.equals("main") || !"channel".equals(mPage)|| !"episode".equals(mPage) || mWebView.canGoBack())
@@ -344,15 +366,16 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void closeRefreshWeb(String url, String page, String key, String value) {
-        UserInfo info = UserInfo.getInstance();
-        ContentValues content = new ContentValues();
-        content.put("id", info.getUID());
-        content.put("loc", "Android");
-        content.put("page", page);
-        mPage = page;
-        content.put(key, value);
-        Log.d("onGoToWebUID", info.getUID());
-        minimonWebView.goToWeb(url, content);
+        goToWebMain(url,page,key,value);
+//        UserInfo info = UserInfo.getInstance();
+//        ContentValues content = new ContentValues();
+//        content.put("id", info.getUID());
+//        content.put("loc", "Android");
+//        content.put("page", page);
+////        mPage = page;
+//        content.put(key, value);
+//        Log.d("onGoToWebUID", info.getUID());
+//        minimonWebView.goToWeb(url, content);
     }
 
     @Override
@@ -385,11 +408,11 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void loadingFinished() {
-        if("main".equals(WebViewInfo.getInstance().getPageName())){
-            WebViewInfo.getInstance().setPageName("");
-            mWebView.clearHistory();
-        }
-        changeToolbar();
+//        if("main".equals(webViewPageName)){
+//            WebViewInfo.getInstance().setPageName("");
+//            mWebView.clearHistory();
+//        }
+//        changeToolbar();
         WebViewInfo.getInstance().setPageName("");
     }
 }

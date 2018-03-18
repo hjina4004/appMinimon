@@ -63,7 +63,10 @@ import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener, DBHelper.dbHelperListenr, SearchhistoryAdapter.SearchHistoryAdapterListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.OnConnectionFailedListener,
+        DBHelper.dbHelperListenr,
+        SearchhistoryAdapter.SearchHistoryAdapterListener{
 
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
@@ -109,6 +112,10 @@ public class MainActivity extends AppCompatActivity
     private DBHelper dbHelper;
 
     private WebViewFragment webViewFragment;
+    private String mPageName;
+    private String mPageUrl;
+    private String mPageKey;
+    private String mPageValue;
 //    private Fragment fragment;
 
     @Override
@@ -245,9 +252,11 @@ public class MainActivity extends AppCompatActivity
                         adapter.notifyDataSetChanged();
                         hideSearch();
                         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
+                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
                         WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
-                        webViewFragment.moveWebUrl();
-                        changeFragment(webViewFragment);
+                        newActivity("search");
+//                        webViewFragment.moveWebUrl();
+//                        changeFragment(webViewFragment);
                         return true; // consume.
                     }
                 }
@@ -277,8 +286,9 @@ public class MainActivity extends AppCompatActivity
                         hideSearch2();
                         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
                         WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search2.getText().toString());
-                        webViewFragment.moveWebUrl();
-                        changeFragment(webViewFragment);
+                        newActivity("search");
+//                        webViewFragment.moveWebUrl();
+//                        changeFragment(webViewFragment);
                         return true; // consume.
                     }
                 }
@@ -288,9 +298,31 @@ public class MainActivity extends AppCompatActivity
 
         viewUserInfo();
 
-        webViewFragment = new WebViewFragment();
-
-        goMainWeb();
+        mPageName = getIntent().getStringExtra("pageName");
+        if(mPageName == null || mPageName.isEmpty())
+            mPageName = "main";
+        mPageUrl = getIntent().getStringExtra("pageUrl");
+        if(mPageUrl == null || mPageUrl.isEmpty())
+            mPageUrl = "Contents/view";
+        mPageKey = getIntent().getStringExtra("pageKey");
+        if(mPageKey == null)
+            mPageKey = "";
+        mPageValue = getIntent().getStringExtra("pageValue");
+        if(mPageValue == null)
+            mPageValue = "";
+        if("setting".equals(mPageName))
+            changeFragment(new SettingFragment());
+        else {
+            Bundle bundle = new Bundle();
+            bundle.putString("pageName", mPageName);
+            bundle.putString("pageUrl", mPageUrl);
+            bundle.putString("pageKey", mPageKey);
+            bundle.putString("pageValue", mPageValue);
+            webViewFragment = new WebViewFragment();
+            webViewFragment.setArguments(bundle);
+            changeFragment(webViewFragment);
+            setToolbar();
+        }
     }
 
     @Override
@@ -311,6 +343,7 @@ public class MainActivity extends AppCompatActivity
                 mListenr.onBack();
             }else {
 //                if(isMain) {
+                if("main".equals(mPageName)) {
                     long tempTime = System.currentTimeMillis();
                     long intervalTime = tempTime - backPressedTime;
 
@@ -320,6 +353,9 @@ public class MainActivity extends AppCompatActivity
                         backPressedTime = tempTime;
                         Toast.makeText(getApplicationContext(), R.string.notice_exit_app, Toast.LENGTH_SHORT).show();
                     }
+                }else{
+                    finish();
+                }
 //                }
             }
         }
@@ -524,14 +560,16 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_cookies:
                     info.setPageName(getResources().getString(R.string.page_name_cookie_list));
-                    webViewFragment.moveWebUrl();
+//                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
 //                    tv_frag_title.setText("최근 본 영상");
                     isShowSearch = true;
 //                    isMain = false;
                     break;
                 case R.id.view_menu_user_info:
                     info.setPageName(getResources().getString(R.string.page_name_info));
-                    webViewFragment.moveWebUrl();
+//                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText(getResources().getString(R.string.menu_user_page));
                     isShowSearch = false;
@@ -539,7 +577,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_purchase:
                     info.setPageName(getResources().getString(R.string.page_name_purchase));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText(getResources().getString(R.string.menu_watch));
                     isShowSearch = true;
@@ -547,7 +586,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_favorite:
                     info.setPageName(getResources().getString(R.string.page_name_like));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText(getResources().getString(R.string.menu_favorite));
                     isShowSearch = true;
@@ -555,7 +595,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_subscribe:
                     info.setPageName(getResources().getString(R.string.page_name_keep));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText(getResources().getString(R.string.menu_subscribe));
                     isShowSearch = true;
@@ -563,7 +604,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_point_history:
                     info.setPageName(getResources().getString(R.string.page_name_point_list));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText(getResources().getString(R.string.menu_point_history));
                     isShowSearch = false;
@@ -571,7 +613,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_pay_history:
                     info.setPageName(getResources().getString(R.string.page_name_pay_list));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText(getResources().getString(R.string.menu_pay_history));
                     isShowSearch = false;
@@ -579,14 +622,16 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_notice:
                     info.setPageName(getResources().getString(R.string.page_name_notice));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText("공지사항");
 //                    isMain = false;
                     break;
                 case R.id.view_menu_faq:
                     info.setPageName(getResources().getString(R.string.page_name_faq));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText("FAQ");
                     isShowSearch = false;
@@ -594,7 +639,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_qna:
                     info.setPageName(getResources().getString(R.string.page_name_qna_list));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText("1:1 QNA");
                     isShowSearch = false;
@@ -602,7 +648,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_policy:
                     info.setPageName(getResources().getString(R.string.page_name_policy));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText("이용약관");
                     isShowSearch = false;
@@ -610,7 +657,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case R.id.view_menu_fix:
                     info.setPageName(getResources().getString(R.string.page_name_index));
-                    webViewFragment.moveWebUrl();
+                    newActivity(info.getPageName());
+//                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText("이용권");
                     isShowSearch = false;
@@ -623,10 +671,11 @@ public class MainActivity extends AppCompatActivity
 //                    tv_frag_title.setText(getResources().getString(R.string.menu_setting));
                     isShowSearch = false;
 //                    isMain = false;
-                    changeFragment(new SettingFragment());
+//                    changeFragment(new SettingFragment());
+                    newActivity("setting");
                     return;
             }
-            changeFragment(webViewFragment);
+//            changeFragment(webViewFragment);
         }
     };
 
@@ -639,6 +688,33 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 //        changeToolbarVisibility(isMain);
+    }
+
+    private void newActivity(String pageName){
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.putExtra("pageName",pageName);
+        if("main".equals(pageName))
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
+    private void setToolbar(){
+        if("main".equals(mPageName)){
+            view_main_toolbar.setVisibility(View.VISIBLE);
+            view_main_toolbar2.setVisibility(View.GONE);
+        }else{
+            view_main_toolbar.setVisibility(View.GONE);
+            view_main_toolbar2.setVisibility(View.VISIBLE);
+            if("info".equals(mPageName)){
+                tv_toolbar_frag_go_back2.setVisibility(View.VISIBLE);
+                tv_toolbar_open_drawer2.setVisibility(View.GONE);
+            }else{
+                tv_toolbar_frag_go_back2.setVisibility(View.GONE);
+                tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
 //    private void changeToolbarVisibility(boolean ismain){
@@ -661,10 +737,14 @@ public class MainActivity extends AppCompatActivity
 //    }
     public void goMainWeb(){
 //        isMain = true;
-        WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_main));
-        webViewFragment.moveWebUrl();
+//        WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_main));
+        mPageName = "main";
+//        Bundle bundle = new Bundle();
+
+//        webViewFragment.moveWebUrl();
 //        changeToolbarVisibility(true);
-        changeFragment(webViewFragment);
+//        changeFragment(webViewFragment);
+        newActivity(mPageName);
     }
 
     private void initGoogle() {
@@ -747,13 +827,16 @@ public class MainActivity extends AppCompatActivity
         if(findViewById(R.id.view_main_search).getVisibility() == View.VISIBLE) {
             WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
             WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
-            webViewFragment.moveWebUrl();
-            changeFragment(webViewFragment);
+            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+            newActivity("search");
+//            webViewFragment.moveWebUrl();
+//            changeFragment(webViewFragment);
         }else if (findViewById(R.id.view_main_search2).getVisibility() == View.VISIBLE){
             WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
             WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search2.getText().toString());
-            webViewFragment.moveWebUrl();
-            changeFragment(webViewFragment);
+            newActivity("search");
+//            webViewFragment.moveWebUrl();
+//            changeFragment(webViewFragment);
         }
     }
 }
