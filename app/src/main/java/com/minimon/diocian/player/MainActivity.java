@@ -310,8 +310,10 @@ public class MainActivity extends AppCompatActivity
         mPageValue = getIntent().getStringExtra("pageValue");
         if(mPageValue == null)
             mPageValue = "";
-        if("setting".equals(mPageName))
+        if("setting".equals(mPageName)) {
             changeFragment(new SettingFragment());
+            setToolbar();
+        }
         else if("paying".equals(mPageName)){
             Bundle bundle = new Bundle();
             bundle.putString("pageName", mPageName);
@@ -676,7 +678,7 @@ public class MainActivity extends AppCompatActivity
 //                    isMain = false;
                     break;
                 case R.id.view_menu_setting:
-                    tv_toolbar_search2.setVisibility(View.GONE);
+//                    tv_toolbar_search2.setVisibility(View.GONE);
 //                    webViewFragment.moveWebUrl();
 //                    tv_frag_title.setVisibility(View.VISIBLE);
 //                    tv_frag_title.setText(getResources().getString(R.string.menu_setting));
@@ -718,7 +720,7 @@ public class MainActivity extends AppCompatActivity
         }else{
             view_main_toolbar.setVisibility(View.GONE);
             view_main_toolbar2.setVisibility(View.VISIBLE);
-            if("info".equals(mPageName) || "paying".equals(mPageName)){
+            if("info".equals(mPageName) || "paying".equals(mPageName) || "setting".equals(mPageName)){
                 tv_toolbar_frag_go_back2.setVisibility(View.VISIBLE);
                 tv_toolbar_open_drawer2.setVisibility(View.GONE);
             }else{
