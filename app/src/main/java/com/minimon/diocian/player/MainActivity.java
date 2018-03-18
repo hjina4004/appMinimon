@@ -312,6 +312,17 @@ public class MainActivity extends AppCompatActivity
             mPageValue = "";
         if("setting".equals(mPageName))
             changeFragment(new SettingFragment());
+        else if("paying".equals(mPageName)){
+            Bundle bundle = new Bundle();
+            bundle.putString("pageName", mPageName);
+            bundle.putString("pageUrl", mPageUrl);
+            bundle.putString("item", getIntent().getStringExtra("item"));
+            bundle.putString("how", getIntent().getStringExtra("how"));
+            webViewFragment = new WebViewFragment();
+            webViewFragment.setArguments(bundle);
+            changeFragment(webViewFragment);
+            setToolbar();
+        }
         else {
             Bundle bundle = new Bundle();
             bundle.putString("pageName", mPageName);
@@ -707,7 +718,7 @@ public class MainActivity extends AppCompatActivity
         }else{
             view_main_toolbar.setVisibility(View.GONE);
             view_main_toolbar2.setVisibility(View.VISIBLE);
-            if("info".equals(mPageName)){
+            if("info".equals(mPageName) || "paying".equals(mPageName)){
                 tv_toolbar_frag_go_back2.setVisibility(View.VISIBLE);
                 tv_toolbar_open_drawer2.setVisibility(View.GONE);
             }else{
