@@ -298,12 +298,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onResponse(JSONObject info) {
         Log.d("PostAPITOKEN", info.toString());
     }
-//
-//    @Override
-//    public void onResponseHtml(String html) {
-//        Log.d("PostAPITOKEN", html);
-//        mWebView.loadData(html, "text/html","utf-8");
-//    }
 
     @Override
     public void onGoToWeb(String url, String page, String key, String value) {
@@ -359,9 +353,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         Log.d("BaseUrlHtml", html);
         setAcListener();
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
-//        changeToolbar();
-//        if(!mPage.equals("main") || !"channel".equals(mPage)|| !"episode".equals(mPage) || mWebView.canGoBack())
-//            view_main_search.setBackgroundColor(getResources().getColor(R.color.MainColor));
     }
 
     @Override

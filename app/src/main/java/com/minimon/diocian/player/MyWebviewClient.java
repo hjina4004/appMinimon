@@ -38,29 +38,6 @@ public class MyWebviewClient extends WebViewClient {
     public void setMyWebViewClientListener(myWebViewClientListener listener){
         mListener = listener;
     }
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        Log.d("MyWebviewClient","shouldOverrideUrlLoading1");
-        return true;
-    }
-
-    @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-        Log.d("MyWebviewClient","shouldInterceptRequest");
-        return super.shouldInterceptRequest(view, request);
-    }
-
-    @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-        Log.d("MyWebviewClient","shouldInterceptRequest2");
-        return super.shouldInterceptRequest(view, url);
-    }
-
-    @Override
-    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        Log.d("MyWebviewClient","shouldOverrideUrlLoading2");
-        return super.shouldOverrideUrlLoading(view, request);
-    }
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
