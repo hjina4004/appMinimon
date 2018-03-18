@@ -91,6 +91,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private ObservableWebView mWebView;
     private ProgressBar mProgressBar;
     private MinimonWebView minimonWebView;
+    private MainActivity activity;
     private JavascriptInterface javascriptInterface;
 
     private RelativeLayout view_main_toolbar;
@@ -127,6 +128,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 //    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        activity = (MainActivity) getActivity();
+        activity.setOnKeypressListener(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -215,8 +218,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        MainActivity activity = (MainActivity) getActivity();
-        activity.setOnKeypressListener(this);
+
     }
 
     @Override
@@ -238,6 +240,10 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             activity.setOnKeypressListener(null);
             activity.onBackPressed();
         }
+    }
+
+    public void setListener(){
+        activity.setOnKeypressListener(this);
     }
 
 
@@ -329,6 +335,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onResponseHtml(String html, String baseUrl) {
         Log.d("BasrUrl", baseUrl);
         Log.d("BaseUrlHtml", html);
+        setListener();
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
 //        changeToolbar();
 //        if(!mPage.equals("main") || !"channel".equals(mPage)|| !"episode".equals(mPage) || mWebView.canGoBack())

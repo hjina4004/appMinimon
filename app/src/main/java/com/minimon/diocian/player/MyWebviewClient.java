@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.UrlQuerySanitizer;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -40,27 +41,20 @@ public class MyWebviewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         Log.d("LoadingUrl",url);
-        if(url.startsWith("minimon://goToWeb")){
-           return true;
-        }else {
-            Log.d("LoadingUrl",url);
-            return super.shouldOverrideUrlLoading(view, url);
-        }
+        return true;
     }
-
-
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        super.onPageStarted(view, url, favicon);
         bar.setVisibility(View.VISIBLE);
+        super.onPageStarted(view, url, favicon);
     }
 
     @Override
     public void onPageFinished(WebView view, String url) {
-        super.onPageFinished(view, url);
         bar.setVisibility(View.GONE);
         if(mListener!=null) mListener.loadingFinished();
+        super.onPageFinished(view, url);
     }
 
 

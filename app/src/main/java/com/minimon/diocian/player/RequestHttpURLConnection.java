@@ -41,19 +41,22 @@ public class RequestHttpURLConnection {
             String value;
 
             for(Map.Entry<String, Object> parameter : _params.valueSet()){
-                key = parameter.getKey();
-                value = parameter.getValue().toString();
+                if (parameter.getValue() != null) {
+                    key = parameter.getKey();
+                    value = parameter.getValue().toString();
 
-                // 파라미터가 두개 이상일때, 파라미터 사이에 &를 붙인다.
-                if (isAnd)
-                    sbParams.append("&");
+                    // 파라미터가 두개 이상일때, 파라미터 사이에 &를 붙인다.
+                    if (isAnd)
+                        sbParams.append("&");
 
-                sbParams.append(key).append("=").append(value);
+                    sbParams.append(key).append("=").append(value);
 
-                // 파라미터가 2개 이상이면 isAnd를 true로 바꾸고 다음 루프부터 &를 붙인다.
-                if (!isAnd)
-                    if (_params.size() >= 2)
-                        isAnd = true;
+                    // 파라미터가 2개 이상이면 isAnd를 true로 바꾸고 다음 루프부터 &를 붙인다.
+                    if (!isAnd)
+                        if (_params.size() >= 2)
+                            isAnd = true;
+                }
+
             }
         }
 
