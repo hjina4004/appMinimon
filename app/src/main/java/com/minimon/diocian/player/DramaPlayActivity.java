@@ -127,7 +127,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
-        checkWifi();
         progress_bar_drama_play = findViewById(R.id.progress_bar_drama_play);
         mWebView = findViewById(R.id.webview_dramaplay);
         javascriptInterface = new JavascriptInterface(this, mWebView);
@@ -163,18 +162,11 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return true;
     }
 
     private void checkWifi(){
@@ -442,7 +434,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
-
             }
         }
         releasePlayer();

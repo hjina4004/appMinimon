@@ -93,6 +93,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private MinimonWebView minimonWebView;
     private MainActivity mActivity;
     private JavascriptInterface javascriptInterface;
+    private JavascriptInterface playerJavascriptInterface;
 
     private RelativeLayout view_main_toolbar;
     private RelativeLayout view_main_toolbar2;
@@ -103,34 +104,39 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private String webViewUrl;
     private String webViewKey;
     private String webViewValue;
-    private long mWebViewHeight;
+
+    private ObservableWebView mPlayerWebView;
+    private SimpleExoPlayer player;
+    private SimpleExoPlayerView playerView;
+    private ComponentListener componentListener;
+
+    private MinimonEpisode minimonEpisode;
+    private String videoUrl;
+    private boolean playWhenReady;
+    private FrameLayout mFullScreenButton;
+    private ImageView mFullScreenIcon;
+    private TextView mEpisodeTitle;
+    private ImageView mLockScreen;
+    private boolean isLockSreen;
+    private String nowBandWidth = "";
+    private boolean isChangeBandWidth;
+    private LinearLayout mNowBandWidth;
+    private TextView mBandWidth;
+    private TextView mBandWidthAuto;
+    private TextView mBandWidth480;
+    private TextView mBandWidth720;
+    private TextView mBandWidth1080;
+    private LinearLayout mBandWidthView;
+    private RelativeLayout layout_player_view;
+    private FrameLayout view_frag_webview;
+    private boolean isChannelToEpisode = false;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-
-
-//    private String mPage;
-    // TODO: Rename and change types of parameters
 
     public WebViewFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     * <p>
-     * //     * @param param1 Parameter 1.
-     *
-     * @return A new instance of fragment WebViewFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-//    public static WebViewFragment newInstance(String param1) {
-//        WebViewFragment fragment = new WebViewFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM_WEBVIEW, param1);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mActivity = (MainActivity) getActivity();
@@ -161,6 +167,11 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         }
         javascriptInterface = new JavascriptInterface(getActivity(), mWebView);
         javascriptInterface.setListener(this);
+        playerJavascriptInterface = new JavascriptInterface(getActivity(),mPlayerWebView);
+        playerJavascriptInterface.setListener(this);
+
+        layout_player_view = view.findViewById(R.id.layout_player_view);
+        view_frag_webview = view.findViewById(R.id.view_frag_webview);
 
         view_main_toolbar = getActivity().findViewById(R.id.view_main_toolbar);
         view_main_toolbar2 = getActivity().findViewById(R.id.view_main_toolbar2);
@@ -174,6 +185,17 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface, "minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
+
+        mPlayerWebView = view.findViewById(R.id.webView_player);
+        mPlayerWebView.setWebViewClient(client);
+        mPlayerWebView.setWebChromeClient(new WebChromeClient());
+        mPlayerWebView.addJavascriptInterface(playerJavascriptInterface,"minimon");
+        mWebView.getSettings().setJavaScriptEnabled(true);
+
+        componentListener = new ComponentListener();
+
+        playerView = view.findViewById(R.id.player_frag_view);
+
         view_main_toolbar = getActivity().findViewById(R.id.view_main_toolbar);
         mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
             @Override
@@ -186,13 +208,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
             }
         });
-//        changeToolbar();
         moveWebUrl();
-    }
-
-    public void clearHistory(){
-        if(mWebView!=null)
-            mWebView.clearHistory();
     }
 
     public void moveWebUrl(){
@@ -210,9 +226,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             minimonWebView.goToPayWeb(webViewUrl, content);
         }else {
             content.put("page", webViewPageName);
-            Log.d("moveWebUrlPageName", webViewPageName);
-//        arrPageNameHistory.add(WebViewInfo.getInstance().getPageName());
-//        Log.d("FragmentCreated",WebViewInfo.getInstance().getPageName());
             if ("search".equals(webViewPageName)) {
                 content.put("searchTag", WebViewInfo.getInstance().getSearch_tag());
             } else {
@@ -220,24 +233,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             }
             minimonWebView.goToWeb(webViewUrl, content);
         }
-//        if(mWebView!=null)
-//            changeToolbar();
-    }
-
-//    public void changeToolbar(){
-//        if(mWebView.canGoBack()){
-//            view_main_toolbar.setVisibility(View.GONE);
-//            view_main_toolbar2.setVisibility(View.VISIBLE);
-//        }else{
-//            view_main_toolbar.setVisibility(View.VISIBLE);
-//            view_main_toolbar2.setVisibility(View.GONE);
-//        }
-//    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
     }
 
     @Override
@@ -274,37 +269,42 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         UserInfo info = UserInfo.getInstance();
         ContentValues content = new ContentValues();
         content.put("id", info.getUID());
-        content.put("loc", "Android");
         content.put("page", page);
-//        mPage = page;
 
         if("episode".equals(page)) {
             Log.d("ongotodramaplay",url+","+page+","+key+","+value);
            goToEpisodeMain(url,page,key,value);
             return;
         }
-        if("search".equals(page)) {
+        else if("search".equals(page)) {
             Log.d("WebViewFragmentisSearch","page is Search");
             content.put(key, WebViewInfo.getInstance().getSearch_tag());
+            content.put("loc", "Android");
         }
         else {
             Log.d("WebViewFragmentisSearch","page is not Search");
             Log.d("WebViewFragmentvalue",key+","+value);
-            content.put(key, value);
+            if(key != null && !key.isEmpty()) {
+                content.put(key, value);
+                content.put("loc", "Android");
+            }else{
+                content.put("loc", "android");
+            }
         }
-        Log.d("onGoToWebUID", info.getUID());
-        goToWebMain(url,page,key,value);
+        if(page == null || page.isEmpty() || "".equals(page)){
+            minimonWebView.goToWeb(url, content);
+        }
+        else
+            goToWebMain(url,page,key,value);
 //        minimonWebView.goToWeb(url, content);
     }
 
     private void goToEpisodeMain(String url, String page, String key, String value)
     {
-        Intent intent = new Intent(getActivity(),DramaPlayActivity.class);
-        intent.putExtra("url",url);
-        intent.putExtra("page",page);
-        intent.putExtra("key",key);
-        intent.putExtra("value",value);
-        startActivity(intent);
+        view_frag_webview.setVisibility(View.GONE);
+        layout_player_view.setVisibility(View.VISIBLE);
+        EpisodeInfo.getInsatnace().setIdx(value);
+        sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
     }
 
     private void goToWebMain(String url, String page, String key, String value){
@@ -327,8 +327,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void onResponseHtml(String html, String baseUrl) {
-        Log.d("BasrUrl", baseUrl);
-        Log.d("BaseUrlHtml", html);
         setAcListener();
         mWebView.loadDataWithBaseURL(baseUrl, html, "text/html", "utf-8", null);
     }
@@ -339,41 +337,432 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     }
 
     @Override
-    public void closeDepthRefreshWeb(String depth) {
-//        if (mWebView.canGoBackOrForward(Integer.parseInt(depth)))
-//            mWebView.goBackOrForward(Integer.parseInt(depth));
-    }
+    public void closeDepthRefreshWeb(String depth) {}
 
     @Override
     public void goToPg(String url, String item, String how) {
         Log.d("goToPgValues",url+","+item+","+how);
-//        UserInfo info = UserInfo.getInstance();
-//        ContentValues content = new ContentValues();
-//        content.put("id", info.getUID());
-//        content.put("loc", "Android");
-//        content.put("item",item);
-//        content.put("how",how);
-//        minimonWebView.goToPayWeb(url,content);
         goToPayWeb(url,item,how);
     }
 
     @Override
-    public void goToSearch() {
-
-    }
+    public void goToSearch() {}
 
     @Override
     public void changePlayer(String idx) {
-
+        sendEpisodeData(idx);
     }
 
     @Override
     public void loadingFinished() {
-//        if("main".equals(webViewPageName)){
-//            WebViewInfo.getInstance().setPageName("");
-//            mWebView.clearHistory();
-//        }
-//        changeToolbar();
-//        WebViewInfo.getInstance().setPageName("");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    private void initializePlayer() {
+        if (player == null) {
+            TrackSelection.Factory adaptiveTrackSelectionFactory =
+                    new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
+            TrackSelector trackSelector =
+                    new DefaultTrackSelector(adaptiveTrackSelectionFactory);
+            player = ExoPlayerFactory.newSimpleInstance(getActivity(),trackSelector);
+
+            player.addListener(componentListener);
+            player.setAudioDebugListener(componentListener);
+            player.setVideoDebugListener(componentListener);
+            playerView.setPlayer(player);
+
+            player.setPlayWhenReady(playWhenReady);
+        }
+
+
+        MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
+        playerView.getPlayer().prepare(mediaSources, true, false);
+        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
+            playerView.getPlayer().seekTo(EpisodeInfo.getInsatnace().getResumePosition());
+            playerView.getPlayer().setPlayWhenReady(true);
+        }
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            playWhenReady = player.getPlayWhenReady();
+            player.removeListener(componentListener);
+            player.setAudioDebugListener(null);
+            player.setVideoDebugListener(null);
+            player.release();
+            player = null;
+        }
+    }
+
+    private void initData(){
+        minimonEpisode = new MinimonEpisode();
+        minimonEpisode.setListener(new MinimonEpisode.MinimonEpisodeListener() {
+            @Override
+            public void onResponse(JSONObject info , String responseType) {
+                try{
+                    if("info".equals(responseType)) //현재 플레이할 에피소드 에이터
+                        setData(info);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private void setData(JSONObject info){
+        try{
+            JSONArray videoArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").getJSONObject("list_mp").get("video");
+            JSONObject videoObj = null;
+            if(ConfigInfo.getInstance().getBandwidth()!= 3)
+                videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
+            else
+                videoObj = (JSONObject) videoArr.get(0);
+            Log.d("VideoObjTag",videoObj.toString());
+            JSONArray episodeArr = (JSONArray)info.getJSONObject("data").getJSONObject("list").get("list_ep");
+            JSONObject episodeInformation = (JSONObject)info.getJSONObject("data").get("list");
+            setEpisodeData(episodeInformation);
+            videoUrl = videoObj.getString("playUrl");
+            EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
+            if (!isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
+                EpisodeInfo.getInsatnace().setResumePosition(0);
+            }else{
+                isChangeBandWidth = !isChangeBandWidth;
+            }
+            initializePlayer();
+            initFullscreenButton();
+        }catch (JSONException e){
+            Toast.makeText(getActivity().getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    private void setEpisodeData(JSONObject obj){
+        try {
+            EpisodeInfo.getInsatnace().setTitle(obj.getString("title"));
+            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
+            EpisodeInfo.getInsatnace().setIdx(obj.getString("idx"));
+//            c_title = obj.getString("c_title");
+            main_tv_frag_title.setText(obj.getString("c_title"));
+//            setTitle(c_title);
+//            nowEp = obj.getString("ep");
+            JSONArray jarr = obj.getJSONArray("list_tag");
+            String tags = "";
+            for(int i=0; i<jarr.length(); i++){
+                JSONObject objTag = (JSONObject) jarr.get(i);
+                tags += "#"+objTag.getString("tag") + " ";
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void initFullscreenButton() {
+        PlaybackControlView controlView = playerView.findViewById(R.id.exo_controller);
+        mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
+        mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
+        mFullScreenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goFullScreen();
+            }
+        });
+        mEpisodeTitle = controlView.findViewById(R.id.tv_exo_title);
+        mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
+        mLockScreen = controlView.findViewById(R.id.img_exo_lock);
+        if(getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
+        else
+            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+
+        mLockScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getActivity().getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR){//잠겨있던 잠금 풀 경우
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+                    isLockSreen = !isLockSreen;
+                }else{ //다시 잠글경우
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
+                    isLockSreen = !isLockSreen;
+                }
+            }
+        });
+
+        mBandWidthView = controlView.findViewById(R.id.view_bandwidth);
+        mBandWidth = controlView.findViewById(R.id.tv_bandwidth);
+        mNowBandWidth = controlView.findViewById(R.id.view_now_bandwidth);
+
+        switch (ConfigInfo.getInstance().getBandwidth()){
+            case 0:
+                nowBandWidth = "480p";
+                break;
+            case 1:
+                nowBandWidth = "720p";
+                break;
+            case 2:
+                nowBandWidth = "1080p";
+                break;
+            case 3:
+                nowBandWidth = "자동";
+                break;
+        }
+        mBandWidth.setText(nowBandWidth);
+        mBandWidthAuto = controlView.findViewById(R.id.tv_bandwidth_auto);
+        mBandWidth480 = controlView.findViewById(R.id.tv_bandwidth_480);
+        mBandWidth720 = controlView.findViewById(R.id.tv_bandwidth_720);
+        mBandWidth1080 = controlView.findViewById(R.id.tv_bandwidth_1080);
+        mNowBandWidth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mBandWidthView.getVisibility() == View.VISIBLE)
+                    mBandWidthView.setVisibility(View.GONE);
+                else
+                    mBandWidthView.setVisibility(View.VISIBLE);
+            }
+        });
+        mBandWidth480.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("480p".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth480);
+                mBandWidthView.setVisibility(View.GONE);
+                nowBandWidth = "480p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
+        });
+        mBandWidth720.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("720p".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth720);
+                mBandWidthView.setVisibility(View.GONE);
+                nowBandWidth = "720p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
+        });
+        mBandWidth1080.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if("1080p".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.bandwidth1080);
+                mBandWidthView.setVisibility(View.GONE);
+                nowBandWidth = "1080p";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
+        });
+        mBandWidthAuto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mBandWidthView.setVisibility(View.GONE);
+                if("자동".equals(nowBandWidth))
+                    return;
+                ConfigInfo.getInstance().setBandwidth(ConfigInfo.banswidthAuto);
+                nowBandWidth = "자동";
+                mBandWidth.setText(nowBandWidth);
+                isChangeBandWidth = true;
+                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+                sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
+            }
+        });
+    }
+
+    /*
+   현재 플레이할 에피소드 데이터
+    */
+    private void sendEpisodeData(String idx){
+        Log.d("sendEpisodeData",idx);
+        ContentValues values = new ContentValues();
+        values.put("ep_idx",idx);
+        if(ConfigInfo.getInstance().getBandwidth() == 3)
+            values.put("quality","hlsabr");
+        else
+            values.put("quality","his");
+        values.put("id",UserInfo.getInstance().getUID());
+
+        minimonEpisode.info(values);
+    }
+
+    private void goFullScreen(){
+        Intent intent = new Intent(getActivity(), VideoPlayScreenActivity.class);
+        startActivity(intent);
+    }
+
+    private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {
+        @Override
+        public void onTimelineChanged(Timeline timeline, Object manifest) {
+
+        }
+
+        @Override
+        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+        }
+
+        @Override
+        public void onLoadingChanged(boolean isLoading) {
+
+        }
+
+        @Override
+        public void onPlayerStateChanged(boolean playWhenReady, int state) {
+            String stateString;
+            switch (state) {
+                case ExoPlayer.STATE_IDLE:
+                    stateString = "STATE_IDLE";
+                    break;
+                case ExoPlayer.STATE_BUFFERING:
+                    stateString = "STATE_BUFFERING";
+                    break;
+                case ExoPlayer.STATE_READY:
+                    stateString = "STATE_READY";
+                    break;
+                case ExoPlayer.STATE_ENDED:
+                    stateString = "STATE_ENDED";
+                    break;
+                default:
+                    stateString = "UNKNOWN STATE";
+                    break;
+            }
+        }
+
+        @Override
+        public void onRepeatModeChanged(int repeatMode) {
+
+        }
+
+        @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+        }
+
+        @Override
+        public void onPlayerError(ExoPlaybackException error) {
+        }
+
+        @Override
+        public void onPositionDiscontinuity(int reason) {
+
+        }
+
+
+        @Override
+        public void onSeekProcessed() {
+
+        }
+
+        @Override
+        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+        }
+
+        @Override
+        public void onAudioEnabled(DecoderCounters counters) {
+
+        }
+
+        @Override
+        public void onAudioSessionId(int audioSessionId) {
+
+        }
+
+        @Override
+        public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+
+        }
+
+        @Override
+        public void onAudioInputFormatChanged(Format format) {
+
+        }
+
+        @Override
+        public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
+
+        }
+
+        @Override
+        public void onAudioDisabled(DecoderCounters counters) {
+
+        }
+
+        @Override
+        public void onVideoEnabled(DecoderCounters counters) {
+
+        }
+
+        @Override
+        public void onVideoDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+
+        }
+
+        @Override
+        public void onVideoInputFormatChanged(Format format) {
+
+        }
+
+        @Override
+        public void onDroppedFrames(int count, long elapsedMs) {
+
+        }
+
+        @Override
+        public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+
+        }
+
+        @Override
+        public void onRenderedFirstFrame(Surface surface) {
+
+        }
+
+        @Override
+        public void onVideoDisabled(DecoderCounters counters) {
+
+        }
+    }
+
+    private MediaSource buildMediaSource(Uri uri, String videoType) {
+
+        DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
+        if("mp4".equals(videoType))
+            return new ExtractorMediaSource.Factory(mediaDataSourceFactory).createMediaSource(uri, null, null);
+        else if("hls".equals(videoType))
+            return new HlsMediaSource.Factory(mediaDataSourceFactory).createMediaSource(uri, null, null);
+        else
+            return null;
+    }
+
+    public DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return new DefaultDataSourceFactory(getActivity(), bandwidthMeter, buildHttpDataSourceFactory(true));
+    }
+
+    public HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return new DefaultHttpDataSourceFactory(Util.getUserAgent(getActivity(), "exAndroid"), bandwidthMeter);
     }
 }
