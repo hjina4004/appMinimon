@@ -425,6 +425,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public void onClickLogin(View view) {
         Log.d("LoginActivity:", "onClickLogin start");
+//        mDialogMng.showProgressDlg(mContext,"미니몬 로그인 중입니다",null);
         loginMinimon(getInputUID(), getInputPassword(), "basic");
     }
 
@@ -432,6 +433,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if("social".equals(type)){
             saveAutoLogin(true);
         }
+        mDialogMng.showProgressDlg(mContext,"미니몬 로그인 중입니다",null);
         String myVersion = Build.VERSION.RELEASE;
         String myDeviceModel = Build.MODEL;
         ContentValues loginInfo = new ContentValues();
