@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
     private TextAwesome tv_toolbar_open_drawer;
     private TextAwesome tv_toolbar_search;
     private ImageView tv_toolbar_go_back;
-    private EditText ed_toolbar_search;
+    public EditText ed_toolbar_search;
     private DrawerLayout drawer;
     private RelativeLayout view_delete_search_history;
     private RecyclerView rec_search_history;
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity
         adapter.setHistorySearchListener(this);
         rec_search_history.setAdapter(adapter);
         rec_search_history2.setAdapter(adapter);
-
+        ed_toolbar_search.setImeOptions(EditorInfo.IME_ACTION_DONE);
         ed_toolbar_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -247,16 +247,14 @@ public class MainActivity extends AppCompatActivity
                         s.setHistory(textView.getText().toString());
                         dbHelper.insert(textView.getText().toString(),String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
 //                        arrHistory.add(s);
-                        textView.setText("");
 //                        arrHistory = dbHelper.getResult();
                         adapter.notifyDataSetChanged();
                         hideSearch();
                         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
                         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
                         WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
+                        textView.setText("");
                         newActivity("search");
-//                        webViewFragment.moveWebUrl();
-//                        changeFragment(webViewFragment);
                         return true; // consume.
                     }
                 }
