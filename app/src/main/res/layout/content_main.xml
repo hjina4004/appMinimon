@@ -80,7 +80,11 @@
                 android:layout_toEndOf="@+id/tv_toolbar_go_back2"
                 android:layout_toRightOf="@+id/tv_toolbar_go_back2"
                 android:hint="검색어를 입력하세요"
+                android:layout_centerVertical="true"
                 android:inputType="text"
+                android:background="@color/transparent"
+                android:textColor="#fff"
+                android:gravity="center_vertical"
                 android:textColorHint="#fff"
                 android:visibility="gone" />
 
@@ -187,8 +191,12 @@
                     android:layout_toEndOf="@+id/tv_toolbar_go_back"
                     android:layout_toRightOf="@+id/tv_toolbar_go_back"
                     android:hint="검색어를 입력하세요"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical"
                     android:inputType="text"
                     android:textColorHint="#fff"
+                    android:background="@color/transparent"
+                    android:textColor="#fff"
                     android:visibility="gone" />
 
                 <com.minimon.diocian.player.TextAwesome

@@ -706,6 +706,9 @@ public class MainActivity extends AppCompatActivity
     private void newActivity(String pageName){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        if(pageName.equals(mPageName) && !"search".equals(mPageName)){
+            return;
+        }
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
         intent.putExtra("pageName",pageName);
         if("main".equals(pageName))

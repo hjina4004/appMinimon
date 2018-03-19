@@ -5,8 +5,8 @@
     android:background="@color/transparent">
     <ImageView
         android:id="@+id/img_dialog_gesture_info_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@mipmap/a022_play_b_close"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

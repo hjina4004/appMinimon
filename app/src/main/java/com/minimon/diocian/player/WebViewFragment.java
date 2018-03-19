@@ -103,6 +103,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private String webViewUrl;
     private String webViewKey;
     private String webViewValue;
+    private long mWebViewHeight;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
@@ -177,11 +178,11 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
             @Override
             public void onScroll(int l, int t) {
-                    if(t!=0){
-                        view_main_toolbar.setBackgroundColor(Color.parseColor("#BFFB450B"));
-                    }else{
-                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-                    }
+                if(t!=0){
+                    view_main_toolbar.setBackgroundColor(Color.parseColor("#"+"BF"+"FB450B"));
+                }else{
+                    view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
 
             }
         });

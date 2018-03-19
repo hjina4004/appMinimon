@@ -157,6 +157,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             }
         });
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         initializePlayer();
         initFullscreenButton();
         initData();

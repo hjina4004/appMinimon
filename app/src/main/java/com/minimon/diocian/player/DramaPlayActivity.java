@@ -127,7 +127,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
-//        checkWifi();
+        checkWifi();
         progress_bar_drama_play = findViewById(R.id.progress_bar_drama_play);
         mWebView = findViewById(R.id.webview_dramaplay);
         javascriptInterface = new JavascriptInterface(this, mWebView);
@@ -189,8 +189,9 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                     public void onClick(DialogInterface dialogInterface, int i) {
                         ConfigInfo.getInstance().setUseData(true);
                         SharedPreferences preferences = getSharedPreferences("minimon-preference", MODE_PRIVATE);
-                        preferences.edit().putBoolean("useData",ConfigInfo.getInstance().isUseData());
-                        preferences.edit().apply();
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean("useData",true);
+                        editor.apply();
                     }
                 });
                 builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
@@ -618,9 +619,9 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                     stateString = "UNKNOWN STATE";
                     break;
             }
-            if("STATE_READY".equals(stateString) && playWhenReady){
-                checkWifi();
-            }
+//            if("STATE_READY".equals(stateString) && playWhenReady){
+//                checkWifi();
+//            }
             Log.d(TAG, "DramaPlaystate [" + playWhenReady + ", " + stateString + "]");
         }
 
