@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity
     private final String PREF_NAME = "minimon-preference";
 
     private RelativeLayout view_main_toolbar;
-    private TextAwesome tv_toolbar_open_drawer;
-    private TextAwesome tv_toolbar_search;
+    private ImageView img_toolbar_open_drawer;
+    private ImageView img_toolbar_search;
     private ImageView tv_toolbar_go_back;
     public EditText ed_toolbar_search;
     private DrawerLayout drawer;
@@ -190,8 +190,8 @@ public class MainActivity extends AppCompatActivity
         Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
         view_main_toolbar = (RelativeLayout)  findViewById(R.id.view_main_toolbar);
         view_main_toolbar2 = (RelativeLayout)  findViewById(R.id.view_main_toolbar2);
-        tv_toolbar_open_drawer = (TextAwesome) findViewById(R.id.tv_toolbar_open_drawer);
-        tv_toolbar_search = (TextAwesome) findViewById(R.id.tv_toolbar_search);
+        img_toolbar_open_drawer = (ImageView) findViewById(R.id.img_toolbar_open_drawer);
+        img_toolbar_search = (ImageView) findViewById(R.id.img_toolbar_search);
         tv_toolbar_go_back = findViewById(R.id.tv_toolbar_go_back);
         ed_toolbar_search = (EditText) findViewById(R.id.ed_toolbar_search);
 
@@ -202,8 +202,8 @@ public class MainActivity extends AppCompatActivity
         rec_search_history.setLayoutManager(manager);
         DividerItemDecoration deco = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         rec_search_history.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        tv_toolbar_open_drawer.setOnClickListener(toolbarClickListenr);
-        tv_toolbar_search.setOnClickListener(toolbarClickListenr);
+        img_toolbar_open_drawer.setOnClickListener(toolbarClickListenr);
+        img_toolbar_search.setOnClickListener(toolbarClickListenr);
         tv_toolbar_go_back.setOnClickListener(toolbarClickListenr);
         view_delete_search_history.setOnClickListener(toolbarClickListenr);
 
@@ -477,16 +477,16 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View view) {
             switch (view.getId()){
-                case R.id.tv_toolbar_open_drawer:
+                case R.id.img_toolbar_open_drawer:
                     drawer.openDrawer(Gravity.LEFT);
                     break;
-                case R.id.tv_toolbar_search:
+                case R.id.img_toolbar_search:
                     ed_toolbar_search.setVisibility(View.VISIBLE);
                     view_delete_search_history.setVisibility(View.VISIBLE);
                     rec_search_history.setVisibility(View.VISIBLE);
                     tv_toolbar_go_back.setVisibility(View.VISIBLE);
-                    tv_toolbar_search.setVisibility(View.GONE);
-                    tv_toolbar_open_drawer.setVisibility(View.GONE);
+                    img_toolbar_search.setVisibility(View.GONE);
+                    img_toolbar_open_drawer.setVisibility(View.GONE);
                     view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
                     break;
                 case R.id.tv_toolbar_go_back:
@@ -529,8 +529,8 @@ public class MainActivity extends AppCompatActivity
         view_delete_search_history.setVisibility(View.GONE);
         rec_search_history.setVisibility(View.GONE);
         tv_toolbar_go_back.setVisibility(View.GONE);
-        tv_toolbar_search.setVisibility(View.VISIBLE);
-        tv_toolbar_open_drawer.setVisibility(View.VISIBLE);
+        img_toolbar_search.setVisibility(View.VISIBLE);
+        img_toolbar_open_drawer.setVisibility(View.VISIBLE);
 //        if(isMain){
 //            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
 //        }

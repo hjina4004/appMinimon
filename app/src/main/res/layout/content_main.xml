@@ -46,7 +46,7 @@
                 android:layout_centerVertical="true"
                 android:paddingLeft="15dp"
                 android:paddingRight="5dp"
-                android:src="@mipmap/a001_top_back"
+                android:src="@drawable/ic_back"
                 android:textColor="#fff"
                 android:visibility="gone" />
 
@@ -69,7 +69,7 @@
                 android:layout_centerVertical="true"
                 android:paddingLeft="15dp"
                 android:paddingRight="5dp"
-                android:src="@mipmap/a001_top_back"
+                android:src="@drawable/ic_back"
                 android:textColor="#fff"
                 android:visibility="gone" />
 
@@ -159,17 +159,15 @@
                 android:layout_height="50dp"
                 android:background="@color/transparent">
 
-                <com.minimon.diocian.player.TextAwesome
-                    android:id="@+id/tv_toolbar_open_drawer"
+                <ImageView
+                    android:id="@+id/img_toolbar_open_drawer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:paddingLeft="10dp"
-                    android:text="@string/fa_bars"
-                    android:textColor="#fff"
-                    android:textSize="30dp" />
+                    android:src="@drawable/ic_open_drawer"/>
 
                 <ImageView
                     android:id="@+id/tv_toolbar_go_back"
@@ -180,7 +178,7 @@
                     android:layout_centerVertical="true"
                     android:paddingLeft="15dp"
                     android:paddingRight="5dp"
-                    android:src="@mipmap/a001_top_back"
+                    android:src="@drawable/ic_back"
                     android:textColor="#fff"
                     android:visibility="gone" />
 
@@ -199,16 +197,14 @@
                     android:textColor="#fff"
                     android:visibility="gone" />
 
-                <com.minimon.diocian.player.TextAwesome
-                    android:id="@+id/tv_toolbar_search"
+                <ImageView
+                    android:id="@+id/img_toolbar_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:paddingRight="10dp"
-                    android:text="@string/fa_search"
-                    android:textColor="#fff"
-                    android:textSize="30dp" />
+                    android:src="@drawable/ic_search" />
             </RelativeLayout>
 
             <RelativeLayout
