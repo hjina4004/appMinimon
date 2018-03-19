@@ -4,12 +4,10 @@
     android:background="@color/colorBaseBG"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="23.33dp"
     android:paddingTop="23.33dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:paddingEnd="@dimen/base_padding"
         android:paddingLeft="@dimen/base_padding"
         android:paddingRight="@dimen/base_padding"
@@ -195,7 +193,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="#222222"
-        android:paddingTop="18dp"
+        android:paddingTop="10dp"
         android:paddingEnd="@dimen/base_padding"
         android:paddingLeft="@dimen/base_padding"
         android:paddingRight="@dimen/base_padding"
@@ -267,8 +265,8 @@
             android:layout_height="wrap_content"
             android:textColor="#fff"
             android:text="@string/menu_my_info"
-            android:paddingTop="18dp"
-            android:paddingBottom="11.33dp"/>
+            android:paddingTop="7dp"
+            android:paddingBottom="4dp"/>
         <!--내정보-->
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -515,8 +513,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="17.33dp"
-            android:paddingBottom="11.33dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="4dp"
             android:text="고객센터"
             android:textColor="#fff"/>
         <LinearLayout
