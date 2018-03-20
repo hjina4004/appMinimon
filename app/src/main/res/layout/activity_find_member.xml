@@ -8,6 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/base_padding"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical" >
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,6 +59,8 @@
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textEmailAddress"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textSize="@dimen/btn_md_font_size" >
             </EditText>
 

@@ -89,9 +89,9 @@ public class FindMemberActivity extends AppCompatActivity {
             String resCode = info.has("resCode") ? info.getString("resCode") : "";
 
             if (resCode.equals("0000")) {
-                alertNotice("Success: " + info.getString("msg"));
+                alertNotice(info.getString("msg"));
             } else {
-                alertNotice("Fail: " + info.getString("msg"));
+                alertNotice("실패 : " + info.getString("msg"));
             }
         } catch (JSONException e) {
             e.printStackTrace();

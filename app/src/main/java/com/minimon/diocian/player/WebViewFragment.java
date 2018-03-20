@@ -272,6 +272,12 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private void goToEpisodeMain(String url, String page, String key, String value)
     {
         EpisodeInfo.getInsatnace().setIdx(value);
+        Intent intent = new Intent(getActivity(), DramaPlayActivity.class);
+        intent.putExtra("url",url);
+        intent.putExtra("page",page);
+        intent.putExtra("key",key);
+        intent.putExtra("value",value);
+        startActivity(intent);
     }
 
     private void goToWebMain(String url, String page, String key, String value){

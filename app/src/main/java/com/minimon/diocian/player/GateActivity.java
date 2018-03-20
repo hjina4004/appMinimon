@@ -55,9 +55,9 @@ public class GateActivity extends AppCompatActivity {
         task.execute();
 
         SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        String autoLogin = pref.getString("AutoLogin","0");
+//        String autoLogin = pref.getString("AutoLogin","0");
         String token = pref.getString("token","");
-        if(token != null && token.length() > 1 && "1".equals(autoLogin))
+        if(token != null && token.length() > 1)
             gotoLogin();
 
         Button btnLogin = (Button) findViewById(R.id.btn_login);

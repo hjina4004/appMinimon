@@ -33,7 +33,7 @@
                 android:id="@+id/view_main_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/transparent">
+                android:background="@drawable/background_toolbar">
 
                 <ImageView
                     android:id="@+id/img_toolbar"
