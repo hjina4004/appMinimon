@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     private final String PREF_NAME = "minimon-preference";
 
     private RelativeLayout view_main_toolbar;
-    private ImageView img_toolbar_open_drawer;
+    private ImageView img_toolbar;
     private ImageView img_toolbar_search;
     private ImageView tv_toolbar_go_back;
     public EditText ed_toolbar_search;
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity
 
     private RelativeLayout view_main_toolbar2;
     private ImageView tv_toolbar_frag_go_back2;
+    private TextView tv_frag_title;
 
     private SearchhistoryAdapter adapter;
     private LinearLayoutManager manager;
@@ -176,7 +177,8 @@ public class MainActivity extends AppCompatActivity
         Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
         view_main_toolbar = (RelativeLayout)  findViewById(R.id.view_main_toolbar);
         view_main_toolbar2 = (RelativeLayout)  findViewById(R.id.view_main_toolbar2);
-        img_toolbar_open_drawer = (ImageView) findViewById(R.id.img_toolbar_open_drawer);
+        tv_frag_title = (TextView) findViewById(R.id.tv_frag_title);
+        img_toolbar = (ImageView) findViewById(R.id.img_toolbar);
         img_toolbar_search = (ImageView) findViewById(R.id.img_toolbar_search);
         tv_toolbar_go_back = findViewById(R.id.tv_toolbar_go_back);
         ed_toolbar_search = (EditText) findViewById(R.id.ed_toolbar_search);
@@ -188,7 +190,7 @@ public class MainActivity extends AppCompatActivity
         rec_search_history.setLayoutManager(manager);
         DividerItemDecoration deco = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         rec_search_history.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        img_toolbar_open_drawer.setOnClickListener(toolbarClickListenr);
+        img_toolbar.setOnClickListener(toolbarClickListenr);
         img_toolbar_search.setOnClickListener(toolbarClickListenr);
         tv_toolbar_go_back.setOnClickListener(toolbarClickListenr);
         view_delete_search_history.setOnClickListener(toolbarClickListenr);
@@ -415,8 +417,11 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onClick(View view) {
             switch (view.getId()){
-                case R.id.img_toolbar_open_drawer:
-                    drawer.openDrawer(Gravity.LEFT);
+                case R.id.img_toolbar:
+                    if("main".equals(mPageName))
+                        drawer.openDrawer(Gravity.LEFT);
+                    else
+                        finish();
                     break;
                 case R.id.img_toolbar_search:
                     ed_toolbar_search.setVisibility(View.VISIBLE);
@@ -424,16 +429,11 @@ public class MainActivity extends AppCompatActivity
                     rec_search_history.setVisibility(View.VISIBLE);
                     tv_toolbar_go_back.setVisibility(View.VISIBLE);
                     img_toolbar_search.setVisibility(View.GONE);
-                    img_toolbar_open_drawer.setVisibility(View.GONE);
+                    img_toolbar.setVisibility(View.GONE);
                     view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.MainColor));
                     break;
                 case R.id.tv_toolbar_go_back:
                     hideSearch();
-                    break;
-                case R.id.view_delete_search_history2:
-                    dbHelper.deleteAll();
-                    arrHistory.clear();
-                    adapter.notifyDataSetChanged();
                     break;
                 case R.id.view_delete_search_history:
                     dbHelper.deleteAll();
@@ -453,7 +453,7 @@ public class MainActivity extends AppCompatActivity
         rec_search_history.setVisibility(View.GONE);
         tv_toolbar_go_back.setVisibility(View.GONE);
         img_toolbar_search.setVisibility(View.VISIBLE);
-        img_toolbar_open_drawer.setVisibility(View.VISIBLE);
+        img_toolbar.setVisibility(View.VISIBLE);
     }
 
     private View.OnClickListener drawerClickListenr = new View.OnClickListener() {
@@ -557,12 +557,39 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setToolbar(){
-        if("main".equals(mPageName)){
+        if("main".equals(mPageName) || "channel".equals(mPageName)){
             view_main_toolbar.setVisibility(View.VISIBLE);
             view_main_toolbar2.setVisibility(View.GONE);
+            if("main".equals(mPageName)){
+                img_toolbar.setImageResource(R.drawable.ic_open_drawer);
+            }else{
+                img_toolbar.setImageResource(R.drawable.ic_back);
+            }
         }else{
+            tv_frag_title.setText("");
             view_main_toolbar.setVisibility(View.GONE);
             view_main_toolbar2.setVisibility(View.VISIBLE);
+            if(mPageName.equals(getResources().getString(R.string.page_name_info))){
+                tv_frag_title.setText("회원정보");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_purchase))){
+                tv_frag_title.setText("시청영상");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_like))){
+                tv_frag_title.setText("찜한영상");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_keep))){
+                tv_frag_title.setText("구독채널");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_point_list))){
+                tv_frag_title.setText("포인트내역");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_pay_list))){
+                tv_frag_title.setText("결제내역");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_notice))){
+                tv_frag_title.setText("공지사항");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_faq))){
+                tv_frag_title.setText("FAQ");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_qna_list))){
+                tv_frag_title.setText("온라인 문의");
+            }else if(mPageName.equals(getResources().getString(R.string.page_name_policy))){
+                tv_frag_title.setText("운영정책");
+            }
         }
     }
 

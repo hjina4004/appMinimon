@@ -95,6 +95,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     private JavascriptInterface javascriptInterface;
 
     private RelativeLayout view_main_toolbar;
+    private RelativeLayout view_main_toolbar2;
+    private FrameLayout view_main;
 
 //    private List<String> arrPageNameHistory = new ArrayList<>();
     private String webViewPageName;
@@ -140,6 +142,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         javascriptInterface.setListener(this);
 
         view_main_toolbar = getActivity().findViewById(R.id.view_main_toolbar);
+        view_main_toolbar2 = getActivity().findViewById(R.id.view_main_toolbar2);
+        view_main = getActivity().findViewById(R.id.view_main);
 
         mWebView = (ObservableWebView) view.findViewById(R.id.webview_other);
         mProgressBar = view.findViewById(R.id.progress_bar);
@@ -150,10 +154,22 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.addJavascriptInterface(javascriptInterface, "minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
 
-        view_main_toolbar = getActivity().findViewById(R.id.view_main_toolbar);
         mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
             @Override
-            public void onScroll(int l, int t) {
+            public void onScroll(int l, int t, int oldl, int oldt) {
+                if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
+                    if(t>oldt){
+                        view_main_toolbar.setVisibility(View.GONE);
+                    }else{
+                        view_main_toolbar.setVisibility(View.VISIBLE);
+                    }
+                }else{
+                    if(t>oldt){
+                        view_main_toolbar2.setVisibility(View.GONE);
+                    }else{
+                        view_main_toolbar2.setVisibility(View.VISIBLE);
+                    }
+                }
                 if(t!=0){
                     view_main_toolbar.setBackgroundColor(Color.parseColor("#"+"BF"+"FB450B"));
                 }else{
