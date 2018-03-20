@@ -415,6 +415,7 @@ public class MinimonUser {
     private final String WEBVIEW_URL = "https://api.minimon.com/";
     private String currentRequest;
     private String typeSocial;
+    private String validField;
 
     public interface MinimonUserListener {
         // These methods are the different events and need to pass relevant arguments with the event
@@ -445,6 +446,7 @@ public class MinimonUser {
             currentRequest = "resetPassword";
 
         typeSocial = info.getAsString("value");
+        validField = info.containsKey("field") ? info.getAsString("field"):"";
         NetworkTask networkTask = new NetworkTask(API_URL+current, info);
 //        networkTask.setToken(UserInfo.getInstance().getToken());
         networkTask.execute();
@@ -503,9 +505,10 @@ public class MinimonUser {
 
     // #5 중복체크
     // 이메일 체크는 일반회원일때만 사용
-    public void checked() {
+    public void checked(ContentValues info) {
 //        field			String	O	중복체크 필드	"id: 아이디, nickname: 닉네임, email: 이메일 대소문자 구분없음"
 //        value			String	O	중복체크 값
+        requestFunction("checked",info);
     }
 
     // #6 회원정보수정
@@ -610,6 +613,7 @@ public class MinimonUser {
             JSONObject objJSON = new JSONObject(s);
             objJSON.put("current_request", currentRequest);
             objJSON.put("current_social", typeSocial);
+            objJSON.put("valid_field",validField);
             Log.d(TAG, "responseNetworkTask: " + objJSON);
 
             if (listener != null)

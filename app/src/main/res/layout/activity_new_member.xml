@@ -9,12 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/base_padding"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical" >
 
         <FrameLayout
             android:id="@+id/layoutUserID"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingBottom="@dimen/base_padding" >
             <EditText
                 android:id="@+id/editTextID"
@@ -30,6 +34,8 @@
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textEmailAddress"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textSize="@dimen/btn_md_font_size" >
             </EditText>
 
@@ -46,6 +52,8 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingBottom="@dimen/base_padding" >
             <EditText
                 android:id="@+id/editTextNickname"
@@ -61,6 +69,8 @@
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textEmailAddress"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textSize="@dimen/btn_md_font_size" >
             </EditText>
 
@@ -78,6 +88,8 @@
             android:id="@+id/layoutUserPW"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingBottom="@dimen/base_padding" >
             <EditText
                 android:id="@+id/editTextPW"
@@ -93,6 +105,8 @@
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textPassword"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textSize="@dimen/btn_md_font_size" >
             </EditText>
 
@@ -110,6 +124,8 @@
             android:id="@+id/layoutUserPWConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingBottom="@dimen/base_padding" >
             <EditText
                 android:id="@+id/editTextPWC"
@@ -125,6 +141,8 @@
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textPassword"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textSize="@dimen/btn_md_font_size" >
             </EditText>
 
@@ -142,6 +160,8 @@
             android:id="@+id/layoutUserEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingBottom="@dimen/base_padding" >
             <EditText
                 android:id="@+id/editTextEmail"
@@ -157,6 +177,8 @@
                 android:textCursorDrawable="@null"
                 android:background="@drawable/bg_edittext"
                 android:inputType="textEmailAddress"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:textSize="@dimen/btn_md_font_size" >
             </EditText>
 

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -37,6 +38,9 @@ public class NewMemberActivity extends AppCompatActivity {
 
     private Button btnTermOfUse;
     private Button btnPrivacyPolicy;
+    private ContentValues infoNewMember;
+
+//    private boolean
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +99,7 @@ public class NewMemberActivity extends AppCompatActivity {
 
         editText = findViewById(R.id.editTextEmail);
         editText.setText(getIntent().getStringExtra("email"));
+        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
         view = findViewById(R.id.layoutUserEmail);
         enableViews(view, false);
     }
@@ -121,6 +126,9 @@ public class NewMemberActivity extends AppCompatActivity {
                     String currentRequest = info.has("current_request")? info.getString("current_request"):"";
                     if (currentRequest.equals("create"))     resultMinimonSignup(info);
                     else if (currentRequest.equals("login")) resultMinimonLogin(info);
+                    else if (currentRequest.equals("checked")){
+                        resultOverlap(info);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -128,6 +136,46 @@ public class NewMemberActivity extends AppCompatActivity {
 
         });
     }
+
+    private void checkOverlap(String field, String value){
+        ContentValues overlap = new ContentValues();
+        Log.d("checkoverlapField",field);
+        Log.d("checkoverlapValue",value);
+        overlap.put("field",field);
+        overlap.put("value",value);
+        minimonUser.checked(overlap);
+    }
+
+    private void resultOverlap(JSONObject info){
+        try {
+            String resCode = info.has("resCode") ? info.getString("resCode") : "";
+            String msg = info.has("msg")? info.getString("msg") : "";
+            String field = info.getString("valid_field");
+
+            if(!resCode.equals("0000")){
+                Log.d("overlapRescode",resCode);
+                Log.d("overlapInfo",info.toString());
+                String errMsg = "";
+                if("0900".equals(resCode))
+                    errMsg = info.getJSONObject("data").getString("errMsg");
+                else
+                    errMsg = msg;
+                alertNotice(errMsg);
+                return;
+            }else{
+                if("id".equals(field)){
+                    checkOverlap("nickname",getInputNickname());
+                }else if("nickname".equals(field))
+                    checkOverlap("email",getInputEmail());
+                else if("email".equals(field)) {
+                    minimonUser.create(infoNewMember);
+                }
+            }
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
     private void resultMinimonSignup(JSONObject info) {
         try {
             String resCode = info.has("resCode") ? info.getString("resCode") : "";
@@ -200,15 +248,19 @@ public class NewMemberActivity extends AppCompatActivity {
 //        nickname			String	O	닉네임
         String strUID = getInputUID();
         if (strUID.length() == 0) return;
+//        checkOverlap("id",strUID);
 
         String strNickname = getInputNickname();
         if (strNickname.length() == 0) return;
+//        checkOverlap("nickname",strNickname);
+
+        String strEmail = getInputEmail();
+        if (strEmail.length() == 0) return;
+//        checkOverlap("email",strEmail);
 
         String strPW = getInputPassword();
         if (strPW.length() == 0) return;
 
-        String strEmail = getInputEmail();
-        if (strEmail.length() == 0) return;
 
         if (!cbAgreeTotal.isChecked()) {
             alertNotice(R.string.notice_error_agree);
@@ -217,15 +269,19 @@ public class NewMemberActivity extends AppCompatActivity {
 
         UserInfo.getInstance().setUID(strUID);
 
-        ContentValues info = new ContentValues();
-        info.put("type", getType());
-        info.put("id", strUID);
-        info.put("value", strPW);
-        info.put("email", strEmail);
-        info.put("nickname", strNickname);
-        info.put("device_id", strDeviceID);
+        infoNewMember = new ContentValues();
+        infoNewMember.put("type", getType());
+        infoNewMember.put("id", strUID);
+        infoNewMember.put("value", strPW);
+        infoNewMember.put("email", strEmail);
+        infoNewMember.put("nickname", strNickname);
+        infoNewMember.put("device_id", strDeviceID);
+        createNewMinimonMember();
+//        minimonUser.create(info);
+    }
 
-        minimonUser.create(info);
+    private void createNewMinimonMember(){
+        checkOverlap("id",getInputUID());
     }
 
     private String getType() {
@@ -237,6 +293,7 @@ public class NewMemberActivity extends AppCompatActivity {
 
     private String getInputUID() {
         EditText text = findViewById(R.id.editTextID);
+        text.setImeOptions(EditorInfo.IME_ACTION_DONE);
         if (text.getText().length() < 1) {
             alertNotice(R.string.notice_none_input_id);
             return "";
@@ -256,6 +313,7 @@ public class NewMemberActivity extends AppCompatActivity {
 
     private String getInputPassword() {
         EditText text = findViewById(R.id.editTextPW);
+        text.setImeOptions(EditorInfo.IME_ACTION_DONE);
         if (!strType.equals("basic"))
             return strType;
 
@@ -278,6 +336,7 @@ public class NewMemberActivity extends AppCompatActivity {
 
     private String getInputEmail() {
         EditText text = findViewById(R.id.editTextEmail);
+        text.setImeOptions(EditorInfo.IME_ACTION_DONE);
         if (text.getText().length() < 1) {
             alertNotice(R.string.notice_none_input_email);
             return "";
@@ -294,11 +353,13 @@ public class NewMemberActivity extends AppCompatActivity {
 
     private boolean confirmPassword(String strPW) {
         EditText text = findViewById(R.id.editTextPWC);
+        text.setImeOptions(EditorInfo.IME_ACTION_DONE);
         return strPW.equals(text.getText().toString());
     }
 
     private String getInputNickname() {
         EditText text = findViewById(R.id.editTextNickname);
+        text.setImeOptions(EditorInfo.IME_ACTION_DONE);
         if (text.getText().length() < 1) {
             alertNotice(R.string.notice_none_input_nickname);
             return "";
@@ -335,6 +396,8 @@ public class NewMemberActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void loginMinimon(String uid, String password, String type) {
         ContentValues loginInfo = new ContentValues();
