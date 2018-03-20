@@ -94,7 +94,8 @@
         </activity>
         <activity
             android:name=".DramaPlayActivity"
-            android:screenOrientation="nosensor">
+            android:screenOrientation="nosensor"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />

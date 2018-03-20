@@ -119,6 +119,8 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     private String key;
     private String value;
     private MinimonWebView minimonWebView;
+    private ImageView img_toolbar_go_back;
+    private TextView tv_frag_title;
 
     private ProgressBar progress_bar_drama_play;
     private JavascriptInterface javascriptInterface;
@@ -137,6 +139,14 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         mWebView.addJavascriptInterface(javascriptInterface,"minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
 
+        img_toolbar_go_back = findViewById(R.id.img_toolbar_go_back);
+        img_toolbar_go_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        tv_frag_title = findViewById(R.id.tv_frag_title);
 
         url = getIntent().getStringExtra("url");
         page = getIntent().getStringExtra("page");
@@ -160,9 +170,8 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         if(!isLockSreen)
             isLockSreen = true;
 
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+//        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -263,7 +272,8 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
            EpisodeInfo.getInsatnace().setC_idx(obj.getString("c_idx"));
            EpisodeInfo.getInsatnace().setIdx(obj.getString("idx"));
            c_title = obj.getString("c_title");
-           setTitle(c_title);
+//           setTitle(c_title);
+           tv_frag_title.setText(c_title);
            nowEp = obj.getString("ep");
            JSONArray jarr = obj.getJSONArray("list_tag");
            String tags = "";

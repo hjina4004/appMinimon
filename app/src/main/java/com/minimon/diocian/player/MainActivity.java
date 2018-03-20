@@ -448,6 +448,7 @@ public class MainActivity extends AppCompatActivity
     };
 
     private void hideSearch(){
+        view_main_toolbar.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_toolbar));
         ed_toolbar_search.setVisibility(View.GONE);
         view_delete_search_history.setVisibility(View.GONE);
         rec_search_history.setVisibility(View.GONE);

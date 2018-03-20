@@ -170,11 +170,11 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
                         view_main_toolbar2.setVisibility(View.VISIBLE);
                     }
                 }
-                if(t!=0){
-                    view_main_toolbar.setBackgroundColor(Color.parseColor("#"+"BF"+"FB450B"));
-                }else{
-                    view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-                }
+//                if(t!=0){
+//                    view_main_toolbar.setBackgroundColor(Color.parseColor("#"+"BF"+"FB450B"));
+//                }else{
+//                    view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+//                }
 
             }
         });
