@@ -454,9 +454,6 @@ public class MainActivity extends AppCompatActivity
         tv_toolbar_go_back.setVisibility(View.GONE);
         img_toolbar_search.setVisibility(View.VISIBLE);
         img_toolbar_open_drawer.setVisibility(View.VISIBLE);
-//        if(isMain){
-//            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-//        }
     }
 
     private View.OnClickListener drawerClickListenr = new View.OnClickListener() {
@@ -566,11 +563,6 @@ public class MainActivity extends AppCompatActivity
         }else{
             view_main_toolbar.setVisibility(View.GONE);
             view_main_toolbar2.setVisibility(View.VISIBLE);
-            if("info".equals(mPageName) || "paying".equals(mPageName) || "setting".equals(mPageName)){
-                tv_toolbar_frag_go_back2.setVisibility(View.VISIBLE);
-            }else{
-                tv_toolbar_frag_go_back2.setVisibility(View.GONE);
-            }
         }
     }
 

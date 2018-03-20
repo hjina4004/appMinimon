@@ -71,7 +71,9 @@ public class RequestHttpURLConnection {
             urlConn.setRequestMethod("POST"); // URL 요청에 대한 메소드 설정 : POST.
             urlConn.setRequestProperty("Accept-Charset", "UTF-8"); // Accept-Charset 설정.
             urlConn.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;charset=UTF-8");
+//            urlConn.setRequestProperty("Develop","dev.debug");
             if (token != null)  urlConn.setRequestProperty("Authorization", token);
+            else urlConn.setRequestProperty("Develop","dev.debug");
 
             // [2-2]. parameter 전달 및 데이터 읽어오기.
             String strParams = sbParams.toString(); //sbParams에 정리한 파라미터들을 스트링으로 저장. 예)id=id1&pw=123;

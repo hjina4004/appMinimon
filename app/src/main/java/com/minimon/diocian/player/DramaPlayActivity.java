@@ -162,6 +162,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
