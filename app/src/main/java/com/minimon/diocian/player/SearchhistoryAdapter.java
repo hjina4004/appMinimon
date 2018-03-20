@@ -21,7 +21,7 @@ public class SearchhistoryAdapter extends RecyclerView.Adapter {
     private SearchHistoryAdapterListener mListener;
 
     public interface SearchHistoryAdapterListener{
-        void onClick();
+        void onClick(String history);
     }
 
     public void setHistorySearchListener(SearchHistoryAdapterListener listener){
@@ -76,7 +76,7 @@ public class SearchhistoryAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View view) {
-            if(mListener!=null) mListener.onClick();
+            if(mListener!=null) mListener.onClick(tv_history.getText().toString());
         }
     }
 }

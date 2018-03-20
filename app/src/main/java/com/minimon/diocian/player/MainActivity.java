@@ -225,7 +225,9 @@ public class MainActivity extends AppCompatActivity
                         hideSearch();
                         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
                         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-                        WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
+                        String searchTag = ed_toolbar_search.getText().toString();
+                        Log.d("searchTag",searchTag);
+                        WebViewInfo.getInstance().setSearch_tag(searchTag);
                         ed_toolbar_search.setText("");
                         newActivity("search");
                         return true; // consume.
@@ -259,6 +261,17 @@ public class MainActivity extends AppCompatActivity
             bundle.putString("pageUrl", mPageUrl);
             bundle.putString("item", getIntent().getStringExtra("item"));
             bundle.putString("how", getIntent().getStringExtra("how"));
+            webViewFragment = new WebViewFragment();
+            webViewFragment.setArguments(bundle);
+            changeFragment(webViewFragment);
+            setToolbar();
+        }
+        else if("search".equals(mPageName)){
+            Bundle bundle = new Bundle();
+            bundle.putString("pageName", mPageName);
+            bundle.putString("pageUrl", mPageUrl);
+            bundle.putString("pageKey", "search_tag");
+            bundle.putString("pageValue", WebViewInfo.getInstance().getSearch_tag());
             webViewFragment = new WebViewFragment();
             webViewFragment.setArguments(bundle);
             changeFragment(webViewFragment);
@@ -547,7 +560,7 @@ public class MainActivity extends AppCompatActivity
     private void newActivity(String pageName){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        if(pageName.equals(mPageName) && !"search".equals(mPageName)){
+        if(pageName.equals(mPageName)){
             return;
         }
         Intent intent = new Intent(MainActivity.this, MainActivity.class);
@@ -673,12 +686,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClick() {
+    public void onClick(String his) {
         hideSearch();
         if(findViewById(R.id.view_main_search).getVisibility() == View.VISIBLE) {
             WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
-            WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
-            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+            WebViewInfo.getInstance().setSearch_tag(his);
+//            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
             newActivity("search");
         }
     }

@@ -197,7 +197,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         }else {
             content.put("page", webViewPageName);
             if ("search".equals(webViewPageName)) {
-                content.put("searchTag", WebViewInfo.getInstance().getSearch_tag());
+                content.put("search_tag", WebViewInfo.getInstance().getSearch_tag());
             } else {
                 content.put(webViewKey, webViewValue);
             }
