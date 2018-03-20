@@ -9,6 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/base_padding"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical" >
 
         <EditText
@@ -40,16 +42,6 @@
             android:textCursorDrawable="@null"
             android:background="@drawable/bg_edittext"
             android:inputType="textPassword"
-            android:textSize="@dimen/btn_md_font_size" />
-
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/cbAutoLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:buttonTint="@color/checkbox_filter_tint"
-            android:text="@string/btn_autologin"
-            android:textColor="@color/colorBaseText"
             android:textSize="@dimen/btn_md_font_size" />
 
         <Button
