@@ -85,29 +85,16 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView rec_search_history;
 
     private RelativeLayout view_main_toolbar2;
-    private TextAwesome tv_toolbar_open_drawer2;
     private ImageView tv_toolbar_frag_go_back2;
-    private TextAwesome tv_toolbar_search2;
-    private ImageView tv_toolbar_go_back2;
-    private EditText ed_toolbar_search2;
-//    private TextView tv_frag_title;
-//    private DrawerLayout drawer2;
-    private RelativeLayout view_delete_search_history2;
-    private RecyclerView rec_search_history2;
 
     private SearchhistoryAdapter adapter;
     private LinearLayoutManager manager;
     private List<SearchItem> arrHistory = new ArrayList<SearchItem>();
     private LinearLayoutManager manager2;
-//    private Realm realm;
 
     // for Google
     private static final int GOOGLE_SIGN_IN = 9001;
     private GoogleApiClient mGoogleApiClient;
-
-    private WebView mWebView;
-//    private boolean isMain;
-    private boolean isShowSearch = false;
 
     private DBHelper dbHelper;
 
@@ -116,7 +103,6 @@ public class MainActivity extends AppCompatActivity
     private String mPageUrl;
     private String mPageKey;
     private String mPageValue;
-//    private Fragment fragment;
 
     @Override
     public void onSucess(JSONObject data) {
@@ -209,27 +195,12 @@ public class MainActivity extends AppCompatActivity
 
         manager2 = new LinearLayoutManager(this);
         manager2.setOrientation(LinearLayoutManager.VERTICAL);
-        tv_toolbar_open_drawer2 = (TextAwesome) findViewById(R.id.tv_toolbar_open_drawer2);
-        tv_toolbar_search2 = (TextAwesome) findViewById(R.id.tv_toolbar_search2);
-        tv_toolbar_go_back2 = findViewById(R.id.tv_toolbar_go_back2);
         tv_toolbar_frag_go_back2 = findViewById(R.id.tv_toolbar_frag_go_back2);
-        ed_toolbar_search2 = (EditText) findViewById(R.id.ed_toolbar_search2);
-//        tv_frag_title = findViewById(R.id.tv_frag_title);
-
-        view_delete_search_history2 = findViewById(R.id.view_delete_search_history2);
-        rec_search_history2 = findViewById(R.id.rec_search_history2);
-        rec_search_history2.setLayoutManager(manager2);
-        rec_search_history2.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        tv_toolbar_open_drawer2.setOnClickListener(toolbarClickListenr);
-        tv_toolbar_search2.setOnClickListener(toolbarClickListenr);
-        tv_toolbar_go_back2.setOnClickListener(toolbarClickListenr);
         tv_toolbar_frag_go_back2.setOnClickListener(toolbarClickListenr);
-        view_delete_search_history2.setOnClickListener(toolbarClickListenr);
 
         adapter = new SearchhistoryAdapter(this,arrHistory);
         adapter.setHistorySearchListener(this);
         rec_search_history.setAdapter(adapter);
-        rec_search_history2.setAdapter(adapter);
         ed_toolbar_search.setImeOptions(EditorInfo.IME_ACTION_DONE);
         ed_toolbar_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -253,40 +224,8 @@ public class MainActivity extends AppCompatActivity
                         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
                         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
                         WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
-                        textView.setText("");
+                        ed_toolbar_search.setText("");
                         newActivity("search");
-                        return true; // consume.
-                    }
-                }
-                return false;
-            }
-        });
-
-        ed_toolbar_search2.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_NEXT ||
-                        i == EditorInfo.IME_ACTION_DONE ||
-                        keyEvent != null &&
-                                keyEvent.getAction() == KeyEvent.ACTION_DOWN &&
-                                keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
-                    if (keyEvent == null || !keyEvent.isShiftPressed()) {
-                        // the user is done typing.
-                        Date today = Calendar.getInstance().getTime();Log.d("DBHELPER","add");
-                        SearchItem s = new SearchItem();
-                        s.setDate(String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
-                        s.setHistory(textView.getText().toString());
-                        dbHelper.insert(textView.getText().toString(),String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
-//                        arrHistory.add(s);
-                        textView.setText("");
-//                        arrHistory = dbHelper.getResult();
-                        adapter.notifyDataSetChanged();
-                        hideSearch2();
-                        WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
-                        WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search2.getText().toString());
-                        newActivity("search");
-//                        webViewFragment.moveWebUrl();
-//                        changeFragment(webViewFragment);
                         return true; // consume.
                     }
                 }
@@ -349,7 +288,6 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if(mListenr!=null){
-                isShowSearch = true;
 //                changeToolbarVisibility(isMain);
                 mListenr.onBack();
             }else {
@@ -497,21 +435,6 @@ public class MainActivity extends AppCompatActivity
                     arrHistory.clear();
                     adapter.notifyDataSetChanged();
                     break;
-                case R.id.tv_toolbar_open_drawer2:
-                    drawer.openDrawer(Gravity.LEFT);
-                    break;
-                case R.id.tv_toolbar_search2:
-                    ed_toolbar_search2.setVisibility(View.VISIBLE);
-                    view_delete_search_history2.setVisibility(View.VISIBLE);
-                    rec_search_history2.setVisibility(View.VISIBLE);
-                    tv_toolbar_go_back2.setVisibility(View.VISIBLE);
-                    tv_toolbar_search2.setVisibility(View.GONE);
-                    tv_toolbar_open_drawer2.setVisibility(View.GONE);
-                    view_main_toolbar2.setBackgroundColor(getResources().getColor(R.color.MainColor));
-                    break;
-                case R.id.tv_toolbar_go_back2:
-                    hideSearch2();
-                    break;
                 case R.id.view_delete_search_history:
                     dbHelper.deleteAll();
                     arrHistory.clear();
@@ -536,15 +459,6 @@ public class MainActivity extends AppCompatActivity
 //        }
     }
 
-    private void hideSearch2(){
-        ed_toolbar_search2.setVisibility(View.GONE);
-        view_delete_search_history2.setVisibility(View.GONE);
-        rec_search_history2.setVisibility(View.GONE);
-        tv_toolbar_go_back2.setVisibility(View.GONE);
-        tv_toolbar_search2.setVisibility(View.VISIBLE);
-        tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
-    }
-
     private View.OnClickListener drawerClickListenr = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -562,131 +476,63 @@ public class MainActivity extends AppCompatActivity
                 case R.id.img_menu_close:
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                     drawer.closeDrawer(GravityCompat.START);
-//                    if(isMain){
-//                        view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
-//                    }
                     break;
                 case R.id.view_menu_go_home:
                     goMainWeb();
                     break;
                 case R.id.view_menu_cookies:
                     info.setPageName(getResources().getString(R.string.page_name_cookie_list));
-//                    webViewFragment.moveWebUrl();
                     newActivity(info.getPageName());
-//                    tv_frag_title.setText("최근 본 영상");
-                    isShowSearch = true;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_user_info:
                     info.setPageName(getResources().getString(R.string.page_name_info));
-//                    webViewFragment.moveWebUrl();
                     newActivity(info.getPageName());
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText(getResources().getString(R.string.menu_user_page));
-                    isShowSearch = false;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_purchase:
                     info.setPageName(getResources().getString(R.string.page_name_purchase));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText(getResources().getString(R.string.menu_watch));
-                    isShowSearch = true;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_favorite:
                     info.setPageName(getResources().getString(R.string.page_name_like));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText(getResources().getString(R.string.menu_favorite));
-                    isShowSearch = true;
 //                    isMain = false;
                     break;
                 case R.id.view_menu_subscribe:
                     info.setPageName(getResources().getString(R.string.page_name_keep));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText(getResources().getString(R.string.menu_subscribe));
-                    isShowSearch = true;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_point_history:
                     info.setPageName(getResources().getString(R.string.page_name_point_list));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText(getResources().getString(R.string.menu_point_history));
-                    isShowSearch = false;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_pay_history:
                     info.setPageName(getResources().getString(R.string.page_name_pay_list));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText(getResources().getString(R.string.menu_pay_history));
-                    isShowSearch = false;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_notice:
                     info.setPageName(getResources().getString(R.string.page_name_notice));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText("공지사항");
-//                    isMain = false;
                     break;
                 case R.id.view_menu_faq:
                     info.setPageName(getResources().getString(R.string.page_name_faq));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText("FAQ");
-                    isShowSearch = false;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_qna:
                     info.setPageName(getResources().getString(R.string.page_name_qna_list));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText("1:1 QNA");
-                    isShowSearch = false;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_policy:
                     info.setPageName(getResources().getString(R.string.page_name_policy));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText("이용약관");
-                    isShowSearch = false;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_fix:
                     info.setPageName(getResources().getString(R.string.page_name_index));
                     newActivity(info.getPageName());
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText("이용권");
-                    isShowSearch = false;
-//                    isMain = false;
                     break;
                 case R.id.view_menu_setting:
-//                    tv_toolbar_search2.setVisibility(View.GONE);
-//                    webViewFragment.moveWebUrl();
-//                    tv_frag_title.setVisibility(View.VISIBLE);
-//                    tv_frag_title.setText(getResources().getString(R.string.menu_setting));
-                    isShowSearch = false;
-//                    isMain = false;
-//                    changeFragment(new SettingFragment());
                     newActivity("setting");
                     return;
             }
-//            changeFragment(webViewFragment);
         }
     };
 
@@ -698,7 +544,6 @@ public class MainActivity extends AppCompatActivity
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-//        changeToolbarVisibility(isMain);
     }
 
     private void newActivity(String pageName){
@@ -723,41 +568,14 @@ public class MainActivity extends AppCompatActivity
             view_main_toolbar2.setVisibility(View.VISIBLE);
             if("info".equals(mPageName) || "paying".equals(mPageName) || "setting".equals(mPageName)){
                 tv_toolbar_frag_go_back2.setVisibility(View.VISIBLE);
-                tv_toolbar_open_drawer2.setVisibility(View.GONE);
             }else{
                 tv_toolbar_frag_go_back2.setVisibility(View.GONE);
-                tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
             }
         }
     }
 
-//    private void changeToolbarVisibility(boolean ismain){
-//        if(ismain){
-//            view_main_toolbar.setVisibility(View.VISIBLE);
-//            view_main_toolbar2.setVisibility(View.GONE);
-//        }else{
-//            view_main_toolbar.setVisibility(View.GONE);
-//            view_main_toolbar2.setVisibility(View.VISIBLE);
-//            if(isShowSearch){
-//                tv_toolbar_open_drawer2.setVisibility(View.VISIBLE);
-////                tv_toolbar_search2.setVisibility(View.VISIBLE);
-//                tv_toolbar_frag_go_back2.setVisibility(View.GONE);
-//            }else{
-//                tv_toolbar_open_drawer2.setVisibility(View.GONE);
-////                tv_toolbar_search2.setVisibility(View.GONE);
-//                tv_toolbar_frag_go_back2.setVisibility(View.VISIBLE);
-//            }
-//        }
-//    }
     public void goMainWeb(){
-//        isMain = true;
-//        WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_main));
         mPageName = "main";
-//        Bundle bundle = new Bundle();
-
-//        webViewFragment.moveWebUrl();
-//        changeToolbarVisibility(true);
-//        changeFragment(webViewFragment);
         newActivity(mPageName);
     }
 
@@ -837,20 +655,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick() {
         hideSearch();
-        hideSearch2();
         if(findViewById(R.id.view_main_search).getVisibility() == View.VISIBLE) {
             WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
             WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search.getText().toString());
             view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
             newActivity("search");
-//            webViewFragment.moveWebUrl();
-//            changeFragment(webViewFragment);
-        }else if (findViewById(R.id.view_main_search2).getVisibility() == View.VISIBLE){
-            WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
-            WebViewInfo.getInstance().setSearch_tag(ed_toolbar_search2.getText().toString());
-            newActivity("search");
-//            webViewFragment.moveWebUrl();
-//            changeFragment(webViewFragment);
         }
     }
 }
