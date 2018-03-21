@@ -59,8 +59,8 @@
             android:id="@+id/textViewError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:textColor="@color/colorError"
             android:textSize="@dimen/btn_md_font_size" />
 
@@ -71,10 +71,11 @@
 
             <Button
                 android:id="@+id/btnFindUser"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:minHeight="35.33dp"
                 android:layout_weight="1"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/ripple_background_outline_flat"
                 android:onClick="onClickFindMember"
                 android:text="@string/find_usr"
@@ -83,8 +84,9 @@
 
             <Button
                 android:id="@+id/btnNewUser"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="35.33dp"
                 android:layout_weight="1"
                 android:textColor="@color/colorBaseText"
                 android:background="@drawable/ripple_background_outline_flat"
@@ -96,7 +98,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="50dp"
+            android:paddingTop="40dp"
             android:paddingBottom="10dp"
             android:orientation="horizontal" >
 

@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/MainColor</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionBarSize">50dip</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -24,4 +25,5 @@
         <item name="android:prompt">@mipmap/a022_play_b_light</item>
         <item name="android:minHeight">5dp</item>
     </style>
+
 </resources>

@@ -189,17 +189,23 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         }
         ContentValues content = new ContentValues();
         content.put("id", info.getUID());
-        content.put("loc", "Android");
         if("paying".equals(webViewPageName)){
             content.put("item",getArguments().getString("item"));
             content.put("how",getArguments().getString("how"));
             minimonWebView.goToPayWeb(webViewUrl, content);
+            content.put("loc", "Android");
         }else {
             content.put("page", webViewPageName);
             if ("search".equals(webViewPageName)) {
                 content.put("search_tag", WebViewInfo.getInstance().getSearch_tag());
+                content.put("loc", "Android");
             } else {
-                content.put(webViewKey, webViewValue);
+                if(!webViewKey.isEmpty() && webViewKey != null && !webViewPageName.equals("Auth")) {
+                    content.put(webViewKey, webViewValue);
+                    content.put("loc", "Android");
+                }else{
+                    content.put("loc", "android");
+                }
             }
             minimonWebView.goToWeb(webViewUrl, content);
         }

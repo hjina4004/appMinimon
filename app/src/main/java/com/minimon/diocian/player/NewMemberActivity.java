@@ -160,6 +160,12 @@ public class NewMemberActivity extends AppCompatActivity {
                     errMsg = info.getJSONObject("data").getString("errMsg");
                 else
                     errMsg = msg;
+                if("id".equals(field))
+                    findViewById(R.id.editTextID).requestFocus();
+                else if("email".equals(field))
+                    findViewById(R.id.editTextEmail).requestFocus();
+                else if("nickname".equals(field))
+                    findViewById(R.id.editTextNickname).requestFocus();
                 alertNotice(errMsg);
                 return;
             }else{

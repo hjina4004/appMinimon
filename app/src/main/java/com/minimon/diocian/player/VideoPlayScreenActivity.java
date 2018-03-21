@@ -133,7 +133,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_play_screen);
-        videoUrl = EpisodeInfo.getInsatnace().getVideoUrl();
+        videoUrl = EpisodeInfo.getInsatnace().getCurrentVideoUrl();
 //        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
         playerView = findViewById(R.id.player_view);
         componentListener = new ComponentListener();
@@ -350,14 +350,14 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             player.setPlayWhenReady(playWhenReady);
         }
 
-        MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
-        playerView.getPlayer().prepare(mediaSources, true, false);
-        inErrorState = false;
-        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
-            player.seekTo(EpisodeInfo.getInsatnace().getResumePosition());
-            player.setPlayWhenReady(true);
-        }
-
+//        MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
+//        playerView.getPlayer().prepare(mediaSources, true, false);
+//        inErrorState = false;
+//        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
+//            player.seekTo(EpisodeInfo.getInsatnace().getResumePosition());
+//            player.setPlayWhenReady(true);
+//        }
+        updateVideoPlayer(videoUrl);
         videoPlayGestureDetector = new VideoPlayGestureDetector(this,this,width,height);
         gestureDetector = new TouchGestureDetector(this, videoPlayGestureDetector);
         gestureDetector.setListner(new TouchGestureDetector.touchListner() {
@@ -366,7 +366,18 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 videoPlayGestureDetector.onUp();
             }
         });
-}
+    }
+
+    private void updateVideoPlayer(String videoUrl){
+        EpisodeInfo.getInsatnace().setCurrentVideoUrl(videoUrl);
+        MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
+        playerView.getPlayer().prepare(mediaSources, true, false);
+        inErrorState = false;
+        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
+            player.seekTo(EpisodeInfo.getInsatnace().getResumePosition());
+            player.setPlayWhenReady(true);
+        }
+    }
 
     private void releasePlayer() {
         if (player != null) {
@@ -594,6 +605,13 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 default:
                     stateString = "UNKNOWN STATE";
                     break;
+            }
+            if(stateString.equals("STATE_ENDED")){
+                String videoUrl = EpisodeInfo.getInsatnace().getVideoUrl();
+                if(EpisodeInfo.getInsatnace().isIntro()){
+                    EpisodeInfo.getInsatnace().setIntro(false);
+                    updateVideoPlayer(videoUrl);
+                }
             }
         }
 

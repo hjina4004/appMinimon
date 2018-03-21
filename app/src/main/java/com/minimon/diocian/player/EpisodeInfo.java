@@ -9,11 +9,31 @@ import org.json.JSONObject;
 public class EpisodeInfo {
     private static volatile EpisodeInfo insatnace;
 
+    public static final int bandwidth480        = 0;
+    public static final int bandwidth720        = 1;
+    public static final int bandwidth1080       = 2;
+    public static final int banswidthAuto       = 3;
+
     private String idx;
     private String c_idx;
     private String videoUrl;
     private String title;
     private long resumePosition;
+    private String thumbnailUrl;
+    private String isAdult;
+    private String point;
+    private String playTime;
+    private String grade;
+    private String ep;
+    private String remainingTime;
+    private boolean isUseLte;
+    private int bandwidth;
+    private String introVideoUrl;
+    private String currentVideoUrl;
+    private boolean prepareVideoFlag;
+    private boolean isReplayVideoFlag;
+    private boolean isIntro;
+
 
     private EpisodeInfo(){
         if(insatnace != null)
@@ -67,5 +87,118 @@ public class EpisodeInfo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getIsAdult() {
+        return isAdult;
+    }
+
+    public void setIsAdult(String isAdult) {
+        this.isAdult = isAdult;
+    }
+
+    public String getPoint() {
+        return point;
+    }
+
+    public void setPoint(String point) {
+        this.point = point;
+    }
+
+    public String getPlayTime() {
+        return playTime;
+    }
+
+    public void setPlayTime(String playTime) {
+        this.playTime = playTime;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getEp() {
+        return ep;
+    }
+
+    public void setEp(String ep) {
+        this.ep = ep;
+    }
+
+    public String getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(String remainingTime) {
+        //String clean1 = string1.replaceAll("[^0-9]", "");
+        this.remainingTime = remainingTime.replaceAll("[^0-9]", "");
+    }
+
+    public boolean isUseLte() {
+        return isUseLte;
+    }
+
+    public void setUseLte(boolean useLte) {
+        isUseLte = useLte;
+    }
+
+    public String getIntroVideoUrl() {
+        return introVideoUrl;
+    }
+
+    public void setIntroVideoUrl(String introVideoUrl) {
+        this.introVideoUrl = introVideoUrl;
+    }
+
+    public int getBandwidth() {
+        return bandwidth;
+    }
+
+    public void setBandwidth(int bandwidth) {
+        this.bandwidth = bandwidth;
+    }
+
+    public String getCurrentVideoUrl() {
+        return currentVideoUrl;
+    }
+
+    public void setCurrentVideoUrl(String currentVideoUrl) {
+        this.currentVideoUrl = currentVideoUrl;
+    }
+
+    public boolean isPrepareVideoFlag() {
+        return prepareVideoFlag;
+    }
+
+    public void setPrepareVideoFlag(boolean prepareVideoFlag) {
+        this.prepareVideoFlag = prepareVideoFlag;
+    }
+
+    public boolean isReplayVideoFlag() {
+        return isReplayVideoFlag;
+    }
+
+    public void setReplayVideoFlag(boolean replayVideoFlag) {
+        isReplayVideoFlag = replayVideoFlag;
+    }
+
+    public boolean isIntro() {
+        return isIntro;
+    }
+
+    public void setIntro(boolean intro) {
+        isIntro = intro;
     }
 }

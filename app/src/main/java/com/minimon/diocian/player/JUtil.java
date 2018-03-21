@@ -32,4 +32,27 @@ public class JUtil {
     public void showList(Context context, List<SettingItem> list, final JUtilListener listener){
 
     }
+
+    public void confirmNotice(Context context, String str, final JUtilListener listener) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setCancelable(false);
+        dialog.setMessage(str);
+        dialog.setPositiveButton(R.string.notice_confirm_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                if (listener != null)
+                    listener.callback(1);
+            }
+        });
+        dialog.setNegativeButton(R.string.notice_confirm_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                if (listener != null)
+                    listener.callback(0);
+            }
+        });
+
+        final AlertDialog alert = dialog.create();
+        alert.show();
+    }
 }

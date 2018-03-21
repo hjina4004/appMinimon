@@ -239,18 +239,33 @@ public class MainActivity extends AppCompatActivity
 
         viewUserInfo();
 
-        mPageName = getIntent().getStringExtra("pageName");
-        if(mPageName == null || mPageName.isEmpty())
-            mPageName = "main";
         mPageUrl = getIntent().getStringExtra("pageUrl");
-        if(mPageUrl == null || mPageUrl.isEmpty())
-            mPageUrl = "Contents/view";
+        mPageName = getIntent().getStringExtra("pageName");
         mPageKey = getIntent().getStringExtra("pageKey");
         if(mPageKey == null)
             mPageKey = "";
         mPageValue = getIntent().getStringExtra("pageValue");
         if(mPageValue == null)
             mPageValue = "";
+
+//        if(mPageKey.isEmpty() || mPageKey == null){
+//            Bundle bundle = new Bundle();
+//            mPageName = "";
+//            bundle.putString("pageName", mPageName);
+//            bundle.putString("pageUrl", mPageUrl);
+//            bundle.putString("pageKey","");
+//            bundle.putString("pageValue","");
+//            webViewFragment = new WebViewFragment();
+//            webViewFragment.setArguments(bundle);
+//            changeFragment(webViewFragment);
+//            setToolbar();
+//            return;
+//        }
+        if(mPageName == null || mPageName.isEmpty())
+            mPageName = "main";
+        if(mPageUrl == null || mPageUrl.isEmpty())
+            mPageUrl = "Contents/view";
+
         if("setting".equals(mPageName)) {
             changeFragment(new SettingFragment());
             setToolbar();
@@ -303,10 +318,8 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if(mListenr!=null){
-//                changeToolbarVisibility(isMain);
                 mListenr.onBack();
             }else {
-//                if(isMain) {
                 if("main".equals(mPageName)) {
                     long tempTime = System.currentTimeMillis();
                     long intervalTime = tempTime - backPressedTime;
@@ -603,6 +616,10 @@ public class MainActivity extends AppCompatActivity
                 tv_frag_title.setText("온라인 문의");
             }else if(mPageName.equals(getResources().getString(R.string.page_name_policy))){
                 tv_frag_title.setText("운영정책");
+            }else if(mPageName.equals("Auth")){
+                tv_frag_title.setText("본인인증");
+            }else if(mPageName.equals("index")){
+                tv_frag_title.setText("이용권 구매");
             }
         }
     }

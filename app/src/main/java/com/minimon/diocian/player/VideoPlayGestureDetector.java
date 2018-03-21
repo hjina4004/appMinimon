@@ -217,7 +217,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
                                                    mHander.sendEmptyMessage(0);
                                                }
-                                           },5000);
+                                           },3000);
 
                                        }
                                    }
@@ -243,7 +243,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
                                                    mHander.sendEmptyMessage(0);
                                                }
-                                           },5000);
+                                           },3000);
 
                                        }
                                    }

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:paddingBottom="@dimen/base_padding" >
+            android:layout_marginBottom="@dimen/base_padding_bottom" >
             <EditText
                 android:id="@+id/editTextID"
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:paddingBottom="@dimen/base_padding" >
+            android:paddingBottom="@dimen/base_padding_bottom" >
             <EditText
                 android:id="@+id/editTextNickname"
                 android:layout_width="match_parent"
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:paddingBottom="@dimen/base_padding" >
+            android:paddingBottom="@dimen/base_padding_bottom" >
             <EditText
                 android:id="@+id/editTextPW"
                 android:layout_width="match_parent"
@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:paddingBottom="@dimen/base_padding" >
+            android:paddingBottom="@dimen/base_padding_bottom" >
             <EditText
                 android:id="@+id/editTextPWC"
                 android:layout_width="match_parent"
@@ -230,7 +230,7 @@
                 android:layout_width="@dimen/btn_sm_width"
                 android:layout_height="@dimen/btn_sm_height"
                 android:textColor="@color/colorBaseText"
-                android:background="@drawable/ripple_background_outline_flat"
+                android:background="@drawable/ripple_bg_gray_outline_flat"
                 android:text="@string/view_agree"
                 android:textSize="@dimen/btn_sm_font_size" />
         </LinearLayout>
@@ -256,7 +256,7 @@
                 android:layout_width="@dimen/btn_sm_width"
                 android:layout_height="@dimen/btn_sm_height"
                 android:textColor="@color/colorBaseText"
-                android:background="@drawable/ripple_background_outline_flat"
+                android:background="@drawable/ripple_bg_gray_outline_flat"
                 android:text="@string/view_agree"
                 android:textSize="@dimen/btn_sm_font_size" />
         </LinearLayout>

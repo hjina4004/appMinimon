@@ -102,4 +102,14 @@ public class MinimonEpisode {
         requestFunction("list_",value);
     }
 
+    public void purchase(ContentValues value){
+        responseType = "purchase";
+        requestFunction("purchase",value);
+    }
+
+    public void checked(ContentValues value){
+        responseType = "checked";
+        requestFunction("checked",value);
+    }
+
 }
