@@ -134,12 +134,16 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
     }
 
     private void showDataDialog(){
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View customTitle = inflater.inflate(R.layout.custom_title_dialog, null);
+        TextView title = customTitle.findViewById(R.id.customtitlebar);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        TextView title = new TextView(getActivity());
+//        TextView title = new TextView(getActivity());
         title.setText("데이터 설정");
-        title.setGravity(Gravity.CENTER);
-        title.setTextSize(16);
-        title.setTextColor(Color.BLACK);
+//        title.setGravity(Gravity.CENTER);
+//        title.setTextSize(16);
+//        title.setTextColor(Color.BLACK);
+//        title.setPadding(0,30,0,20);
 
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
@@ -161,20 +165,23 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
                 editor.apply();
                 dialogInterface.dismiss();
             }
-        }).setCustomTitle(title);
+        }).setCustomTitle(customTitle);
         builder.show();
     }
 
     private void showBandDialog(){
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View customTitle = inflater.inflate(R.layout.custom_title_dialog, null);
+        TextView title = customTitle.findViewById(R.id.customtitlebar);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 //        final AlertDialog alert;
 //                = new AlertDialog.Builder(getActivity()).
-        TextView title = new TextView(getActivity());
+//        TextView title = new TextView(getActivity());
         title.setText("플레이어 기본화질");
-        title.setGravity(Gravity.CENTER);
-        title.setTextSize(16);
-        title.setTextColor(Color.BLACK);
-        title.setPadding(0,52,0,52);
+//        title.setGravity(Gravity.CENTER);
+//        title.setTextSize(16);
+//        title.setTextColor(Color.BLACK);
+//        title.setPadding(0,52,0,52);
 
         builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
             @Override
@@ -197,7 +204,7 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
                 }
                 dialogInterface.dismiss();
             }
-        }).setCustomTitle(title);
+        }).setCustomTitle(customTitle);
         builder.show();
     }
 

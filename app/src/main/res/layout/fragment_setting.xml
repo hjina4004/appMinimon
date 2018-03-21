@@ -11,7 +11,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/colorBaseEditText"
-            android:paddingLeft="20dp">
+            android:paddingLeft="20dp"
+            android:paddingTop="17.33dp"
+            android:paddingBottom="8.67dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -36,8 +38,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp"
+            android:paddingTop="13.33dp"
+            android:paddingBottom="13.33dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
             <RelativeLayout
@@ -66,22 +68,22 @@
                 android:layout_height="wrap_content"
                 android:textSize="13.92dp"
                 android:textColor="@color/colorEditTextAddone"
-                android:paddingTop="17dp"
+                android:paddingTop="13.33dp"
                 android:text="@string/setting_player_set_data_info"
                 />
         </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#b0b0b0"/>
+            android:background="@color/colorBaseEditText"/>
         <LinearLayout
             android:id="@+id/view_setting_set_bandwidth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp"
+            android:paddingTop="13.33dp"
+            android:paddingBottom="13.33dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
             <RelativeLayout
@@ -110,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13.92dp"
-                android:paddingTop="17dp"
+                android:paddingTop="13.33dp"
                 android:textColor="@color/colorEditTextAddone"
                 android:text="@string/setting_player_set_bandwidth_info"
                 />
@@ -124,7 +126,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/colorBaseEditText"
-            android:paddingLeft="20dp">
+            android:paddingLeft="20dp"
+            android:paddingTop="8.67dp"
+            android:paddingBottom="8.67dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -149,8 +153,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp"
+            android:paddingTop="13.33dp"
+            android:paddingBottom="13.33dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
             <RelativeLayout
@@ -172,14 +176,18 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:checked="true"
-                    android:theme="@style/toggleTheme"
+                    android:textOff=""
+                    android:textOn=""
+                    android:switchMinWidth="30dp"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb_selector"
                     />
             </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13.92dp"
-                android:paddingTop="17dp"
+                android:paddingTop="13.33dp"
                 android:textColor="@color/colorEditTextAddone"
                 android:text="@string/setting_alert_event_info"
                 />
@@ -187,15 +195,15 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#b0b0b0"/>
+            android:background="@color/colorBaseEditText"/>
         <LinearLayout
             android:id="@+id/view_setting_alert_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp"
+            android:paddingTop="13.33dp"
+            android:paddingBottom="13.33dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
             <RelativeLayout
@@ -218,14 +226,18 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:checked="true"
-                    android:theme="@style/toggleTheme"
+                    android:textOff=""
+                    android:textOn=""
+                    android:switchMinWidth="30dp"
+                    android:track="@drawable/switch_track_selector"
+                    android:thumb="@drawable/switch_thumb_selector"
                     />
             </RelativeLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13.92dp"
-                android:paddingTop="17dp"
+                android:paddingTop="13.33dp"
                 android:textColor="@color/colorEditTextAddone"
                 android:text="@string/setting_alert_service_info"
                 />
@@ -238,7 +250,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/colorBaseEditText"
-            android:paddingLeft="20dp">
+            android:paddingLeft="20dp"
+            android:paddingTop="8.67dp"
+            android:paddingBottom="8.67dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -264,8 +278,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp"
+            android:paddingTop="13.33dp"
+            android:paddingBottom="13.33dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
             <RelativeLayout
@@ -294,7 +308,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13.92dp"
-                android:paddingTop="17dp"
+                android:paddingTop="13.33dp"
                 android:textColor="@color/colorEditTextAddone"
                 android:text="@string/setting_app_delete_cache_info"
                 />
@@ -302,15 +316,15 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#b0b0b0"/>
+            android:background="@color/colorBaseEditText"/>
         <LinearLayout
             android:id="@+id/view_setting_app_version"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp"
+            android:paddingTop="13.33dp"
+            android:paddingBottom="13.33dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
             <LinearLayout
@@ -373,15 +387,15 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#b0b0b0"/>
+            android:background="@color/colorBaseEditText"/>
         <LinearLayout
             android:id="@+id/view_setting_app_license"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="#222222"
-            android:paddingTop="17dp"
-            android:paddingBottom="17dp"
+            android:paddingTop="13.33dp"
+            android:paddingBottom="13.33dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
             <RelativeLayout

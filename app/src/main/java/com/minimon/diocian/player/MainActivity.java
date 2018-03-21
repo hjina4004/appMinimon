@@ -620,6 +620,8 @@ public class MainActivity extends AppCompatActivity
                 tv_frag_title.setText("본인인증");
             }else if(mPageName.equals("index")){
                 tv_frag_title.setText("이용권 구매");
+            }else if(mPageName.equals("setting")){
+                tv_frag_title.setText("환경설정");
             }
         }
     }
