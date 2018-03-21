@@ -177,17 +177,13 @@
                 android:layout_height="wrap_content"
                 android:textSize="13.92dp"
                 android:textColor="#fff"
-                android:text="@string/init_point"
+                android:text="@string/init_fixed"
                 android:gravity="center_vertical"
                 android:layout_toRightOf="@id/tv_menu_ticket"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.33dp"
-        android:background="#767b7f" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -276,7 +272,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="*"
-                android:background="#333333">
+                android:background="#767b7f">
                 <TableRow
                     android:layout_weight="1">
                     <LinearLayout

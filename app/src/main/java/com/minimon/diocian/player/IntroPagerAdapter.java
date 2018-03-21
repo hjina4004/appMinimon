@@ -11,9 +11,7 @@ import android.widget.ImageView;
 
 public class IntroPagerAdapter extends PagerAdapter {
     private int[] images = {
-            R.mipmap.a001_intro_bg_01,
-            R.mipmap.a001_intro_bg_02,
-            R.mipmap.a001_intro_bg_03
+            R.mipmap.a001_intro_bg_01
     };
     private LayoutInflater inflater;
     private Context context;

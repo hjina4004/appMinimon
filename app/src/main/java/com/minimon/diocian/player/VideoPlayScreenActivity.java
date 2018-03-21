@@ -2,15 +2,20 @@ package com.minimon.diocian.player;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
@@ -80,7 +85,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private boolean inErrorState;
     private String videoUrl = "";
 //    private long mResumePosition;
-    private boolean isChangeBandWidth = true;
+    private boolean isChangeBandWidth = false;
     private String nowBandWidth = "";
 
     private Dialog gestureInfoDialog;
@@ -129,6 +134,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     public static final int STATE_VOLUME_CTRL = 304;      // volume controller view state
     public static final int STATE_SHOW_MOVING_TIME = 305; // seek drag show
 
+    BroadcastReceiver broadcastReceiver;
+    IntentFilter intentFilter;
+    JUtil jUtil;
+    boolean isShowAlert = false;
+    boolean isActive;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +157,45 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         display.getSize(size);
         width = size.x;
         height = size.y;
+        isActive = false;
+        jUtil = new JUtil();
+        broadcastReceiver = new InternetConnector_Receiver_DramaPlay(){
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(!isActive)
+                    return;
+                ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+                if(intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
+                    if(networkInfo!= null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI){
+                        Log.d("newtorkInfo","changedWifi");
+                        if(!ConfigInfo.getInstance().isUseData()  && !isShowAlert){
+                            isShowAlert = true;
+                            playerView.getPlayer().setPlayWhenReady(false);
+                            jUtil.confirmNotice(context, "WiFi 환경이 아닙니다. LTE/3G 데이터를 사용하시겠습니까?\n", new JUtil.JUtilListener() {
+                                @Override
+                                public void callback(int id) {
+                                    if(id == 1){
+                                        playerView.getPlayer().setPlayWhenReady(true);
+                                    }
+                                    isShowAlert = false;
+                                }
+                            });
+                        }
+                    }
+                }
+
+//                if(networkInfo != null && networkInfo.getType() != ConnectivityManager.TYPE_WIFI){
+//
+//                }
+            }
+        };
+        intentFilter = new IntentFilter();
+//        intentFilter.addAction("com.minimon.diocian.player.SEND_BROAD_CAST");
+        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
         mCurrentState = STATE_IDLE;
         playerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
@@ -164,6 +214,19 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         initData();
 
         initVerticalSeekBar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isActive = true;
+//        registerReceiver(broadcastReceiver,intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 
     public int getCurrentState() {
@@ -323,9 +386,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             videoUrl = videoObj.getString("playUrl");
             EpisodeInfo.getInsatnace().setIdx(list.getString("idx"));
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
-            if(!isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0)
+            if(isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
                 EpisodeInfo.getInsatnace().setResumePosition(0);
-            else {
+                Log.d("setPosition-9", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+            }
+            else if(isChangeBandWidth){
                 isChangeBandWidth = false;
             }
             initializePlayer();
@@ -373,6 +438,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
         playerView.getPlayer().prepare(mediaSources, true, false);
         inErrorState = false;
+        Log.d("setPosition-10", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
         if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
             player.seekTo(EpisodeInfo.getInsatnace().getResumePosition());
             player.setPlayWhenReady(true);
@@ -759,9 +825,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     @Override
     protected void onPause() {
         super.onPause();
+        isActive = false;
+//        unregisterReceiver(broadcastReceiver);
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+                Log.d("setPosition-6", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
         }
@@ -773,6 +842,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+                Log.d("setPosition-7", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
         }

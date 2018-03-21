@@ -157,16 +157,17 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
             @Override
             public void onScroll(int l, int t, int oldl, int oldt) {
+                int availableDepth = 30;
                 if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
                     if(t>oldt){
                         view_main_toolbar.setVisibility(View.GONE);
-                    }else{
+                    }else if (oldt-t > availableDepth){
                         view_main_toolbar.setVisibility(View.VISIBLE);
                     }
                 }else{
                     if(t>oldt){
                         view_main_toolbar2.setVisibility(View.GONE);
-                    }else{
+                    }else if (oldt-t > availableDepth){
                         view_main_toolbar2.setVisibility(View.VISIBLE);
                     }
                 }
@@ -202,9 +203,9 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             } else {
                 if(!webViewKey.isEmpty() && webViewKey != null && !webViewPageName.equals("Auth")) {
                     content.put(webViewKey, webViewValue);
-                    content.put("loc", "Android");
+                    content.put("loc","Android");
                 }else{
-                    content.put("loc", "android");
+                    content.put("loc","android");
                 }
             }
             minimonWebView.goToWeb(webViewUrl, content);

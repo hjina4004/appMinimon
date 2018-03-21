@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -26,6 +27,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.*;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -55,6 +58,7 @@ import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -379,6 +383,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public static String toNumFormat(int num) {
+        DecimalFormat df = new DecimalFormat("#,###");
+        return df.format(num);
+    }
+
     private void viewUserInfo() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         View view  = navigationView.getHeaderView(0);
@@ -389,7 +398,9 @@ public class MainActivity extends AppCompatActivity
 
         UserInfo userInfo = UserInfo.getInstance();
         tvUserNickname.setText(userInfo.getNickname());
-        tvUserPoint.setText(userInfo.getPoint());
+        Integer point = Integer.parseInt(userInfo.getPoint());
+        tvUserPoint.setText(String.format("%,d", point));
+
         tvUserFixed.setText(checkFixed(userInfo.getFixed()));
 
         LinearLayout view_logout = view.findViewById(R.id.view_menu_logout);
@@ -429,10 +440,11 @@ public class MainActivity extends AppCompatActivity
 
     private String checkFixed(String fixed){
         if("0".equals(fixed)){
-            return "-";
-        }else{
-            return fixed;
+            return "0000.00.00";
         }
+        fixed = fixed.replaceAll("[^0-9]", "");
+        fixed = fixed.substring(0,4)+"."+fixed.substring(4,6)+"."+fixed.substring(6,8);
+        return fixed;
     }
 
     private void SearchResult(){
@@ -481,6 +493,8 @@ public class MainActivity extends AppCompatActivity
         tv_toolbar_go_back.setVisibility(View.GONE);
         img_toolbar_search.setVisibility(View.VISIBLE);
         img_toolbar.setVisibility(View.VISIBLE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(ed_toolbar_search.getWindowToken(),0);
     }
 
     private View.OnClickListener drawerClickListenr = new View.OnClickListener() {

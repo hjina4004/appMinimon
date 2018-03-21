@@ -3,12 +3,17 @@ package com.minimon.diocian.player;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.support.design.widget.FloatingActionButton;
@@ -99,7 +104,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     private ComponentListener componentListener;
 
     private String nowBandWidth = "";
-    private boolean isChangeBandWidth;
+    private boolean isChangeBandWidth  = false;
     private LinearLayout mNowBandWidth;
     private TextView mBandWidth;
     private TextView mBandWidthAuto;
@@ -133,6 +138,11 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     private boolean isReplayVideoFlag    = false;
 
     private playListener m_playlistener;
+//    private BroadcastReceiver broadcastReceiver;
+    IntentFilter intentFilter;
+    JUtil jUtil;
+    boolean isShowAlert = false;
+    boolean isActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,11 +152,45 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         mWebView = findViewById(R.id.webview_dramaplay);
         javascriptInterface = new JavascriptInterface(this, mWebView);
         javascriptInterface.setListener(this);
-
+        jUtil = new JUtil();
+        isActive = false;
+//        broadcastReceiver = new InternetConnector_Receiver_DramaPlay(){
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                if(!isActive)
+//                    return;
+//                ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//
+//                if(intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
+//                    if(networkInfo!= null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI){
+//                        if(!ConfigInfo.getInstance().isUseData() && prepareVideoFlag && !isShowAlert){
+//                            isShowAlert = true;
+//                            playerView.getPlayer().setPlayWhenReady(false);
+//                            jUtil.confirmNotice(context, "WiFi 환경이 아닙니다. LTE/3G 데이터를 사용하시겠습니까?\n", new JUtil.JUtilListener() {
+//                                @Override
+//                                public void callback(int id) {
+//                                    if(id == 1){
+//                                        playerView.getPlayer().setPlayWhenReady(true);
+//                                    }
+//                                    isShowAlert = false;
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//            }
+//        };
+        intentFilter = new IntentFilter();
+//        intentFilter.addAction("com.minimon.diocian.player.SEND_BROAD_CAST");
+        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         mWebView.setWebViewClient(new MyWebviewClient(this, progress_bar_drama_play));
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface,"minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
+
+//        registerReceiver(broadcastReceiver, intentFilter);
 
         img_toolbar_go_back = findViewById(R.id.img_toolbar_go_back);
         img_toolbar_go_back.setOnClickListener(new View.OnClickListener() {
@@ -203,8 +247,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         if(!isLockSreen)
             isLockSreen = true;
 
-//        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.a001_top_back);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -274,6 +316,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         }
         if(nRemainTime > 0){
             EpisodeInfo.getInsatnace().setResumePosition(nRemainTime);
+            Log.d("setPosition-4", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
             setData(info);
             initializePlayer();
             initFullscreenButton();
@@ -347,11 +390,15 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
            episodeInfo.setVideoUrl(videoUrl);
            String introVideoUrl = getIntroVideoUrl(list_mp);
            episodeInfo.setIntroVideoUrl(introVideoUrl);
-           if (!isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
+           if (isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
                episodeInfo.setResumePosition(0);
-           }else{
-               isChangeBandWidth = !isChangeBandWidth;
+               Log.d("setPosition-1", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+           }else if(isChangeBandWidth){
+               isChangeBandWidth = false;
            }
+//           else{
+//               isChangeBandWidth = !isChangeBandWidth;
+//           }
 
        }catch (JSONException e){
            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
@@ -383,7 +430,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
             String resCode = info.getString("resCode");
             String errCode = info.has("data")?info.getJSONObject("data").getString("errCode") : "0207";
             if (resCode.equals("0000") || (resCode.equals("0900") && errCode.equals("0207"))) {
-                procPlayIntro();
+                procUsableLTE();
             }else{
                 if("0204".equals(errCode)){
                     confirmRefillPoint();
@@ -702,9 +749,10 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     protected void onResume() {
         super.onResume();
         Log.d(TAG+"Test","OnResume");
+        isActive = true;
+//        registerReceiver(broadcastReceiver, intentFilter);
         if (Util.SDK_INT <= 23) {
             initData();
-
 //            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
 //                sendEpisodeData("645");
 //            else
@@ -716,12 +764,15 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     protected void onPause() {
         super.onPause();
         Log.d(TAG+"Test","OnPause");
+        isActive = false;
+//        unregisterReceiver(broadcastReceiver);
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+                Log.d("setPosition-2", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+                releasePlayer();
             }
         }
-        releasePlayer();
    }
 
     @Override
@@ -731,12 +782,14 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+                Log.d("setPosition-3", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+                releasePlayer();
             }
         }
-        releasePlayer();
     }
 
     private void goFullScreen(){
+        EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
         Intent intent = new Intent(DramaPlayActivity.this, VideoPlayScreenActivity.class);
         startActivity(intent);
     }
@@ -771,6 +824,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         EpisodeInfo.getInsatnace().setCurrentVideoUrl(playUrl);
         MediaSource mediaSources = buildMediaSource(Uri.parse(playUrl), "mp4");
         playerView.getPlayer().prepare(mediaSources, true, false);
+        Log.d("DramaUpdatePlayerVideo",String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
         if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
             playerView.getPlayer().seekTo(EpisodeInfo.getInsatnace().getResumePosition());
             playerView.getPlayer().setPlayWhenReady(true);
@@ -869,7 +923,10 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     @Override
     public void changePlayer(String idx) {
         Log.d("DramaPlayChangePlayer",idx);
+//        EpisodeInfo.getInsatnace().setIdx(idx);
+        prepareVideoFlag = false;
         requestEpisodeData(idx);
+//        requestCheckEpisode();
     }
 
     private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {
@@ -948,6 +1005,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
         @Override
         public void onSeekProcessed() {
+
             Log.d(TAG, "seekProcessed");
         }
 
@@ -1034,5 +1092,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         SharedPreferences pref = getSharedPreferences("minimon-preference",MODE_PRIVATE);
         EpisodeInfo.getInsatnace().setResumePosition(0);
         ConfigInfo.getInstance().setBandwidth(pref.getInt("BandWidth",1));
+//        unregisterReceiver(broadcastReceiver);
     }
 }
