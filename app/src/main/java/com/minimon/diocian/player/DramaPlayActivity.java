@@ -259,7 +259,13 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     private void responseEpisodeData(JSONObject info){
         Log.d("currentVideoUrl",String.valueOf(prepareVideoFlag));
-        String remainTime = EpisodeInfo.getInsatnace().getRemainingTime().trim();
+//        setData(info);
+        String remainTime  = "";
+        try {
+            remainTime = info.getJSONObject("data").getJSONObject("list").getString("remaining_time").replaceAll("[^0-9]", "");
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
         int nRemainTime;
         if(remainTime.isEmpty()){
             nRemainTime = 0;
