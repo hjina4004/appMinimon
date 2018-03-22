@@ -55,6 +55,7 @@ public class NewMemberActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NewMemberActivity.this, PolicyActivity.class);
+                intent.putExtra("policyType","service");
                 startActivity(intent);
             }
         });
@@ -63,6 +64,7 @@ public class NewMemberActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NewMemberActivity.this, PolicyActivity.class);
+                intent.putExtra("policyType","privacy");
                 startActivity(intent);
             }
         });
@@ -70,6 +72,8 @@ public class NewMemberActivity extends AppCompatActivity {
         strDeviceID = DeviceUuidFactory.getDeviceUuid(this.getApplicationContext());
         Log.i("strType", strType);
         if (!strType.equals("basic")) modeSNS();
+
+//        getActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
         initMinomon();
         initAgree();
