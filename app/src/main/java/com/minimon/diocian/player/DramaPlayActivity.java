@@ -581,7 +581,9 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
    private void confirmRefillPoint(){
        prepareVideoFlag = false;
-       new JUtil().confirmNotice(this, "포인트를 충전하고 이용하십시오.", new JUtil.JUtilListener() {
+       new JUtil().confirmNotice(this, "컨텐츠를 구매하시겠습니까?\n" +
+               "구매 후 72시간 동안 재시청 가능합니다.\n" +
+               EpisodeInfo.getInsatnace().getPoint()+"포인트가 차감됩니다.", new JUtil.JUtilListener() {
            @Override
            public void callback(int id) {
                if(id == 1){
