@@ -213,6 +213,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         EpisodeInfo epInfo = EpisodeInfo.getInsatnace();
         ConfigInfo conInfo = ConfigInfo.getInstance();
         epInfo.setUseLte(conInfo.isUseData());
+        Log.i("JWiFiMonitor", epInfo.isUseLte()? "use LTE":"only WIFI");
         epInfo.setBandwidth(conInfo.getBandwidth());
 
         minimonWebView = new MinimonWebView();
@@ -276,7 +277,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                 });
                 builder.show();
             }else{
-                EpisodeInfo.getInsatnace().setUseLte(true);
+                //EpisodeInfo.getInsatnace().setUseLte(true);
                 procPlayIntro();
             }
         }else{

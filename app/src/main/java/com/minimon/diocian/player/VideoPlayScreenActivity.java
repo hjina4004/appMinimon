@@ -8,29 +8,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -38,9 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -72,9 +62,6 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class VideoPlayScreenActivity extends AppCompatActivity implements PlayListItemClickListener, View.OnTouchListener{
 
@@ -134,11 +121,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     public static final int STATE_VOLUME_CTRL = 304;      // volume controller view state
     public static final int STATE_SHOW_MOVING_TIME = 305; // seek drag show
 
-    BroadcastReceiver broadcastReceiver;
-    IntentFilter intentFilter;
     JUtil jUtil;
-    boolean isShowAlert = false;
-    boolean isActive;
+    private JWiFiMonitor wifiMonitor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,45 +141,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         display.getSize(size);
         width = size.x;
         height = size.y;
-        isActive = false;
+
         jUtil = new JUtil();
-        broadcastReceiver = new InternetConnector_Receiver_DramaPlay(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if(!isActive)
-                    return;
-                ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-                if(intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
-                    if(networkInfo!= null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI){
-                        Log.d("newtorkInfo","changedWifi");
-                        if(!ConfigInfo.getInstance().isUseData()  && !isShowAlert){
-                            isShowAlert = true;
-                            playerView.getPlayer().setPlayWhenReady(false);
-                            jUtil.confirmNotice(context, "WiFi 환경이 아닙니다. LTE/3G 데이터를 사용하시겠습니까?\n", new JUtil.JUtilListener() {
-                                @Override
-                                public void callback(int id) {
-                                    if(id == 1){
-                                        playerView.getPlayer().setPlayWhenReady(true);
-                                    }
-                                    isShowAlert = false;
-                                }
-                            });
-                        }
-                    }
-                }
-
-//                if(networkInfo != null && networkInfo.getType() != ConnectivityManager.TYPE_WIFI){
-//
-//                }
-            }
-        };
-        intentFilter = new IntentFilter();
-//        intentFilter.addAction("com.minimon.diocian.player.SEND_BROAD_CAST");
-        intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
 
         mCurrentState = STATE_IDLE;
         playerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
@@ -214,19 +161,89 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         initData();
 
         initVerticalSeekBar();
+
+        createWifiMoniter();
     }
+
+    private void createWifiMoniter() {
+        wifiMonitor = new JWiFiMonitor(this);
+        wifiMonitor.setOnChangeNetworkStatusListener(WifiChangedListener);
+        registerReceiver(wifiMonitor, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+    }
+
+    private void removeWifiMoniter() {
+        unregisterReceiver(wifiMonitor);
+    }
+
+    JWiFiMonitor.OnChangeNetworkStatusListener WifiChangedListener = new JWiFiMonitor.OnChangeNetworkStatusListener() {
+        @Override
+        public void OnChanged(int status) {
+            String tag = "JWiFiMonitor";
+            switch(status) {
+                case JWiFiMonitor.WIFI_STATE_DISABLED:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_DISABLED");
+                    confirmUseLTE();
+                    break;
+                case JWiFiMonitor.WIFI_STATE_DISABLING:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_DISABLING");
+                    break;
+                case JWiFiMonitor.WIFI_STATE_ENABLED:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_ENABLED");
+                    break;
+                case JWiFiMonitor.WIFI_STATE_ENABLING:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_ENABLING");
+                    break;
+                case JWiFiMonitor.WIFI_STATE_UNKNOWN:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_UNKNOWN");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_CONNECTED:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_CONNECTED");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_CONNECTING:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_CONNECTING");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_DISCONNECTED:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_DISCONNECTED");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_DISCONNECTING:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_DISCONNECTING");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_SUSPENDED:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_SUSPENDED");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_UNKNOWN:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_UNKNOWN");
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
         super.onResume();
-        isActive = true;
-//        registerReceiver(broadcastReceiver,intentFilter);
     }
 
     @Override
     protected void onDestroy() {
+        removeWifiMoniter();
         super.onDestroy();
 
+    }
+
+    private void confirmUseLTE() {
+        if (EpisodeInfo.getInsatnace().isUseLte())
+            return;
+
+        playerView.getPlayer().setPlayWhenReady(false);
+        jUtil.confirmNotice(this, "WiFi 환경이 아닙니다. LTE/3G 데이터를 사용하시겠습니까?", new JUtil.JUtilListener() {
+            @Override
+            public void callback(int id) {
+                if (id == 1) {
+                    EpisodeInfo.getInsatnace().setUseLte(true);
+                    playerView.getPlayer().setPlayWhenReady(true);
+                }
+            }
+        });
     }
 
     public int getCurrentState() {
@@ -476,14 +493,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         mDuration.setTextSize(19);
         mPosition.setTextSize(19);
 
-
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
         mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.a022_play_zoom_in));
         mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
         mFullScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 finish();
             }
         });
@@ -590,7 +605,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         });
     }
 
-
     private MediaSource buildMediaSource(Uri uri, String videoType) {
         DataSource.Factory mediaDataSourceFactory = buildDataSourceFactory(true);
         if("mp4".equals(videoType))
@@ -600,6 +614,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         else
             return null;
     }
+
     public DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
         return new DefaultDataSourceFactory(this, bandwidthMeter, buildHttpDataSourceFactory(true));
@@ -825,8 +840,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     @Override
     protected void onPause() {
         super.onPause();
-        isActive = false;
-//        unregisterReceiver(broadcastReceiver);
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
@@ -847,6 +860,4 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             }
         }
     }
-
-
 }
