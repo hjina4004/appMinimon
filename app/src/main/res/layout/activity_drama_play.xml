@@ -13,8 +13,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorBaseBG"
         android:layout_below="@+id/view_main_search"
-        android:orientation="vertical"
-        android:paddingTop="17.33dp">
+        android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/fragment_video"
@@ -25,11 +24,14 @@
             <FrameLayout
                 android:id="@+id/view_player_thumbnail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="200dp">
                 <ImageView
                     android:id="@+id/img_player_thumbnail"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
