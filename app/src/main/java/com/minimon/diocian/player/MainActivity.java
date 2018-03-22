@@ -637,6 +637,8 @@ public class MainActivity extends AppCompatActivity
                 tv_frag_title.setText("이용권 구매");
             }else if(mPageName.equals("setting")){
                 tv_frag_title.setText("환경설정");
+            }else if(mPageName.equals("search")){
+                tv_frag_title.setText(WebViewInfo.getInstance().getSearch_tag());
             }
         }
     }
