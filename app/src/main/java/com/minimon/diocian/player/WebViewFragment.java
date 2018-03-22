@@ -257,6 +257,14 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
                 if(!webViewKey.isEmpty() && webViewKey != null && !webViewPageName.equals("Auth")) {
                     content.put(webViewKey, webViewValue);
                     content.put("loc","Android");
+                    WebViewHistory history = new WebViewHistory();
+                    history.setPageUrl(webViewUrl);
+                    history.setPageName(webViewPageName);
+                    history.setPageKey(webViewKey);
+                    history.setPageValue(webViewValue);
+                    ArrayList<WebViewHistory> arrhis = WebViewInfo.getInstance().getWebviewHistory();
+                    arrhis.add(history);
+                    WebViewInfo.getInstance().setWebviewHistory(arrhis);
                 }else{
                     content.put("loc","android");
                 }
@@ -346,6 +354,14 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         intent.putExtra("pageName",page);
         intent.putExtra("pageKey",key);
         intent.putExtra("pageValue",value);
+        WebViewHistory history = new WebViewHistory();
+        history.setPageUrl(url);
+        history.setPageName(page);
+        history.setPageKey(key);
+        history.setPageValue(value);
+        ArrayList<WebViewHistory> arrhis = WebViewInfo.getInstance().getWebviewHistory();
+        arrhis.add(history);
+        WebViewInfo.getInstance().setWebviewHistory(arrhis);
         startActivity(intent);
     }
 
@@ -373,7 +389,20 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     }
 
     @Override
-    public void closeDepthRefreshWeb(String depth) {}
+    public void closeDepthRefreshWeb(String depth) {
+        Log.d("closeDepthRefreshWeb","inWebViewFragment");
+//        ArrayList<WebViewHistory> arrWebViewHistory = WebViewInfo.getInstance().getWebviewHistory();
+//        int webDepth = Integer.valueOf(depth);
+//        WebViewHistory depthHistory = arrWebViewHistory.get(arrWebViewHistory.size()-webDepth);
+//        for(int i=0;i<webDepth; i++){
+//            arrWebViewHistory.remove(arrWebViewHistory.size()-1);
+//        }
+//        goToWebMain(depthHistory.getPageUrl(), depthHistory.getPageName(), depthHistory.getPageKey(), depthHistory.getPageValue());
+//        goToWebMain("main","","","");
+        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
     @Override
     public void goToPg(String url, String item, String how, String title) {

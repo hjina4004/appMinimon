@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 /**
  * Created by GOOD on 2018-03-12.
@@ -52,15 +51,13 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void closeRefreshWeb(String url, String page, String key, String value){
         Log.d("JavascriptInterface", "closeRefreshWeb");
-        Toast.makeText(mContext,"closeRefreshWeb",Toast.LENGTH_SHORT).show();
         if(mListener!=null)
             mListener.closeRefreshWeb(url,page,key,value);
     }
 
     @android.webkit.JavascriptInterface
     public void closeDepthRefreshWeb(String depth){
-        Log.d("JavascriptInterface", "closeDepthRefreshWeb");
-        Toast.makeText(mContext,"closeDepthRefreshWeb",Toast.LENGTH_SHORT).show();
+        Log.d("JavascriptInterface", "closeDepthRefreshWeb"+","+depth);
         if(mListener!=null){
             mListener.closeDepthRefreshWeb(depth);
         }
@@ -84,12 +81,11 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void closeGoToNative(String page){
         Log.d("JavascriptInterface", "closeGoToNative");
-        Toast.makeText(mContext,"closeGoToNative",Toast.LENGTH_SHORT).show();
     }
 
     @android.webkit.JavascriptInterface
     public void changePlayer(String idx){
-        Log.d("changeplayer", idx);
+        Log.d("JavascriptInterface", idx);
         if(mListener!=null)
             mListener.changePlayer(idx);
     }

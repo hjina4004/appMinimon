@@ -31,6 +31,7 @@ public class WebViewInfo {
     private String search_tag;
     private String htmlCode;
     private String payHow;
+    private ArrayList<WebViewHistory> webviewHistory = new ArrayList<>();
 
     public String getPageName() {
         return pageName;
@@ -94,5 +95,13 @@ public class WebViewInfo {
 
     public void setPayHow(String payHow) {
         this.payHow = payHow;
+    }
+
+    public ArrayList<WebViewHistory> getWebviewHistory() {
+        return webviewHistory;
+    }
+
+    public void setWebviewHistory(ArrayList<WebViewHistory> webviewHistory) {
+        this.webviewHistory = webviewHistory;
     }
 }
