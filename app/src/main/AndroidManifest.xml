@@ -125,7 +125,13 @@
         </receiver>
 
         <activity android:name=".ServerErrorActivity" />
-        <activity android:name=".PolicyActivity" />
+        <activity android:name=".PolicyActivity"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".NewMemberActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NewMemberActivity" />
+        </activity>
         <activity android:name=".LauncherActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
