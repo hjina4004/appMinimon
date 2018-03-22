@@ -143,6 +143,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     JUtil jUtil;
     boolean isShowAlert = false;
     boolean isActive;
+    private JWiFiMonitor wifiMonitor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,9 +251,80 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     }
 
+    private void createWifiMonitor(){
+        wifiMonitor = new JWiFiMonitor(this);
+        wifiMonitor.setOnChangeNetworkStatusListener(WifiChangedListener);
+        registerReceiver(wifiMonitor, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+    }
+
+    private void removeWifiMoniter() {
+        unregisterReceiver(wifiMonitor);
+    }
+
+    JWiFiMonitor.OnChangeNetworkStatusListener WifiChangedListener = new JWiFiMonitor.OnChangeNetworkStatusListener() {
+        @Override
+        public void OnChanged(int status) {
+            String tag = "JWiFiMonitor";
+            switch(status) {
+                case JWiFiMonitor.WIFI_STATE_DISABLED:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_DISABLED");
+                    if(prepareVideoFlag)
+                        confirmUseLTE();
+                    break;
+                case JWiFiMonitor.WIFI_STATE_DISABLING:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_DISABLING");
+                    break;
+                case JWiFiMonitor.WIFI_STATE_ENABLED:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_ENABLED");
+                    break;
+                case JWiFiMonitor.WIFI_STATE_ENABLING:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_ENABLING");
+                    break;
+                case JWiFiMonitor.WIFI_STATE_UNKNOWN:
+                    Log.i(tag, "[WifiMonitor] WIFI_STATE_UNKNOWN");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_CONNECTED:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_CONNECTED");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_CONNECTING:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_CONNECTING");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_DISCONNECTED:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_DISCONNECTED");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_DISCONNECTING:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_DISCONNECTING");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_SUSPENDED:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_SUSPENDED");
+                    break;
+                case JWiFiMonitor.NETWORK_STATE_UNKNOWN:
+                    Log.i(tag, "[WifiMonitor] NETWORK_STATE_UNKNOWN");
+                    break;
+            }
+        }
+    };
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return true;
+    }
+
+    private void confirmUseLTE() {
+        if (EpisodeInfo.getInsatnace().isUseLte())
+            return;
+        if(playerView.getPlayer() != null) {
+            playerView.getPlayer().setPlayWhenReady(false);
+            jUtil.confirmNotice(this, "WiFi 환경이 아닙니다. LTE/3G 데이터를 사용하시겠습니까?", new JUtil.JUtilListener() {
+                @Override
+                public void callback(int id) {
+                    if (id == 1) {
+                        EpisodeInfo.getInsatnace().setUseLte(true);
+                        playerView.getPlayer().setPlayWhenReady(true);
+                    }
+                }
+            });
+        }
     }
 
     private void procUsableLTE(){
@@ -301,7 +373,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     }
 
     private void responseEpisodeData(JSONObject info){
-        Log.d("currentVideoUrl",String.valueOf(prepareVideoFlag));
 //        setData(info);
         String remainTime  = "";
         try {
@@ -752,6 +823,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         Log.d(TAG+"Test","OnResume");
         isActive = true;
 //        registerReceiver(broadcastReceiver, intentFilter);
+        createWifiMonitor();
         if (Util.SDK_INT <= 23) {
             initData();
 //            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
@@ -767,6 +839,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         Log.d(TAG+"Test","OnPause");
         isActive = false;
 //        unregisterReceiver(broadcastReceiver);
+        removeWifiMoniter();
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));

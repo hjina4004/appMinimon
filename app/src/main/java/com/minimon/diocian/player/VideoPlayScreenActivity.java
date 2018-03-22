@@ -227,7 +227,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     protected void onDestroy() {
         removeWifiMoniter();
         super.onDestroy();
-
     }
 
     private void confirmUseLTE() {

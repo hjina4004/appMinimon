@@ -46,11 +46,12 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
     private LinearLayout viewVertion;
     private SettingBandwidthAdapter adapter;
     private TextView mSetBandwidth;
-    private TextView mSetData;
+//    private TextView mSetData;
     private Switch mEventSwitch;
     private Switch mServiceSwitch;
     private String appVersion;
     private TextView mAppVersion;
+    private Switch mLteSwitch;
 
     @Nullable
     @Override
@@ -78,12 +79,12 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
                 break;
         }
 
-        mSetData = (TextView) mView.findViewById(R.id.tv_setting_player_data);
-        if(ConfigInfo.getInstance().isUseData()){
-            mSetData.setText("LTE/3G");
-        }else{
-            mSetData.setText("WIFI");
-        }
+//        mSetData = (TextView) mView.findViewById(R.id.tv_setting_player_data);
+//        if(ConfigInfo.getInstance().isUseData()){
+//            mSetData.setText("LTE/3G");
+//        }else{
+//            mSetData.setText("WIFI");
+//        }
         adapter = new SettingBandwidthAdapter(getActivity(), mSettingList);
         viewSetBandWidth = view.findViewById(R.id.view_setting_set_bandwidth);
         viewSetBandWidth.setOnClickListener(new View.OnClickListener() {
@@ -94,18 +95,20 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
             }
         });
 
-        viewSetData = view.findViewById(R.id.view_setting_set_data);
-        viewSetData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setDataList();
-                showDataDialog();
-            }
-        });
+//        viewSetData = view.findViewById(R.id.view_setting_set_data);
+//        viewSetData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setDataList();
+//                showDataDialog();
+//            }
+//        });
 
 
         mEventSwitch = view.findViewById(R.id.switch_setting_event);
         mEventSwitch.setChecked(ConfigInfo.getInstance().isAlertEvent());
+        mLteSwitch = view.findViewById(R.id.switch_setting_use_lte);
+        mLteSwitch.setChecked(ConfigInfo.getInstance().isUseData());
         mServiceSwitch = view.findViewById(R.id.switch_setting_service);
         mEventSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -117,6 +120,17 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
                 editor.putBoolean("alertEvent",b);
                 editor.apply();
                 ConfigInfo.getInstance().setAlertEvent(b);
+            }
+        });
+        mLteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mLteSwitch.setChecked(isChecked);
+                ConfigInfo.getInstance().setUseData(isChecked);
+                SharedPreferences pref = getActivity().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("useData",ConfigInfo.getInstance().isUseData());
+                editor.apply();
             }
         });
 
@@ -133,41 +147,41 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void showDataDialog(){
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View customTitle = inflater.inflate(R.layout.custom_title_dialog, null);
-        TextView title = customTitle.findViewById(R.id.customtitlebar);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        TextView title = new TextView(getActivity());
-        title.setText("데이터 설정");
-//        title.setGravity(Gravity.CENTER);
-//        title.setTextSize(16);
-//        title.setTextColor(Color.BLACK);
-//        title.setPadding(0,30,0,20);
-
-        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                SharedPreferences pref = getActivity().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                switch (i){
-                    case 0:
-                        ConfigInfo.getInstance().setUseData(false);
-                        mSetData.setText("WIFI");
-//                        setMobileDataEnabled(getActivity(),false);
-                        break;
-                    case 1:
-                        ConfigInfo.getInstance().setUseData(true);
-                        mSetData.setText("LTE/3G");
-                        break;
-                }
-                editor.putBoolean("useData",ConfigInfo.getInstance().isUseData());
-                editor.apply();
-                dialogInterface.dismiss();
-            }
-        }).setCustomTitle(customTitle);
-        builder.show();
-    }
+//    private void showDataDialog(){
+//        LayoutInflater inflater = LayoutInflater.from(getActivity());
+//        View customTitle = inflater.inflate(R.layout.custom_title_dialog, null);
+//        TextView title = customTitle.findViewById(R.id.customtitlebar);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+////        TextView title = new TextView(getActivity());
+//        title.setText("데이터 설정");
+////        title.setGravity(Gravity.CENTER);
+////        title.setTextSize(16);
+////        title.setTextColor(Color.BLACK);
+////        title.setPadding(0,30,0,20);
+//
+////        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+////            @Override
+////            public void onClick(DialogInterface dialogInterface, int i) {
+////                SharedPreferences pref = getActivity().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+////                SharedPreferences.Editor editor = pref.edit();
+////                switch (i){
+////                    case 0:
+////                        ConfigInfo.getInstance().setUseData(false);
+////                        mSetData.setText("WIFI");
+//////                        setMobileDataEnabled(getActivity(),false);
+////                        break;
+////                    case 1:
+////                        ConfigInfo.getInstance().setUseData(true);
+////                        mSetData.setText("LTE/3G");
+////                        break;
+////                }
+////                editor.putBoolean("useData",ConfigInfo.getInstance().isUseData());
+////                editor.apply();
+////                dialogInterface.dismiss();
+////            }
+////        }).setCustomTitle(customTitle);
+////        builder.show();
+//    }
 
     private void showBandDialog(){
         LayoutInflater inflater = LayoutInflater.from(getActivity());
