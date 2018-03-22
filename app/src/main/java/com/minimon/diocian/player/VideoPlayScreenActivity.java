@@ -279,6 +279,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 }
                 playerView.findViewById(R.id.exo_ffwd).setVisibility(View.VISIBLE);
                 playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
+                findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
+                findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
             } else if (state == STATE_BRIGHT_CTRL) {
                 findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
             } else if (state == STATE_VOLUME_CTRL) {
@@ -403,6 +405,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             EpisodeInfo.getInsatnace().setIdx(list.getString("idx"));
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
 //            if(isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
+
 //                EpisodeInfo.getInsatnace().setResumePosition(0);
 //                Log.d("setPosition-9", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
 //            }
