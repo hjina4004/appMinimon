@@ -159,13 +159,16 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
             public void onScroll(int l, int t, int oldl, int oldt) {
                 int availableDepth = 30;
                 if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
-                    if(t>oldt){
+                    Log.d("webViewPageName",webViewPageName);
+                    if(t-oldt > availableDepth){
+                        Log.d("webViewPageName","tisbigger");
                         view_main_toolbar.setVisibility(View.GONE);
                     }else if (oldt-t > availableDepth){
+                        Log.d("webViewPageName","oldtisbigger");
                         view_main_toolbar.setVisibility(View.VISIBLE);
                     }
                 }else{
-                    if(t>oldt){
+                    if(t-oldt > availableDepth){
                         view_main_toolbar2.setVisibility(View.GONE);
                     }else if (oldt-t > availableDepth){
                         view_main_toolbar2.setVisibility(View.VISIBLE);
