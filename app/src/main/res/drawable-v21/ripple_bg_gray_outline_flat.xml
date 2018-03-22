@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true">
-        <shape android:shape="rectangle">
-            <corners android:radius="@dimen/base_radius" />
-            <solid android:color="@color/colorBaseRipple"/>
-        </shape>
-    </item>
-    <item android:state_focused="true">
-        <shape android:shape="rectangle">
-            <corners android:radius="@dimen/base_radius" />
-            <solid android:color="@color/colorBaseEditText"/>
-        </shape>
-    </item>
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/colorBaseRipple">
+    <!-- 위의 색상은 Ripple Effect의 Color를 가리킵니다. -->
+
     <item>
+        <!--
+            Item 하위에 Drawable를 추가할 수 있습니다.
+            이는 버튼의 배경이 됩니다.
+        -->
         <shape android:shape="rectangle">
             <corners android:radius="@dimen/base_radius" />
             <solid android:color="@color/colorBaseEditText"/>
         </shape>
     </item>
-</selector>
+</ripple>

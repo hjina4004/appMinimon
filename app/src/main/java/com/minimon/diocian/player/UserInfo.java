@@ -24,6 +24,34 @@ public class UserInfo {
     private String mFixed;
     private String mPWD;
 
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
+
+    public String getDeviceOS() {
+        return deviceOS;
+    }
+
+    public void setDeviceOS(String deviceOS) {
+        this.deviceOS = deviceOS;
+    }
+
+    public String getDeviceModel() {
+        return deviceModel;
+    }
+
+    public void setDeviceModel(String deviceModel) {
+        this.deviceModel = deviceModel;
+    }
+
+    private String deviceToken;
+    private String deviceOS;
+    private String deviceModel;
+
     //private constructor.
     private UserInfo(){
         //Prevent form the reflection api.

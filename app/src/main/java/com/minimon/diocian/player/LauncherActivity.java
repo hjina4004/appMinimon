@@ -85,8 +85,11 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     private void loginMinimon(){
-        String myVersion = Build.VERSION.RELEASE;
-        String myDeviceModel = Build.MODEL;
+        UserInfo userInfo = UserInfo.getInstance();
+        userInfo.setDeviceOS(Build.VERSION.RELEASE);
+        userInfo.setDeviceModel(Build.MODEL);
+        userInfo.setDeviceToken(FirebaseInstanceId.getInstance().getToken());
+
         ContentValues loginInfo = new ContentValues();
         String socialValue = "";
         if("GG".equals(social) || "FB".equals(social) || "NV".equals(social) || "KK".equals(social)) {
@@ -101,10 +104,11 @@ public class LauncherActivity extends AppCompatActivity {
             loginInfo.put("value",social);
         else
             loginInfo.put("value",strPwd);
-        loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
-        loginInfo.put("device_token", FirebaseInstanceId.getInstance().getToken());
-        loginInfo.put("device_os",myVersion);
-        loginInfo.put("device_device",myDeviceModel);
+//        loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
+        loginInfo.put("loc", "Android");
+        loginInfo.put("device_token", userInfo.getDeviceToken());
+        loginInfo.put("device_os", userInfo.getDeviceOS());
+        loginInfo.put("device_model", userInfo.getDeviceModel());
         minimonUser.login(loginInfo);
     }
 

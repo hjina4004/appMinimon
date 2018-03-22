@@ -423,10 +423,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginInfo.put("type", type);
         loginInfo.put("id", uid);
         loginInfo.put("value", password);
-        loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
-        loginInfo.put("device_token", FirebaseInstanceId.getInstance().getToken());
-        loginInfo.put("device_os",myVersion);
-        loginInfo.put("device_device",myDeviceModel);
+//        loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
+//        loginInfo.put("device_token", FirebaseInstanceId.getInstance().getToken());
+//        loginInfo.put("device_os",myVersion);
+//        loginInfo.put("device_device",myDeviceModel);
+
+        UserInfo userInfo = UserInfo.getInstance();
+        loginInfo.put("loc", "Android");
+        loginInfo.put("device_token", userInfo.getDeviceToken());
+        loginInfo.put("device_os", userInfo.getDeviceOS());
+        loginInfo.put("device_model", userInfo.getDeviceModel());
 
         print_error(null);
         minimonUser.login(loginInfo);

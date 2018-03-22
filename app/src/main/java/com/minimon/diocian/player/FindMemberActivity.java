@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.regex.Pattern;
+
 public class FindMemberActivity extends AppCompatActivity {
     private final String TAG = "FindMemberActivity";
     private MinimonUser minimonUser;
@@ -90,6 +92,9 @@ public class FindMemberActivity extends AppCompatActivity {
 
             if (resCode.equals("0000")) {
                 alertNotice(info.getString("msg"));
+            } else if (resCode.equals("0900")) {
+                String errMsg = info.has("data")? info.getJSONObject("data").getString("errMsg") : "알수 없는 오류";
+                alertNotice(errMsg);
             } else {
                 alertNotice("실패 : " + info.getString("msg"));
             }
@@ -98,8 +103,36 @@ public class FindMemberActivity extends AppCompatActivity {
         }
     }
 
+    private boolean validUID(EditText text) {
+        if (text.getText().length() < 1) {
+            alertNotice(getResources().getString(R.string.notice_none_input_id));
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean validEmail(EditText text) {
+        if (text.getText().length() < 1) {
+            alertNotice(getResources().getString(R.string.notice_none_input_email));
+            return false;
+        }
+
+        String strInput = text.getText().toString();
+        boolean flag = Pattern.matches("^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$", strInput);
+        if (!flag) {
+            alertNotice(getResources().getString(R.string.notice_error_input_email));
+            return false;
+        }
+
+        return true;
+    }
+
     public void onClickFindMember(View view) {
         EditText text = findViewById(R.id.editTextEmail);
+        if (!validEmail(text))
+            return;
+
         String strEmail[] = text.getText().toString().split("[@]");
 
         ContentValues info = new ContentValues();
@@ -112,6 +145,11 @@ public class FindMemberActivity extends AppCompatActivity {
     public void onClickResetPassword(View view) {
         EditText textUID = findViewById(R.id.editTextUserID);
         EditText textEmail = findViewById(R.id.editTextUserEmail);
+        if (!validUID(textUID))
+            return;
+        if (!validEmail(textEmail))
+            return;
+
         String strEmail[] = textEmail.getText().toString().split("[@]");
 
         ContentValues info = new ContentValues();

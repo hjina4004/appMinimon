@@ -285,7 +285,14 @@ public class NewMemberActivity extends AppCompatActivity {
         infoNewMember.put("value", strPW);
         infoNewMember.put("email", strEmail);
         infoNewMember.put("nickname", strNickname);
-        infoNewMember.put("device_id", strDeviceID);
+//        infoNewMember.put("device_id", strDeviceID);
+
+        UserInfo userInfo = UserInfo.getInstance();
+        infoNewMember.put("loc", "Android");
+        infoNewMember.put("device_token", userInfo.getDeviceToken());
+        infoNewMember.put("device_os", userInfo.getDeviceOS());
+        infoNewMember.put("device_model", userInfo.getDeviceModel());
+
         createNewMinimonMember();
 //        minimonUser.create(info);
     }
