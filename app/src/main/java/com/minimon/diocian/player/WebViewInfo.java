@@ -28,6 +28,7 @@ public class WebViewInfo {
     private String category;
     private String search_tag;
     private String htmlCode;
+    private String payHow;
 
     public String getPageName() {
         return pageName;
@@ -83,5 +84,13 @@ public class WebViewInfo {
 
     public void setHtmlCode(String htmlCode) {
         this.htmlCode = htmlCode;
+    }
+
+    public String getPayHow() {
+        return payHow;
+    }
+
+    public void setPayHow(String payHow) {
+        this.payHow = payHow;
     }
 }

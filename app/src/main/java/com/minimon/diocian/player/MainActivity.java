@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity
             bundle.putString("pageUrl", mPageUrl);
             bundle.putString("item", getIntent().getStringExtra("item"));
             bundle.putString("how", getIntent().getStringExtra("how"));
+            WebViewInfo.getInstance().setPayHow(getIntent().getStringExtra("how"));
             bundle.putString("title",getIntent().getStringExtra("title"));
             webViewFragment = new WebViewFragment();
             webViewFragment.setArguments(bundle);
@@ -633,12 +634,33 @@ public class MainActivity extends AppCompatActivity
                 tv_frag_title.setText("운영정책");
             }else if(mPageName.equals("Auth")){
                 tv_frag_title.setText("본인인증");
-            }else if(mPageName.equals("index") || mPageName.equals("paying")){
+            }else if(mPageName.equals("index")){
                 tv_frag_title.setText("이용권 구매");
             }else if(mPageName.equals("setting")){
                 tv_frag_title.setText("환경설정");
             }else if(mPageName.equals("search")){
                 tv_frag_title.setText(WebViewInfo.getInstance().getSearch_tag());
+            }else if(mPageName.equals("paying")){
+                if("PHONE".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("휴대폰 결제");
+                else if("CARD".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("신용카드 결제");
+                else if("BANK".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("계좌이체");
+                else if("VBANK".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("가상계좌");
+                else if("CULTURE".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("문화상푼권 결제");
+                else if("BOOK".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("도서문화상품권 결제");
+                else if("HAPPY".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("해피머니 상품권 결제");
+                else if("GAME".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("게임문화상품권 결제");
+                else if("PAYPAL".equals(WebViewInfo.getInstance().getPayHow()))
+                    tv_frag_title.setText("PAYPAL 결제");
+                else
+                    tv_frag_title.setText("이용권 구매");
             }
         }
     }
