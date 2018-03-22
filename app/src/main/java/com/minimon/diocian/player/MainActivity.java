@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity
             bundle.putString("pageUrl", mPageUrl);
             bundle.putString("item", getIntent().getStringExtra("item"));
             bundle.putString("how", getIntent().getStringExtra("how"));
+            bundle.putString("title",getIntent().getStringExtra("title"));
             webViewFragment = new WebViewFragment();
             webViewFragment.setArguments(bundle);
             changeFragment(webViewFragment);
@@ -626,13 +627,13 @@ public class MainActivity extends AppCompatActivity
                 tv_frag_title.setText("공지사항");
             }else if(mPageName.equals(getResources().getString(R.string.page_name_faq))){
                 tv_frag_title.setText("FAQ");
-            }else if(mPageName.equals(getResources().getString(R.string.page_name_qna_list))){
+            }else if(mPageName.contains("qna")){
                 tv_frag_title.setText("온라인 문의");
             }else if(mPageName.equals(getResources().getString(R.string.page_name_policy))){
                 tv_frag_title.setText("운영정책");
             }else if(mPageName.equals("Auth")){
                 tv_frag_title.setText("본인인증");
-            }else if(mPageName.equals("index")){
+            }else if(mPageName.equals("index") || mPageName.equals("paying")){
                 tv_frag_title.setText("이용권 구매");
             }else if(mPageName.equals("setting")){
                 tv_frag_title.setText("환경설정");

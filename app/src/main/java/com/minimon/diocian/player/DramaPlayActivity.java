@@ -985,7 +985,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     }
 
     @Override
-    public void goToPg(String url, String item, String how) {
+    public void goToPg(String url, String item, String how, String title) {
 
     }
 

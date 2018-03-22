@@ -17,6 +17,16 @@ public class ObservableWebView extends WebView {
 
     private Context context;
     private GestureDetector gestDetector;
+    private gestureListener mListener;
+
+    public interface gestureListener{
+        void onSwipeUp();
+        void onSwipeDown();
+    }
+
+    public void setListener(gestureListener listener){
+        mListener = listener;
+    }
 
     public ObservableWebView(Context context) {
         super(context);
@@ -45,9 +55,11 @@ public class ObservableWebView extends WebView {
 
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
             if (event1.getRawY() > event2.getRawY()) {
-                Log.i("WebView", "[swipe] up");
+                if(mListener!=null)
+                    mListener.onSwipeUp();
             } else {
-                Log.i("WebView", "[swipe] down");
+                if(mListener!=null)
+                    mListener.onSwipeDown();
             }
             //you can trace any touch events here
             return true;

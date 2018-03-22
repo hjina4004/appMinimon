@@ -15,7 +15,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +85,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         MinimonUser.MinimonUserListener,
         MinimonWebView.MinimonWebviewListener,
         JavascriptInterface.JavascriptInterfaceListener,
-        MyWebviewClient.myWebViewClientListener{
+        MyWebviewClient.myWebViewClientListener,
+        ObservableWebView.gestureListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM_WEBVIEW = "webViewUrl";
@@ -153,36 +156,83 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface, "minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
-
-        mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
-            @Override
-            public void onScroll(int l, int t, int oldl, int oldt) {
-                int availableDepth = 30;
-                if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
-                    Log.d("webViewPageName",webViewPageName);
-                    if(t-oldt > availableDepth){
-                        Log.d("webViewPageName","tisbigger");
-                        view_main_toolbar.setVisibility(View.GONE);
-                    }else if (oldt-t > availableDepth){
-                        Log.d("webViewPageName","oldtisbigger");
-                        view_main_toolbar.setVisibility(View.VISIBLE);
-                    }
-                }else{
-                    if(t-oldt > availableDepth){
-                        view_main_toolbar2.setVisibility(View.GONE);
-                    }else if (oldt-t > availableDepth){
-                        view_main_toolbar2.setVisibility(View.VISIBLE);
-                    }
-                }
-//                if(t!=0){
-//                    view_main_toolbar.setBackgroundColor(Color.parseColor("#"+"BF"+"FB450B"));
+        mWebView.setListener(this);
+//        mWebView.gestListener = new GestureDetector.SimpleOnGestureListener(){
+//            @Override
+//            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+////                if (e1.getRawY() > e2.getRawY()) {
+////                    Log.i("WebView", "[swipe] up");
+////                } else {
+////                    Log.i("WebView", "[swipe] down");
+////                }
+//                if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
+//                    Log.d("webViewPageName",webViewPageName);
+//                    if(e1.getRawY() > e2.getRawY()){
+//                        Log.d("webViewPageName","tisbigger");
+//                        view_main_toolbar.setVisibility(View.GONE);
+//                    }else if (e1.getRawY() < e2.getRawY()){
+//                        Log.d("webViewPageName","oldtisbigger");
+//                        view_main_toolbar.setVisibility(View.VISIBLE);
+//                    }
 //                }else{
-//                    view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+//                    if(e1.getRawY() > e2.getRawY()){
+//                        view_main_toolbar2.setVisibility(View.GONE);
+//                    }else if (e1.getRawY() < e2.getRawY()){
+//                        view_main_toolbar2.setVisibility(View.VISIBLE);
+//                    }
 //                }
+//                return super.onFling(e1, e2, velocityX, velocityY);
+//            }
+//        };
 
-            }
-        });
+//        mWebView.setOnScrollChangedCallback(new ObservableWebView.OnScrollChangedCallback() {
+//            @Override
+//            public void onScroll(int l, int t, int oldl, int oldt) {
+//                int availableDepth = 30;
+//                if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
+//                    Log.d("webViewPageName",webViewPageName);
+//                    if(t-oldt > availableDepth){
+//                        Log.d("webViewPageName","tisbigger");
+//                        view_main_toolbar.setVisibility(View.GONE);
+//                    }else if (oldt-t > availableDepth){
+//                        Log.d("webViewPageName","oldtisbigger");
+//                        view_main_toolbar.setVisibility(View.VISIBLE);
+//                    }
+//                }else{
+//                    if(t-oldt > availableDepth){
+//                        view_main_toolbar2.setVisibility(View.GONE);
+//                    }else if (oldt-t > availableDepth){
+//                        view_main_toolbar2.setVisibility(View.VISIBLE);
+//                    }
+//                }
+////                if(t!=0){
+////                    view_main_toolbar.setBackgroundColor(Color.parseColor("#"+"BF"+"FB450B"));
+////                }else{
+////                    view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
+////                }
+//
+//            }
+//        });
         moveWebUrl();
+    }
+
+    @Override
+    public void onSwipeUp() {
+        if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
+            view_main_toolbar.setVisibility(View.GONE);
+        }else{
+            view_main_toolbar2.setVisibility(View.GONE);
+        }
+
+    }
+
+    @Override
+    public void onSwipeDown() {
+        if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
+            view_main_toolbar.setVisibility(View.VISIBLE);
+        }else{
+            view_main_toolbar2.setVisibility(View.VISIBLE);
+        }
     }
 
     public void moveWebUrl(){
@@ -299,14 +349,17 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         startActivity(intent);
     }
 
-    private void goToPayWeb(String url, String item, String how){
+    private void goToPayWeb(String url, String item, String how, String title){
         Intent intent = new Intent(getActivity(),MainActivity.class);
         intent.putExtra("pageUrl",url);
         intent.putExtra("pageName","paying");
         intent.putExtra("item",item);
         intent.putExtra("how",how);
+        intent.putExtra("title",title);
         startActivity(intent);
     }
+
+
 
     @Override
     public void onResponseHtml(String html, String baseUrl) {
@@ -323,9 +376,9 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void closeDepthRefreshWeb(String depth) {}
 
     @Override
-    public void goToPg(String url, String item, String how) {
-        Log.d("goToPgValues",url+","+item+","+how);
-        goToPayWeb(url,item,how);
+    public void goToPg(String url, String item, String how, String title) {
+        Log.d("goToPgValues",url+","+item+","+how + "," + title);
+        goToPayWeb(url,item,how,title);
     }
 
     @Override

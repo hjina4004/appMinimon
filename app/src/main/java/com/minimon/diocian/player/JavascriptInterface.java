@@ -18,7 +18,7 @@ public class JavascriptInterface {
         void onGoToWeb(String url, String page, String key, String value);
         void closeRefreshWeb(String url, String page, String key, String value);
         void closeDepthRefreshWeb(String depth);
-        void goToPg(String url, String item, String how);
+        void goToPg(String url, String item, String how, String title);
         void goToSearch();
         void changePlayer(String idx);
     }
@@ -67,10 +67,10 @@ public class JavascriptInterface {
     }
 
     @android.webkit.JavascriptInterface
-    public void goToPG(String url, String item, String how){
+    public void goToPG(String url, String item, String how, String title){
         Log.d("JavascriptInterface", "goToPG");
         if(mListener != null){
-            mListener.goToPg(url,item,how);
+            mListener.goToPg(url,item,how, title);
         }
     }
 

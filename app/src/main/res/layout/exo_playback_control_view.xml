@@ -20,7 +20,7 @@
    <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:background="#CC000000"
+       android:background="@drawable/background_toolbar"
        android:padding="8dp">
       <TextView
           android:id="@+id/tv_exo_title"
@@ -131,7 +131,7 @@
        android:layout_height="wrap_content"
        android:layout_alignParentBottom="true"
        android:layoutDirection="ltr"
-       android:background="#CC000000"
+       android:background="@drawable/background_playerbottom"
        android:orientation="vertical">
 
       <!--<LinearLayout-->

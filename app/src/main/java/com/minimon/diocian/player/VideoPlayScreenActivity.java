@@ -402,13 +402,14 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             videoUrl = videoObj.getString("playUrl");
             EpisodeInfo.getInsatnace().setIdx(list.getString("idx"));
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
-            if(isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
-                EpisodeInfo.getInsatnace().setResumePosition(0);
-                Log.d("setPosition-9", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
-            }
-            else if(isChangeBandWidth){
-                isChangeBandWidth = false;
-            }
+//            if(isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
+//                EpisodeInfo.getInsatnace().setResumePosition(0);
+//                Log.d("setPosition-9", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+//            }
+//            else
+//                if(isChangeBandWidth){
+//                isChangeBandWidth = false;
+//            }
             initializePlayer();
         }catch (JSONException e){
             e.printStackTrace();

@@ -153,6 +153,8 @@ public class GateActivity extends AppCompatActivity {
             pager_indicator.removeAllViews();
         }
         pager_indicator = findViewById(R.id.viewPagerCountDots);
+        if(dotsCount < 2)
+            return;
         dots = new ImageView[dotsCount];
         for (int i = 0; i < dotsCount; i++) {
             dots[i] = new ImageView(getApplicationContext());
