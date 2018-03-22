@@ -92,6 +92,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private ImageView mPrev;
     private ImageView mPlay;
     private ImageView mNext;
+    private ImageView mPause;
     private TextView mTitle;
 
 
@@ -149,8 +150,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             @Override
             public void onVisibilityChange(int visibility) {
                 Log.d("GestureTag", "onVisibilityChange: " + visibility);
-                if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL)
+                if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL) {
                     playerView.hideController();
+                }else if(visibility == 8){
+                    changeState(STATE_IDLE);
+                }
             }
         });
 
@@ -488,6 +492,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         mPrev.setImageResource(R.drawable.icon_b_prev);
         mNext = controlView.findViewById(R.id.exo_ffwd);
         mNext.setImageResource(R.drawable.icon_b_ffwd);
+        mPause = controlView.findViewById(R.id.exo_pause);
+        mPause.setImageResource(R.drawable.icon_b_stop);
         mTitle = controlView.findViewById(R.id.tv_exo_title);
         mTitle.setText(EpisodeInfo.getInsatnace().getTitle());
         mTitle.setTextSize(19);

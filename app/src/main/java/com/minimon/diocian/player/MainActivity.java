@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -54,9 +56,11 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity
     private String mPageUrl;
     private String mPageKey;
     private String mPageValue;
+    private boolean hasTicket = false;
 
     @Override
     public void onSucess(JSONObject data) {
@@ -395,24 +400,39 @@ public class MainActivity extends AppCompatActivity
         View view  = navigationView.getHeaderView(0);
 
         TextView tvUserNickname = view.findViewById(R.id.tv_user_nickname);
-        TextView tvUserPoint = view.findViewById(R.id.tv_menu_point);
-        TextView tvUserFixed = view.findViewById(R.id.tv_menu_charge);
+        ImageView img_menu_nickname = view.findViewById(R.id.img_menu_nickname);
+
+//        TextView tvUserPoint = view.findViewById(R.id.tv_menu_point);
+//        TextView tvUserFixed = view.findViewById(R.id.tv_menu_charge);
+
 
         UserInfo userInfo = UserInfo.getInstance();
         tvUserNickname.setText(userInfo.getNickname());
-        Integer point = Integer.parseInt(userInfo.getPoint());
-        tvUserPoint.setText(String.format("%,d", point));
+        if("GG".equals(UserInfo.getInstance().getSocial())){
+            Picasso.with(this).load(R.mipmap.a008_gnb_sns_google).transform(new CircleTransform()).into(img_menu_nickname);
+        }else if("NV".equals(UserInfo.getInstance().getSocial())){
+            Picasso.with(this).load(R.mipmap.a008_gnb_sns_naver).transform(new CircleTransform()).into(img_menu_nickname);
+        }else if("FB".equals(UserInfo.getInstance().getSocial())){
+            Picasso.with(this).load(R.mipmap.a008_gnb_sns_facebook).transform(new CircleTransform()).into(img_menu_nickname);
+        }else if("KK".equals(UserInfo.getInstance().getSocial())){
+            Picasso.with(this).load(R.mipmap.a008_gnb_sns_kakao).transform(new CircleTransform()).into(img_menu_nickname);
+        }else{
+            Picasso.with(this).load(R.drawable.ic_user).transform(new CircleTransform()).into(img_menu_nickname);
+        }
 
-        tvUserFixed.setText(checkFixed(userInfo.getFixed()));
+        Integer point = Integer.parseInt(userInfo.getPoint());
+//        tvUserPoint.setText(String.format("%,d", point));
+//
+//        tvUserFixed.setText(checkFixed(userInfo.getFixed()));
 
         LinearLayout view_logout = view.findViewById(R.id.view_menu_logout);
         view_logout.setOnClickListener(drawerClickListenr);
-        LinearLayout view_menu_go_home = view.findViewById(R.id.view_menu_go_home);
-        view_menu_go_home.setOnClickListener(drawerClickListenr);
+//        LinearLayout view_menu_go_home = view.findViewById(R.id.view_menu_go_home);
+//        view_menu_go_home.setOnClickListener(drawerClickListenr);
         ImageView img_menu_close = view.findViewById(R.id.img_menu_close);
         img_menu_close.setOnClickListener(drawerClickListenr);
-        LinearLayout view_menu_cookies = view.findViewById(R.id.view_menu_cookies);
-        view_menu_cookies.setOnClickListener(drawerClickListenr);
+//        LinearLayout view_menu_cookies = view.findViewById(R.id.view_menu_cookies);
+//        view_menu_cookies.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_user_info = view.findViewById(R.id.view_menu_user_info);
         view_menu_user_info.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_purchase = view.findViewById(R.id.view_menu_purchase);
@@ -435,18 +455,31 @@ public class MainActivity extends AppCompatActivity
         view_menu_qna.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_policy = view.findViewById(R.id.view_menu_policy);
         view_menu_policy.setOnClickListener(drawerClickListenr);
-        LinearLayout view_menu_fix = view.findViewById(R.id.view_menu_fix);
-        view_menu_fix.setOnClickListener(drawerClickListenr);
-
+//        LinearLayout view_menu_fix = view.findViewById(R.id.view_menu_fix);
+//        view_menu_fix.setOnClickListener(drawerClickListenr);
+        TextView tv_menu_has_ticket = view.findViewById(R.id.tv_menu_hasTicket);
+        tv_menu_has_ticket.setText(checkFixed(userInfo.getFixed()));
+        //tvUserFixed.setText(checkFixed(userInfo.getFixed()));
+        TextView tv_menu_go_ticket = view.findViewById(R.id.tv_menu_go_ticket);
+        if(hasTicket){
+            tv_menu_go_ticket.setText("확인하기>");
+        }else{
+            tv_menu_go_ticket.setText("이용권 신청>");
+        }
+        tv_menu_go_ticket.setOnClickListener(drawerClickListenr);
     }
 
     private String checkFixed(String fixed){
         if("0".equals(fixed)){
-            return "0000.00.00";
+            hasTicket = false;
+            return "이용권 없음";
+        }else{
+            hasTicket = true;
+            return "이용권 사용 중";
         }
-        fixed = fixed.replaceAll("[^0-9]", "");
-        fixed = fixed.substring(0,4)+"."+fixed.substring(4,6)+"."+fixed.substring(6,8);
-        return fixed;
+//        fixed = fixed.replaceAll("[^0-9]", "");
+//        fixed = fixed.substring(0,4)+"."+fixed.substring(4,6)+"."+fixed.substring(6,8);
+//        return fixed;
     }
 
     private void SearchResult(){
@@ -517,13 +550,13 @@ public class MainActivity extends AppCompatActivity
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                     drawer.closeDrawer(GravityCompat.START);
                     break;
-                case R.id.view_menu_go_home:
-                    goMainWeb();
-                    break;
-                case R.id.view_menu_cookies:
-                    info.setPageName(getResources().getString(R.string.page_name_cookie_list));
-                    newActivity(info.getPageName());
-                    break;
+//                case R.id.view_menu_go_home:
+//                    goMainWeb();
+//                    break;
+//                case R.id.view_menu_cookies:
+//                    info.setPageName(getResources().getString(R.string.page_name_cookie_list));
+//                    newActivity(info.getPageName());
+//                    break;
                 case R.id.view_menu_user_info:
                     info.setPageName(getResources().getString(R.string.page_name_info));
                     newActivity(info.getPageName());
@@ -565,13 +598,22 @@ public class MainActivity extends AppCompatActivity
                     info.setPageName(getResources().getString(R.string.page_name_policy));
                     newActivity(info.getPageName());
                     break;
-                case R.id.view_menu_fix:
-                    info.setPageName(getResources().getString(R.string.page_name_index));
-                    newActivity(info.getPageName());
-                    break;
+//                case R.id.view_menu_fix:
+//                    info.setPageName(getResources().getString(R.string.page_name_index));
+//                    newActivity(info.getPageName());
+//                    break;
                 case R.id.view_menu_setting:
                     newActivity("setting");
                     return;
+                case R.id.tv_menu_go_ticket:
+                    if(hasTicket){
+                        info.setPageName(getResources().getString(R.string.page_name_info));
+                        newActivity(info.getPageName());
+                    }else{
+                        info.setPageName(getResources().getString(R.string.page_name_index));
+                        newActivity(info.getPageName());
+                    }
+                    break;
             }
         }
     };

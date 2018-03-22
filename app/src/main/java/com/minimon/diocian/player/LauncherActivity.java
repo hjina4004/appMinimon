@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,14 +25,14 @@ public class LauncherActivity extends AppCompatActivity {
     private String token;
     private String social;
 
-    private OAuthLoginDialogMng mDialogMng;
+    private long timeout_delay = 3000;
+    private boolean enoughWait = false;
+    private boolean respondeLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launcher);
-
-        mDialogMng = new OAuthLoginDialogMng();
 
         initMinimon();
         loadLoginInfo();
@@ -67,12 +68,23 @@ public class LauncherActivity extends AppCompatActivity {
         if(strUID.isEmpty()){
             goToGate();
         }else{
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            enoughWait = true;
+                            gotoMain();
+                        }
+                    });
+                }
+            }, timeout_delay);
             loginMinimon();
         }
     }
 
     private void loginMinimon(){
-        mDialogMng.showProgressDlg(this,"미니몬 로그인 중입니다",null);
         String myVersion = Build.VERSION.RELEASE;
         String myDeviceModel = Build.MODEL;
         ContentValues loginInfo = new ContentValues();
@@ -119,7 +131,6 @@ public class LauncherActivity extends AppCompatActivity {
      */
 
     private void resultMinimonLogin(JSONObject info) {
-        mDialogMng.hideProgressDlg();
         try {
             UserInfo userInfo = UserInfo.getInstance();
             String resCode = info.has("resCode") ? info.getString("resCode") : "";
@@ -130,6 +141,7 @@ public class LauncherActivity extends AppCompatActivity {
                 userInfo.setPWD(strPwd);
                 setSetting();
 //                saveLoginInfo();
+                respondeLogin = true;
                 gotoMain();
             }else{
                 Log.d("LauncherLog","not 0000 error");
@@ -156,9 +168,11 @@ public class LauncherActivity extends AppCompatActivity {
     }
 
     public void gotoMain() {
-        Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        if (enoughWait && respondeLogin) {
+            Intent intent = new Intent(this.getApplicationContext(), MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 
     private void goToGate(){

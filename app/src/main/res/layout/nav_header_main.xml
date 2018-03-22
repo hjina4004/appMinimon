@@ -1,323 +1,169 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/colorBaseBG"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:paddingTop="23.33dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingEnd="@dimen/base_padding"
-        android:paddingLeft="@dimen/base_padding"
-        android:paddingRight="@dimen/base_padding"
-        android:paddingStart="@dimen/base_padding"
-        android:orientation="vertical">
-    <ImageView
-        android:id="@+id/img_menu_close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:src="@mipmap/a015_search_close"
-        />
-    <TextView
-        android:id="@+id/tv_user_nickname"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:drawableLeft="@drawable/ic_user"
-        android:drawableStart="@drawable/ic_user"
-        android:drawablePadding="17.67dp"
-        android:gravity="center_vertical"
-        android:text="@string/init_nickname"
-        android:textColor="@color/colorBaseText"
-        android:textSize="@dimen/menu_font_size_uid" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="11.33dp"
-        android:layout_marginBottom="14dp">
-        <LinearLayout
-            android:id="@+id/view_menu_go_home"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="#333"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_home"
-                android:layout_marginRight="23dp"
-                android:layout_marginEnd="23dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_gravity="center_vertical"/>
-            <TextView
-                android:id="@+id/tv_go_home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btn_home"
-                android:textColor="#fff"
-                android:textSize="15dp"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/view_menu_logout"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="#333"
-            android:layout_marginLeft="9dp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_logout"
-                android:layout_marginRight="15.67dp"
-                android:layout_marginLeft="15dp"
-                android:layout_gravity="center_vertical"/>
-            <TextView
-                android:id="@+id/tv_logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/menu_logout"
-                android:textColor="#fff"
-                android:textSize="15dp"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.33dp"
-        android:background="@color/MainColor" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40.33dp"
-        android:orientation="horizontal"
-        >
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            >
-            <TextView
-                android:id="@+id/img_menu_point"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/shape_circle"
-                android:text="@string/mark_point"
-                android:textColor="@color/colorBaseText"
-                android:textSize="@dimen/menu_font_size_link"
-                android:gravity="center"
-                android:layout_centerVertical="true"
-                />
-            <TextView
-                android:id="@+id/tv_menu_point2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_point"
-                android:textColor="#fff"
-                android:textSize="13.92dp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/img_menu_point"
-                android:layout_marginLeft="9dp"
-                android:layout_marginStart="9dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center_vertical"
-                android:layout_marginEnd="16dp"/>
-            <TextView
-                android:id="@+id/tv_menu_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15.66dp"
-                android:textColor="@color/MainColor"
-                android:text="@string/init_point"
-                android:gravity="center_vertical"
-                android:layout_toRightOf="@id/tv_menu_point2"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical">
-            <TextView
-                android:id="@+id/img_menu_ticket"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/shape_circle"
-                android:text="@string/mark_fixed"
-                android:textColor="@color/colorBaseText"
-                android:textSize="@dimen/menu_font_size_link"
-                android:gravity="center"
-                android:layout_centerVertical="true"
-                />
-            <TextView
-                android:id="@+id/tv_menu_ticket"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/menu_charge"
-                android:textColor="#fff"
-                android:textSize="13.92dp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/img_menu_ticket"
-                android:layout_marginLeft="9dp"
-                android:layout_marginStart="9dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center_vertical"/>
-            <TextView
-                android:id="@+id/tv_menu_charge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="13.92dp"
-                android:textColor="#fff"
-                android:text="@string/init_fixed"
-                android:gravity="center_vertical"
-                android:layout_toRightOf="@id/tv_menu_ticket"
-                android:layout_centerVertical="true"/>
-        </RelativeLayout>
-    </LinearLayout>
-</LinearLayout>
+    android:gravity="top"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#222222"
-        android:paddingTop="10dp"
         android:paddingEnd="@dimen/base_padding"
         android:paddingLeft="@dimen/base_padding"
         android:paddingRight="@dimen/base_padding"
-        android:paddingStart="@dimen/base_padding">
+        android:paddingStart="@dimen/base_padding"
+        android:layout_marginTop="23.33dp">
+
+        <ImageView
+            android:id="@+id/img_menu_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:src="@mipmap/a015_search_close" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#767b7f"
             android:orientation="horizontal">
-            <!--이용권-->
-            <LinearLayout
-                android:id="@+id/view_menu_fix"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:layout_margin="0.33dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:background="#222222">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_charge"
-                    android:paddingLeft="13.33dp"
-                    android:layout_gravity="center_vertical"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/menu_charge"
-                    android:textSize="15.66dp"
-                    android:textColor="#fff"
-                    android:gravity="center"
-                    android:paddingLeft="8.67dp"
-                    android:layout_gravity="center_vertical"
-                    />
-            </LinearLayout>
-            <!--최근 본 영상-->
-            <LinearLayout
-                android:id="@+id/view_menu_cookies"
-                android:layout_width="0dp"
-                android:layout_weight="1"
+            <ImageView
+                android:id="@+id/img_menu_nickname"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0.33dp"
-                android:layout_margin="0.33dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:background="#222222">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_recent"
-                    android:paddingLeft="13.33dp"
-                    android:layout_gravity="center_vertical"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/menu_last_watched"
-                    android:textSize="15.66dp"
-                    android:textColor="#fff"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:paddingLeft="8.67dp"
-                    />
-            </LinearLayout>
+                />
+            <TextView
+                android:id="@+id/tv_user_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="17.67dp"
+                android:gravity="center_vertical"
+                android:text="@string/init_nickname"
+                android:textColor="@color/colorBaseText"
+                android:textSize="@dimen/menu_font_size_uid" />
         </LinearLayout>
+
+
+
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="17.33dp"
+        android:gravity="center_vertical"
+        android:paddingBottom="17.33dp">
+        <ImageView
+            android:id="@+id/img_menu_ticket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_charge"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20.33dp"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/tv_menu_hasTicket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/img_menu_ticket"
+            android:layout_centerVertical="true"
+            android:textColor="#fff"
+            android:textSize="17dp"
+            android:text="이용권 없음"/>
+
+        <TextView
+            android:id="@+id/tv_menu_go_ticket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|end"
+            android:gravity="right|end"
+            android:text="이용권 신청 >"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="#555"
+            android:textSize="15dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#222222"
+        android:orientation="vertical"
+        android:paddingEnd="@dimen/base_padding"
+        android:paddingLeft="@dimen/base_padding"
+        android:paddingRight="@dimen/base_padding"
+        android:paddingStart="@dimen/base_padding"
+        android:paddingTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#fff"
-            android:text="@string/menu_my_info"
+            android:paddingBottom="4dp"
             android:paddingTop="7dp"
-            android:paddingBottom="4dp"/>
+            android:text="@string/menu_my_info"
+            android:textColor="#fff" />
         <!--내정보-->
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#767b7f">
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:stretchColumns="*"
-                android:background="#767b7f">
-                <TableRow
-                    android:layout_weight="1">
+                android:background="#767b7f"
+                android:stretchColumns="*">
+
+                <TableRow android:layout_weight="1">
+
                     <LinearLayout
                         android:id="@+id/view_menu_user_info"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingTop="6.67dp"
-                        android:background="#222222"
-                        android:layout_marginRight="0.33dp"
+                        android:layout_marginBottom="0.33dp"
                         android:layout_marginEnd="0.33dp"
                         android:layout_marginLeft="0.33dp"
+                        android:layout_marginRight="0.33dp"
                         android:layout_marginStart="0.33dp"
                         android:layout_marginTop="0.33dp"
-                        android:layout_marginBottom="0.33dp">
+                        android:layout_weight="1"
+                        android:background="#222222"
+                        android:orientation="vertical"
+                        android:paddingTop="6.67dp">
+
                         <ImageView
                             android:id="@+id/img_member"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_mypage"
-                            android:layout_gravity="center_horizontal"/>
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_mypage" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="8.67dp"
-                            android:paddingBottom="11.33dp"
                             android:gravity="center_horizontal"
+                            android:paddingBottom="11.33dp"
+                            android:paddingTop="8.67dp"
                             android:text="회원정보"
                             android:textColor="#ffffff"
                             android:textSize="10.43dp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/view_menu_purchase"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="fill_parent"
-                        android:orientation="vertical"
-                        android:paddingTop="6.67dp"
-                        android:layout_marginTop="0.33dp"
-                        android:layout_marginRight="0.33dp"
-                        android:layout_marginEnd="0.33dp"
                         android:layout_marginBottom="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginTop="0.33dp"
+                        android:layout_weight="1"
                         android:background="#222222"
-                        android:gravity="bottom">
+                        android:gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingTop="6.67dp">
 
                         <ImageView
                             android:id="@+id/img_watch"
@@ -336,87 +182,92 @@
                             android:textColor="#ffffff"
                             android:textSize="10.43dp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/view_menu_favorite"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="fill_parent"
-                        android:orientation="vertical"
-                        android:layout_marginRight="0.33dp"
-                        android:layout_marginEnd="0.33dp"
-                        android:layout_marginTop="0.33dp"
                         android:layout_marginBottom="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginTop="0.33dp"
+                        android:layout_weight="1"
                         android:background="#222222"
-                        android:gravity="bottom">
+                        android:gravity="bottom"
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/img_hearth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_favorite"
-                            android:layout_gravity="center_horizontal"/>
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_favorite" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="8.67dp"
-                            android:paddingBottom="11.33dp"
                             android:gravity="center_horizontal"
+                            android:paddingBottom="11.33dp"
+                            android:paddingTop="8.67dp"
                             android:text="찜한영상"
                             android:textColor="#ffffff"
-                            android:textSize="10.43dp"
-                            />
+                            android:textSize="10.43dp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/view_menu_subscribe"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="fill_parent"
-                        android:orientation="vertical"
-                        android:background="#222222"
-                        android:layout_marginTop="0.33dp"
-                        android:layout_marginRight="0.33dp"
-                        android:layout_marginEnd="0.33dp"
                         android:layout_marginBottom="0.33dp"
-                        android:gravity="bottom">
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_marginTop="0.33dp"
+                        android:layout_weight="1"
+                        android:background="#222222"
+                        android:gravity="bottom"
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/img_subscribe"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_subscribe"
-                            android:layout_gravity="center_horizontal"/>
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_subscribe" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:paddingTop="8.67dp"
                             android:paddingBottom="11.33dp"
+                            android:paddingTop="8.67dp"
                             android:text="구독채널"
                             android:textColor="#ffffff"
-                            android:textSize="10.43dp"
-                            />
+                            android:textSize="10.43dp" />
                     </LinearLayout>
                 </TableRow>
+
                 <TableRow>
                     <!--<View-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="0.33dp"-->
                     <!--android:background="#767b7f"/>-->
                 </TableRow>
+
                 <TableRow>
+
                     <LinearLayout
                         android:id="@+id/view_menu_point_history"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="fill_parent"
-                        android:orientation="vertical"
-                        android:layout_marginRight="0.33dp"
-                        android:layout_marginEnd="0.33dp"
                         android:layout_marginBottom="0.33dp"
+                        android:layout_marginEnd="0.33dp"
                         android:layout_marginLeft="0.33dp"
+                        android:layout_marginRight="0.33dp"
                         android:layout_marginStart="0.33dp"
+                        android:layout_weight="1"
+                        android:background="#222222"
                         android:gravity="bottom"
-                        android:background="#222222">
+                        android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/img_history"
@@ -429,53 +280,55 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:paddingTop="8.67dp"
                             android:paddingBottom="11.33dp"
+                            android:paddingTop="8.67dp"
                             android:text="포인트내역"
                             android:textColor="#ffffff"
                             android:textSize="10.43dp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/view_menu_pay_history"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="fill_parent"
-                        android:orientation="vertical"
-                        android:layout_marginRight="0.33dp"
-                        android:layout_marginEnd="0.33dp"
                         android:layout_marginBottom="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_weight="1"
+                        android:background="#222"
                         android:gravity="bottom"
-                        android:background="#222">
+                        android:orientation="vertical">
+
                         <ImageView
                             android:id="@+id/img_payment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_payment"
-                            android:layout_gravity="center_horizontal"/>
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_payment" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:paddingTop="8.67dp"
                             android:paddingBottom="11.33dp"
+                            android:paddingTop="8.67dp"
                             android:text="결제내역"
                             android:textColor="#ffffff"
-                            android:textSize="10.43dp"
-                            />
+                            android:textSize="10.43dp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/view_menu_setting"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:background="#222222"
-                        android:paddingTop="6.67dp"
-                        android:layout_marginRight="0.33dp"
-                        android:layout_marginEnd="0.33dp"
                         android:layout_marginBottom="0.33dp"
-                        android:gravity="bottom">
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginRight="0.33dp"
+                        android:layout_weight="1"
+                        android:background="#222222"
+                        android:gravity="bottom"
+                        android:orientation="vertical"
+                        android:paddingTop="6.67dp">
 
                         <ImageView
                             android:id="@+id/img_setting"
@@ -487,21 +340,20 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingTop="8.67dp"
+                            android:gravity="center_horizontal"
                             android:paddingBottom="11.33dp"
+                            android:paddingTop="8.67dp"
                             android:text="환경설정"
                             android:textColor="#ffffff"
-                            android:textSize="10.43dp"
-                            android:gravity="center_horizontal"/>
+                            android:textSize="10.43dp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="fill_parent"
-                        android:orientation="vertical"
-                        android:background="#222222">
-                    </LinearLayout>
+                        android:layout_weight="1"
+                        android:background="#222222"
+                        android:orientation="vertical"></LinearLayout>
                 </TableRow>
             </TableLayout>
         </android.support.constraint.ConstraintLayout>
@@ -509,202 +361,176 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="7dp"
             android:paddingBottom="4dp"
+            android:paddingTop="17dp"
             android:text="고객센터"
-            android:textColor="#fff"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="#767b7f">
-            <LinearLayout
-                android:id="@+id/view_menu_notice"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:paddingTop="6.67dp"
-                android:orientation="vertical"
-                android:background="#222222"
-                android:layout_marginLeft="0.33dp"
-                android:layout_marginStart="0.33dp"
-                android:layout_marginTop="0.33dp"
-                android:layout_marginBottom="0.33dp"
-                android:gravity="bottom">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_notice"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp"
-                    />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="8.67dp"
-                    android:paddingBottom="11.33dp"
-                    android:text="공지사항"
-                    android:textColor="#fff"
-                    android:textSize="10.44dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/view_menu_faq"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:paddingTop="6.67dp"
-                android:orientation="vertical"
-                android:background="#222222"
-                android:layout_marginLeft="0.33dp"
-                android:layout_marginStart="0.33dp"
-                android:layout_marginTop="0.33dp"
-                android:layout_marginBottom="0.33dp"
-                android:gravity="bottom">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_faq"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="8.67dp"
-                    android:paddingBottom="11.33dp"
-                    android:text="FAQ"
-                    android:textColor="#fff"
-                    android:textSize="10.44dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/view_menu_qna"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="fill_parent"
-                android:paddingTop="6.67dp"
-                android:orientation="vertical"
-                android:background="#222222"
-                android:layout_marginLeft="0.33dp"
-                android:layout_marginStart="0.33dp"
-                android:layout_marginTop="0.33dp"
-                android:layout_marginBottom="0.33dp"
-                android:gravity="bottom">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_qna"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="8.67dp"
-                    android:paddingBottom="11.33dp"
-                    android:text="1:1 Q&amp;A"
-                    android:textColor="#fff"
-                    android:textSize="10.44dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/view_menu_policy"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:paddingTop="6.67dp"
-                android:orientation="vertical"
-                android:background="#222222"
-                android:layout_marginLeft="0.33dp"
-                android:layout_marginStart="0.33dp"
-                android:layout_marginTop="0.33dp"
-                android:layout_marginBottom="0.33dp"
-                android:layout_marginRight="0.33dp"
-                android:layout_marginEnd="0.33dp">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_policy"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="5dp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:paddingTop="8.67dp"
-                    android:paddingBottom="11.33dp"
-                    android:text="이용약관"
-                    android:textColor="#fff"
-                    android:textSize="10.44dp"/>
-            </LinearLayout>
-        </LinearLayout>
+            android:textColor="#fff" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="21.33dp"
-            android:background="#767b7f">
+            android:background="#767b7f"
+            android:orientation="horizontal">
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:id="@+id/view_menu_notice"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="0.33dp"
+                android:layout_marginLeft="0.33dp"
+                android:layout_marginStart="0.33dp"
+                android:layout_marginTop="0.33dp"
+                android:layout_weight="1"
                 android:background="#222222"
-                android:layout_margin="0.33dp"
-                android:paddingLeft="16.67dp"
-                android:paddingTop="7.67dp"
-                android:paddingBottom="7.67dp">
-                <TextView
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingTop="6.67dp">
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="고객센터"
-                    android:textColor="#fff"
-                    android:paddingRight="16.67dp"/>
-                <View
-                    android:layout_width="0.33dp"
-                    android:layout_height="match_parent"
-                    android:background="#767b7f"
-                    />
-                <LinearLayout
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_notice" />
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="16.67dp"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tel"
-                            android:textSize="12.18dp"
-                            android:textColor="#767b7f"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Mail"
-                            android:textSize="12.18dp"
-                            android:textColor="#767b7f"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="7.67dp"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="02-6953-1020"
-                            android:textSize="12.18dp"
-                            android:textColor="#fff"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="customer@minimon.com"
-                            android:textSize="12.18dp"
-                            android:textColor="#fff"/>
-                    </LinearLayout>
-                </LinearLayout>
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="11.33dp"
+                    android:paddingTop="8.67dp"
+                    android:text="공지사항"
+                    android:textColor="#fff"
+                    android:textSize="10.44dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/view_menu_faq"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="0.33dp"
+                android:layout_marginLeft="0.33dp"
+                android:layout_marginStart="0.33dp"
+                android:layout_marginTop="0.33dp"
+                android:layout_weight="1"
+                android:background="#222222"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingTop="6.67dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_faq" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="11.33dp"
+                    android:paddingTop="8.67dp"
+                    android:text="FAQ"
+                    android:textColor="#fff"
+                    android:textSize="10.44dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/view_menu_qna"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="0.33dp"
+                android:layout_marginLeft="0.33dp"
+                android:layout_marginStart="0.33dp"
+                android:layout_marginTop="0.33dp"
+                android:layout_weight="1"
+                android:background="#222222"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:paddingTop="6.67dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_qna" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="11.33dp"
+                    android:paddingTop="8.67dp"
+                    android:text="1:1 Q&amp;A"
+                    android:textColor="#fff"
+                    android:textSize="10.44dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/view_menu_policy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0.33dp"
+                android:layout_marginEnd="0.33dp"
+                android:layout_marginLeft="0.33dp"
+                android:layout_marginRight="0.33dp"
+                android:layout_marginStart="0.33dp"
+                android:layout_marginTop="0.33dp"
+                android:layout_weight="1"
+                android:background="#222222"
+                android:orientation="vertical"
+                android:paddingTop="6.67dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/ic_policy" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:paddingBottom="11.33dp"
+                    android:paddingTop="8.67dp"
+                    android:text="이용약관"
+                    android:textColor="#fff"
+                    android:textSize="10.44dp" />
             </LinearLayout>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="17.33dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/view_menu_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="9dp"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp">
+
+        <TextView
+            android:id="@+id/tv_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/menu_logout"
+            android:textColor="#fff"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15.67dp"
+            android:src="@drawable/ic_logout" />
     </LinearLayout>
 </LinearLayout>

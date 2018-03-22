@@ -75,15 +75,13 @@
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
 
-      <com.minimon.diocian.player.TextAwesome
+      <ImageView
           android:id="@+id/exo_pause"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerHorizontal="true"
           android:layout_centerVertical="true"
-          android:text="@string/fa_pause"
-          android:textColor="#ffffff"
-          android:textSize="50dp"
+          android:src="@drawable/ic_stop"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
