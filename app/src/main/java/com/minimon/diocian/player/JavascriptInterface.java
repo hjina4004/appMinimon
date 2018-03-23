@@ -23,6 +23,7 @@ public class JavascriptInterface {
         void closeWebView();
         void setTitle(String title);
         void closeGoToNative(String page);
+        void shareSNS(String loc, String url, String img);
     }
     private JavascriptInterfaceListener mListener;
     public void setListener(JavascriptInterfaceListener listener){mListener = listener;}
@@ -107,5 +108,12 @@ public class JavascriptInterface {
         Log.d("JavascriptInterface", "setTitle");
         if(mListener!=null)
             mListener.setTitle(title);
+    }
+
+    @android.webkit.JavascriptInterface
+    public void shareSNS(String loc, String url, String img){
+        Log.d("JavascriptInterface", "shareSNS: " + loc + ", " + url + ", " + img);
+        if(mListener!=null)
+            mListener.shareSNS(loc, url, img);
     }
 }

@@ -1230,4 +1230,14 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
             }
         });
     }
+
+    @Override
+    public void closeGoToNative(String page) {
+
+    }
+
+    @Override
+    public void shareSNS(String loc, String url, String img) {
+
+    }
 }

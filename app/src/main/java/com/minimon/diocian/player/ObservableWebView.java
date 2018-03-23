@@ -54,10 +54,13 @@ public class ObservableWebView extends WebView {
         }
 
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            if (event1.getRawY() > event2.getRawY()) {
+            float SWIPE_MIN_DISTANCE = 50;
+            float SWIPE_THRESHOLD_VELOCITY = 200;
+
+            if (event1.getRawY() - event2.getRawY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
                 if(mListener!=null)
                     mListener.onSwipeUp();
-            } else {
+            } else if (event2.getRawY() - event1.getRawY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
                 if(mListener!=null)
                     mListener.onSwipeDown();
             }

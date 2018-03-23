@@ -215,6 +215,9 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
                     case 2:
                         mSetBandwidth.setText("1080p");
                         break;
+                    case 3:
+                        mSetBandwidth.setText("자동");
+                        break;
                 }
                 dialogInterface.dismiss();
             }
@@ -251,6 +254,11 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
             mSettingList.add(new SettingItem(false,"720p"));
             mSettingList.add(new SettingItem(true,"1080p"));
             mSettingList.add(new SettingItem(false,"자동"));
+        }else if(ConfigInfo.getInstance().getBandwidth() == 3){
+            mSettingList.add(new SettingItem(false,"480p"));
+            mSettingList.add(new SettingItem(false,"720p"));
+            mSettingList.add(new SettingItem(false,"1080p"));
+            mSettingList.add(new SettingItem(true,"자동"));
         }
         adapter.notifyDataSetChanged();
     }

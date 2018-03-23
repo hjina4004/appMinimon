@@ -709,6 +709,8 @@ public class MainActivity extends AppCompatActivity
                 tv_frag_title.setText("비밀번호 수정");
             }else if("category".equals(mPageName)){
                 tv_frag_title.setText("장르보기");
+            }else if("steelcut".equals(mPageName)){
+                tv_frag_title.setText("스틸컷");
             }
         }
     }

@@ -93,7 +93,7 @@
     <string name="setting_player_set_data">데이터 설정</string>
     <string name="setting_player_set_bandwidth">플레이어 기본화질 설정</string>
     <string name="setting_player_set_bandwidth_info">플레이어에서 자동으로 재생되는 화질을 선택합니다.</string>
-    <string name="setting_player_set_data_info">LTE/3G 접속 설정 시 데이터 이용료가 발생합니다.</string>
+    <string name="setting_player_set_data_info">LTE/3G 연결 시 플레이어 재생 허용</string>
 
     <string name="setting_alert">알림 설정</string>
     <string name="setting_alert_event">이벤트 혜택 제공 알림</string>

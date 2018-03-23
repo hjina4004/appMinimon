@@ -431,6 +431,21 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void closeGoToNative(String page) {
-        goToWebMain("Contents/view",page,"","");
+        if ("intro".equals(page)) {
+            getActivity().finish();
+            Intent intent = new Intent(getActivity().getApplicationContext(), GateActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } else {
+            goToWebMain("Contents/view", page, "", "");
+        }
+    }
+
+    @Override
+    public void shareSNS(String loc, String url, String img) {
+        // shareSNS: TT, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
+        // shareSNS: GG, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
+        // shareSNS: FB, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
+        // shareSNS: KK, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
     }
 }
