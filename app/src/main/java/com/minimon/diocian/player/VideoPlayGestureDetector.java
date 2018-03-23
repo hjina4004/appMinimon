@@ -225,7 +225,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                     );
         }
         else if(isShowVolumeSeekBar){
-            videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+//            videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
             ((VideoPlayScreenActivity) mContext)
                     .runOnUiThread(new Runnable() {
                                        @Override
@@ -234,7 +234,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                                                @Override
                                                public void handleMessage(Message msg) {
 //                        super.handleMessage(msg);
-                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+//                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
                                                    isShowVolumeSeekBar = false;
                                                }
                                            };

@@ -22,7 +22,6 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#555555"
                 android:layout_marginBottom="0dp"
                 android:src="@mipmap/a022_play_b_light"/>
             <com.minimon.diocian.player.VerticalSeekBar
@@ -89,8 +88,7 @@
                 android:paddingBottom="10dp"
                 android:paddingRight="7dp"
                 android:paddingLeft="7dp"
-                android:layout_marginBottom="0dp"
-                android:background="#555555"/>
+                android:layout_marginBottom="0dp"/>
             <com.minimon.diocian.player.VerticalSeekBar
                 android:id="@+id/VolumeSeekBar"
                 style="@style/VerticalSeekBarStyle"
