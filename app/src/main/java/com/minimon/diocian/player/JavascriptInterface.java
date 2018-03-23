@@ -22,6 +22,7 @@ public class JavascriptInterface {
         void changePlayer(String idx);
         void closeWebView();
         void setTitle(String title);
+        void closeGoToNative(String page);
     }
     private JavascriptInterfaceListener mListener;
     public void setListener(JavascriptInterfaceListener listener){mListener = listener;}
@@ -83,6 +84,8 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void closeGoToNative(String page){
         Log.d("JavascriptInterface", "closeGoToNative");
+        if(mListener!=null)
+            mListener.closeGoToNative(page);
     }
 
     @android.webkit.JavascriptInterface

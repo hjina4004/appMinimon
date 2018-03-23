@@ -99,6 +99,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     private RelativeLayout view_main_toolbar;
     private RelativeLayout view_main_toolbar2;
+    private TextView tv_frag_title;
     private FrameLayout view_main;
 
 //    private List<String> arrPageNameHistory = new ArrayList<>();
@@ -146,6 +147,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
         view_main_toolbar = getActivity().findViewById(R.id.view_main_toolbar);
         view_main_toolbar2 = getActivity().findViewById(R.id.view_main_toolbar2);
+        tv_frag_title = getActivity().findViewById(R.id.tv_frag_title);
         view_main = getActivity().findViewById(R.id.view_main);
 
         mWebView = (ObservableWebView) view.findViewById(R.id.webview_other);
@@ -424,6 +426,11 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void setTitle(String title) {
+        tv_frag_title.setText(title);
+    }
 
+    @Override
+    public void closeGoToNative(String page) {
+        goToWebMain("Contents/view",page,"","");
     }
 }
