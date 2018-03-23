@@ -3,12 +3,11 @@
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/colorPlayerBackground" />
-            <size android:height="20dp"
-                android:width="20dp"/>
+            <size android:height="40dp"
+                android:width="40dp"/>
         </shape>
     </item>
     <item>
-        <bitmap android:src="@mipmap/a022_detail_next"
-            android:gravity="center"/>
+        <bitmap android:src="@mipmap/a022_play_zoom_in"/>
     </item>
 </layer-list>

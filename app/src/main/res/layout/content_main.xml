@@ -42,7 +42,6 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="10dp"
                     android:src="@drawable/ic_open_drawer"/>
 
                 <ImageView
@@ -140,7 +139,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:paddingLeft="10dp"
                 android:src="@drawable/ic_back"
                 android:textColor="#fff" />
 

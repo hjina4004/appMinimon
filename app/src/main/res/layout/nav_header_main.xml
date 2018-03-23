@@ -2,8 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBaseBG"
-    android:gravity="top"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="23.33dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,8 +12,7 @@
         android:paddingEnd="@dimen/base_padding"
         android:paddingLeft="@dimen/base_padding"
         android:paddingRight="@dimen/base_padding"
-        android:paddingStart="@dimen/base_padding"
-        android:layout_marginTop="23.33dp">
+        android:paddingStart="@dimen/base_padding">
 
         <ImageView
             android:id="@+id/img_menu_close"
@@ -22,29 +21,30 @@
             android:layout_gravity="right"
             android:src="@mipmap/a015_search_close" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingEnd="@dimen/base_padding"
+        android:paddingLeft="@dimen/base_padding"
+        android:paddingRight="@dimen/base_padding"
+        android:paddingStart="@dimen/base_padding">
+        <ImageView
+            android:id="@+id/img_menu_nickname"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/img_menu_nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <TextView
-                android:id="@+id/tv_user_nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="17.67dp"
-                android:gravity="center_vertical"
-                android:text="@string/init_nickname"
-                android:textColor="@color/colorBaseText"
-                android:textSize="@dimen/menu_font_size_uid" />
-        </LinearLayout>
-
-
-
-
+            android:src="@drawable/ic_user"
+            />
+        <TextView
+            android:id="@+id/tv_user_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="17.67dp"
+            android:gravity="center_vertical"
+            android:text="@string/init_nickname"
+            android:textColor="@color/colorBaseText"
+            android:textSize="@dimen/menu_font_size_uid" />
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -82,7 +82,7 @@
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:textColor="#555"
+            android:textColor="#fff"
             android:textSize="15dp" />
     </RelativeLayout>
 
@@ -108,12 +108,12 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#767b7f">
+            android:background="#80767b7f">
 
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#767b7f"
+                android:background="#80767b7f"
                 android:stretchColumns="*">
 
                 <TableRow android:layout_weight="1">
@@ -256,44 +256,14 @@
                 <TableRow>
 
                     <LinearLayout
-                        android:id="@+id/view_menu_point_history"
-                        android:layout_width="0dp"
-                        android:layout_height="fill_parent"
-                        android:layout_marginBottom="0.33dp"
-                        android:layout_marginEnd="0.33dp"
-                        android:layout_marginLeft="0.33dp"
-                        android:layout_marginRight="0.33dp"
-                        android:layout_marginStart="0.33dp"
-                        android:layout_weight="1"
-                        android:background="#222222"
-                        android:gravity="bottom"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/img_history"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ic_point_history" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:paddingBottom="11.33dp"
-                            android:paddingTop="8.67dp"
-                            android:text="포인트내역"
-                            android:textColor="#ffffff"
-                            android:textSize="10.43dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
                         android:id="@+id/view_menu_pay_history"
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_marginBottom="0.33dp"
-                        android:layout_marginEnd="0.33dp"
                         android:layout_marginRight="0.33dp"
+                        android:layout_marginEnd="0.33dp"
+                        android:layout_marginLeft="0.33dp"
+                        android:layout_marginStart="0.33dp"
                         android:layout_weight="1"
                         android:background="#222"
                         android:gravity="bottom"
@@ -354,6 +324,12 @@
                         android:layout_weight="1"
                         android:background="#222222"
                         android:orientation="vertical"></LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:background="#222222"
+                        android:orientation="vertical"></LinearLayout>
                 </TableRow>
             </TableLayout>
         </android.support.constraint.ConstraintLayout>
@@ -369,7 +345,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#767b7f"
+            android:background="#80767b7f"
             android:orientation="horizontal">
 
             <LinearLayout

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape android:shape="oval">
-            <solid android:color="@color/MainColor" />
-            <size android:height="30dp"
-                android:width="30dp"/>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorPlayerBackground" />
+            <size android:height="20dp"
+                android:width="20dp"/>
         </shape>
     </item>
     <item>

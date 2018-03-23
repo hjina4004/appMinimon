@@ -75,10 +75,12 @@ public class MinimonWebView {
     }
 
     public void goToWeb(String url, ContentValues info){
+        WebViewInfo.getInstance().historyPush(url, info, "goToWeb");
         requestFunctionWebView(url, info);
     }
 
     public void goToPayWeb(String url, ContentValues info){
+        WebViewInfo.getInstance().historyPush(url, info,"goToPayWeb");
         requestPayFunctionWebView(url, info);
     }
 }

@@ -1,22 +1,16 @@
 package com.minimon.diocian.player;
 
+import android.content.ContentValues;
+
 /**
  * Created by GOOD on 2018-03-22.
  */
 
 public class WebViewHistory {
-    private String pageName;
+//    private String pageName;
     private String pageUrl;
-    private String pageKey;
-    private String pageValue;
-
-    public String getPageName() {
-        return pageName;
-    }
-
-    public void setPageName(String pageName) {
-        this.pageName = pageName;
-    }
+    private ContentValues content;
+    private String pageType;
 
     public String getPageUrl() {
         return pageUrl;
@@ -26,19 +20,27 @@ public class WebViewHistory {
         this.pageUrl = pageUrl;
     }
 
-    public String getPageKey() {
-        return pageKey;
+    public ContentValues getContent() {
+        return content;
     }
 
-    public void setPageKey(String pageKey) {
-        this.pageKey = pageKey;
+    public void setContent(ContentValues content) {
+        this.content = content;
     }
 
-    public String getPageValue() {
-        return pageValue;
+    public String getPageType() {
+        return pageType;
     }
 
-    public void setPageValue(String pageValue) {
-        this.pageValue = pageValue;
+    public void setPageType(String pageType) {
+        this.pageType = pageType;
     }
+//    private String pageKey;
+//    private String pageValue;
+//    private String item;
+//    private String how;
+//    private String loc;
+//    private String search_tag;
+
+
 }

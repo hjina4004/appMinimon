@@ -220,8 +220,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onSwipeUp() {
         if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
             view_main_toolbar.setVisibility(View.GONE);
-        }else{
-            view_main_toolbar2.setVisibility(View.GONE);
         }
 
     }
@@ -230,8 +228,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     public void onSwipeDown() {
         if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
             view_main_toolbar.setVisibility(View.VISIBLE);
-        }else{
-            view_main_toolbar2.setVisibility(View.VISIBLE);
         }
     }
 
@@ -246,8 +242,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         if("paying".equals(webViewPageName)){
             content.put("item",getArguments().getString("item"));
             content.put("how",getArguments().getString("how"));
-            minimonWebView.goToPayWeb(webViewUrl, content);
             content.put("loc", "Android");
+            minimonWebView.goToPayWeb(webViewUrl, content);
         }else {
             content.put("page", webViewPageName);
             if ("search".equals(webViewPageName)) {
@@ -257,14 +253,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
                 if(!webViewKey.isEmpty() && webViewKey != null && !webViewPageName.equals("Auth")) {
                     content.put(webViewKey, webViewValue);
                     content.put("loc","Android");
-                    WebViewHistory history = new WebViewHistory();
-                    history.setPageUrl(webViewUrl);
-                    history.setPageName(webViewPageName);
-                    history.setPageKey(webViewKey);
-                    history.setPageValue(webViewValue);
-                    ArrayList<WebViewHistory> arrhis = WebViewInfo.getInstance().getWebviewHistory();
-                    arrhis.add(history);
-                    WebViewInfo.getInstance().setWebviewHistory(arrhis);
                 }else{
                     content.put("loc","android");
                 }
@@ -275,7 +263,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void onBack() {
-        if (mWebView.canGoBack()) {
+        if (mWebView.canGoBack() && !"paying".equals(webViewPageName)) {
             mWebView.goBack();
         } else {
             MainActivity activity = (MainActivity) getActivity();
@@ -354,14 +342,6 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         intent.putExtra("pageName",page);
         intent.putExtra("pageKey",key);
         intent.putExtra("pageValue",value);
-        WebViewHistory history = new WebViewHistory();
-        history.setPageUrl(url);
-        history.setPageName(page);
-        history.setPageKey(key);
-        history.setPageValue(value);
-        ArrayList<WebViewHistory> arrhis = WebViewInfo.getInstance().getWebviewHistory();
-        arrhis.add(history);
-        WebViewInfo.getInstance().setWebviewHistory(arrhis);
         startActivity(intent);
     }
 
@@ -385,6 +365,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void closeRefreshWeb(String url, String page, String key, String value) {
+        getActivity().finish();
         goToWebMain(url,page,key,value);
     }
 
@@ -399,15 +380,34 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 //        }
 //        goToWebMain(depthHistory.getPageUrl(), depthHistory.getPageName(), depthHistory.getPageKey(), depthHistory.getPageValue());
 //        goToWebMain("main","","","");
-        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+
+        int dep  = Integer.parseInt(depth);
+        if(dep > 1)
+            getActivity().finish();
+        WebViewHistory history = null;
+        for(int i=0;i<dep;i++){
+            history = WebViewInfo.getInstance().historyPop();
+        }
+        if("goToPayWeb".equals(history.getPageType())){
+            minimonWebView.goToPayWeb(history.getPageUrl(), history.getContent());
+        }else{
+            minimonWebView.goToWeb(history.getPageUrl(), history.getContent());
+        }
+
+//        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
     }
 
     @Override
     public void goToPg(String url, String item, String how, String title) {
         Log.d("goToPgValues",url+","+item+","+how + "," + title);
         goToPayWeb(url,item,how,title);
+    }
+
+    @Override
+    public void closeWebView() {
+        getActivity().finish();
     }
 
     @Override
@@ -420,5 +420,10 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void loadingFinished() {
+    }
+
+    @Override
+    public void setTitle(String title) {
+
     }
 }

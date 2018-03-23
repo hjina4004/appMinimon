@@ -14,6 +14,7 @@
      limitations under the License.
 -->
 <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
@@ -51,6 +52,7 @@
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:layout_alignParentTop="true"
+          android:background="@color/colorPlayerBackground"
           android:src="@mipmap/a022_play_b_lock_on" />
    </RelativeLayout>
    <android.support.constraint.ConstraintLayout
@@ -64,16 +66,13 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_centerVertical="true"
-          android:layout_marginBottom="8dp"
-          android:layout_marginLeft="8dp"
-          android:layout_marginStart="8dp"
-          android:layout_marginTop="8dp"
           android:src="@drawable/ic_prev"
           app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintEnd_toStartOf="@+id/exo_play"
-          app:layout_constraintHorizontal_bias="0.6"
+          app:layout_constraintEnd_toStartOf="@+id/view_mask"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent" />
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintVertical_bias="0.498" />
+
 
       <ImageView
           android:id="@+id/exo_pause"
@@ -98,6 +97,16 @@
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toStartOf="parent"
           app:layout_constraintTop_toTopOf="parent" />
+      <View
+          android:id="@+id/view_mask"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
+          android:visibility="invisible"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          android:background="@color/transparent"/>
 
 
       <!--<ImageView-->
@@ -113,16 +122,12 @@
           android:layout_height="wrap_content"
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
-          android:layout_marginBottom="8dp"
-          android:layout_marginRight="8dp"
-          android:layout_marginEnd="8dp"
-          android:layout_marginTop="8dp"
           android:src="@drawable/ic_ffwd"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintHorizontal_bias="0.4"
-          app:layout_constraintStart_toEndOf="@+id/exo_play"
-          app:layout_constraintTop_toTopOf="parent" />
+          app:layout_constraintStart_toEndOf="@+id/view_mask"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintVertical_bias="0.498" />
    </android.support.constraint.ConstraintLayout>
    <LinearLayout
        android:layout_width="match_parent"
@@ -205,7 +210,7 @@
       <RelativeLayout
           android:id="@+id/exo_view_play_info"
           android:layout_width="match_parent"
-          android:layout_height="30dp"
+          android:layout_height="40dp"
           android:gravity="center_vertical"
           android:paddingLeft="15dp">
          <LinearLayout
@@ -213,11 +218,12 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:layout_centerVertical="true"
-             android:paddingRight="9.67dp"
+             android:paddingRight="5dp"
              android:layout_marginTop="6dp"
+             android:paddingTop="5dp"
+             android:paddingBottom="5dp"
              android:layout_marginBottom="6dp"
-             android:orientation="horizontal"
-             android:background="@drawable/shape_bandwidth">
+             android:orientation="horizontal">
             <TextView
                 android:id="@+id/tv_bandwidth"
                 android:layout_width="wrap_content"
@@ -246,8 +252,8 @@
              android:layout_toEndOf="@id/view_now_bandwidth"
              android:layout_toRightOf="@id/view_now_bandwidth"
              android:layout_centerVertical="true"
-             android:visibility="gone"
-             android:layout_marginLeft="20dp">
+             android:layout_marginLeft="10dp"
+             android:visibility="gone">
             <TextView
                 android:id="@+id/tv_bandwidth_auto"
                 android:layout_width="wrap_content"
@@ -260,7 +266,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:text="480p"
                 android:textColor="#fff"/>
             <TextView
@@ -270,7 +276,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/tv_bandwidth_480"
                 android:layout_toRightOf="@id/tv_bandwidth_480"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:text="720p"
                 android:textColor="#fff"/>
             <TextView
@@ -278,7 +284,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:text="1080p"
                 android:textColor="#fff"
                 />
@@ -295,12 +301,12 @@
 
             <ImageView
                 android:id="@+id/exo_fullscreen_icon"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@mipmap/a022_play_zoom_out"/>
+                android:src="@drawable/icon_zoom_out"/>
 
          </FrameLayout>
       </RelativeLayout>

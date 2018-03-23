@@ -19,6 +19,7 @@
     <color name="MainColor">#fb450d</color>
     <color name="colorBaseRipple">#80FFFFFF</color>
     <color name="colorBaseBG">#1e2328</color>
+    <color name="colorPlayerBackground">#555555</color>
     <color name="colorBaseEditText">#2b3135</color>
     <color name="colorBaseText">#ffffff</color>
     <color name="colorSubText">#777c80</color>

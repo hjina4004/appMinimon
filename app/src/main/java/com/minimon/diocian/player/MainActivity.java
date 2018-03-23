@@ -417,7 +417,7 @@ public class MainActivity extends AppCompatActivity
         }else if("KK".equals(UserInfo.getInstance().getSocial())){
             Picasso.with(this).load(R.mipmap.a008_gnb_sns_kakao).transform(new CircleTransform()).into(img_menu_nickname);
         }else{
-            Picasso.with(this).load(R.drawable.ic_user).transform(new CircleTransform()).into(img_menu_nickname);
+            Picasso.with(this).load(R.mipmap.a008_gnb_user).transform(new CircleTransform()).into(img_menu_nickname);
         }
 
         Integer point = Integer.parseInt(userInfo.getPoint());
@@ -441,8 +441,8 @@ public class MainActivity extends AppCompatActivity
         view_menu_favorite.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_subscribe = view.findViewById(R.id.view_menu_subscribe);
         view_menu_subscribe.setOnClickListener(drawerClickListenr);
-        LinearLayout view_menu_point_history = view.findViewById(R.id.view_menu_point_history);
-        view_menu_point_history.setOnClickListener(drawerClickListenr);
+//        LinearLayout view_menu_point_history = view.findViewById(R.id.view_menu_point_history);
+//        view_menu_point_history.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_pay_history = view.findViewById(R.id.view_menu_pay_history);
         view_menu_pay_history.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_setting = view.findViewById(R.id.view_menu_setting);
@@ -574,10 +574,10 @@ public class MainActivity extends AppCompatActivity
                     info.setPageName(getResources().getString(R.string.page_name_keep));
                     newActivity(info.getPageName());
                     break;
-                case R.id.view_menu_point_history:
-                    info.setPageName(getResources().getString(R.string.page_name_point_list));
-                    newActivity(info.getPageName());
-                    break;
+//                case R.id.view_menu_point_history:
+//                    info.setPageName(getResources().getString(R.string.page_name_point_list));
+//                    newActivity(info.getPageName());
+//                    break;
                 case R.id.view_menu_pay_history:
                     info.setPageName(getResources().getString(R.string.page_name_pay_list));
                     newActivity(info.getPageName());
@@ -703,6 +703,12 @@ public class MainActivity extends AppCompatActivity
                     tv_frag_title.setText("PAYPAL 결제");
                 else
                     tv_frag_title.setText("이용권 구매");
+            }else if("update.info".equals(mPageName)){
+                tv_frag_title.setText("기본정보 수정");
+            }else if("update.pwd".equals(mPageName)){
+                tv_frag_title.setText("비밀번호 수정");
+            }else if("category".equals(mPageName)){
+                tv_frag_title.setText("장르보기");
             }
         }
     }

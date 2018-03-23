@@ -8,6 +8,43 @@
 
 
 
+
+
+    <LinearLayout
+        android:id="@+id/view_main_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/view_main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/MainColor">
+
+            <ImageView
+                android:id="@+id/img_toolbar_go_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_back"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/tv_frag_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/img_toolbar_go_back"
+                android:layout_toEndOf="@+id/img_toolbar_go_back"
+                android:textColor="#fff"
+                android:textSize="20dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -49,43 +86,6 @@
             android:id="@+id/webview_dramaplay"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/view_main_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/view_main_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/MainColor">
-
-            <ImageView
-                android:id="@+id/img_toolbar_go_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:paddingLeft="15dp"
-                android:paddingRight="5dp"
-                android:src="@drawable/ic_back"
-                android:textColor="#fff" />
-
-            <TextView
-                android:id="@+id/tv_frag_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/img_toolbar_go_back"
-                android:layout_toEndOf="@+id/img_toolbar_go_back"
-                android:textColor="#fff"
-                android:textSize="20dp" />
-
-        </RelativeLayout>
     </LinearLayout>
 
     <ProgressBar

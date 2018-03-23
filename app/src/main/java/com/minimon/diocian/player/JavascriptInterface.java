@@ -20,6 +20,8 @@ public class JavascriptInterface {
         void goToPg(String url, String item, String how, String title);
         void goToSearch();
         void changePlayer(String idx);
+        void closeWebView();
+        void setTitle(String title);
     }
     private JavascriptInterfaceListener mListener;
     public void setListener(JavascriptInterfaceListener listener){mListener = listener;}
@@ -88,5 +90,19 @@ public class JavascriptInterface {
         Log.d("JavascriptInterface", idx);
         if(mListener!=null)
             mListener.changePlayer(idx);
+    }
+
+    @android.webkit.JavascriptInterface
+    public void closeWebview(){
+        Log.d("JavascriptInterface", "closeWebview");
+        if(mListener!=null)
+            mListener.closeWebView();
+    }
+
+    @android.webkit.JavascriptInterface
+    public void setTitle(String title){
+        Log.d("JavascriptInterface", "setTitle");
+        if(mListener!=null)
+            mListener.setTitle(title);
     }
 }

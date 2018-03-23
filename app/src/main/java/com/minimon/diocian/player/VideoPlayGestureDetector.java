@@ -128,6 +128,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                     !isViewContains(playerView.findViewById(R.id.view_now_bandwidth),(int)e.getX(),(int)e.getY()) &&
                     !isViewContains(playerView.findViewById(R.id.exo_play),(int)e.getX(),(int)e.getY()) &&
                     !isViewContains(playerView.findViewById(R.id.exo_pause),(int)e.getX(),(int)e.getY())){
+
                 videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
             }
             return false;

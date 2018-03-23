@@ -153,7 +153,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL) {
                     playerView.hideController();
                 }else if(visibility == 8){
-                    changeState(STATE_IDLE);
+                    findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+                    findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
                 }
             }
         });
@@ -497,13 +498,19 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         mTitle = controlView.findViewById(R.id.tv_exo_title);
         mTitle.setText(EpisodeInfo.getInsatnace().getTitle());
         mTitle.setTextSize(19);
+        controlView.findViewById(R.id.exo_rew).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playerView.getPlayer().seekTo(playerView.getPlayer().getCurrentPosition()-15000);
+            }
+        });
         TextView mPosition = controlView.findViewById(R.id.exo_position);
         TextView mDuration = controlView.findViewById(R.id.exo_duration);
         mDuration.setTextSize(19);
         mPosition.setTextSize(19);
 
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
-        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.a022_play_zoom_in));
+        mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.icon_zoom_in));
         mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
         mFullScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -849,6 +856,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     @Override
     protected void onPause() {
         super.onPause();
+        if(playerView!= null&& playerView.getPlayer()!=null)
+            playerView.getPlayer().setPlayWhenReady(false);
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
@@ -861,6 +870,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     @Override
     protected void onStop() {
         super.onStop();
+        if(playerView!= null&& playerView.getPlayer()!=null)
+            playerView.getPlayer().setPlayWhenReady(false);
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));

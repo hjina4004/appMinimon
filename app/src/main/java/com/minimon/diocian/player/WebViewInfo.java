@@ -1,5 +1,7 @@
 package com.minimon.diocian.player;
 
+import android.content.ContentValues;
+
 import java.util.ArrayList;
 
 /**
@@ -32,6 +34,28 @@ public class WebViewInfo {
     private String htmlCode;
     private String payHow;
     private ArrayList<WebViewHistory> webviewHistory = new ArrayList<>();
+
+    public WebViewHistory historyPop(){
+        WebViewHistory last = webviewHistory.get(webviewHistory.size()-1);
+        webviewHistory.remove(webviewHistory.size()-1);
+        return last;
+    }
+
+    public void historyPush(String url, ContentValues values, String type){
+        WebViewHistory history = new WebViewHistory();
+        history.setPageUrl(url);
+        history.setPageType(type);
+        history.setContent(values);
+        webviewHistory.add(history);
+    }
+
+    public void historyClear(){
+        webviewHistory.clear();
+    }
+
+    public int getHistorySize(){
+        return webviewHistory.size();
+    }
 
     public String getPageName() {
         return pageName;
