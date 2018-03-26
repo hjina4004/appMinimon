@@ -448,6 +448,8 @@ public class MinimonUser {
         typeSocial = info.getAsString("value");
         validField = info.containsKey("field") ? info.getAsString("field"):"";
         NetworkTask networkTask = new NetworkTask(API_URL+current, info);
+        if(current.equals("info"))
+            networkTask.setToken(UserInfo.getInstance().getToken());
 //        networkTask.setToken(UserInfo.getInstance().getToken());
         networkTask.execute();
     }
@@ -495,12 +497,14 @@ public class MinimonUser {
     }
 
     // #4 회원정보조회
-    public void info() {
+    public void info(ContentValues info) {
 //        id			String	O	아이디	"헤당 토큰 과 요청 아이디값이 일치해야지만 조회가능
 //                                           요청 헤더정보에 key Authorization 로 토큰을 담아서 보내야지만 조회가능
 //                                           key: Authorization  /value:  apiToken값
 //                                           토큰 값 없이 디버그용으로 조회시에는
 //                                           key: Develop / value:  dev.debug 로보내면 토큰 없이 조회가능 "
+        Log.d(TAG, "infoinfo: " + info);
+        requestFunction("info",info);
     }
 
     // #5 중복체크

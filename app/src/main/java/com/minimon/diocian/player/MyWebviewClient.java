@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.UrlQuerySanitizer;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
@@ -54,6 +57,12 @@ public class MyWebviewClient extends WebViewClient {
         Log.d("MyWebviewClient","onPageFinished");
         isFinished = true;
         super.onPageFinished(view, url);
+        CookieManager.getInstance().acceptCookie();
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
+            CookieSyncManager.getInstance().sync();
+        }else{
+            CookieManager.getInstance().flush();
+        }
         if(isStarted && isFinished) {
             bar.setVisibility(View.GONE);
             if (mListener != null) mListener.loadingFinished();

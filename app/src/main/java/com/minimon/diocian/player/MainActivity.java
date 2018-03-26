@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -113,6 +114,8 @@ public class MainActivity extends AppCompatActivity
     private String mPageKey;
     private String mPageValue;
     private boolean hasTicket = false;
+
+    private MinimonUser minimonUser;
 
     @Override
     public void onSucess(JSONObject data) {
@@ -243,6 +246,21 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
                 return false;
+            }
+        });
+
+        minimonUser = new MinimonUser();
+        minimonUser.setListener(new MinimonUser.MinimonUserListener() {
+            @Override
+            public void onResponse(JSONObject info) {
+                try {
+                    String currentRequest = info.has("current_request")? info.getString("current_request"):"";
+                    if (currentRequest.equals("info")){
+                        resultInfo(info);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -406,7 +424,7 @@ public class MainActivity extends AppCompatActivity
             Picasso.with(this).load(R.mipmap.a008_gnb_user).transform(new CircleTransform()).into(img_menu_nickname);
         }
 
-        Integer point = Integer.parseInt(userInfo.getPoint());
+//        Integer point = Integer.parseInt(userInfo.getPoint());
 //        tvUserPoint.setText(String.format("%,d", point));
 //
 //        tvUserFixed.setText(checkFixed(userInfo.getFixed()));
@@ -806,11 +824,31 @@ public class MainActivity extends AppCompatActivity
                     info.setPageName(getResources().getString(R.string.page_name_qna_list));
                     newActivity(info.getPageName());
                 }
+
             }else{
                 finish();
             }
         }
+        if(UserInfo.getInstance().getUID()!=null && !UserInfo.getInstance().getUID().isEmpty()) {
+            ContentValues values = new ContentValues();
+            values.put("id", UserInfo.getInstance().getUID());
+            Log.d("mainMinimonUser",UserInfo.getInstance().getUID());
+            minimonUser.info(values);
+        }
         super.onResume();
+    }
+
+    private void resultInfo(JSONObject info){
+        Log.d("mainMinimonUser","resultInfo");
+        try {
+            Log.d("mainMinimonUser","info : "+info);
+            String nickname = info.has("data")?info.getJSONObject("data").getJSONObject("userInfo").getString("nickname"):"";
+            Log.d("mainMinimonUser","nickname : "+nickname);
+            UserInfo.getInstance().setNickname(nickname);
+            viewUserInfo();
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
 //    @Override

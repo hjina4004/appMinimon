@@ -13,7 +13,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -23,7 +25,10 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
@@ -83,6 +88,7 @@ import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.WIFI_SERVICE;
+import static android.preference.PreferenceManager.*;
 
 
 /**
@@ -170,6 +176,26 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface, "minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
+//        CookieManager.getInstance().setAcceptCookie(true);
+//        mWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+//        mWebView.getSettings().setDomStorageEnabled(true);
+
+        if(Build.VERSION.SDK_INT >= 21) {
+            CookieSyncManager.createInstance(getActivity());
+            CookieSyncManager.getInstance().startSync();
+            CookieManager cookieManager = CookieManager.getInstance();
+            cookieManager.setAcceptCookie(true);
+            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
+        }
+        mWebView.getSettings().setAppCacheEnabled(true);
+
+//        SharedPreferences prefs = getDefaultSharedPreferences(this);
+//        String token2= mPreferences.getString("auth_token","");
+//
+//        HashMap<String, String> map = new HashMap<String, String>();
+//        map.put("x-auth-token", token);
+
+
         mWebView.setListener(this);
 //        mWebView.gestListener = new GestureDetector.SimpleOnGestureListener(){
 //            @Override
@@ -278,12 +304,14 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void onBack() {
-        if (mWebView.canGoBack() && !"paying".equals(webViewPageName)) {
+        if (mWebView.canGoBack() && !"paying".equals(webViewPageName) && !"info".equals(webViewPageName)) {
             Log.d("FragmentOnBack",webViewPageName);
             mWebView.goBack();
         } else {
             Log.d("FragmentOnBackFin",webViewPageName);
 //            MainActivity activity = (MainActivity) getActivity();
+            if("info".equals(webViewPageName) && mWebView.canGoBack())
+                WebViewInfo.getInstance().setRefreshPageName("info");
             mActivity.setOnKeypressListener(null);
             mActivity.onBackPressed();
         }
