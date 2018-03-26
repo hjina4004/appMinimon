@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -32,6 +34,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -67,6 +72,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -446,23 +454,56 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void shareSNS(String loc, String url, String img) {
+        if("KK".equals(loc)){
+            shareKakaotalk(url, img);
+        }else if("FB".equals(loc)){
+            shareFacebook(url,img);
+        }else if("TT".equals(loc)){
+            shareTweeter(url, img);
+        }else if("GG".equals(loc)){
+            shareGooglePlus(url,img);
+        }
         // shareSNS: TT, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
         // shareSNS: GG, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
         // shareSNS: FB, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
         // shareSNS: KK, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
     }
 
-    private void shareKakaotalk() {
+    private void shareKakaotalk(String url, String img) {
         try {
-            KakaoLink link = KakaoLink.getKakaoLink(getActivity().getApplicationContext());
+            KakaoLink link = KakaoLink.getKakaoLink(mActivity);
             KakaoTalkLinkMessageBuilder builder=link.createKakaoTalkLinkMessageBuilder();
 
             builder.addText("Minimon");
-            builder.addAppButton("앱으로 이동하기");
-            link.sendMessage(builder, getActivity().getApplicationContext());
+            builder.addInWebLink(url);
+            builder.addImage(img,640,240);
+
+            link.sendMessage(builder, mActivity);
 
         } catch (KakaoParameterException e) {
             e.printStackTrace();
         }
+    }
+
+    private void shareFacebook(String url, String img){
+//        Bitmap bitmap = getBitmapFromURL(img);
+//        SharePhoto photo = new SharePhoto.Builder().setBitmap(bitmap).build();
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(url)).build();
+        ShareDialog.show(this, content);
+    }
+
+    private void shareTweeter(String url, String img){
+        String tweetUrl = "https://twitter.com/intent/tweet?url="
+                + url;
+        Uri uri = Uri.parse(tweetUrl);
+        startActivity(new Intent(Intent.ACTION_VIEW, uri));
+    }
+
+    private void shareGooglePlus(String url, String img){
+        String googleUrl = "https://plus.google.com/share?url="
+                + url;
+        Uri uri = Uri.parse(googleUrl);
+        startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
 }
