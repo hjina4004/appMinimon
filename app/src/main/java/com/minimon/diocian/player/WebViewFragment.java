@@ -171,7 +171,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
         mWebView = (ObservableWebView) view.findViewById(R.id.webview_other);
         mProgressBar = view.findViewById(R.id.progress_bar);
-        MyWebviewClient client = new MyWebviewClient(getActivity(), mProgressBar);
+        MyWebviewClient client = new MyWebviewClient(getActivity(), mProgressBar, webViewPageName);
         client.setMyWebViewClientListener(this);
         mWebView.setWebViewClient(client);
         mWebView.setWebChromeClient(new WebChromeClient());
@@ -298,7 +298,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void onBack() {
-        if (mWebView.canGoBack() && !"paying".equals(webViewPageName) && !"info".equals(webViewPageName) && !"channel".equals(webViewPageName)) {
+        if (mWebView.canGoBack() && !"paying".equals(webViewPageName) && !"info".equals(webViewPageName)) {
             Log.d("FragmentOnBack",webViewPageName);
             mWebView.goBack();
         } else {
@@ -448,6 +448,8 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     @Override
     public void closeWebView() {
 
+        Log.d("WebViewFragment","closeWebView");
+        getActivity().finish();
 //        getActivity().runOnUiThread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -457,7 +459,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 //                    getActivity().finish();
 //            }
 //        });
-        mActivity.finish();
+//        mActivity.finish();
     }
 
     @Override

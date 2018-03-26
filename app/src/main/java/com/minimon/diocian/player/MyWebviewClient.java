@@ -35,6 +35,7 @@ public class MyWebviewClient extends WebViewClient {
     private myWebViewClientListener mListener;
     private boolean isStarted = false;
     private boolean isFinished = false;
+    private String pageName;
 
     public interface  myWebViewClientListener{
         void loadingFinished();
@@ -54,7 +55,7 @@ public class MyWebviewClient extends WebViewClient {
 
     @Override
     public void onPageFinished(WebView view, String url) {
-        Log.d("MyWebviewClient","onPageFinished");
+        Log.d("MyWebviewClient","onPageFinished : "+url+", pageName : "+pageName);
         isFinished = true;
         super.onPageFinished(view, url);
         if(isStarted && isFinished) {
@@ -62,7 +63,10 @@ public class MyWebviewClient extends WebViewClient {
             if (mListener != null) mListener.loadingFinished();
         }else{
             Log.d("finishDrama", "finish");
-            ((DramaPlayActivity)mContext).finish();
+            if("episode".equals(pageName))
+                ((DramaPlayActivity)mContext).finish();
+            else
+                ((MainActivity)mContext).finish();
         }
         isStarted = false;
         isFinished = false;
@@ -74,8 +78,9 @@ public class MyWebviewClient extends WebViewClient {
         return false;
     }
 
-    public MyWebviewClient(Context context, ProgressBar progress){
+    public MyWebviewClient(Context context, ProgressBar progress, String page){
         mContext = context;
         bar = progress;
+        pageName = page;
     }
 }

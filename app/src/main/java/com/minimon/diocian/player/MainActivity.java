@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity
                 arrHistory.add(item);
             }
         }catch (JSONException e){
-
+            e.printStackTrace();
         }
 
     }

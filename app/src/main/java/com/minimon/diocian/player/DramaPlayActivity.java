@@ -149,6 +149,12 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drama_play);
+
+        url = getIntent().getStringExtra("url");
+        page = getIntent().getStringExtra("page");
+        key = getIntent().getStringExtra("key");
+        value = getIntent().getStringExtra("value");
+
         progress_bar_drama_play = findViewById(R.id.progress_bar_drama_play);
         mWebView = findViewById(R.id.webview_dramaplay);
         javascriptInterface = new JavascriptInterface(this, mWebView);
@@ -159,7 +165,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 //        intentFilter.addAction("com.minimon.diocian.player.SEND_BROAD_CAST");
         intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        mWebView.setWebViewClient(new MyWebviewClient(this, progress_bar_drama_play));
+        mWebView.setWebViewClient(new MyWebviewClient(this, progress_bar_drama_play, page));
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface,"minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
@@ -178,10 +184,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         view_player_thumbnail = findViewById(R.id.view_player_thumbnail);
         img_player_thumbnail = findViewById(R.id.img_player_thumbnail);
 
-        url = getIntent().getStringExtra("url");
-        page = getIntent().getStringExtra("page");
-        key = getIntent().getStringExtra("key");
-        value = getIntent().getStringExtra("value");
+
         EpisodeInfo.getInsatnace().setIdx(value);
 
         EpisodeInfo epInfo = EpisodeInfo.getInsatnace();
