@@ -59,6 +59,9 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+import com.kakao.util.KakaoParameterException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -447,5 +450,19 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         // shareSNS: GG, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
         // shareSNS: FB, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
         // shareSNS: KK, http://www.minimon.com/semoy1, https://static.minimon.com/content/2018/03/06/eb018323d00f8635c3f309535c97d87e.jpg
+    }
+
+    private void shareKakaotalk() {
+        try {
+            KakaoLink link = KakaoLink.getKakaoLink(getActivity().getApplicationContext());
+            KakaoTalkLinkMessageBuilder builder=link.createKakaoTalkLinkMessageBuilder();
+
+            builder.addText("Minimon");
+            builder.addAppButton("앱으로 이동하기");
+            link.sendMessage(builder, getActivity().getApplicationContext());
+
+        } catch (KakaoParameterException e) {
+            e.printStackTrace();
+        }
     }
 }
