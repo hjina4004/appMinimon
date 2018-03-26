@@ -782,7 +782,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear().commit();
-        Toast.makeText(this, getResources().getString(R.string.notice_logout), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, getResources().getString(R.string.notice_logout), Toast.LENGTH_SHORT).show();
         gotoGate();
 //        new MinimonUser().logout();
 //        new JUtil().alertNotice(MainActivity.this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {

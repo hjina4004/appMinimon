@@ -100,7 +100,8 @@ public class NaverLogin {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            mOAuthLoginInstance.logoutAndDeleteToken(mContext);
+//            mOAuthLoginInstance.logoutAndDeleteToken(mContext);
+            mOAuthLoginInstance.logout(mContext);
             return null;
         }
     }

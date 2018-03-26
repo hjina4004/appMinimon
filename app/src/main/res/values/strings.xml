@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Minimon</string>
+    <string name="app_name_kr">미니몬</string>
     <string name="naver_ClientID">pFdVUe7QyF5niz__G19O</string>
     <string name="naver_ClientSecret">yopsmvueGB</string>
 
@@ -106,6 +107,7 @@
     <string name="setting_app_delete_cache">저장된 캐시데이터 삭제</string>
     <string name="setting_app_delete_cache_info">검색기록 등 임시저장된 데이터를 삭제합니다.</string>
     <string name="setting_app_license">오픈소스 라이센스</string>
+    <string name="clear_cache">캐시를 삭제하였습니다.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

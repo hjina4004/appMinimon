@@ -23,7 +23,9 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,6 +34,9 @@ import java.util.List;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
+import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.facebook.FacebookSdk.getCacheDir;
+import static java.util.ResourceBundle.clearCache;
 
 /**
  * Created by ICARUSUD on 2018. 3. 4..
@@ -47,8 +52,8 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
     private SettingBandwidthAdapter adapter;
     private TextView mSetBandwidth;
 //    private TextView mSetData;
-    private Switch mEventSwitch;
-    private Switch mServiceSwitch;
+//    private Switch mEventSwitch;
+//    private Switch mServiceSwitch;
     private String appVersion;
     private TextView mAppVersion;
     private Switch mLteSwitch;
@@ -105,23 +110,23 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
 //        });
 
 
-        mEventSwitch = view.findViewById(R.id.switch_setting_event);
-        mEventSwitch.setChecked(ConfigInfo.getInstance().isAlertEvent());
+//        mEventSwitch = view.findViewById(R.id.switch_setting_event);
+//        mEventSwitch.setChecked(ConfigInfo.getInstance().isAlertEvent());
         mLteSwitch = view.findViewById(R.id.switch_setting_use_lte);
         mLteSwitch.setChecked(ConfigInfo.getInstance().isUseData());
-        mServiceSwitch = view.findViewById(R.id.switch_setting_service);
-        mEventSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mEventSwitch.setChecked(b);
-                Log.d("SWITCHTAG",String.valueOf(b));
-                SharedPreferences pref = getActivity().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putBoolean("alertEvent",b);
-                editor.apply();
-                ConfigInfo.getInstance().setAlertEvent(b);
-            }
-        });
+//        mServiceSwitch = view.findViewById(R.id.switch_setting_service);
+//        mEventSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                mEventSwitch.setChecked(b);
+//                Log.d("SWITCHTAG",String.valueOf(b));
+//                SharedPreferences pref = getActivity().getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+//                SharedPreferences.Editor editor = pref.edit();
+//                editor.putBoolean("alertEvent",b);
+//                editor.apply();
+//                ConfigInfo.getInstance().setAlertEvent(b);
+//            }
+//        });
         mLteSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -144,7 +149,59 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
         mAppVersion = view.findViewById(R.id.tv_setting_app_version);
         mAppVersion.setText("ver "+appVersion);
 
+        final TextView btnClearCache = view.findViewById(R.id.tv_setting_app_delete_cache);
+        btnClearCache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clearApplicationData();
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
+
+        final LinearLayout btnViewLicense = view.findViewById(R.id.view_setting_app_license);
+        btnViewLicense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewLicense();
+            }
+        });
+    }
+
+    private void viewLicense() {
+        Log.i("TAG", "viewLicense");
+    }
+
+    public void clearApplicationData() {
+        File cache = getCacheDir();
+        File appDir = new File(cache.getParent());
+        if (appDir.exists()) {
+            String[] children = appDir.list();
+            for (String s : children) {
+                if (!s.equals("lib")) {
+                    if (s.equals("shared_prefs"))
+                        continue;
+
+                    deleteDir(new File(appDir, s));
+                    Log.i("TAG", "**************** File /data/data/APP_PACKAGE/" + s + " DELETED *******************");
+                }
+            }
+        }
+
+        Toast.makeText(getActivity(), getActivity().getString(R.string.clear_cache), Toast.LENGTH_LONG).show();
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        return dir.delete();
     }
 
 //    private void showDataDialog(){
