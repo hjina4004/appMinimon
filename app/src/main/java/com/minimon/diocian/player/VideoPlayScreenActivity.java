@@ -79,7 +79,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
-    private ImageView mScreenLock;
+//    private ImageView mScreenLock;
     private RelativeLayout mBottomMenu;
     private ImageView mShowGestureInfo;
     private LinearLayout mNowBandWidth;
@@ -150,11 +150,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             @Override
             public void onVisibilityChange(int visibility) {
                 Log.d("GestureTag", "onVisibilityChange: " + visibility);
-                if (visibility == 0 && getCurrentState() != STATE_EXOPLAYER_CTRL) {
+                if (getCurrentState() == STATE_SHOW_MOVING_TIME) {
                     playerView.hideController();
-                }else if(visibility == 8){
-                    findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-                    findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
+                }
+                if(visibility == 8){
+                    changeState(STATE_IDLE);
                 }
             }
         });
@@ -255,19 +255,20 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     }
 
     public void changeState(int state) {
-        int currentState = getCurrentState();
+//        return;
+//        int currentState = getCurrentState();
 
-        Log.d("ChangeState : ", String.valueOf(state));
+//        Log.d("ChangeState : ", String.valueOf(state));
         if (state == STATE_IDLE) {
             playerView.hideController();
-            findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-            findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
+//            findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+//            findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_bandwidth).setVisibility(View.GONE);
         } else {
             playerView.hideController();
-            findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-            findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
+//            findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+//            findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_move_time).setVisibility(View.GONE);
 
             if (state == STATE_EXOPLAYER_CTRL) {
@@ -284,13 +285,15 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 }
                 playerView.findViewById(R.id.exo_ffwd).setVisibility(View.VISIBLE);
                 playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
-                findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
-                findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
-            } else if (state == STATE_BRIGHT_CTRL) {
-                findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
-            } else if (state == STATE_VOLUME_CTRL) {
-                findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
-            } else if (state == STATE_SHOW_MOVING_TIME){
+//                findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
+//                findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
+            }
+//            else if (state == STATE_BRIGHT_CTRL) {
+//                findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
+//            } else if (state == STATE_VOLUME_CTRL) {
+//                findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
+//            }
+            else if (state == STATE_SHOW_MOVING_TIME){
 //                playerView.showController();
 //                playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
 //                playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
@@ -317,8 +320,11 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         now_volume_status = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
 
 
-        final VerticalSeekBar vSeekBar = (VerticalSeekBar) findViewById(R.id.BrightSeekBar);
-        final VerticalSeekBar volumeSeekBar = (VerticalSeekBar) findViewById(R.id.VolumeSeekBar);
+        PlaybackControlView controlView = playerView.findViewById(R.id.exo_controller);
+        final VerticalSeekBar vSeekBar = (VerticalSeekBar) controlView.findViewById(R.id.BrightSeekBar);
+        final VerticalSeekBar volumeSeekBar = (VerticalSeekBar) controlView.findViewById(R.id.VolumeSeekBar);
+        vSeekBar.setVisibility(View.VISIBLE);
+        volumeSeekBar.setVisibility(View.VISIBLE);
 
         vSeekBar.setMax(255);
         vSeekBar.setProgress(now_bright_status);
@@ -460,7 +466,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     private void updateVideoPlayer(String videoUrl){
         EpisodeInfo.getInsatnace().setCurrentVideoUrl(videoUrl);
-        MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
+        MediaSource mediaSources;
+        if(videoUrl.contains("/hls/")){
+            mediaSources = buildMediaSource(Uri.parse(videoUrl), "hls");
+        }else {
+            mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
+        }
         playerView.getPlayer().prepare(mediaSources, true, false);
         inErrorState = false;
         Log.d("setPosition-10", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
@@ -518,7 +529,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 finish();
             }
         });
-        mScreenLock = controlView.findViewById(R.id.img_exo_lock);
+//        mScreenLock = controlView.findViewById(R.id.img_exo_lock);
         mBottomMenu = controlView.findViewById(R.id.exo_view_play_info);
         mBottomMenu.setVisibility(View.VISIBLE);
 
@@ -856,11 +867,13 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     @Override
     protected void onPause() {
         super.onPause();
-        if(playerView!= null&& playerView.getPlayer()!=null)
+        if(playerView!= null&& playerView.getPlayer()!=null) {
+            EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
             playerView.getPlayer().setPlayWhenReady(false);
+        }
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+//                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 Log.d("setPosition-6", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
@@ -870,11 +883,13 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     @Override
     protected void onStop() {
         super.onStop();
-        if(playerView!= null&& playerView.getPlayer()!=null)
+        if(playerView!= null&& playerView.getPlayer()!=null) {
+            EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
             playerView.getPlayer().setPlayWhenReady(false);
+        }
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+//                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 Log.d("setPosition-7", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }

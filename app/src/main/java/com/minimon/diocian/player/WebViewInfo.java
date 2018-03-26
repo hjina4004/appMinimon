@@ -34,6 +34,7 @@ public class WebViewInfo {
     private String htmlCode;
     private String payHow;
     private ArrayList<WebViewHistory> webviewHistory = new ArrayList<>();
+    private String refreshPageName;
 
     public WebViewHistory historyPop(){
         WebViewHistory last = webviewHistory.get(webviewHistory.size()-1);
@@ -55,6 +56,13 @@ public class WebViewInfo {
 
     public int getHistorySize(){
         return webviewHistory.size();
+    }
+
+    public WebViewHistory historyLast(){
+        if(getHistorySize()==0)
+            return null;
+        WebViewHistory last = webviewHistory.get(webviewHistory.size()-1);
+        return last;
     }
 
     public String getPageName() {
@@ -127,5 +135,13 @@ public class WebViewInfo {
 
     public void setWebviewHistory(ArrayList<WebViewHistory> webviewHistory) {
         this.webviewHistory = webviewHistory;
+    }
+
+    public String getRefreshPageName() {
+        return refreshPageName;
+    }
+
+    public void setRefreshPageName(String refreshPageName) {
+        this.refreshPageName = refreshPageName;
     }
 }

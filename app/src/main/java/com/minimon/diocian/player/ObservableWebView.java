@@ -1,10 +1,12 @@
 package com.minimon.diocian.player;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebView;
 
 /**
@@ -109,5 +111,10 @@ public class ObservableWebView extends WebView {
     public interface OnScrollChangedCallback
     {
         void onScroll(int l, int t, int oldl, int oldt);
+    }
+
+    @Override
+    public void setOnClickListener(@Nullable OnClickListener l) {
+        super.setOnClickListener(l);
     }
 }

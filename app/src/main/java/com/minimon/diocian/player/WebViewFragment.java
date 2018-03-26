@@ -148,6 +148,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         super.onViewCreated(view, savedInstanceState);
 
 //        mPage = WebViewInfo.getInstance().getPageName();
+        WebViewInfo.getInstance().setRefreshPageName("");
 
         if(minimonWebView == null){
             minimonWebView = new MinimonWebView();
@@ -271,17 +272,20 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
                 }
             }
             minimonWebView.goToWeb(webViewUrl, content);
+
         }
     }
 
     @Override
     public void onBack() {
         if (mWebView.canGoBack() && !"paying".equals(webViewPageName)) {
+            Log.d("FragmentOnBack",webViewPageName);
             mWebView.goBack();
         } else {
-            MainActivity activity = (MainActivity) getActivity();
-            activity.setOnKeypressListener(null);
-            activity.onBackPressed();
+            Log.d("FragmentOnBackFin",webViewPageName);
+//            MainActivity activity = (MainActivity) getActivity();
+            mActivity.setOnKeypressListener(null);
+            mActivity.onBackPressed();
         }
     }
 
@@ -378,8 +382,9 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void closeRefreshWeb(String url, String page, String key, String value) {
+        WebViewInfo.getInstance().setRefreshPageName(page);
         getActivity().finish();
-        goToWebMain(url,page,key,value);
+//        goToWebMain(url,page,key,value);
     }
 
     @Override
@@ -420,7 +425,16 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void closeWebView() {
-        getActivity().finish();
+
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                if(mWebView.canGoBack())
+//                    mWebView.goBack();
+//                else
+                    mActivity.finish();
+            }
+        });
     }
 
     @Override
@@ -506,4 +520,10 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         Uri uri = Uri.parse(googleUrl);
         startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
+
+//    @Override
+//    public void onResume() {
+//
+//        super.onResume();
+//    }
 }

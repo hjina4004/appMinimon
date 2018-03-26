@@ -256,20 +256,6 @@ public class MainActivity extends AppCompatActivity
         mPageValue = getIntent().getStringExtra("pageValue");
         if(mPageValue == null)
             mPageValue = "";
-
-//        if(mPageKey.isEmpty() || mPageKey == null){
-//            Bundle bundle = new Bundle();
-//            mPageName = "";
-//            bundle.putString("pageName", mPageName);
-//            bundle.putString("pageUrl", mPageUrl);
-//            bundle.putString("pageKey","");
-//            bundle.putString("pageValue","");
-//            webViewFragment = new WebViewFragment();
-//            webViewFragment.setArguments(bundle);
-//            changeFragment(webViewFragment);
-//            setToolbar();
-//            return;
-//        }
         if(mPageName == null || mPageName.isEmpty())
             mPageName = "main";
         if(mPageUrl == null || mPageUrl.isEmpty())
@@ -790,6 +776,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void gotoGate(){
+        WebViewInfo.getInstance().historyClear();
         Intent intent = new Intent(MainActivity.this, GateActivity.class);
         startActivity(intent);
         finish();
@@ -805,4 +792,30 @@ public class MainActivity extends AppCompatActivity
             newActivity("search");
         }
     }
+
+    @Override
+    protected void onResume() {
+        if(!WebViewInfo.getInstance().getRefreshPageName().isEmpty()){
+            if(mPageName.equals("main")){
+                if(WebViewInfo.getInstance().getRefreshPageName().equals("info")) {
+                    WebViewInfo info = WebViewInfo.getInstance();
+                    info.setPageName(getResources().getString(R.string.page_name_info));
+                    newActivity(info.getPageName());
+                }else if(WebViewInfo.getInstance().getRefreshPageName().equals("qna.list")){
+                    WebViewInfo info = WebViewInfo.getInstance();
+                    info.setPageName(getResources().getString(R.string.page_name_qna_list));
+                    newActivity(info.getPageName());
+                }
+            }else{
+                finish();
+            }
+        }
+        super.onResume();
+    }
+
+//    @Override
+//    protected void onDestroy() {
+//
+//        super.onDestroy();
+//    }
 }

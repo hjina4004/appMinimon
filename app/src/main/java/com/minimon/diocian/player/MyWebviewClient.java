@@ -30,6 +30,8 @@ public class MyWebviewClient extends WebViewClient {
     private Context mContext;
     private ProgressBar bar;
     private myWebViewClientListener mListener;
+    private boolean isStarted = false;
+    private boolean isFinished = false;
 
     public interface  myWebViewClientListener{
         void loadingFinished();
@@ -42,6 +44,7 @@ public class MyWebviewClient extends WebViewClient {
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
         Log.d("MyWebviewClient","onPageStarted");
+        isStarted = true;
         super.onPageStarted(view, url, favicon);
         bar.setVisibility(View.VISIBLE);
     }
@@ -49,11 +52,24 @@ public class MyWebviewClient extends WebViewClient {
     @Override
     public void onPageFinished(WebView view, String url) {
         Log.d("MyWebviewClient","onPageFinished");
+        isFinished = true;
         super.onPageFinished(view, url);
-        bar.setVisibility(View.GONE);
-        if(mListener!=null) mListener.loadingFinished();
+        if(isStarted && isFinished) {
+            bar.setVisibility(View.GONE);
+            if (mListener != null) mListener.loadingFinished();
+        }else{
+            Log.d("finishDrama", "finish");
+            ((DramaPlayActivity)mContext).finish();
+        }
+        isStarted = false;
+        isFinished = false;
     }
 
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        Log.d("shouldOverrideUrl",url);
+        return false;
+    }
 
     public MyWebviewClient(Context context, ProgressBar progress){
         mContext = context;

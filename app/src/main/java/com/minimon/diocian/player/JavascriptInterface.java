@@ -54,7 +54,7 @@ public class JavascriptInterface {
 
     @android.webkit.JavascriptInterface
     public void closeRefreshWeb(String url, String page, String key, String value){
-        Log.d("JavascriptInterface", "closeRefreshWeb");
+        Log.d("JavascriptInterface", "closeWebRef"+page);
         if(mListener!=null)
             mListener.closeRefreshWeb(url,page,key,value);
     }

@@ -36,8 +36,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 //    private Path brightPath;
     private RectF brightRectf;
 
-    private boolean isShowBrightSeekBar = false;
-    private boolean isShowVolumeSeekBar = false;
+//    private boolean isShowBrightSeekBar = false;
+//    private boolean isShowVolumeSeekBar = false;
     private boolean isActivePlaylist = false;
 
     private SimpleExoPlayerView playerView;
@@ -109,32 +109,32 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
         int currentState = videoActivity.getCurrentState();
-        boolean inBrightCtrl = brightRectf.contains(e.getX(), e.getY());
-        boolean inVolumeCtrl = volumeRectf.contains(e.getX(), e.getY());
-        isShowVolumeSeekBar = false;
-        isShowBrightSeekBar = false;
-        if (inBrightCtrl) {
-            videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
-            isShowBrightSeekBar = true;
-            return false;
-        } else if (inVolumeCtrl) {
-            videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
-            isShowVolumeSeekBar = true;
-            return false;
-        }
-        if (currentState > VideoPlayScreenActivity.STATE_IDLE) {
-            if(!isViewContains(playerView.findViewById(R.id.exo_ffwd),(int)e.getX(),(int) e.getY()) &&
-                    !isViewContains(playerView.findViewById(R.id.exo_rew),(int)e.getX(),(int)e.getY()) &&
-                    !isViewContains(playerView.findViewById(R.id.view_now_bandwidth),(int)e.getX(),(int)e.getY()) &&
-                    !isViewContains(playerView.findViewById(R.id.exo_play),(int)e.getX(),(int)e.getY()) &&
-                    !isViewContains(playerView.findViewById(R.id.exo_pause),(int)e.getX(),(int)e.getY())){
-
-                videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-            }
-            return false;
-        } else if (currentState != VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME){
-            videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
-        }
+//        boolean inBrightCtrl = brightRectf.contains(e.getX(), e.getY());
+//        boolean inVolumeCtrl = volumeRectf.contains(e.getX(), e.getY());
+//        isShowVolumeSeekBar = false;
+//        isShowBrightSeekBar = false;
+//        if (inBrightCtrl) {
+//            videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+//            isShowBrightSeekBar = true;
+//            return false;
+//        } else if (inVolumeCtrl) {
+//            videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+//            isShowVolumeSeekBar = true;
+//            return false;
+//        }
+//        if (currentState > VideoPlayScreenActivity.STATE_IDLE) {
+//            if(!isViewContains(playerView.findViewById(R.id.exo_ffwd),(int)e.getX(),(int) e.getY()) &&
+//                    !isViewContains(playerView.findViewById(R.id.exo_rew),(int)e.getX(),(int)e.getY()) &&
+//                    !isViewContains(playerView.findViewById(R.id.view_now_bandwidth),(int)e.getX(),(int)e.getY()) &&
+//                    !isViewContains(playerView.findViewById(R.id.exo_play),(int)e.getX(),(int)e.getY()) &&
+//                    !isViewContains(playerView.findViewById(R.id.exo_pause),(int)e.getX(),(int)e.getY())){
+//
+//                videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+//            }
+//            return false;
+//        } else if (currentState != VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME){
+//            videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
+//        }
         return true;
     }
 
@@ -167,7 +167,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     }
 
     public void onUp(){
-        if(isScroll && !isShowVolumeSeekBar && !isShowBrightSeekBar){
+        if(isScroll ){
             isScroll = !isScroll;
             playerView.getPlayer().setPlayWhenReady(true);
             playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
@@ -198,59 +198,59 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             );
 
         }
-        if(isShowBrightSeekBar){
-            videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
-            ((VideoPlayScreenActivity) mContext)
-                    .runOnUiThread(new Runnable() {
-                                       @Override
-                                       public void run() {
-                                           final Handler mHander = new Handler(){
-                                               @Override
-                                               public void handleMessage(Message msg) {
-//                        super.handleMessage(msg);
-                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-                                                   isShowBrightSeekBar = false;
-                                               }
-                                           };
-                                           new Handler().postDelayed(new Runnable() {
-                                               @Override
-                                               public void run() {
-//                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
-                                                   mHander.sendEmptyMessage(0);
-                                               }
-                                           },3000);
-
-                                       }
-                                   }
-                    );
-        }
-        else if(isShowVolumeSeekBar){
-//            videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-            ((VideoPlayScreenActivity) mContext)
-                    .runOnUiThread(new Runnable() {
-                                       @Override
-                                       public void run() {
-                                           final Handler mHander = new Handler(){
-                                               @Override
-                                               public void handleMessage(Message msg) {
-//                        super.handleMessage(msg);
+//        if(isShowBrightSeekBar){
+//            videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+//            ((VideoPlayScreenActivity) mContext)
+//                    .runOnUiThread(new Runnable() {
+//                                       @Override
+//                                       public void run() {
+//                                           final Handler mHander = new Handler(){
+//                                               @Override
+//                                               public void handleMessage(Message msg) {
+////                        super.handleMessage(msg);
 //                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
-                                                   isShowVolumeSeekBar = false;
-                                               }
-                                           };
-                                           new Handler().postDelayed(new Runnable() {
-                                               @Override
-                                               public void run() {
+//                                                   isShowBrightSeekBar = false;
+//                                               }
+//                                           };
+//                                           new Handler().postDelayed(new Runnable() {
+//                                               @Override
+//                                               public void run() {
+////                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
+//                                                   mHander.sendEmptyMessage(0);
+//                                               }
+//                                           },3000);
+//
+//                                       }
+//                                   }
+//                    );
+//        }
+//        else if(isShowVolumeSeekBar){
+////            videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
+//            ((VideoPlayScreenActivity) mContext)
+//                    .runOnUiThread(new Runnable() {
+//                                       @Override
+//                                       public void run() {
+//                                           final Handler mHander = new Handler(){
+//                                               @Override
+//                                               public void handleMessage(Message msg) {
+////                        super.handleMessage(msg);
+////                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
 //                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
-                                                   mHander.sendEmptyMessage(0);
-                                               }
-                                           },3000);
-
-                                       }
-                                   }
-                    );
-        }
+//                                                   isShowVolumeSeekBar = false;
+//                                               }
+//                                           };
+//                                           new Handler().postDelayed(new Runnable() {
+//                                               @Override
+//                                               public void run() {
+////                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
+//                                                   mHander.sendEmptyMessage(0);
+//                                               }
+//                                           },3000);
+//
+//                                       }
+//                                   }
+//                    );
+//        }
     }
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
@@ -258,32 +258,12 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         float min_distance = 30;
         int currentState = videoActivity.getCurrentState();
         Log.d("absDistance",String.valueOf(Math.abs(distanceX)));
-        if (!isShowBrightSeekBar && !isShowVolumeSeekBar) {    // HORIZONTAL SCROLL
-            if(Math.abs(distanceX) > 1) {
+//        if (!isShowBrightSeekBar && !isShowVolumeSeekBar) {    // HORIZONTAL SCROLL
+            if(Math.abs(distanceX) > min_distance && Math.abs(distanceY) < min_distance) {
                 if (Math.abs(distanceX) > Math.abs(distanceY)) {
                     controlPlayTime(distanceX);
-                } else {
-//                // not long enough swipe...
                 }
             }
-        } else {                                            // VERTICAL SCROLL
-            boolean inBrightCtrl = brightRectf.contains(e1.getX(), e1.getY());
-            boolean inVolumeCtrl = volumeRectf.contains(e1.getX(), e1.getY());
-
-            if (Math.abs(distanceY) > min_distance) {
-                if (distanceY > 0) {                 // Bottom To Top Swipe
-                    if (inBrightCtrl) {
-                        videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
-                        return false;
-                    } else if (inVolumeCtrl) {
-                        videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
-                        return false;
-                    }
-                }
-            } else {
-                // not long enough swipe...
-            }
-        }
         return true;
     }
 

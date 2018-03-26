@@ -96,7 +96,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
     private TextView mEpisodeTitle;
-    private ImageView mLockScreen;
+//    private ImageView mLockScreen;
     private boolean isLockSreen;
 
     private SimpleExoPlayer player;
@@ -189,6 +189,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         epInfo.setUseLte(conInfo.isUseData());
         Log.i("JWiFiMonitor", epInfo.isUseLte()? "use LTE":"only WIFI");
         epInfo.setBandwidth(conInfo.getBandwidth());
+        Log.d("DramaBandwidth",String.valueOf(epInfo.getBandwidth()));
 
         minimonWebView = new MinimonWebView();
         minimonWebView.setListener(this);
@@ -202,7 +203,15 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
         componentListener = new ComponentListener();
         playerView = (SimpleExoPlayerView) findViewById(R.id.player_view);
+        playerView.setControllerVisibilityListener(new PlaybackControlView.VisibilityListener() {
+            @Override
+            public void onVisibilityChange(int visibility) {
+                Log.d("GestureTag", "onVisibilityChange: " + visibility);
+                    findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
+                    findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
 
+            }
+        });
         m_playlistener = new playListener() {
             @Override
             public void endPlay() {
@@ -336,7 +345,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     private void requestEpisodeData(String idx){
         ContentValues values = new ContentValues();
         values.put("ep_idx",idx);
-        if(ConfigInfo.getInstance().getBandwidth() == 3)
+        if(EpisodeInfo.getInsatnace().getBandwidth() == 3)
             values.put("quality","hlsabr");
         else
             values.put("quality","his");
@@ -347,27 +356,27 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     private void responseEpisodeData(JSONObject info){
 //        setData(info);
-        String remainTime  = "";
-        try {
-            remainTime = info.getJSONObject("data").getJSONObject("list").getString("remaining_time").replaceAll("[^0-9]", "");
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-        int nRemainTime;
-        if(remainTime.isEmpty()){
-            nRemainTime = 0;
-        }else{
-            nRemainTime = Integer.parseInt(remainTime);
-        }
-        if(nRemainTime > 0){
-            EpisodeInfo.getInsatnace().setResumePosition(nRemainTime);
-            Log.d("setPosition-4", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
-            setData(info);
-            initializePlayer();
-            initFullscreenButton();
-            EpisodeInfo.getInsatnace().setIntro(false);
-            updatePlayerVideo(EpisodeInfo.getInsatnace().getVideoUrl());
-        }else {
+//        String remainTime  = "";
+//        try {
+//            remainTime = info.getJSONObject("data").getJSONObject("list").getString("remaining_time").replaceAll("[^0-9]", "");
+//        }catch (JSONException e){
+//            e.printStackTrace();
+//        }
+//        int nRemainTime;
+//        if(remainTime.isEmpty()){
+//            nRemainTime = 0;
+//        }else{
+//            nRemainTime = Integer.parseInt(remainTime);
+//        }
+//        if(nRemainTime > 0){
+//            EpisodeInfo.getInsatnace().setResumePosition(nRemainTime);
+//            Log.d("setPosition-4", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+//            setData(info);
+//            initializePlayer();
+//            initFullscreenButton();
+//            EpisodeInfo.getInsatnace().setIntro(false);
+//            updatePlayerVideo(EpisodeInfo.getInsatnace().getVideoUrl());
+//        }else {
             if (!prepareVideoFlag) {
                 procPrepareVideo(info);
             } else {
@@ -386,7 +395,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                     updatePlayerVideo(currentVideoUrl);
                 }
             }
-        }
+//        }
     }
 
     private void initData(){
@@ -420,8 +429,8 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
            JSONArray videoArr = (JSONArray) list_mp.get("video");
 
            JSONObject videoObj = null;
-           if(ConfigInfo.getInstance().getBandwidth()!= 3)
-               videoObj = (JSONObject) videoArr.get(ConfigInfo.getInstance().getBandwidth());
+           if(EpisodeInfo.getInsatnace().getBandwidth()!= 3)
+               videoObj = (JSONObject) videoArr.get(EpisodeInfo.getInsatnace().getBandwidth());
            else
                videoObj = (JSONObject) videoArr.get(0);
            Log.d("VideoObjTag",videoObj.toString());
@@ -627,7 +636,10 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
    private String getIntroVideoUrl(JSONObject info){
        String resultUrl = "";
        try{
-           resultUrl = info.getJSONArray("intro").getJSONObject(EpisodeInfo.getInsatnace().getBandwidth()).getString("playUrl");
+           if(EpisodeInfo.getInsatnace().getBandwidth()!=3)
+               resultUrl = info.getJSONArray("intro").getJSONObject(EpisodeInfo.getInsatnace().getBandwidth()).getString("playUrl");
+           else
+               resultUrl = info.getJSONArray("intro").getJSONObject(0).getString("playUrl");
        }catch (JSONException e){
            e.printStackTrace();
        }
@@ -695,32 +707,32 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         });
         mEpisodeTitle = controlView.findViewById(R.id.tv_exo_title);
         mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
-        mLockScreen = controlView.findViewById(R.id.img_exo_lock);
+//        mLockScreen = controlView.findViewById(R.id.img_exo_lock);
         controlView.findViewById(R.id.exo_rew).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 playerView.getPlayer().seekTo(playerView.getPlayer().getCurrentPosition()-15000);
             }
         });
-        if(this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
-        else
-            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+//        if(this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+//            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
+//        else
+//            mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
 
-        mLockScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(DramaPlayActivity.this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR){//잠겨있던 잠금 풀 경우
-                    DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
-                    isLockSreen = !isLockSreen;
-                }else{ //다시 잠글경우
-                    DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
-                    isLockSreen = !isLockSreen;
-                }
-            }
-        });
+//        mLockScreen.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(DramaPlayActivity.this.getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_SENSOR){//잠겨있던 잠금 풀 경우
+//                    DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+//                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_off);
+//                    isLockSreen = !isLockSreen;
+//                }else{ //다시 잠글경우
+//                    DramaPlayActivity.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+//                    mLockScreen.setImageResource(R.mipmap.a022_play_b_lock_on);
+//                    isLockSreen = !isLockSreen;
+//                }
+//            }
+//        });
 
         mBandWidthView = controlView.findViewById(R.id.view_bandwidth);
         mBandWidth = controlView.findViewById(R.id.tv_bandwidth);
@@ -850,11 +862,13 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         isActive = false;
 //        unregisterReceiver(broadcastReceiver);
         removeWifiMoniter();
-        if(playerView!= null&& playerView.getPlayer()!=null)
+        if(playerView!= null&& playerView.getPlayer()!=null) {
+            EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
             playerView.getPlayer().setPlayWhenReady(false);
+        }
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+//                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 Log.d("setPosition-2", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
@@ -865,11 +879,13 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     protected void onStop() {
         super.onStop();
         Log.d(TAG+"Test","OnStop");
-        if(playerView!= null&& playerView.getPlayer()!=null)
+        if(playerView!= null&& playerView.getPlayer()!=null) {
+            EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
             playerView.getPlayer().setPlayWhenReady(false);
+        }
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
+//                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 Log.d("setPosition-3", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
@@ -930,7 +946,12 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     private void updatePlayerVideo(String playUrl){
         EpisodeInfo.getInsatnace().setCurrentVideoUrl(playUrl);
-        MediaSource mediaSources = buildMediaSource(Uri.parse(playUrl), "mp4");
+        MediaSource mediaSources;
+        if(playUrl.contains("/hls/")){
+            mediaSources = buildMediaSource(Uri.parse(playUrl), "hls");
+        }else {
+            mediaSources = buildMediaSource(Uri.parse(playUrl), "mp4");
+        }
         playerView.getPlayer().prepare(mediaSources, true, false);
         Log.d("DramaUpdatePlayerVideo",String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
 
@@ -1214,9 +1235,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     @Override
     public void closeWebView() {
-        if(mWebView.canGoBack())
-            mWebView.canGoBack();
-        else
+
             finish();
     }
 
@@ -1240,4 +1259,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     public void shareSNS(String loc, String url, String img) {
 
     }
+
+    
 }
