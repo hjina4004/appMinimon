@@ -176,25 +176,12 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.addJavascriptInterface(javascriptInterface, "minimon");
         mWebView.getSettings().setJavaScriptEnabled(true);
-//        CookieManager.getInstance().setAcceptCookie(true);
-//        mWebView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-//        mWebView.getSettings().setDomStorageEnabled(true);
-
-        if(Build.VERSION.SDK_INT >= 21) {
-            CookieSyncManager.createInstance(getActivity());
-            CookieSyncManager.getInstance().startSync();
-            CookieManager cookieManager = CookieManager.getInstance();
-            cookieManager.setAcceptCookie(true);
-            CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
-        }
-        mWebView.getSettings().setAppCacheEnabled(true);
 
 //        SharedPreferences prefs = getDefaultSharedPreferences(this);
 //        String token2= mPreferences.getString("auth_token","");
 //
 //        HashMap<String, String> map = new HashMap<String, String>();
 //        map.put("x-auth-token", token);
-
 
         mWebView.setListener(this);
 //        mWebView.gestListener = new GestureDetector.SimpleOnGestureListener(){
@@ -304,7 +291,7 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
 
     @Override
     public void onBack() {
-        if (mWebView.canGoBack() && !"paying".equals(webViewPageName) && !"info".equals(webViewPageName)) {
+        if (mWebView.canGoBack() && !"paying".equals(webViewPageName) && !"info".equals(webViewPageName) && !"channel".equals(webViewPageName)) {
             Log.d("FragmentOnBack",webViewPageName);
             mWebView.goBack();
         } else {
@@ -454,15 +441,16 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     @Override
     public void closeWebView() {
 
-        mActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                if(mWebView.canGoBack())
-//                    mWebView.goBack();
-//                else
-                    mActivity.finish();
-            }
-        });
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+////                if(mWebView.canGoBack())
+////                    mWebView.goBack();
+////                else
+//                    getActivity().finish();
+//            }
+//        });
+        mActivity.finish();
     }
 
     @Override

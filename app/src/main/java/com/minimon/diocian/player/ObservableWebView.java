@@ -56,7 +56,7 @@ public class ObservableWebView extends WebView {
         }
 
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-            float SWIPE_MIN_DISTANCE = 50;
+            float SWIPE_MIN_DISTANCE = 120;
             float SWIPE_THRESHOLD_VELOCITY = 200;
 
             if (event1.getRawY() - event2.getRawY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {

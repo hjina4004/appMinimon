@@ -57,12 +57,6 @@ public class MyWebviewClient extends WebViewClient {
         Log.d("MyWebviewClient","onPageFinished");
         isFinished = true;
         super.onPageFinished(view, url);
-        CookieManager.getInstance().acceptCookie();
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
-            CookieSyncManager.getInstance().sync();
-        }else{
-            CookieManager.getInstance().flush();
-        }
         if(isStarted && isFinished) {
             bar.setVisibility(View.GONE);
             if (mListener != null) mListener.loadingFinished();
