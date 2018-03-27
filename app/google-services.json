@@ -15,6 +15,50 @@
       },
       "oauth_client": [
         {
+          "client_id": "913852316246-7fu1uqtmkapirqaha87eaknnppljir45.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.minimon.diocian.player",
+            "certificate_hash": "1bc2453bcf3e267ee660a210f4dbddd3ef145632"
+          }
+        },
+        {
+          "client_id": "913852316246-sgln4svg6p9a2esgb3uipoppk8ifji7o.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "913852316246-vg6t4uh3npdou7ht1nfuf2hdmpo4bf9r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.minimon.diocian.player",
+            "certificate_hash": "6eb4eaf86fe08e0bd886fa1c086c698115c06898"
+          }
+        },
+        {
+          "client_id": "913852316246-98bnb0fsa9nk3tecn5kad5jt42p3jun0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.minimon.diocian.player",
+            "certificate_hash": "f508766edd31b6f8a033a7a8b39a29ea5ad9d5de"
+          }
+        },
+        {
+          "client_id": "913852316246-055fm84oa6ga8cgp3osfr5q6ca5p8m9h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.minimon.diocian.player",
+            "certificate_hash": "56c8477c1e68c614c2cec0fcadd69a6e09fcbba0"
+          }
+        },
+        {
+          "client_id": "913852316246-f2bp1ntij0dn099bcslrotgtdshojsit.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.minimon.diocian.player",
+            "certificate_hash": "f830252450cfa9aecb0c38dad924600caeb09d1f"
+          }
+        },
+        {
           "client_id": "913852316246-c5t3d6atbregmu5gf4om8t1i9c63i2cu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -40,7 +84,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "913852316246-qe0qf95qc94m6tuiclm4595l7qp4446m.apps.googleusercontent.com",
+              "client_id": "913852316246-sgln4svg6p9a2esgb3uipoppk8ifji7o.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

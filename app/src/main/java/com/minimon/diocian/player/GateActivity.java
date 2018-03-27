@@ -58,10 +58,6 @@ public class GateActivity extends AppCompatActivity {
         justLogout = getIntent().getBooleanExtra("justLogout",false);
 
         SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-//        String autoLogin = pref.getString("AutoLogin","0");
-//        String token = pref.getString("token","");
-//        if(token != null && token.length() > 1)
-//            gotoLogin();
 
         Button btnLogin = (Button) findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {

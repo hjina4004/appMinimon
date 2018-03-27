@@ -35,6 +35,7 @@
     <string name="notice_logout">정상적으로 로그아웃 되었습니다</string>
     <string name="notice_confirm_ok">확인</string>
     <string name="notice_confirm_cancel">취소</string>
+    <string name="notice_purchase">이용권을 구매하시면 언제 어디서나,\n한 달 내내 무제한으로 시청할 수 있습니다.\n이용권을 구매하시겠습니까?</string>
 
     <string name="btn_home">홈이동</string>
     <string name="btn_login">로그인</string>
@@ -60,7 +61,7 @@
     <string name="hint_input_pw">영문/숫자 6~12자</string>
     <string name="hint_input_pw_confirm">비밀번호를 입력하세요</string>
     <string name="hint_input_email">이메일을 입력하세요</string>
-    <string name="hint_input_nickname">영문/숫자 2~12자</string>
+    <string name="hint_input_nickname">2~12자</string>
     <string name="new_usr">신규 회원 가입</string>
     <string name="reset_password">신규 비밀번호 발급</string>
     <string name="login_naver">NAVER 로그인</string>

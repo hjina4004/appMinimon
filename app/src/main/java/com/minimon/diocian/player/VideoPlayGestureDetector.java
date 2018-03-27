@@ -45,6 +45,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     private int moveCount = 0;
     private long currentTime;
     private boolean isScroll = false;
+    private boolean isShowController = false;
 
     public VideoPlayGestureDetectorListener mListener;
 //
@@ -108,34 +109,23 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
+        Log.d("VideoPlayGestureDetect", "onSingleTapConfirmed");
         int currentState = videoActivity.getCurrentState();
-//        boolean inBrightCtrl = brightRectf.contains(e.getX(), e.getY());
-//        boolean inVolumeCtrl = volumeRectf.contains(e.getX(), e.getY());
-//        isShowVolumeSeekBar = false;
-//        isShowBrightSeekBar = false;
-//        if (inBrightCtrl) {
-//            videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
-//            isShowBrightSeekBar = true;
-//            return false;
-//        } else if (inVolumeCtrl) {
-//            videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
-//            isShowVolumeSeekBar = true;
-//            return false;
-//        }
-//        if (currentState > VideoPlayScreenActivity.STATE_IDLE) {
-//            if(!isViewContains(playerView.findViewById(R.id.exo_ffwd),(int)e.getX(),(int) e.getY()) &&
-//                    !isViewContains(playerView.findViewById(R.id.exo_rew),(int)e.getX(),(int)e.getY()) &&
-//                    !isViewContains(playerView.findViewById(R.id.view_now_bandwidth),(int)e.getX(),(int)e.getY()) &&
-//                    !isViewContains(playerView.findViewById(R.id.exo_play),(int)e.getX(),(int)e.getY()) &&
-//                    !isViewContains(playerView.findViewById(R.id.exo_pause),(int)e.getX(),(int)e.getY())){
-//
-//                videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-//            }
-//            return false;
-//        } else if (currentState != VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME){
-//            videoActivity.changeState(VideoPlayScreenActivity.STATE_EXOPLAYER_CTRL);
-//        }
+        isShowController = !isShowController;
+        if(isShowController){
+            playerView.hideController();
+        }else{
+            playerView.showController();
+        }
         return true;
+    }
+
+    public boolean isShowController(){
+        return isShowController;
+    }
+
+    public void setShowController(boolean controller){
+        isShowController = controller;
     }
 
     @Override
@@ -152,6 +142,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     public boolean onDown(MotionEvent e) {
         currentTime = playerView.getPlayer().getCurrentPosition();
         doub = 0;
+//        if(!isShowController)
+//            playerView.hideController();
         return true;
     }
 
@@ -254,6 +246,7 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     }
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.d("VideoPlayGestureDetect", "onScroll");
         Log.d("GestureTag", "onScroll distanceX="+distanceX+", distanceY= "+distanceY);
         float min_distance = 30;
         int currentState = videoActivity.getCurrentState();
@@ -279,9 +272,12 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     private void controlPlayTime(final float x1){
         long movingTime = 0;
-        if(isScroll)
+        isShowController = false;
+        if(isScroll) {
             videoActivity.changeState(VideoPlayScreenActivity.STATE_SHOW_MOVING_TIME);
+        }
         isScroll = true;
+        playerView.hideController();
         Log.d("distanceXControl",String.valueOf(x1));
 
 //        doub = Math.round(x1);

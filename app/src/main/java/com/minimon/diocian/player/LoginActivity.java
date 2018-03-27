@@ -109,7 +109,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         initKakao();
         initFacebook();
         initGoogle();
-//        tryAutoLogin();
     }
 
     private void initMinimon() {
@@ -287,7 +286,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             } else {
                 // Google Sign In failed, update UI appropriately
                 // ...
-//                mDialogMng.hideProgressDlg();
             }
         }
     }
@@ -423,10 +421,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginInfo.put("type", type);
         loginInfo.put("id", uid);
         loginInfo.put("value", password);
-//        loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
-//        loginInfo.put("device_token", FirebaseInstanceId.getInstance().getToken());
-//        loginInfo.put("device_os",myVersion);
-//        loginInfo.put("device_device",myDeviceModel);
 
         UserInfo userInfo = UserInfo.getInstance();
         loginInfo.put("loc", "Android");
@@ -489,34 +483,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         editor.apply();
     }
 
-//    public void tryAutoLogin(){
-//        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-//        String token = prefs.getString("token","");
-//        String social = prefs.getString("social","");
-//        if("".equals(token) || token == null || token.isEmpty()){ // 아이디가 이미 저장되어 있으면 토큰을 저장하도록 하므로 토근이 없으면 로그인시도
-//        }else{ // 토큰이 있는경우 자동로그인 처리
-//            if("KK".equals(social)){
-//                Button loginButton = findViewById(R.id.btnKakao);
-//                loginButton.performClick();
-//            }else if("FB".equals(social)){
-//                Button loginButton = findViewById(R.id.btnFacebook);
-//                loginButton.performClick();
-//            }else if("NV".equals(social)){
-//                Button loginButton = findViewById(R.id.btnNaver);
-//                loginButton.performClick();
-//            }else if("GG".equals(social)){
-//                Button loginButton = findViewById(R.id.btnGoogle);
-//                loginButton.performClick();
-//            }else{
-//                String userUID = prefs.getString("userUID","");
-//                String userPWD = prefs.getString("userPWD","");
-//
-//                ((EditText) findViewById(R.id.inUserID)).setText(userUID);
-//                ((EditText) findViewById(R.id.inUserPW)).setText(userPWD);
-//                loginMinimon(userUID, userPWD,"basic");
-//            }
-//        }
-//    }
 
     private String getInputUID() {
         EditText text = findViewById(R.id.inUserID);

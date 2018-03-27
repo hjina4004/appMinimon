@@ -362,7 +362,7 @@
              android:layout_height="32dp"
              android:layout_alignParentRight="true"
              android:layout_alignParentEnd="true"
-             android:layout_alignParentBottom="true">
+             android:layout_centerVertical="true">
 
             <ImageView
                 android:id="@+id/exo_fullscreen_icon"

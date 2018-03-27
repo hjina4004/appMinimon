@@ -73,7 +73,7 @@ public class ObservableWebView extends WebView {
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        Log.i("WebView", "[onScrollChanged]");
+        Log.d("WebView", "[onScrollChanged]");
         super.onScrollChanged(l, t, oldl, oldt);
         if(mOnScrollChangedCallback != null) mOnScrollChangedCallback.onScroll(l, t, oldl, oldt);
     }

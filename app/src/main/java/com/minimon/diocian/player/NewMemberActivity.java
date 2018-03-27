@@ -40,8 +40,6 @@ public class NewMemberActivity extends AppCompatActivity {
     private Button btnPrivacyPolicy;
     private ContentValues infoNewMember;
 
-//    private boolean
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,26 +52,19 @@ public class NewMemberActivity extends AppCompatActivity {
         btnTermOfUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NewMemberActivity.this, PolicyActivity.class);
-                intent.putExtra("policyType","service");
-                startActivity(intent);
+                showPolicy("service");
             }
         });
         btnPrivacyPolicy = findViewById(R.id.btnPrivacyPolicy);
         btnPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NewMemberActivity.this, PolicyActivity.class);
-                intent.putExtra("policyType","privacy");
-                startActivity(intent);
+                showPolicy("privacy");
             }
         });
         strType = getIntent().getStringExtra("type");
         strDeviceID = DeviceUuidFactory.getDeviceUuid(this.getApplicationContext());
-        Log.i("strType", strType);
         if (!strType.equals("basic")) modeSNS();
-
-//        getActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
 
         initMinomon();
         initAgree();
@@ -87,6 +78,12 @@ public class NewMemberActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showPolicy(String type){
+        Intent intent = new Intent(NewMemberActivity.this, PolicyActivity.class);
+        intent.putExtra("policyType",type);
+        startActivity(intent);
     }
 
     private void modeSNS() {
@@ -383,7 +380,7 @@ public class NewMemberActivity extends AppCompatActivity {
         }
 
         String strInput = text.getText().toString();
-        boolean flag = Pattern.matches("^[a-zA-Z\\d]{2,12}$", strInput);
+        boolean flag = Pattern.matches("^[a-zA-Z가-힣\\d]{2,12}$", strInput);
         if (!flag) {
             alertNotice(R.string.notice_error_input_nickname);
             strInput = "";

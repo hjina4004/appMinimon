@@ -154,8 +154,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                     playerView.hideController();
                 }
                 if(visibility == 8){
+                    if(videoPlayGestureDetector!=null)
+                        videoPlayGestureDetector.setShowController(true);
                     changeState(STATE_IDLE);
                 }
+                if(visibility == 0 && !isShowController())
+                    playerView.hideController();
             }
         });
 
@@ -168,6 +172,13 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         initVerticalSeekBar();
 
         createWifiMoniter();
+    }
+
+    private boolean isShowController(){
+        if(videoPlayGestureDetector == null)
+            return false;
+        else
+            return videoPlayGestureDetector.isShowController();
     }
 
     private void createWifiMoniter() {

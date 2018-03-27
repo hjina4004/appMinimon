@@ -589,9 +589,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
    private void confirmRefillPoint(){
        prepareVideoFlag = false;
-       new JUtil().confirmNotice(this, "컨텐츠를 구매하시겠습니까?\n" +
-               "구매 후 72시간 동안 재시청 가능합니다.\n" +
-               EpisodeInfo.getInsatnace().getPoint()+"포인트가 차감됩니다.", new JUtil.JUtilListener() {
+       new JUtil().confirmNotice(this, getResources().getString(R.string.notice_purchase), new JUtil.JUtilListener() {
            @Override
            public void callback(int id) {
                if(id == 1){
@@ -602,9 +600,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
    }
 
    private void procConfirmPayEpisode(){
-       new JUtil().confirmNotice(this, "컨텐츠를 구매하시겠습니까?\n" +
-               "구매 후 72시간 동안 재시청 가능합니다.\n" +
-               EpisodeInfo.getInsatnace().getPoint()+"포인트가 차감됩니다.", new JUtil.JUtilListener() {
+       new JUtil().confirmNotice(this, getResources().getString(R.string.notice_purchase), new JUtil.JUtilListener() {
            @Override
            public void callback(int id) {
                if(id == 1){
@@ -831,6 +827,8 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     protected void onStart() {
         super.onStart();
         Log.d(TAG+"Test","OnStart");
+        if(EpisodeInfo.getInsatnace().getResumePosition()!=0)
+            prepareVideoFlag = true;
         if (Util.SDK_INT > 23) {
             initData();
 //            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty()) {
@@ -849,6 +847,9 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         isActive = true;
 //        registerReceiver(broadcastReceiver, intentFilter);
         createWifiMonitor();
+        Log.d(TAG+"Test","position at onResume : "+String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+//        if(EpisodeInfo.getInsatnace().getResumePosition()!=0)
+//            prepareVideoFlag = true;
         if (Util.SDK_INT <= 23) {
             initData();
 //            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty())
@@ -865,7 +866,10 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         isActive = false;
 //        unregisterReceiver(broadcastReceiver);
         removeWifiMoniter();
-        if(playerView!= null&& playerView.getPlayer()!=null) {
+        Log.d(TAG+"Test","position at onPause : "+String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+//        if(EpisodeInfo.getInsatnace().getResumePosition()==0)
+//            prepareVideoFlag = false;
+        if(playerView!= null&& playerView.getPlayer()!=null && prepareVideoFlag) {
             EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
             playerView.getPlayer().setPlayWhenReady(false);
         }
@@ -882,7 +886,10 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     protected void onStop() {
         super.onStop();
         Log.d(TAG+"Test","OnStop");
-        if(playerView!= null&& playerView.getPlayer()!=null) {
+        Log.d(TAG+"Test","position at onStop : "+String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
+        if(EpisodeInfo.getInsatnace().getResumePosition()==0)
+            prepareVideoFlag = false;
+        if(playerView!= null&& playerView.getPlayer()!=null && prepareVideoFlag) {
             EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
             playerView.getPlayer().setPlayWhenReady(false);
         }
@@ -1060,12 +1067,15 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(playerView!=null && playerView.getPlayer()!=null)
-                playerView.getPlayer().setPlayWhenReady(false);
+                if(playerView!=null && playerView.getPlayer()!=null) {
+                    playerView.getPlayer().setPlayWhenReady(false);
+                    playerView.getPlayer().seekTo(0);
+                }
             }
         });
         prepareVideoFlag = false;
         EpisodeInfo.getInsatnace().setResumePosition(0);
+        Log.d(TAG+"TestCg",String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
         requestEpisodeData(idx);
 //        requestCheckEpisode();
     }

@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public interface onKeypressListenr{
-        public void onBack();
+        void onBack();
 
     }
 
@@ -186,7 +186,6 @@ public class MainActivity extends AppCompatActivity
 
         initGoogle();
 
-        Log.v(TAG, "User Info --- " + UserInfo.getInstance().getData());
         view_main_toolbar = (RelativeLayout)  findViewById(R.id.view_main_toolbar);
         view_main_toolbar2 = (RelativeLayout)  findViewById(R.id.view_main_toolbar2);
         tv_frag_title = (TextView) findViewById(R.id.tv_frag_title);
@@ -201,7 +200,8 @@ public class MainActivity extends AppCompatActivity
         rec_search_history = findViewById(R.id.rec_search_history);
         rec_search_history.setLayoutManager(manager);
         DividerItemDecoration deco = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
-        rec_search_history.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        deco.setDrawable(getResources().getDrawable(R.drawable.divider_search_history));
+        rec_search_history.addItemDecoration(deco);
         img_toolbar.setOnClickListener(toolbarClickListenr);
         img_toolbar_search.setOnClickListener(toolbarClickListenr);
         tv_toolbar_go_back.setOnClickListener(toolbarClickListenr);
@@ -348,7 +348,6 @@ public class MainActivity extends AppCompatActivity
                 }else{
                     finish();
                 }
-//                }
             }
         }
     }
@@ -372,31 +371,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public static String toNumFormat(int num) {
-        DecimalFormat df = new DecimalFormat("#,###");
-        return df.format(num);
     }
 
     private void viewUserInfo() {
@@ -405,10 +380,6 @@ public class MainActivity extends AppCompatActivity
 
         TextView tvUserNickname = view.findViewById(R.id.tv_user_nickname);
         ImageView img_menu_nickname = view.findViewById(R.id.img_menu_nickname);
-
-//        TextView tvUserPoint = view.findViewById(R.id.tv_menu_point);
-//        TextView tvUserFixed = view.findViewById(R.id.tv_menu_charge);
-
 
         UserInfo userInfo = UserInfo.getInstance();
         tvUserNickname.setText(userInfo.getNickname());
@@ -424,19 +395,10 @@ public class MainActivity extends AppCompatActivity
             Picasso.with(this).load(R.mipmap.a008_gnb_user).transform(new CircleTransform()).into(img_menu_nickname);
         }
 
-//        Integer point = Integer.parseInt(userInfo.getPoint());
-//        tvUserPoint.setText(String.format("%,d", point));
-//
-//        tvUserFixed.setText(checkFixed(userInfo.getFixed()));
-
         LinearLayout view_logout = view.findViewById(R.id.view_menu_logout);
         view_logout.setOnClickListener(drawerClickListenr);
-//        LinearLayout view_menu_go_home = view.findViewById(R.id.view_menu_go_home);
-//        view_menu_go_home.setOnClickListener(drawerClickListenr);
         ImageView img_menu_close = view.findViewById(R.id.img_menu_close);
         img_menu_close.setOnClickListener(drawerClickListenr);
-//        LinearLayout view_menu_cookies = view.findViewById(R.id.view_menu_cookies);
-//        view_menu_cookies.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_user_info = view.findViewById(R.id.view_menu_user_info);
         view_menu_user_info.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_purchase = view.findViewById(R.id.view_menu_purchase);
@@ -445,8 +407,6 @@ public class MainActivity extends AppCompatActivity
         view_menu_favorite.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_subscribe = view.findViewById(R.id.view_menu_subscribe);
         view_menu_subscribe.setOnClickListener(drawerClickListenr);
-//        LinearLayout view_menu_point_history = view.findViewById(R.id.view_menu_point_history);
-//        view_menu_point_history.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_pay_history = view.findViewById(R.id.view_menu_pay_history);
         view_menu_pay_history.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_setting = view.findViewById(R.id.view_menu_setting);
@@ -459,11 +419,8 @@ public class MainActivity extends AppCompatActivity
         view_menu_qna.setOnClickListener(drawerClickListenr);
         LinearLayout view_menu_policy = view.findViewById(R.id.view_menu_policy);
         view_menu_policy.setOnClickListener(drawerClickListenr);
-//        LinearLayout view_menu_fix = view.findViewById(R.id.view_menu_fix);
-//        view_menu_fix.setOnClickListener(drawerClickListenr);
         TextView tv_menu_has_ticket = view.findViewById(R.id.tv_menu_hasTicket);
         tv_menu_has_ticket.setText(checkFixed(userInfo.getFixed()));
-        //tvUserFixed.setText(checkFixed(userInfo.getFixed()));
         TextView tv_menu_go_ticket = view.findViewById(R.id.tv_menu_go_ticket);
         if(hasTicket){
             tv_menu_go_ticket.setText("확인하기>");
@@ -782,15 +739,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.clear().commit();
-//        Toast.makeText(this, getResources().getString(R.string.notice_logout), Toast.LENGTH_SHORT).show();
         gotoGate();
-//        new MinimonUser().logout();
-//        new JUtil().alertNotice(MainActivity.this, getResources().getString(R.string.notice_logout), new JUtil.JUtilListener() {
-//            @Override
-//            public void callback(int id) {
-//                gotoGate();
-//            }
-//        });
     }
 
     private void gotoGate(){
