@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.minimon.diocian.player.LicenseActivity">
+    <LinearLayout
+        android:id="@+id/view_main_search2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/view_main_toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/MainColor">
+
+            <ImageView
+                android:id="@+id/img_toolbar_frag_go_back2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_back"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/tv_frag_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/img_toolbar_frag_go_back2"
+                android:layout_toEndOf="@+id/img_toolbar_frag_go_back2"
+                android:textColor="#fff"
+                android:textSize="20dp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:text="@string/apache_license"/>
+</LinearLayout>

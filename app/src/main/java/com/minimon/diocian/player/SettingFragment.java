@@ -168,6 +168,8 @@ public class SettingFragment extends Fragment implements MainActivity.onKeypress
     }
 
     private void viewLicense() {
+        Intent intent = new Intent(getActivity(), LicenseActivity.class);
+        startActivity(intent);
         Log.i("TAG", "viewLicense");
     }
 
