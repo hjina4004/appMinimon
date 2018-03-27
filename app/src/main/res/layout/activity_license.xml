@@ -40,8 +40,12 @@
 
         </RelativeLayout>
     </LinearLayout>
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:text="@string/apache_license"/>
+        android:layout_height="fill_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/apache_license"/>
+    </ScrollView>
 </LinearLayout>
