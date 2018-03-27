@@ -796,6 +796,7 @@ public class MainActivity extends AppCompatActivity
     private void gotoGate(){
         WebViewInfo.getInstance().historyClear();
         Intent intent = new Intent(MainActivity.this, GateActivity.class);
+        intent.putExtra("justLogout",true);
         startActivity(intent);
         finish();
     }

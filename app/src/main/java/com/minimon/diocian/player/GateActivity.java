@@ -42,6 +42,7 @@ public class GateActivity extends AppCompatActivity {
     private LinearLayout pager_indicator;
     private int dotsCount;
     private ImageView[] dots;
+    private boolean justLogout;
 
 
     @Override
@@ -53,6 +54,8 @@ public class GateActivity extends AppCompatActivity {
 
         NetworkAsync task = new NetworkAsync();
         task.execute();
+
+        justLogout = getIntent().getBooleanExtra("justLogout",false);
 
         SharedPreferences pref = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
 //        String autoLogin = pref.getString("AutoLogin","0");
@@ -77,6 +80,7 @@ public class GateActivity extends AppCompatActivity {
         });
 
         initIntro();
+        isLogout();
     }
 
     @Override
@@ -102,6 +106,12 @@ public class GateActivity extends AppCompatActivity {
         intent.putExtra("type", "basic");
         intent.putExtra("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
         startActivity(intent);
+    }
+
+    private void isLogout(){
+        if(justLogout){
+            Toast.makeText(this,getResources().getString(R.string.notice_logout), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static String getKeyHash(final Context context) {
