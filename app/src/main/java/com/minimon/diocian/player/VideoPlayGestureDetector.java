@@ -31,18 +31,9 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     VideoPlayScreenActivity videoActivity;
 
     int mWidth, mHeight = 0;
-//    private Path volumePath;
-    private RectF volumeRectf;
-//    private Path brightPath;
-    private RectF brightRectf;
-
-//    private boolean isShowBrightSeekBar = false;
-//    private boolean isShowVolumeSeekBar = false;
-    private boolean isActivePlaylist = false;
 
     private SimpleExoPlayerView playerView;
     private int doub = 0;
-    private int moveCount = 0;
     private long currentTime;
     private boolean isScroll = false;
     private boolean isShowController = false;
@@ -74,43 +65,16 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
 
     public VideoPlayGestureDetector(Context context, VideoPlayScreenActivity activity, int width, int height){
         mContext = context;
-        int brightnessValue = Settings.System.getInt(
-                mContext.getContentResolver(),
-                Settings.System.SCREEN_BRIGHTNESS,
-                0
-        );
         videoActivity = activity;
         playerView = activity.findViewById(R.id.player_view);
 
         mWidth = width;
         mHeight = (int) (height - convertDpToPixel(60.0f, mContext));
-
-        brightRectf = new RectF(0, 0, mWidth/6, mHeight);
-        volumeRectf = new RectF(mWidth/6*5, 0, mWidth, mHeight);
-    }
-
-    private boolean isViewContains(View view, int rx, int ry) {
-        if(view.getVisibility() == View.GONE)
-            return false;
-        int[] l = new int[2];
-        view.getLocationOnScreen(l);
-        int x = l[0];
-        int y = l[1];
-        int w = view.getWidth();
-        int h = view.getHeight();
-        boolean returnValue = true;
-
-        if (rx < x || rx > x + w || ry < y || ry > y + h) {
-            returnValue = false;
-        }
-        Log.d("isViewContains",String.valueOf(returnValue));
-        return returnValue;
     }
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
         Log.d("VideoPlayGestureDetect", "onSingleTapConfirmed");
-        int currentState = videoActivity.getCurrentState();
         isShowController = !isShowController;
         if(isShowController){
             playerView.hideController();
@@ -142,8 +106,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
     public boolean onDown(MotionEvent e) {
         currentTime = playerView.getPlayer().getCurrentPosition();
         doub = 0;
-//        if(!isShowController)
-//            playerView.hideController();
         return true;
     }
 
@@ -173,7 +135,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                            final Handler mHander = new Handler(){
                                @Override
                                public void handleMessage(Message msg) {
-//                        super.handleMessage(msg);
                                    videoActivity.findViewById(R.id.view_move_time).setVisibility(View.GONE);
                                }
                            };
@@ -190,68 +151,13 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             );
 
         }
-//        if(isShowBrightSeekBar){
-//            videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
-//            ((VideoPlayScreenActivity) mContext)
-//                    .runOnUiThread(new Runnable() {
-//                                       @Override
-//                                       public void run() {
-//                                           final Handler mHander = new Handler(){
-//                                               @Override
-//                                               public void handleMessage(Message msg) {
-////                        super.handleMessage(msg);
-//                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-//                                                   isShowBrightSeekBar = false;
-//                                               }
-//                                           };
-//                                           new Handler().postDelayed(new Runnable() {
-//                                               @Override
-//                                               public void run() {
-////                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_BRIGHT_CTRL);
-//                                                   mHander.sendEmptyMessage(0);
-//                                               }
-//                                           },3000);
-//
-//                                       }
-//                                   }
-//                    );
-//        }
-//        else if(isShowVolumeSeekBar){
-////            videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-//            ((VideoPlayScreenActivity) mContext)
-//                    .runOnUiThread(new Runnable() {
-//                                       @Override
-//                                       public void run() {
-//                                           final Handler mHander = new Handler(){
-//                                               @Override
-//                                               public void handleMessage(Message msg) {
-////                        super.handleMessage(msg);
-////                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_IDLE);
-//                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
-//                                                   isShowVolumeSeekBar = false;
-//                                               }
-//                                           };
-//                                           new Handler().postDelayed(new Runnable() {
-//                                               @Override
-//                                               public void run() {
-////                                                   videoActivity.changeState(VideoPlayScreenActivity.STATE_VOLUME_CTRL);
-//                                                   mHander.sendEmptyMessage(0);
-//                                               }
-//                                           },3000);
-//
-//                                       }
-//                                   }
-//                    );
-//        }
     }
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         Log.d("VideoPlayGestureDetect", "onScroll");
         Log.d("GestureTag", "onScroll distanceX="+distanceX+", distanceY= "+distanceY);
         float min_distance = 30;
-        int currentState = videoActivity.getCurrentState();
         Log.d("absDistance",String.valueOf(Math.abs(distanceX)));
-//        if (!isShowBrightSeekBar && !isShowVolumeSeekBar) {    // HORIZONTAL SCROLL
             if(Math.abs(distanceX) > min_distance && Math.abs(distanceY) < min_distance) {
                 if (Math.abs(distanceX) > Math.abs(distanceY)) {
                     controlPlayTime(distanceX);
@@ -280,9 +186,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         playerView.hideController();
         Log.d("distanceXControl",String.valueOf(x1));
 
-//        doub = Math.round(x1);
-//        movingTime = doub*1000;
-//
         doub+=1;
         if(doub>60)
             return;
@@ -297,17 +200,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
         }
         Log.d("doub",String.valueOf(doub));
 
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                videoActivity.findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
-//
-//            }
-//        },1000);
-
-
-
         TextView tv_now_playtime = (TextView) videoActivity.findViewById(R.id.tv_now_playtime);
         TextView tv_now_moving_time = (TextView) videoActivity.findViewById(R.id.tv_now_moving_time);
         int now_playtime = (int)playerView.getPlayer().getCurrentPosition()/1000;
@@ -320,24 +212,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
             tv_now_moving_time.setText("0:"+String.valueOf(doub));
         }
         tv_now_playtime.setText(now_minute + ":"+now_sec);
-//        Thread thread = new Thread(){
-//            @Override
-//            public void run() {
-//                try{
-//                    Thread.sleep(1000);
-//                }catch (InterruptedException e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        try {
-
-//
-//        }catch (InterruptedException e){
-//
-//        }
-//        tv_now_moving_time.setVisibility(View.GONE);
-//        tv_now_playtime.setVisibility(View.GONE);
     }
 
     private void controlBright(float y1, float y2) {
@@ -361,7 +235,6 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                     Settings.System.putInt(mContext.getContentResolver(),
                             Settings.System.SCREEN_BRIGHTNESS,
                             brightnessValue);
-//                    brightSeekBar.setProgress(brightnessValue);
                 }
             } else {
                 Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
@@ -388,26 +261,8 @@ public class VideoPlayGestureDetector implements GestureDetector.OnGestureListen
                 Settings.System.putInt(mContext.getContentResolver(),
                         Settings.System.SCREEN_BRIGHTNESS,
                         brightnessValue);
-//                brightSeekBar.setProgress(brightnessValue);
             }
         }
     }
 
-
-    private void controlMediaVolume(float y1, float y2){
-        AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        if(currentVolume <= 15) {
-            if(currentVolume == 15)
-                return;
-            if (y1 > y2) {
-                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, AudioManager.FLAG_PLAY_SOUND);
-            } else {
-                audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, AudioManager.FLAG_PLAY_SOUND);
-            }
-        }
-        currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        Log.d("TAGVOLUME", String.valueOf(currentVolume));
-//        volumeSeekBar.setProgress(currentVolume);
-    }
 }

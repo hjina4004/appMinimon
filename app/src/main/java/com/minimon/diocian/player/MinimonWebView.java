@@ -29,12 +29,6 @@ public class MinimonWebView {
         task.execute();
     }
 
-    public void requestRefresh(){
-        WebViewHistory history  = WebViewInfo.getInstance().historyLast();
-        if(history!=null)
-            requestFunctionWebView(history.getPageUrl(), history.getContent());
-    }
-
     private void requestPayFunctionWebView(String url, ContentValues info)
     {
         baseUrl = url;

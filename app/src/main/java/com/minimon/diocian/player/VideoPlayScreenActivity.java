@@ -63,7 +63,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class VideoPlayScreenActivity extends AppCompatActivity implements PlayListItemClickListener, View.OnTouchListener{
+public class VideoPlayScreenActivity extends AppCompatActivity implements View.OnTouchListener{
 
     private MinimonEpisode minimonEpisode;
 
@@ -71,15 +71,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private boolean playWhenReady = false;
     private boolean inErrorState;
     private String videoUrl = "";
-//    private long mResumePosition;
-    private boolean isChangeBandWidth = false;
     private String nowBandWidth = "";
 
     private Dialog gestureInfoDialog;
 
     private FrameLayout mFullScreenButton;
     private ImageView mFullScreenIcon;
-//    private ImageView mScreenLock;
     private RelativeLayout mBottomMenu;
     private ImageView mShowGestureInfo;
     private LinearLayout mNowBandWidth;
@@ -104,22 +101,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     private VideoPlayGestureDetector videoPlayGestureDetector;
     private TouchGestureDetector gestureDetector;
 
-//    private VerticalSeekBar brightSeekBar;
-//    private VerticalSeekBar volumeSeekBar;
-//    private LinearLayout view_playing_bright_seekbar;
-//    private LinearLayout view_playing_volume_seekbar;
-
-    private boolean isplaying;
-
     public int now_bright_status;
     public int now_volume_status;
 
     private int mCurrentState;
     public static final int STATE_IDLE = 300;             // idle state
-//    public static final int STATE_EPISODE_LIST = 301;     // episode list view state
     public static final int STATE_EXOPLAYER_CTRL = 302;   // exoPlayer controller iew state
-    public static final int STATE_BRIGHT_CTRL = 303;      // bright controller vew state
-    public static final int STATE_VOLUME_CTRL = 304;      // volume controller view state
     public static final int STATE_SHOW_MOVING_TIME = 305; // seek drag show
 
     JUtil jUtil;
@@ -130,7 +117,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_play_screen);
         videoUrl = EpisodeInfo.getInsatnace().getCurrentVideoUrl();
-//        mResumePosition = EpisodeInfo.getInsatnace().getResumePosition();
         playerView = findViewById(R.id.player_view);
         componentListener = new ComponentListener();
 
@@ -266,20 +252,12 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     }
 
     public void changeState(int state) {
-//        return;
-//        int currentState = getCurrentState();
-
-//        Log.d("ChangeState : ", String.valueOf(state));
         if (state == STATE_IDLE) {
             playerView.hideController();
-//            findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-//            findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
             playerView.findViewById(R.id.view_bandwidth).setVisibility(View.GONE);
         } else {
             playerView.hideController();
-//            findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.GONE);
-//            findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.GONE);
             findViewById(R.id.view_move_time).setVisibility(View.GONE);
 
             if (state == STATE_EXOPLAYER_CTRL) {
@@ -296,20 +274,8 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 }
                 playerView.findViewById(R.id.exo_ffwd).setVisibility(View.VISIBLE);
                 playerView.findViewById(R.id.view_move_time).setVisibility(View.GONE);
-//                findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
-//                findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
             }
-//            else if (state == STATE_BRIGHT_CTRL) {
-//                findViewById(R.id.view_playing_bright_seekbar).setVisibility(View.VISIBLE);
-//            } else if (state == STATE_VOLUME_CTRL) {
-//                findViewById(R.id.view_playing_volume_seekbar).setVisibility(View.VISIBLE);
-//            }
             else if (state == STATE_SHOW_MOVING_TIME){
-//                playerView.showController();
-//                playerView.findViewById(R.id.exo_rew).setVisibility(View.GONE);
-//                playerView.findViewById(R.id.exo_play).setVisibility(View.GONE);
-//                playerView.findViewById(R.id.exo_pause).setVisibility(View.GONE);
-//                playerView.findViewById(R.id.exo_ffwd).setVisibility(View.GONE);
                 findViewById(R.id.view_move_time).setVisibility(View.VISIBLE);
             }
         }
@@ -324,7 +290,7 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
             now_bright_status = Settings.System.getInt(getContentResolver(), Settings.System.SCREEN_BRIGHTNESS);
         } catch(Exception e){
-            Log.e("Exception e "+e.getMessage(), null);
+            e.printStackTrace();
         }
 
         final AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -426,15 +392,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             videoUrl = videoObj.getString("playUrl");
             EpisodeInfo.getInsatnace().setIdx(list.getString("idx"));
             EpisodeInfo.getInsatnace().setVideoUrl(videoUrl);
-//            if(isChangeBandWidth && EpisodeInfo.getInsatnace().getResumePosition() != 0) {
-
-//                EpisodeInfo.getInsatnace().setResumePosition(0);
-//                Log.d("setPosition-9", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
-//            }
-//            else
-//                if(isChangeBandWidth){
-//                isChangeBandWidth = false;
-//            }
             initializePlayer();
         }catch (JSONException e){
             e.printStackTrace();
@@ -457,13 +414,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
             player.setPlayWhenReady(playWhenReady);
         }
 
-//        MediaSource mediaSources = buildMediaSource(Uri.parse(videoUrl), "mp4");
-//        playerView.getPlayer().prepare(mediaSources, true, false);
-//        inErrorState = false;
-//        if(EpisodeInfo.getInsatnace().getResumePosition() != 0){
-//            player.seekTo(EpisodeInfo.getInsatnace().getResumePosition());
-//            player.setPlayWhenReady(true);
-//        }
         updateVideoPlayer(videoUrl);
         videoPlayGestureDetector = new VideoPlayGestureDetector(this,this,width,height);
         gestureDetector = new TouchGestureDetector(this, videoPlayGestureDetector);
@@ -505,9 +455,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
 
     private void initFullscreenButton() {
         PlaybackControlView controlView = playerView.findViewById(R.id.exo_controller);
-//        controlView.findViewById(R.id.exo_prev).setBackgroundResource(R.drawable.icon_b_prev);
-//        controlView.findViewById(R.id.exo_play).setBackgroundResource(R.drawable.icon_b_play);
-//        controlView.findViewById(R.id.exo_ffwd).setBackgroundResource(R.drawable.icon_b_ffwd);
 
         mPlay = controlView.findViewById(R.id.exo_play);
         mPlay.setImageResource(R.drawable.icon_b_play);
@@ -540,7 +487,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 finish();
             }
         });
-//        mScreenLock = controlView.findViewById(R.id.img_exo_lock);
         mBottomMenu = controlView.findViewById(R.id.exo_view_play_info);
         mBottomMenu.setVisibility(View.VISIBLE);
 
@@ -594,7 +540,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 mBandWidthView.setVisibility(View.GONE);
                 nowBandWidth = "480p";
                 mBandWidth.setText(nowBandWidth);
-                isChangeBandWidth = true;
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
@@ -608,7 +553,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 mBandWidthView.setVisibility(View.GONE);
                 nowBandWidth = "720p";
                 mBandWidth.setText(nowBandWidth);
-                isChangeBandWidth = true;
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
@@ -622,7 +566,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 mBandWidthView.setVisibility(View.GONE);
                 nowBandWidth = "1080p";
                 mBandWidth.setText(nowBandWidth);
-                isChangeBandWidth = true;
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
@@ -636,7 +579,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
                 ConfigInfo.getInstance().setBandwidth(ConfigInfo.banswidthAuto);
                 nowBandWidth = "자동";
                 mBandWidth.setText(nowBandWidth);
-                isChangeBandWidth = true;
                 EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
                 sendEpisodeData(EpisodeInfo.getInsatnace().getIdx());
             }
@@ -852,30 +794,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
     }
 
     @Override
-    public void onClick(View v, final String idx) {
-        Log.d("DetectorFlingTag","onclick");
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("결제 진행");
-        builder.setMessage(" 결제를 진행하시겠습니까?");
-        builder.setPositiveButton("예",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        EpisodeInfo.getInsatnace().setIdx(idx);
-                        sendEpisodeData(idx);
-                    }
-                });
-        builder.setNegativeButton("아니오",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        return;
-                    }
-                });
-        builder.show();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         if(playerView!= null&& playerView.getPlayer()!=null) {
@@ -884,8 +802,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         }
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-//                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
-                Log.d("setPosition-6", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
         }
@@ -900,8 +816,6 @@ public class VideoPlayScreenActivity extends AppCompatActivity implements PlayLi
         }
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-//                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
-                Log.d("setPosition-7", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
         }

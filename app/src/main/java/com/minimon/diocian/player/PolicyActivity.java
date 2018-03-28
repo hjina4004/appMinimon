@@ -34,8 +34,6 @@ public class PolicyActivity extends AppCompatActivity implements MinimonWebView.
         content.put("page", "policy");
         content.put("tap",policyType);
         minimonWebView.goToWeb("Contents/view", content);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-//        getActionBar().sethome(R.drawable.ic_back);
         setTitle("이용약관");
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
     }

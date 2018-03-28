@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,9 +14,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +32,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -44,7 +39,6 @@ import com.kakao.usermgmt.ApiErrorCode;
 import com.kakao.usermgmt.LoginButton;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
-import com.kakao.usermgmt.response.model.User;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
@@ -77,8 +71,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
 
     private Context mContext;
-
-    String token, social;
 
     boolean isAutoLogin;
 
@@ -406,7 +398,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public void onClickLogin(View view) {
         Log.d("LoginActivity:", "onClickLogin start");
-//        mDialogMng.showProgressDlg(mContext,"미니몬 로그인 중입니다",null);
         loginMinimon(getInputUID(), getInputPassword(), "basic");
     }
 
@@ -415,8 +406,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             saveAutoLogin(true);
         }
         mDialogMng.showProgressDlg(mContext,"미니몬 로그인 중입니다",null);
-        String myVersion = Build.VERSION.RELEASE;
-        String myDeviceModel = Build.MODEL;
         ContentValues loginInfo = new ContentValues();
         loginInfo.put("type", type);
         loginInfo.put("id", uid);
@@ -462,27 +451,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         isAutoLogin = isAuto;
     }
-
-    public boolean loadAutoLogin() {
-        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
-        return prefs.getString("AutoLogin", "0").equals("1");
-    }
-
-    private void saveLoginData(){
-        if(!loadAutoLogin())
-            return;
-        SharedPreferences prefs = getSharedPreferences("minimon-preference",MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("AutoLogin", "1");
-        editor.putString("token", UserInfo.getInstance().getToken());
-        editor.putString("social", UserInfo.getInstance().getSocial());
-        if("basic".equals(UserInfo.getInstance().getSocial())){
-            editor.putString("userUID", getInputUID());
-            editor.putString("userPWD", getInputPassword());
-        }
-        editor.apply();
-    }
-
 
     private String getInputUID() {
         EditText text = findViewById(R.id.inUserID);

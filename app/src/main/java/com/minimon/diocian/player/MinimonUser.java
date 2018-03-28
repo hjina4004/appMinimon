@@ -419,8 +419,7 @@ public class MinimonUser {
 
     public interface MinimonUserListener {
         // These methods are the different events and need to pass relevant arguments with the event
-        public void onResponse(JSONObject info);
-//        public void onResponseHtml(String html);
+        void onResponse(JSONObject info);
     }
     private MinimonUserListener listener;
 
@@ -450,7 +449,6 @@ public class MinimonUser {
         NetworkTask networkTask = new NetworkTask(API_URL+current, info);
         if(current.equals("info"))
             networkTask.setToken(UserInfo.getInstance().getToken());
-//        networkTask.setToken(UserInfo.getInstance().getToken());
         networkTask.execute();
     }
 
@@ -608,12 +606,6 @@ public class MinimonUser {
         }
         try {
             Log.d("ResponseNetworkValue",s);
-//            if(s.contains("<!DOCTYPE html>")){
-//                if(listener!=null){
-//                    listener.onResponseHtml(s);
-//                }
-//                return;
-//            }
             JSONObject objJSON = new JSONObject(s);
             objJSON.put("current_request", currentRequest);
             objJSON.put("current_social", typeSocial);
@@ -625,9 +617,5 @@ public class MinimonUser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public void goToMain(ContentValues info){
-        requestFunctionToWebview("Contents/view", info);
     }
 }

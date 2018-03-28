@@ -112,39 +112,15 @@ public class LauncherActivity extends AppCompatActivity {
         minimonUser.login(loginInfo);
     }
 
-    /*
-    private void loginMinimon(String uid, String password, String type) {
-        if("social".equals(type)){
-            saveAutoLogin(true);
-        }
-        mDialogMng.showProgressDlg(mContext,"미니몬 로그인 중입니다",null);
-        String myVersion = Build.VERSION.RELEASE;
-        String myDeviceModel = Build.MODEL;
-        ContentValues loginInfo = new ContentValues();
-        loginInfo.put("type", type);
-        loginInfo.put("id", uid);
-        loginInfo.put("value", password);
-        loginInfo.put("device_id", DeviceUuidFactory.getDeviceUuid(this.getApplicationContext()));
-        loginInfo.put("device_token", FirebaseInstanceId.getInstance().getToken());
-        loginInfo.put("device_os",myVersion);
-        loginInfo.put("device_device",myDeviceModel);
-
-        print_error(null);
-        minimonUser.login(loginInfo);
-    }
-     */
-
     private void resultMinimonLogin(JSONObject info) {
         try {
             UserInfo userInfo = UserInfo.getInstance();
             String resCode = info.has("resCode") ? info.getString("resCode") : "";
-            String typeSocial = info.has("current_social") ? info.getString("current_social") : "basic";
 
             if (resCode.equals("0000")) {
                 userInfo.setData(info.getJSONObject("data"));
                 userInfo.setPWD(strPwd);
                 setSetting();
-//                saveLoginInfo();
                 respondeLogin = true;
                 gotoMain();
             }else{

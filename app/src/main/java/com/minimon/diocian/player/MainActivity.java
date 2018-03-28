@@ -231,14 +231,11 @@ public class MainActivity extends AppCompatActivity
                         s.setDate(String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
                         s.setHistory(textView.getText().toString());
                         dbHelper.insert(textView.getText().toString(),String.valueOf(today.getYear()+1900)+"."+(today.getMonth()+1)+"."+today.getDate());
-//                        arrHistory.add(s);
-//                        arrHistory = dbHelper.getResult();
                         adapter.notifyDataSetChanged();
                         hideSearch();
                         WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
                         view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
                         String searchTag = ed_toolbar_search.getText().toString();
-                        Log.d("searchTag",searchTag);
                         WebViewInfo.getInstance().setSearch_tag(searchTag);
                         ed_toolbar_search.setText("");
                         newActivity("search");
@@ -438,13 +435,6 @@ public class MainActivity extends AppCompatActivity
             hasTicket = true;
             return "이용권 사용 중";
         }
-//        fixed = fixed.replaceAll("[^0-9]", "");
-//        fixed = fixed.substring(0,4)+"."+fixed.substring(4,6)+"."+fixed.substring(6,8);
-//        return fixed;
-    }
-
-    private void SearchResult(){
-
     }
 
     private View.OnClickListener toolbarClickListenr = new View.OnClickListener() {
@@ -511,13 +501,6 @@ public class MainActivity extends AppCompatActivity
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                     drawer.closeDrawer(GravityCompat.START);
                     break;
-//                case R.id.view_menu_go_home:
-//                    goMainWeb();
-//                    break;
-//                case R.id.view_menu_cookies:
-//                    info.setPageName(getResources().getString(R.string.page_name_cookie_list));
-//                    newActivity(info.getPageName());
-//                    break;
                 case R.id.view_menu_user_info:
                     info.setPageName(getResources().getString(R.string.page_name_info));
                     newActivity(info.getPageName());
@@ -529,16 +512,11 @@ public class MainActivity extends AppCompatActivity
                 case R.id.view_menu_favorite:
                     info.setPageName(getResources().getString(R.string.page_name_like));
                     newActivity(info.getPageName());
-//                    isMain = false;
                     break;
                 case R.id.view_menu_subscribe:
                     info.setPageName(getResources().getString(R.string.page_name_keep));
                     newActivity(info.getPageName());
                     break;
-//                case R.id.view_menu_point_history:
-//                    info.setPageName(getResources().getString(R.string.page_name_point_list));
-//                    newActivity(info.getPageName());
-//                    break;
                 case R.id.view_menu_pay_history:
                     info.setPageName(getResources().getString(R.string.page_name_pay_list));
                     newActivity(info.getPageName());
@@ -559,10 +537,6 @@ public class MainActivity extends AppCompatActivity
                     info.setPageName(getResources().getString(R.string.page_name_policy));
                     newActivity(info.getPageName());
                     break;
-//                case R.id.view_menu_fix:
-//                    info.setPageName(getResources().getString(R.string.page_name_index));
-//                    newActivity(info.getPageName());
-//                    break;
                 case R.id.view_menu_setting:
                     newActivity("setting");
                     return;
@@ -676,11 +650,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void goMainWeb(){
-        mPageName = "main";
-        newActivity(mPageName);
-    }
-
     private void initGoogle() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
@@ -756,7 +725,6 @@ public class MainActivity extends AppCompatActivity
         if(findViewById(R.id.view_main_search).getVisibility() == View.VISIBLE) {
             WebViewInfo.getInstance().setPageName(getResources().getString(R.string.page_name_search));
             WebViewInfo.getInstance().setSearch_tag(his);
-//            view_main_toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
             newActivity("search");
         }
     }
@@ -801,9 +769,4 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    @Override
-//    protected void onDestroy() {
-//
-//        super.onDestroy();
-//    }
 }

@@ -114,15 +114,6 @@
             </intent-filter>
         </service>
 
-        <receiver
-            android:name=".InternetConnector_Receiver_DramaPlay"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-            </intent-filter>
-        </receiver>
-
         <activity android:name=".ServerErrorActivity" />
         <activity
             android:name=".PolicyActivity"

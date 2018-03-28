@@ -39,20 +39,8 @@ public class JavascriptInterface {
     @android.webkit.JavascriptInterface
     public void goToWeb(final String url, final String page, final String key, final String value){
         Log.d("JavascriptInterface", url+","+page+","+key+","+value);
-//        new Handler().post(new Runnable() {
-//            @Override
-//            public void run() {
-//                ((MainActivity)mContext).runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-                        if(mListener!=null)
-                            mListener.onGoToWeb(url,page,key,value);
-//                    }
-//                });
-//            }
-//        });
-
-//        mWebView.loadUrl("window.minimon.goToWeb('"+url+"','"+page+"','"+key+"','"+value+"'");
+        if(mListener!=null)
+            mListener.onGoToWeb(url,page,key,value);
     }
 
     @android.webkit.JavascriptInterface

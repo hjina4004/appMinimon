@@ -291,7 +291,6 @@ public class NewMemberActivity extends AppCompatActivity {
         infoNewMember.put("device_model", userInfo.getDeviceModel());
 
         createNewMinimonMember();
-//        minimonUser.create(info);
     }
 
     private void createNewMinimonMember(){

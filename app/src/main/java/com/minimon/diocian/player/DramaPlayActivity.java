@@ -1,48 +1,29 @@
 package com.minimon.diocian.player;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -77,25 +58,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 public class DramaPlayActivity extends AppCompatActivity implements MinimonWebView.MinimonWebviewListener, JavascriptInterface.JavascriptInterfaceListener{
 
     private final String TAG = "DramaPlayActivity";
-    private final String STATE_RESUME_WINDOW = "resumeWindow";
-    private final String STATE_RESUME_POSITION = "resumePosition";
-    private final String STATE_PLAYER_FULLSCREEN = "playerFullscreen";
-    private final int REQUEST_FULLSCREEN = 1;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private boolean playWhenReady = false;
     private String videoUrl = "";
 
     private FrameLayout mFullScreenButton;
-    private ImageView mFullScreenIcon;
     private TextView mEpisodeTitle;
     private boolean isLockSreen;
 
@@ -115,8 +85,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     //하단 재생목록, 인기목록
     private String c_title;
-    private String c_idx;
-    private String nowEp;
 
     private WebView mWebView;
 
@@ -159,13 +127,10 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         jUtil = new JUtil();
         isActive = false;
         intentFilter = new IntentFilter();
-//        intentFilter.addAction("com.minimon.diocian.player.SEND_BROAD_CAST");
         intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         mWebView.setWebViewClient(new MyWebviewClient(this, progress_bar_drama_play, page));
         settingWebview(mWebView);
-
-//        registerReceiver(broadcastReceiver, intentFilter);
 
         img_toolbar_go_back = findViewById(R.id.img_toolbar_go_back);
         img_toolbar_go_back.setOnClickListener(new View.OnClickListener() {
@@ -330,7 +295,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                 });
                 builder.show();
             }else{
-                //EpisodeInfo.getInsatnace().setUseLte(true);
                 procPlayIntro();
             }
         }else{
@@ -354,28 +318,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     }
 
     private void responseEpisodeData(JSONObject info){
-//        setData(info);
-//        String remainTime  = "";
-//        try {
-//            remainTime = info.getJSONObject("data").getJSONObject("list").getString("remaining_time").replaceAll("[^0-9]", "");
-//        }catch (JSONException e){
-//            e.printStackTrace();
-//        }
-//        int nRemainTime;
-//        if(remainTime.isEmpty()){
-//            nRemainTime = 0;
-//        }else{
-//            nRemainTime = Integer.parseInt(remainTime);
-//        }
-//        if(nRemainTime > 0){
-//            EpisodeInfo.getInsatnace().setResumePosition(nRemainTime);
-//            Log.d("setPosition-4", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
-//            setData(info);
-//            initializePlayer();
-//            initFullscreenButton();
-//            EpisodeInfo.getInsatnace().setIntro(false);
-//            updatePlayerVideo(EpisodeInfo.getInsatnace().getVideoUrl());
-//        }else {
             if (!prepareVideoFlag) {
                 procPrepareVideo(info);
             } else {
@@ -394,7 +336,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                     updatePlayerVideo(currentVideoUrl);
                 }
             }
-//        }
     }
 
     private void initData(){
@@ -409,7 +350,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                     }else if("purchase".equals(responseType)){
                         responsePurchase(info);
                     }else if("checked".equals(responseType)){
-//                        Log.d("RequestChecked",((JSONObject)info).toString());
                         responseChecked(info);
                     }
                 }catch (Exception e){
@@ -446,7 +386,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
            episodeInfo.setIntroVideoUrl(introVideoUrl);
 
        }catch (JSONException e){
-           Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+           e.printStackTrace();
            return;
        }
    }
@@ -455,8 +395,8 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         Log.d("DramaPlayAc", "procPrepareVideo");
         prepareVideoFlag = true;
         setData(obj);
-       view_player_thumbnail.setVisibility(View.VISIBLE);
-       playerView.setVisibility(View.GONE);
+        view_player_thumbnail.setVisibility(View.VISIBLE);
+        playerView.setVisibility(View.GONE);
         Picasso.with(this).load(EpisodeInfo.getInsatnace().getThumbnailUrl()).into(img_player_thumbnail);
         img_player_thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -566,7 +506,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
            @Override
            public void callback(int id) {
                if(id == 1){
-//                   goToPayWeb();
                    purchaseEpisode();
                }else{
                    prepareVideoFlag = false;
@@ -642,9 +581,7 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
            info.setGrade(obj.getString("grade"));
 
            c_title = obj.getString("c_title");
-//           setTitle(c_title);
            tv_frag_title.setText(c_title);
-           nowEp = obj.getString("ep");
            JSONArray jarr = obj.getJSONArray("list_tag");
            String tags = "";
            for(int i=0; i<jarr.length(); i++){
@@ -658,7 +595,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     private void initFullscreenButton() {
         PlaybackControlView controlView = playerView.findViewById(R.id.exo_controller);
-        mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
         mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
         mFullScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -668,7 +604,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         });
         mEpisodeTitle = controlView.findViewById(R.id.tv_exo_title);
         mEpisodeTitle.setText(EpisodeInfo.getInsatnace().getTitle());
-//        mLockScreen = controlView.findViewById(R.id.img_exo_lock);
         controlView.findViewById(R.id.exo_rew).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -770,22 +705,15 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
             prepareVideoFlag = true;
         if (Util.SDK_INT > 23) {
             initData();
-//            if(EpisodeInfo.getInsatnace().getIdx()==null || EpisodeInfo.getInsatnace().getIdx().isEmpty()) {
-//                requestEpisodeData("645");
-//            }
-//            else {
-                requestEpisodeData(EpisodeInfo.getInsatnace().getIdx());
-//            }
+            requestEpisodeData(EpisodeInfo.getInsatnace().getIdx());
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG+"Test","OnResume");
         isActive = true;
         createWifiMonitor();
-        Log.d(TAG+"Test","position at onResume : "+String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
         if (Util.SDK_INT <= 23) {
             initData();
             requestEpisodeData(EpisodeInfo.getInsatnace().getIdx());
@@ -795,18 +723,14 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG+"Test","OnPause");
         isActive = false;
         removeWifiMoniter();
-        Log.d(TAG+"Test","position at onPause : "+String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
         if(playerView!= null&& playerView.getPlayer()!=null && prepareVideoFlag) {
             EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
             playerView.getPlayer().setPlayWhenReady(false);
         }
         if (Util.SDK_INT <= 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-//                EpisodeInfo.getInsatnace().setResumePosition(Math.max(0, playerView.getPlayer().getContentPosition()));
-                Log.d("setPosition-2", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
         }
@@ -815,8 +739,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG+"Test","OnStop");
-        Log.d(TAG+"Test","position at onStop : "+String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
         if(EpisodeInfo.getInsatnace().getResumePosition()==0)
             prepareVideoFlag = false;
         if(playerView!= null&& playerView.getPlayer()!=null && prepareVideoFlag) {
@@ -825,7 +747,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         }
         if (Util.SDK_INT > 23) {
             if(playerView!= null&& playerView.getPlayer()!=null){
-                Log.d("setPosition-3", String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
                 releasePlayer();
             }
         }
@@ -894,15 +815,12 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
 
     private void releasePlayer() {
         if (player != null) {
-            playWhenReady = player.getPlayWhenReady();
             player.removeListener(componentListener);
             player.setAudioDebugListener(null);
             player.setVideoDebugListener(null);
             player.release();
             player = null;
         }
-//        prepareVideoFlag = false;
-//        isReplayVideoFlag = false;
     }
 
     private MediaSource buildMediaSource(Uri uri, String videoType) {
@@ -930,8 +848,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
     public void onResponseHtml(String html, String baseUrl) {
         Log.d("onResponseDramaPlay",baseUrl);
         Log.d("onResponseDramaPlayHtml",html);
-//        mWebView.loadDataWithBaseURL(baseUrl,"<!DOCTYPE HTML><html><head><script> console.log('closeEmptyWeb'); window.minimon.closeEmptyWeb();</script></head><body></body></html>","text/html","utf-8",null);
-//        mWebView.loadData("<!DOCTYPE HTML><html><head><script> console.log('closeEmptyWeb'); window.minimon.closeEmptyWeb();</script></head><body></body></html>","text/html","utf-8");
         mWebView.loadDataWithBaseURL(baseUrl , html, "text/html", "utf-8", null);
     }
 
@@ -999,7 +915,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         EpisodeInfo.getInsatnace().setResumePosition(0);
         Log.d(TAG+"TestCg",String.valueOf(EpisodeInfo.getInsatnace().getResumePosition()));
         requestEpisodeData(idx);
-//        requestCheckEpisode();
     }
 
     private class ComponentListener implements ExoPlayer.EventListener, VideoRendererEventListener, AudioRendererEventListener {
@@ -1050,9 +965,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
                     Log.d("exoPlayer", "m_playlistener null");
                 }
             }
-//            if("STATE_READY".equals(stateString) && playWhenReady){
-//                checkWifi();
-//            }
             Log.d(TAG, "DramaPlaystate [" + playWhenReady + ", " + stateString + "]");
         }
 
@@ -1167,7 +1079,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         ConfigInfo.getInstance().setBandwidth(pref.getInt("BandWidth",1));
         EpisodeInfo.getInsatnace().historyClear();
         WebViewInfo.getInstance().historyClear();
-//        unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -1207,10 +1118,6 @@ public class DramaPlayActivity extends AppCompatActivity implements MinimonWebVi
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                if(mWebView.canGoBack())
-//                    mWebView.goBack();
-//                else
-//                    finish();
                 Log.d("goBack",String.valueOf(EpisodeInfo.getInsatnace().getHistorySize()));
                 if(EpisodeInfo.getInsatnace().getHistorySize()>1){
                     EpisodeInfo.getInsatnace().historyPop();
