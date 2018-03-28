@@ -1,6 +1,10 @@
 package com.minimon.diocian.player;
 
+import android.content.ContentValues;
+
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by GOOD on 2018-02-27.
@@ -33,6 +37,35 @@ public class EpisodeInfo {
     private boolean prepareVideoFlag;
     private boolean isReplayVideoFlag;
     private boolean isIntro;
+    private ArrayList<EpisodeHistory> episodeHistory = new ArrayList<>();
+
+    public EpisodeHistory historyPop(){
+        EpisodeHistory last = episodeHistory.get(episodeHistory.size()-1);
+        episodeHistory.remove(episodeHistory.size()-1);
+        return last;
+    }
+
+    public void historyPush(String url, ContentValues values){
+        EpisodeHistory history = new EpisodeHistory();
+        history.setUrl(url);
+        history.setContent(values);
+        episodeHistory.add(history);
+    }
+
+    public void historyClear(){
+        episodeHistory.clear();
+    }
+
+    public int getHistorySize(){
+        return episodeHistory.size();
+    }
+
+    public EpisodeHistory historyLast(){
+        if(getHistorySize()==0)
+            return null;
+        EpisodeHistory last = episodeHistory.get(episodeHistory.size()-1);
+        return last;
+    }
 
 
     private EpisodeInfo(){

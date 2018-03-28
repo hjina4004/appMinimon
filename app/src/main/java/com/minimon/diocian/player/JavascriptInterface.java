@@ -24,6 +24,9 @@ public class JavascriptInterface {
         void setTitle(String title);
         void closeGoToNative(String page);
         void shareSNS(String loc, String url, String img);
+        void onScrollTop();
+        void goBack();
+        void changeContents(String url, String page, String key, String value);
     }
     private JavascriptInterfaceListener mListener;
     public void setListener(JavascriptInterfaceListener listener){mListener = listener;}
@@ -115,5 +118,26 @@ public class JavascriptInterface {
         Log.d("JavascriptInterface", "shareSNS: " + loc + ", " + url + ", " + img);
         if(mListener!=null)
             mListener.shareSNS(loc, url, img);
+    }
+
+    @android.webkit.JavascriptInterface
+    public void onScrollTop(){
+        Log.d("JavascriptInterface", "onScrollTop");
+        if(mListener!=null)
+            mListener.onScrollTop();
+    }
+
+    @android.webkit.JavascriptInterface
+    public void goBack(){
+        Log.d("JavascriptInterface", "goBack");
+        if(mListener!=null)
+            mListener.goBack();
+    }
+
+    @android.webkit.JavascriptInterface
+    public void changeContents(String url, String page, String key, String value){
+        Log.d("JavascriptInterface", "changeContents");
+        if(mListener!=null)
+            mListener.changeContents(url,page,key,value);
     }
 }

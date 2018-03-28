@@ -174,9 +174,10 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         MyWebviewClient client = new MyWebviewClient(getActivity(), mProgressBar, webViewPageName);
         client.setMyWebViewClientListener(this);
         mWebView.setWebViewClient(client);
-        mWebView.setWebChromeClient(new WebChromeClient());
-        mWebView.addJavascriptInterface(javascriptInterface, "minimon");
-        mWebView.getSettings().setJavaScriptEnabled(true);
+//        mWebView.setWebChromeClient(new WebChromeClient());
+//        mWebView.addJavascriptInterface(javascriptInterface, "minimon");
+//        mWebView.getSettings().setJavaScriptEnabled(true);
+        settingWebview(mWebView);
 
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
@@ -492,6 +493,28 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
     }
 
     @Override
+    public void onScrollTop() {
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if("main".equals(webViewPageName) || "channel".equals(webViewPageName)){
+                    view_main_toolbar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void goBack() {
+
+    }
+
+    @Override
+    public void changeContents(String url, String page, String key, String value) {
+
+    }
+
+    @Override
     public void shareSNS(String loc, String url, String img) {
         if("KK".equals(loc)){
             shareKakaotalk(url, img);
@@ -546,9 +569,29 @@ public class WebViewFragment extends Fragment implements MainActivity.onKeypress
         startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
 
-//    @Override
-//    public void onResume() {
-//
-//        super.onResume();
-//    }
+    private void settingWebview(WebView webView){
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        webView.getSettings().setLoadsImagesAutomatically(true);
+        webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setSupportZoom(false);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webView.getSettings().setAppCacheEnabled(false);
+        webView.getSettings().setSaveFormData(true);
+        webView.getSettings().setDatabaseEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setUserAgentString("app");
+        webView.getSettings().setPluginState(WebSettings.PluginState.ON_DEMAND); // 플러그인을 사용할 수 있도록 설정
+
+
+        webView.addJavascriptInterface(javascriptInterface, "minimon");
+        webView.setWebChromeClient(new WebChromeClient());
+
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        android.webkit.CookieSyncManager.createInstance(mActivity);
+        WebkitCookieManagerProxy coreCookieManager = new WebkitCookieManagerProxy(null, java.net.CookiePolicy.ACCEPT_ALL);
+        java.net.CookieHandler.setDefault(coreCookieManager);
+    }
 }
